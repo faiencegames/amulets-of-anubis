@@ -15,8 +15,8 @@ page.on('pageerror', e => errors.push('pageerror: ' + String(e).slice(0,200)));
 page.on('console', m => { if (m.type() === 'error') errors.push('console.error: ' + m.text().slice(0,200)); });
 await page.addInitScript(({k,save}) => { try { localStorage.removeItem(k); localStorage.setItem(k, JSON.stringify(save)); } catch(e){} }, {k: SAVE_KEY, save});
 await page.goto(URL, { waitUntil: 'load' });
-await page.waitForSelector('#ovMsg.open', { timeout: 15000 });
-await page.click('#ovMsg [data-t="continue"]');
+await page.waitForSelector('#ovTitle.open', { timeout: 15000 });
+await page.click('#ovTitle [data-t="continue"]');
 await page.waitForFunction(() => !document.querySelector('.overlay.open'), null, { timeout: 6000 }).catch(() => {});
 const report = {};
 await page.click('#btnCustomise');
@@ -35,8 +35,8 @@ report.customise = await page.evaluate(() => {
 await page.click('[data-a="close"]');
 await page.waitForFunction(() => !document.querySelector('.overlay.open'), null, { timeout: 5000 }).catch(() => {});
 await page.click('#btnHelp');
-await page.waitForSelector('#msgBody .codex-tabs', { timeout: 5000 });
-await page.click('#msgBody .codex-tabs button[data-t="basics"]');
+await page.waitForSelector('#msgBody .codex-book', { timeout: 5000 });
+await page.click('#msgBody .codex-link[data-t="basics"]');
 await page.waitForSelector('#msgBody .basics-legend', { timeout: 5000 });
 report.basics = await page.evaluate(() => {
 	const legend = Array.from(document.querySelectorAll('#msgBody .basics-legend .legend-row'));
@@ -49,7 +49,7 @@ report.basics = await page.evaluate(() => {
 		hasCustomise: body ? body.textContent.includes('Customise') : false
 	};
 });
-await page.click('#msgBody .codex-tabs button[data-t="events"]');
+await page.click('#msgBody .codex-link[data-t="events"]');
 await page.waitForSelector('#msgBody .codex-body .plain', { timeout: 5000 });
 report.events = await page.evaluate(() => {
 	const body = document.querySelector('#msgBody .codex-body');

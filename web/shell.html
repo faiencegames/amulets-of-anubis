@@ -12,7 +12,7 @@
 /*STYLES*/
 </style>
 </head>
-<body>
+<body class="booting">
 <div id="backdrop" aria-hidden="true"><div class="bd"></div><div class="bd"></div></div>
 <div class="app">
 
@@ -36,6 +36,7 @@
 				<details class="sheet papyrus" id="infoSheet" open>
 					<summary><h2 class="place" id="placeName">Memphis</h2><p class="place-sub" id="placeSub"></p></summary>
 					<p class="fact" id="placeFact"></p>
+					<button class="read-on" id="placeMore" type="button" hidden>{{place.read_on}}</button>
 					<div class="legend" id="legend"></div>
 				</details>
 				<div class="rod"></div>
@@ -47,9 +48,8 @@
 				<div class="boon-row" id="boonRow"></div>
 			</div>
 			<div class="tablet stone collection">
-				<div class="tablet-row"><span>{{side.relics}}</span><strong id="relicTxt2">0 / 8</strong></div>
-				<div class="relic-strip" id="relicStrip"></div>
-				<button class="btn" id="openMuseum" type="button" style="width:100%;margin-top:4px">{{side.open_museum}}</button>
+				<div class="tablet-row"><span>{{side.relics}}</span><strong id="relicTxt2">0 / 8</strong><button class="museum-link" id="openMuseum" type="button" title="{{side.open_museum_title}}">{{side.open_museum}}</button></div>
+				<div class="relic-strip" id="relicStrip" title="{{side.open_museum_title}}"></div>
 			</div>
 		</aside>
 
@@ -62,7 +62,7 @@
 			</div>
 			<div class="tube" id="tube" role="img" aria-label="{{hud.gilded_label}}">
 				<div class="tube-cap top"></div>
-				<div class="tube-body"><div class="tube-fill" id="tubeFill"></div><div class="tube-shine"></div></div>
+				<div class="tube-body"><div class="tube-stream"></div><div class="tube-fill" id="tubeFill"></div><div class="tube-shine"></div></div>
 				<div class="tube-cap bottom"></div>
 				<span class="tube-txt" id="gildTxt">0 / 36</span>
 			</div>
@@ -89,6 +89,9 @@
 </div>
 
 <div id="toasts" aria-live="polite" aria-atomic="false"></div>
+<div class="overlay title-screen" id="ovTitle" role="dialog" aria-modal="true" aria-labelledby="titleName">
+	<div class="title-body" id="titleBody"></div>
+</div>
 <div class="overlay" id="ovMsg" role="dialog" aria-modal="true" aria-labelledby="msgTitle">
 	<div class="scroll"><div class="rod"></div><button class="close-x" type="button" aria-label="{{dock.close}}" title="{{dock.close}}">&times;</button><div class="sheet papyrus" id="msgBody"></div><div class="rod"></div></div>
 </div>

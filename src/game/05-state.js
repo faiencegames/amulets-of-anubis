@@ -217,6 +217,7 @@ function startLevel(i) {
 	$('placeSub').textContent =
 		L.sub + (core.shapeName && core.shapeId !== 'own' ? ` \u00b7 ${core.shapeName}` : '');
 	renderCurse();
+	requestAnimationFrame(fitNote);
 	const hasThick = L.map.some(r => r.includes('2'));
 	$('legend').innerHTML =
 		'<span><i class="sw-stone"></i>Bare stone</span>' +
@@ -309,12 +310,55 @@ function setBackdrop(i, key = LEVELS[i].id) {
 	bdFront = 1 - bdFront;
 }
 
+let tubeWas = 0,
+	tubeTimer = 0; // how full the sand tube was, and when its stream stops
+
+// The note beside the board shows as many whole lines as fit, without a
+// scroll bar; when the rest won't fit, it ends in "Read on", which opens the
+// whole note in a scroll. Measured again whenever the panel below it changes
+// size (a boon won, a trial begun) and when the window does.
+function fitNote() {
+	const sheet = $('infoSheet'),
+		fact = $('placeFact'),
+		more = $('placeMore');
+	if (!sheet || !sheet.offsetParent) return;
+	fact.style.maxHeight = '';
+	more.hidden = true;
+	sheet.classList.remove('clipped');
+	if (sheet.scrollHeight <= sheet.clientHeight + 1) return;
+	sheet.classList.add('clipped'); // first the key to the stones below the note goes
+	if (sheet.scrollHeight <= sheet.clientHeight + 1) return;
+	more.hidden = false;
+	const lh = parseFloat(getComputedStyle(fact).lineHeight) || 24,
+		over = sheet.scrollHeight - sheet.clientHeight;
+	fact.style.maxHeight = Math.max(2, Math.floor((fact.offsetHeight - over) / lh)) * lh + 'px';
+}
+if (window.ResizeObserver) new ResizeObserver(() => fitNote()).observe(document.querySelector('.side .tablet'));
+window.addEventListener('resize', () => fitNote());
+
+$('placeMore').onclick = () => {
+	if (busy) return;
+	const text = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+	showMsg(
+		`<h2 id="msgTitle">${text($('placeName').textContent)}</h2><p class="lede">${text($('placeSub').textContent)}</p><p class="fact">${text($('placeFact').textContent)}</p>`,
+		[[Tplain('place.back'), () => {}]]
+	);
+};
+
 function updateHUD() {
 	$('movesNum').textContent = core.movesLeft;
 	$('gMoves').classList.toggle('low', core.movesLeft <= 5 && core.movesLeft > 0);
 	const done = core.total - core.remaining();
 	$('gildTxt').textContent = `${done} / ${core.total}`;
-	$('tubeFill').style.height = (core.total ? (done / core.total) * 100 : 100) + '%';
+	const full = core.total ? (done / core.total) * 100 : 100;
+	// sand runs into the tube while it rises (a stream of grains, for a moment)
+	if (full > tubeWas) {
+		$('tube').classList.add('filling');
+		clearTimeout(tubeTimer);
+		tubeTimer = setTimeout(() => $('tube').classList.remove('filling'), 900);
+	}
+	tubeWas = full;
+	$('tubeFill').style.height = full + '%';
 	$('hudProgFill').style.width = (core.total ? (done / core.total) * 100 : 100) + '%';
 	$('stopTxt').textContent = eventState
 		? eventState.ev.chamber
@@ -335,7 +379,8 @@ function updateHUD() {
 		stripKey = RELICS.map(r => (save.relics[r.id] ? 1 : 0)).join('');
 	if (strip && strip.dataset.k !== stripKey) {
 		strip.dataset.k = stripKey;
-		strip.innerHTML = RELICS.map(
+		// found ones first, so the row shows them; the rest wait, greyed
+		strip.innerHTML = [...RELICS.filter(r => save.relics[r.id]), ...RELICS.filter(r => !save.relics[r.id])].map(
 			r =>
 				`<span class="relic-slot${save.relics[r.id] ? ' has' : ''}" title="${save.relics[r.id] ? r.name + ': ' + r.desc : 'Undiscovered relic'}">${relicIcon(r.id)}</span>`
 		).join('');

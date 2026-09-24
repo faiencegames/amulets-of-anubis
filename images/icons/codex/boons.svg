@@ -1,0 +1,12 @@
+<!-- How to play, the chapter picture for "boons" (in the margin index and the contents). A copy of boons/flood.svg: change it freely. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+<defs>
+<linearGradient id="cx-bnflood" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#dcf4ff"/>
+<stop offset=".55" stop-color="#5bb4e8"/>
+<stop offset="1" stop-color="#1d5a8a"/>
+</linearGradient>
+</defs>
+<path d="M12 2c4 6 6 9 6 12a6 6 0 0 1-12 0c0-3 2-6 6-12z" fill="url(#cx-bnflood)" stroke="#0a2438" stroke-width="1.6"/>
+<ellipse cx="9.5" cy="11" rx="2" ry="3.2" fill="#fff" opacity=".5" transform="rotate(-18 9.5 11)"/>
+</svg>

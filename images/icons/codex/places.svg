@@ -1,0 +1,7 @@
+<!-- How to play, the chapter picture for "places" (in the margin index and the contents). A copy of map/door.svg: change it freely. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -11 20 22">
+<path d="M-8 9 L-6.5 -8 L6.5 -8 L8 9 Z" fill="#dcc08a" stroke="#3b2406" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M-6 3 L-5.3 -6 L-2 -6" fill="none" stroke="#f4e4b8" stroke-width="1.1" stroke-linecap="round"/>
+<path d="M-8.6 -8 H8.6" stroke="#3b2406" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M-3.4 9 V-2.5 H3.4 V9 Z" fill="#2a1606"/>
+<path d="M-1.6 9 V-0.5" stroke="#e0ac3a" stroke-width="1" opacity=".8"/></svg>

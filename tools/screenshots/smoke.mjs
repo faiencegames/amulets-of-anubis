@@ -44,7 +44,7 @@ async function play(label, device, save) {
 	await page.waitForTimeout(1500);
 
 	// past the title screen and any banner or trial offer
-	await page.click('#ovMsg [data-t="continue"]').catch(() => {});
+	await page.click('#ovTitle [data-t="continue"]').catch(() => {});
 	for (let i = 0; i < 4 && await page.$('.overlay.open'); i++) {
 		await page.keyboard.press('Escape');
 		await page.waitForTimeout(300);
@@ -80,6 +80,11 @@ async function play(label, device, save) {
 		// the tabs inside a screen, if it has any
 		for (const tab of await page.$$('.overlay.open [role="tab"]')) {
 			await tab.click().catch(() => {});
+			await page.waitForTimeout(80);
+		}
+		// the chapters of How to play (each click draws the page anew, so look them up by name)
+		for (const id of await page.$$eval('.overlay.open .codex-book [data-t]', els => [...new Set(els.map(e => e.dataset.t))])) {
+			await page.click(`.overlay.open .codex-book [data-t="${id}"]:visible`).catch(() => {});
 			await page.waitForTimeout(80);
 		}
 		await page.keyboard.press('Escape');

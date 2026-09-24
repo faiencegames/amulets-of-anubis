@@ -23,7 +23,7 @@ $('btnCustomise').onclick = () => {
 	if (!busy) openCustomise();
 };
 
-$('openMuseum').onclick = () => {
+$('openMuseum').onclick = $('relicStrip').onclick = () => {
 	if (!busy) openMuseum();
 };
 

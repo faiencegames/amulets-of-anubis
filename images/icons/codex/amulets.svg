@@ -1,0 +1,8 @@
+<!-- How to play, the chapter picture for "amulets" (in the margin index and the contents). A copy of dock/amulets.svg: change it freely. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<path d="M9 9 L4 6 M23 9 L28 6 M8 16 H3 M24 16 H29 M9 23 L4 27 M23 23 L28 27" stroke="#4a2c10" stroke-width="2" stroke-linecap="round"/>
+<path d="M12 7 C12 4 14 3 16 3 C18 3 20 4 20 7 Z" fill="#e8d49e" stroke="#4a2c10" stroke-width="2" stroke-linejoin="round"/>
+<path d="M9 11 C9 8 12 7 16 7 C20 7 23 8 23 11 C23 13 20 14 16 14 C12 14 9 13 9 11 Z" fill="#e8d49e" stroke="#4a2c10" stroke-width="2"/>
+<path d="M8 17 C8 14 11 14 16 14 C21 14 24 14 24 17 C24 24 20 29 16 29 C12 29 8 24 8 17 Z" fill="#2f6fc0" stroke="#4a2c10" stroke-width="2"/>
+<path d="M16 14 V29" stroke="#4a2c10" stroke-width="1.6"/>
+</svg>

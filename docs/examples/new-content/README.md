@@ -12,5 +12,5 @@ build tells you if one is missing its partner.
 Siwa brings its own pictures: copy `images/backdrops/siwa.svg` and
 `images/boards/siwa.svg` from here into the game's `images/` folder too.
 
-`docs/beginners-guide.md` walks through each kind step by step, and
+The manual (`docs/manual/part-1-making-things.md`) walks through each kind step by step, and
 `docs/content-reference.md` lists every field.

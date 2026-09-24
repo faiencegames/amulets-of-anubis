@@ -69,14 +69,11 @@ function startChamber(c, after, again) {
 			<p class="plaque-sand">${T(placeKey(c, 'cover'))}</p>
 		</div>`,
 		[
-			[Tplain(placeKey(c, 'enter')), () => {}],
-			[after.label, leaveChamber],
+			[Tplain(placeKey(c, 'enter')), () => {}, { kind: 'go', dark: true, oasis: !!c.oasis, icon: iconSvg('map', placeIcon(c)) }],
+			[after.label, leaveChamber, { kind: 'quiet' }],
 		],
 		{ onClose: () => {} }
 	);
-	$('msgBody')
-		.querySelector('.actions .btn')
-		.classList.add(c.oasis ? 'oasis-go' : 'torch-go');
 }
 
 // A tomb or temple already explored wakes when the player goes back in:

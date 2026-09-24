@@ -23,7 +23,7 @@
 # a browser's path). The Android app needs the Android SDK (set ANDROID_SDK or
 # ANDROID_HOME) and a JDK. Missing tools are skipped.
 #
-# GAME_VERSION (default 0.9.0) is the version the apps show. Android also
+# GAME_VERSION (default 0.9.2) is the version the apps show. Android also
 # needs a version code that rises with every release; it is made from the
 # version (1.2.3 becomes 10203) unless ANDROID_VERSION_CODE says otherwise.
 # Android settings: ANDROID_BUILD_TOOLS (default 34.0.0), ANDROID_PLATFORM
@@ -36,7 +36,7 @@ cd "$(dirname "$0")"
 
 ELECTRON_VERSION="44.4.3"
 APP_NAME="Amulets of Anubis"
-GAME_VERSION="${GAME_VERSION:-0.9.0}"
+GAME_VERSION="${GAME_VERSION:-0.9.2}"
 GAME="dist/amulets-of-anubis.html"
 
 info() { printf '\033[1m==> %s\033[0m\n' "$*"; }

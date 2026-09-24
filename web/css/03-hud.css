@@ -18,6 +18,8 @@
 .g-ico.gold{ background:radial-gradient(circle at 34% 30%,#fff3ae,#e0ac3a 60%,#8a5a10); box-shadow:0 0 0 1px #4a2c10; }
 .g-ico.lapis{ background:radial-gradient(circle at 34% 30%,#9fb8ff,#2a49b8 60%,#0d1a56); box-shadow:0 0 0 1px #4a2c10; border-radius:2px; transform:rotate(45deg); }
 .g-ico.relic{ background:radial-gradient(circle at 34% 30%,#f0e6c8,#b09a6a 60%,#5a4a26); box-shadow:0 0 0 1px #4a2c10; border-radius:3px 3px 6px 6px; }
+/* a coin in running text on any scroll; boxes with their own spacing set it later */
+.overlay .g-ico{ display:inline-block; vertical-align:-2px; margin:0 5px 0 3px; }
 .gauge span.g-ico:not(.gold):not(.lapis):not(.relic){ font-size:13px; color:#f0dcae; width:auto; }
 
 /* the moves gauge matters most: it stands out, and warns when moves run low */

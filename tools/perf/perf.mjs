@@ -25,8 +25,8 @@ const page = await ctx.newPage();
 const pageErrors=[]; page.on('pageerror', e=>pageErrors.push(String(e)));
 await page.addInitScript(({k,save})=>{ try{ localStorage.removeItem(k); localStorage.setItem(k, JSON.stringify(save)); }catch(e){} }, {k:SAVE_KEY, save:fresh()});
 await page.goto(URL, { waitUntil:'networkidle' });
-await page.waitForSelector('#ovMsg.open, #ovMsg .title-screen', { timeout:15000 });
-await page.click('#ovMsg [data-t="continue"]');
+await page.waitForSelector('#ovTitle.open', { timeout:15000 });
+await page.click('#ovTitle [data-t="continue"]');
 await page.waitForFunction(()=>!document.querySelector('.overlay.open'), null, { timeout:5000 }).catch(()=>{});
 
 // CDP for reliable JS heap. GC is best-effort (needs --enable-precise-memory; else still useful).

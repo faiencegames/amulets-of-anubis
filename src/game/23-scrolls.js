@@ -31,21 +31,42 @@ function closeOverlays() {
 	shopLog = [];
 	musicDuck(false);
 	document.querySelectorAll('.overlay.open').forEach(o => o.classList.remove('open'));
-	document.querySelectorAll('.overlay.title-screen').forEach(o => o.classList.remove('title-screen'));
+	document.body.classList.remove('at-title');
 	idleTimer = 0;
 	lastFocus && lastFocus.focus ? lastFocus.focus() : canvas.focus();
 }
 
 // opts.noClose: a scroll that needs a choice (victory, defeat) has no close button
 // opts.onClose: what closing means, when it isn't simply "back to the board"
+// Each action is [label, what it does] and may add a third part saying how it
+// looks, so a scroll has one clear way forward and the rest stay quiet:
+//	{ kind: 'go', sub, icon }   the usual next step: one big gold button, with a line under it
+//	{ kind: 'card', sub, icon } another way to go, as a smaller button with a line under it
+//	dark: true (and oasis: true) colours either as the way into a tomb (or an oasis); hidden: true starts it hidden
+//	{ kind: 'quiet', icon }     the rest (the map, replaying): small, in a row at the foot
+// An action with none of these is an ordinary button, as before.
+function actionHtml(a, i) {
+	const o = a[2] || {},
+		ico = o.icon ? `<span class="act-ico" aria-hidden="true">${o.icon}</span>` : '',
+		sub = o.sub ? `<small>${o.sub}</small>` : '';
+	if (o.kind === 'go' || o.kind === 'card')
+		return `<button class="act-${o.kind}${o.dark ? ' dark' : ''}${o.oasis ? ' oasis' : ''}" data-i="${i}"${o.hidden ? ' hidden' : ''}>${ico}<span class="act-words">${a[0]}${sub}</span><span class="act-arrow" aria-hidden="true">\u203a</span></button>`;
+	if (o.kind === 'quiet') return `<button class="act-quiet" data-i="${i}">${ico}${a[0]}</button>`;
+	return `<button class="btn" data-i="${i}">${a[0]}</button>`;
+}
+
 function showMsg(html, actions, opts = {}) {
+	const kind = a => (a[2] || {}).kind;
+	const main = actions.map((a, i) => [a, i]).filter(([a]) => kind(a) !== 'quiet'),
+		quiet = actions.map((a, i) => [a, i]).filter(([a]) => kind(a) === 'quiet');
 	$('msgBody').innerHTML =
 		html +
-		'<div class="actions">' +
-		actions.map((a, i) => `<button class="btn" data-i="${i}">${a[0]}</button>`).join('') +
-		'</div>';
+		`<div class="actions${actions.some(kind) ? ' stacked' : ''}">` +
+		main.map(([a, i]) => actionHtml(a, i)).join('') +
+		'</div>' +
+		(quiet.length ? `<div class="actions-quiet">${quiet.map(([a, i]) => actionHtml(a, i)).join('')}</div>` : '');
 	$('msgBody')
-		.querySelectorAll('.actions .btn')
+		.querySelectorAll('.actions [data-i], .actions-quiet [data-i]')
 		.forEach(
 			b =>
 				(b.onclick = () => {

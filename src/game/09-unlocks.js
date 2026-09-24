@@ -10,7 +10,8 @@ function lookUnlocked(o) {
 // What a condition asks, in words (content/text.json, "conditions"). {n} is its
 // number; for a relic, stop, difficulty or board, {name} is that thing's name.
 const CONDITION_NAMES = {
-	relic: id => (RELICS.find(r => r.id === id) || { name: 'relic' }).name,
+	// with its article: "the Golden barque", and "the royal granary" for The royal granary
+	relic: id => 'the ' + (RELICS.find(r => r.id === id) || { name: 'relic' }).name.replace(/^The /, ''),
 	win_at_stop: id => (LEVELS.find(L => L.id === id) || { name: id }).name,
 	win_on_difficulty: d => DIFFICULTY[d].name,
 	win_on_board: b => boardMode(b).name,

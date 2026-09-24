@@ -1,0 +1,9 @@
+<!-- How to play, the chapter picture for "shops" (in the margin index and the contents). A copy of dock/treasury.svg: change it freely. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<path d="M4 14 C4 9 10 6.5 16 6.5 C22 6.5 28 9 28 14 Z" fill="#e8b93e" stroke="#4a2c10" stroke-width="2" stroke-linejoin="round"/>
+<path d="M5 14 H27 V25 H5 Z" fill="#c8962e" stroke="#4a2c10" stroke-width="2" stroke-linejoin="round"/>
+<path d="M5 17.5 H27" stroke="#2f6fc0" stroke-width="2.6"/>
+<path d="M6.5 25 V28.5 M25.5 25 V28.5" stroke="#4a2c10" stroke-width="2.6" stroke-linecap="round"/>
+<circle cx="16" cy="21.5" r="2" fill="#4a2c10"/>
+<circle cx="16" cy="10.5" r="1.5" fill="#4a2c10"/>
+</svg>

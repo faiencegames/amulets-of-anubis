@@ -76,66 +76,62 @@ Object.keys(ICONS.menu || {}).forEach(k => {
 	Object.defineProperty(MENU_ICONS, k, { get: () => iconArt('menu', k), enumerable: true });
 });
 
+// The Menu: back to the board first, then eight tiles, then the three ways out
+// of the game (title screen, saves, a new journey) small at the foot. Until
+// Anubis's stall opens on a first journey, its tile is the learning pace, so
+// the tiles always make two full rows.
 function openMenu() {
-	const items = [
-		['map', T('menu.map'), T('menu.map_sub')],
-		[
-			'diff',
-			T('menu.difficulty'),
-			T('menu.difficulty_sub', { difficulty: DIFFICULTY[save.difficulty].name }),
-		],
-		...(stageOn('stall') ? [['stall', T('menu.stall'), T('menu.stall_sub')]] : []),
-		['treasury', T('menu.treasury'), T('menu.treasury_sub')],
+	const onOff = v => Tplain(v ? 'menu.on' : 'menu.off');
+	const tiles = [
+		['map', T('menu.tiles.map'), '', T('menu.map_sub')],
+		['treasury', T('menu.tiles.treasury'), '', T('menu.treasury_sub')],
+		stageOn('stall')
+			? ['stall', T('menu.tiles.stall'), '', T('menu.stall_sub')]
+			: ['pace', T('menu.tiles.pace'), '', T('menu.pace_sub')],
 		[
 			'museum',
-			T('menu.museum'),
+			T('menu.tiles.museum'),
+			T('menu.tiles.museum_n', { n: Object.keys(save.relics).length, total: RELICS.length }),
 			T('menu.museum_sub', { n: Object.keys(save.relics).length, total: RELICS.length }),
 		],
-		['customise', T('menu.customise'), T('menu.customise_sub')],
+		['diff', T('menu.tiles.difficulty'), DIFFICULTY[save.difficulty].name, T('menu.difficulty_sub', { difficulty: DIFFICULTY[save.difficulty].name })],
+		['customise', T('menu.tiles.customise'), '', T('menu.customise_sub')],
 		[
 			'audio',
-			T('menu.audio'),
-			T('menu.audio_sub', {
-				effects: save.sound ? Tplain('menu.on') : Tplain('menu.off'),
-				music: save.music === false ? Tplain('menu.off') : Tplain('menu.on'),
-				vibration: save.vibrate ? Tplain('menu.on') : Tplain('menu.off'),
-			}),
+			T('menu.tiles.audio'),
+			T('menu.tiles.audio_state', { music: onOff(save.music !== false) }),
+			T('menu.audio_sub', { effects: onOff(save.sound), music: onOff(save.music !== false), vibration: onOff(save.vibrate) }),
 		],
-		['help', T('menu.help'), T('menu.help_sub')],
-		['pace', T('menu.pace'), stageAllOn() ? T('menu.pace_sub_all') : T('menu.pace_sub')],
-		['journey', T('menu.new_journey'), T('menu.new_journey_sub', { first: LEVELS[0].name }), 'quiet'],
+		['help', T('menu.tiles.help'), '', T('menu.help_sub')],
+	];
+	const fresh = id => isNew(id === 'help' ? 'codex' : id) || (id === 'help' && Object.keys(save.fresh || {}).some(k => k.startsWith('codex:')));
+	const foot = [
+		['title', T('menu.title_screen')],
+		['saves', T('menu.saves')],
+		['journey', T('menu.new_journey_short')],
 	];
 	$('msgBody').innerHTML =
 		`<h2 id="msgTitle">${T('menu.title')}</h2><p class="lede">${(save.journeys || 1) > 1 ? T('menu.journey', { n: save.journeys }) : ''}${core ? (eventState ? T('menu.at_event') : T('menu.at_stop', { stop: core.level.name, n: levelIdx + 1, total: LEVELS.length })) : ''}</p>
-		<div class="menu-top">
-			<button class="menu-item primary" data-m="continue"><svg viewBox="0 0 32 32" aria-hidden="true">${MENU_ICONS.continue}</svg><span class="mi-text"><strong>${T('menu.back')}</strong><span>${T('menu.back_sub')}</span></span></button>
-			<button class="menu-item full" data-m="title"><svg viewBox="0 0 32 32" aria-hidden="true">${MENU_ICONS.title}</svg><span class="mi-text"><strong>${T('menu.title_screen')}</strong><span>${T('menu.title_screen_sub')}</span></span></button>
-			<button class="menu-item full" data-m="saves"><svg viewBox="0 0 32 32" aria-hidden="true">${MENU_ICONS.saves}</svg><span class="mi-text"><strong>${T('menu.saves')}</strong><span>${T('menu.saves_sub')}</span></span></button>
-		</div>
+		<button class="act-go" data-m="continue"><span class="act-ico"><svg viewBox="0 0 32 32" aria-hidden="true">${MENU_ICONS.continue}</svg></span><span class="act-words">${T('menu.back')}<small>${T('menu.back_sub')}</small></span><span class="act-arrow" aria-hidden="true">\u203a</span></button>
 		<hr class="title-hr">
-		<div class="menu-grid">${items
+		<div class="menu-tiles">${tiles
 			.map(
-				([
-					id,
-					t,
-					d,
-					kind,
-				]) => `<button class="menu-item${kind ? ' ' + kind : ''}${isNew(id === 'help' ? 'codex' : id) || (id === 'help' && Object.keys(save.fresh || {}).some(k => k.startsWith('codex:'))) ? ' has-new' : ''}" data-m="${id}">
-			<svg viewBox="0 0 32 32" aria-hidden="true">${MENU_ICONS[id]}</svg><span class="mi-text"><strong>${t}</strong><span>${d}</span></span></button>`
+				([id, name, state, what]) =>
+					`<button class="menu-tile${fresh(id) ? ' has-new' : ''}" data-m="${id}" title="${plainText(what)}"><svg viewBox="0 0 32 32" aria-hidden="true">${MENU_ICONS[id]}</svg><strong>${name}</strong>${state ? `<small>${state}</small>` : ''}</button>`
 			)
+			.join('')}</div>
+		<div class="menu-foot">${foot
+			.map(([id, name]) => `<button class="act-quiet" data-m="${id}"><svg viewBox="0 0 32 32" aria-hidden="true">${MENU_ICONS[id]}</svg>${name}</button>`)
 			.join('')}</div>`;
 	$('msgBody')
-		.querySelectorAll('.menu-item')
+		.querySelectorAll('[data-m]')
 		.forEach(
 			b =>
 				(b.onclick = () => {
 					const m = b.dataset.m;
 					sfx('ui');
-					if (m === 'continue') {
-						closeOverlays();
-						return;
-					}
 					closeOverlays();
+					if (m === 'continue') return;
 					({
 						pace: openPace,
 						title: openTitle,

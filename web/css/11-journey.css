@@ -7,8 +7,27 @@
 .seal-list li.fresh{ color:var(--carnelian); }
 .seal-ok{ color:#2e7d5b; font-weight:700; }
 .seal-dot{ color:#a8341c; font-size:14px; flex:none; }
-.omen-list{ display:grid; gap:6px; max-width:440px; margin:0 auto; }
-.fill-toggle.omen{ align-items:flex-start; }
+/* omens: cards in two columns; a braved one is pressed in and ringed with
+   gold, as a chosen option is elsewhere */
+.omen-list{ display:grid; grid-template-columns:1fr 1fr; gap:6px; margin:0 auto; }
+.fill-toggle.omen{ align-items:flex-start; margin:0; padding:6px 8px; border:2px solid; border-color:#f7ecd4 #b08a58 #b08a58 #f7ecd4; border-radius:2px;
+	background:#efdcb466; font-size:13px; line-height:1.3; }
+.fill-toggle.omen strong{ font-family:var(--display); font-weight:400; font-size:15px; color:var(--carnelian); }
+.fill-toggle.omen:has(input:checked){ border-color:#7a5a30 #f7ecd4 #f7ecd4 #7a5a30; background:linear-gradient(180deg,#f6e6bf,#d9bd8c); box-shadow:0 0 0 2px var(--gold); }
+@media (max-width:380px){ .omen-list{ grid-template-columns:1fr; } }
+
+/* a stop's card: small tiles for its seals, omens and doorway, one open at a
+   time; they look like the tabs of Customise */
+.stop-tiles{ display:grid; grid-template-columns:repeat(auto-fit, minmax(0,1fr)); gap:6px; margin:10px 0 12px; }
+.stop-tile{ display:flex; flex-direction:column; align-items:center; gap:1px; padding:6px 4px 5px; cursor:pointer;
+	font-family:var(--body); font-size:13.5px; color:#5a3a18; border-radius:2px;
+	background:linear-gradient(180deg,#ecd9b2,#c7a877); border:2px solid; border-color:#f7ecd4 #7a5a30 #7a5a30 #f7ecd4; }
+.stop-tile b{ font-family:var(--display); font-weight:400; font-size:17px; color:var(--carnelian); }
+.stop-tile:hover{ background:linear-gradient(180deg,#f3e3c0,#d2b483); }
+.stop-tile.on{ border-color:#7a5a30 #f7ecd4 #f7ecd4 #7a5a30; background:linear-gradient(180deg,#f6e6bf,#d9bd8c); box-shadow:0 0 0 2px var(--gold); }
+.stop-tile:focus-visible{ outline:3px solid var(--lapis); outline-offset:2px; }
+.stop-part{ min-height:120px; }
+.stop-note{ text-align:center; margin-top:8px; }
 .omen-total{ font-family:var(--display); font-size:17px; color:var(--carnelian); margin-top:8px; }
 
 /* Learning pace */

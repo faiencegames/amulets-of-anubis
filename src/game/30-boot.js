@@ -5,6 +5,7 @@ loadPictures().then(() => {
 	startLevel(startAt);
 	requestAnimationFrame(frame);
 	if (TRY) {
+		document.body.classList.remove('booting');
 		document.body.insertAdjacentHTML(
 			'beforeend',
 			'<div class="try-badge" title="A separate save for testing: your real game is not touched">Try-out mode</div>'

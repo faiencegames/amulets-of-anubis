@@ -20,10 +20,10 @@ lives in small text files that explain themselves. You can make your own
 version without writing any code.
 
 <div class="start">
-<p><a href="docs/beginners-guide.md"><b>Change the game</b><br><span>Your own pictures, words and prices, a new stop or tomb. Step by step, no programming.</span></a></p>
+<p><a href="docs/manual/part-1-making-things.md"><b>Change the game</b><br><span>The manual, part 1: your own pictures, words and prices, a new stop, tomb or boon. No programming.</span></a></p>
 <p><a href="docs/content-reference.md"><b>Look something up</b><br><span>Every field of every content file, and every name the build knows.</span></a></p>
 <p><a href="docs/build-guide.md"><b>Build the apps</b><br><span>The Android and desktop apps, from this one folder.</span></a></p>
-<p><a href="docs/developer-guide.md"><b>Work on the code</b><br><span>How the game works inside: rules, drawing, sound, balance.</span></a></p>
+<p><a href="docs/manual/part-2-the-engine.md"><b>Work on the code</b><br><span>The manual, part 2: how the engine works inside, and how to extend it.</span></a></p>
 </div>
 
 ## What's in it
@@ -100,22 +100,22 @@ Most of the game is content rather than code:
 | every picture: amulets, scenery, floors, badges and icons | files in `images/` (mostly SVG, see `images/README.md`) |
 
 If you have never programmed, start with the
-**[beginner's guide](docs/beginners-guide.md)**. It walks you through changing
-pictures, words and numbers and adding a new stop, with pictures at every step.
+**[first part of the manual](docs/manual/part-1-making-things.md)**. It walks
+you through changing pictures, words and numbers and adding a new stop, with
+pictures at every step, and ends with how to write a boon of your own.
 
 ## Documentation
 
 | | |
 |---|---|
-| [Beginner's guide](docs/beginners-guide.md) | pictures, words, numbers and new stops, step by step |
+| [The manual](docs/manual/README.md) | in two parts: making things (for everyone) and the engine (for programmers) |
 | [Content reference](docs/content-reference.md) | every field of every kind of content file |
-| [Developer guide](docs/developer-guide.md) | how the game works inside: balancing, performance, the stylesheet |
 | [Build guide](docs/build-guide.md) | the Android and desktop apps |
 | [Screenshots](docs/screenshots.md) | pictures of every part of the game |
 
 ## Licence
 
-Amulets of Anubis © 2026 faiencegames.
+Amulets of Anubis © 2026 Faience Games.
 
 * **The code** (the game, the build, the tools and the scripts) is free
   software under the GNU General Public License, version 3 or (at your option)

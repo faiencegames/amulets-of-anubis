@@ -18,7 +18,7 @@ grow by their size.
 | `floors/<set>/` | the squares of a floor set | `bare`, `thick`, `gilded-1` … `gilded-4` | square, 128 × 128 |
 | `specials/` | the marks of special amulets | fixed names (below) | 192 × 192 |
 | `badges/` | the badges amulets fall wearing | fixed names (below) | 96 × 96 |
-| `icons/` | buttons, boons, relics, menu, map | see below | their own viewBox |
+| `icons/` | buttons, boons, relics, menu, map, How to play | see below | their own viewBox |
 | `relics/` | a picture for a relic, used instead of its icon | the relic's id: `first.png` | square |
 
 ## Amulets

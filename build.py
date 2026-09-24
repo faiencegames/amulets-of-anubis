@@ -928,6 +928,7 @@ TEXT_FAMILIES = {   # keys the code builds from an id, so they can't be found by
 	'reward': (['gold', 'lapis'], None),
 	'conditions': (None, None),   # filled below from the condition lists
 	'codex.tabs': (['basics', 'amulets', 'specials', 'badges', 'boons', 'floors', 'trials', 'events', 'places', 'relics', 'omens', 'shops'], None),
+	'codex.groups': (['board', 'journey'], None),
 	'codex.places': (['intro', 'sand', 'sand_text', 'water', 'water_text', 'tombs', 'tombs_text', 'oases', 'oases_text', 'line', 'reward'], None),
 	'customise.tabs': (['sets', 'floors', 'frames', 'sparkles'], None),
 	# an oasis's words, looked up by placeKey() in src/game/11-chambers.js
@@ -1035,7 +1036,7 @@ def report():
 	if errors:
 		print(f'\n{len(errors)} {"problem" if len(errors) == 1 else "problems"} in the content files. Nothing was built; the last good game file is unchanged.\n', file=out)
 		for e in errors: print('  x ' + e + '\n', file=out)
-		print('Fix the first one, build again, and repeat. docs/beginners-guide.md, "If something goes wrong", can help.', file=out)
+		print('Fix the first one, build again, and repeat. The manual, docs/manual/part-1-making-things.md ("If something goes wrong"), can help.', file=out)
 
 if errors:
 	report(); sys.exit(1)

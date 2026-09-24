@@ -7,27 +7,50 @@ function openStop(i) {
 		st = save.stars[i] || 0;
 	const pick = new Set(save.omenPick && save.omenPick.stop === L.id ? save.omenPick.list : []);
 	const best = (save.omens || {})[L.id] || 0;
-	const omenHtml =
-		won && !stageOn('omens')
-			? `<p class="shop-desc" style="text-align:center">${T('stop.omens_later')}</p>`
-			: won
-				? `<h3 class="shop-head">${T('stop.omens')}</h3>
-			<p class="shop-desc" style="text-align:center">${T('stop.omens_lede')}${best ? T('stop.omens_best', { n: best }) : ''}</p>
-			<div class="omen-list">${OMENS.map(o => `<label class="fill-toggle omen"><input type="checkbox" data-o="${o.id}" ${pick.has(o.id) ? 'checked' : ''}> <span><strong>${o.name}</strong><br><span class="shop-desc">${o.text}</span></span></label>`).join('')}</div>
-			<p class="omen-total" id="omenTotal" style="text-align:center"></p>`
-				: `<p class="shop-desc" style="text-align:center">${T('stop.omens_first_win')}</p>`;
 	const ch = chamberAt(i),
 		chOpen = chamberOpen(ch);
-	const chamberHtml = chOpen
-		? `<h3 class="shop-head">${T(placeKey(ch, 'heading'))}</h3>
-			<div class="trial-card river-card chamber-card" role="button" tabindex="0" id="stopChamber"><p class="trial-goal">${iconSvg('map', placeIcon(ch), 'class="door-ico" aria-hidden="true"')}${ch.title}</p>
-			<p class="trial-prize"><span>${save.chambers[ch.id] ? T(placeKey(ch, 'card_done'), { reward: rewardText(visitReward(ch)) }) : T(placeKey(ch, 'card_new'), { reward: rewardText(ch.reward) })}</span></p></div>`
-		: ch && stageOn('chambers') && !won
-			? `<p class="shop-desc" style="text-align:center">${T(placeKey(ch, 'locked'))}</p>`
-			: '';
+	// the stop's parts: its seals, the omens to brave, a doorway. With more than
+	// one, each is a small tile with the gist, and only the chosen one is open.
+	const parts = [];
+	const notes = [];
+	if (stageOn('seals') && (L.seals || []).length)
+		parts.push({
+			id: 'seals',
+			name: T('stop.seals'),
+			gist: T('stop.seals_gist', { n: sealsOf(i).filter(Boolean).length, total: L.seals.length }),
+			html: sealsLine(i, []),
+		});
+	if (won && stageOn('omens'))
+		parts.push({
+			id: 'omens',
+			name: T('stop.omens'),
+			gist: '',
+			html: `<p class="shop-desc" style="text-align:center">${T('stop.omens_lede')}${best ? T('stop.omens_best', { n: best }) : ''}</p>
+			<div class="omen-list">${OMENS.map(o => `<label class="fill-toggle omen"><input type="checkbox" data-o="${o.id}" ${pick.has(o.id) ? 'checked' : ''}> <span><strong>${o.name}</strong><br><span class="shop-desc">${o.text}</span></span></label>`).join('')}</div>`,
+		});
+	else if (won) notes.push(T('stop.omens_later'));
+	else notes.push(T('stop.omens_first_win'));
+	const chText = chOpen
+		? save.chambers[ch.id]
+			? T(placeKey(ch, 'card_done'), { reward: rewardText(visitReward(ch)) })
+			: T(placeKey(ch, 'card_new'), { reward: rewardText(ch.reward) })
+		: '';
+	if (chOpen)
+		parts.push({
+			id: 'door',
+			name: T(placeKey(ch, 'heading')),
+			gist: T(save.chambers[ch.id] ? 'stop.door_explored' : 'stop.door_open'),
+			html: `<p class="trial-goal stop-door">${iconSvg('map', placeIcon(ch), 'class="door-ico" aria-hidden="true"')}${ch.title}</p><p>${chText}</p>`,
+		});
+	else if (ch && stageOn('chambers') && !won) notes.push(T(placeKey(ch, 'locked')));
+	const tiles = parts.length > 1;
+	const partsHtml = tiles
+		? `<div class="stop-tiles" role="tablist">${parts.map((p, j) => `<button type="button" role="tab" class="stop-tile${j ? '' : ' on'}" aria-selected="${!j}" data-part="${p.id}"><b>${p.name}</b><span data-gist="${p.id}">${p.gist}</span></button>`).join('')}</div>
+			${parts.map((p, j) => `<div class="stop-part" role="tabpanel" data-panel="${p.id}"${j ? ' hidden' : ''}>${p.html}</div>`).join('')}`
+		: parts.map(p => `<h3 class="shop-head">${p.name}</h3>${p.html}`).join('');
 	showMsg(
 		`<h2 id="msgTitle">${L.name}</h2><p class="lede" style="text-align:center">${L.sub || ''}${st ? `<br>${'\u2605'.repeat(st)}${'\u2606'.repeat(3 - st)}` : ''}</p>
-		${stageOn('seals') ? `<h3 class="shop-head">${T('stop.seals')}</h3>${sealsLine(i, [])}` : ''}${omenHtml}${chamberHtml}`,
+		${partsHtml}${notes.map(n => `<p class="shop-desc stop-note">${n}</p>`).join('')}`,
 		[
 			[
 				Tplain('stop.set_out'),
@@ -39,17 +62,58 @@ function openStop(i) {
 					persist();
 					startLevel(i);
 				},
+				{ kind: 'go', icon: iconSvg('ui', 'barque'), sub: '<span id="omenTotal"></span>' },
 			],
-			[Tplain('stop.back'), openMap],
-		]
+			// the doorway: with tiles, the big button becomes this while its tile is open
+			...(chOpen
+				? [
+						[
+							Tplain(placeKey(ch, save.chambers[ch.id] ? 'go_back' : 'explore'), { name: midSentence(ch.title) }),
+							() => startChamber(ch, chamberFromCard()),
+							{
+								kind: tiles ? 'go' : 'card',
+								dark: true,
+								oasis: !!ch.oasis,
+								hidden: tiles,
+								icon: iconSvg('map', placeIcon(ch)),
+								sub: tiles ? '' : chText,
+							},
+						],
+					]
+				: []),
+		],
+		{ onClose: openMap } // the \u00d7 goes back to the map, where the stop was chosen
 	);
+	$('msgBody')
+		.querySelectorAll('.stop-tile')
+		.forEach(
+			t =>
+				(t.onclick = () => {
+					sfx('select');
+					$('msgBody')
+						.querySelectorAll('.stop-tile')
+						.forEach(x => {
+							x.classList.toggle('on', x === t);
+							x.setAttribute('aria-selected', x === t);
+						});
+					$('msgBody')
+						.querySelectorAll('.stop-part')
+						.forEach(p => (p.hidden = p.dataset.panel !== t.dataset.part));
+					// the big button: into the doorway on its tile, otherwise onto the stop
+					$('msgBody')
+						.querySelectorAll('.act-go')
+						.forEach(b => (b.hidden = (b.dataset.i === '1') !== (t.dataset.part === 'door')));
+				})
+		);
 	const total = () => {
 		const n = $('msgBody').querySelectorAll('.omen input:checked').length,
-			el = $('omenTotal');
-		if (el)
+			el = $('omenTotal'),
+			gist = $('msgBody').querySelector('[data-gist="omens"]');
+		if (el && won && stageOn('omens'))
 			el.innerHTML = n
 				? T('stop.total', { n, x: (1 + OMEN_BONUS * n).toFixed(1) })
 				: T('stop.total_none');
+		if (gist) gist.innerHTML = n ? T('stop.omens_some', { n }) : T('stop.omens_none');
 	};
 	$('msgBody')
 		.querySelectorAll('.omen input')
@@ -61,20 +125,6 @@ function openStop(i) {
 				})
 		);
 	total();
-	const door = $('stopChamber');
-	if (door) {
-		const go = () => {
-			closeOverlays();
-			startChamber(ch, chamberFromCard());
-		};
-		door.onclick = go;
-		door.onkeydown = e => {
-			if (e.key === 'Enter' || e.key === ' ') {
-				e.preventDefault();
-				go();
-			}
-		};
-	}
 }
 
 function openMap() {

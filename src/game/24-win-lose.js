@@ -89,41 +89,44 @@ function levelWon() {
 			<p style="text-align:center">${T('win.rewards', { gold: winGold.toLocaleString(), lapis: winLapis.toLocaleString() })}${nOmens ? ` <em>${T('win.omens', { x: omenK.toFixed(1), n: nOmens })}</em>` : ''}</p>
 			${sealsLine(levelIdx, newSeals)}
 			${curseNote}
-			${doorway ? `<p class="chamber-note">${iconSvg('map', placeIcon(doorway), 'aria-hidden="true"')}<span>${T(placeKey(doorway, save.chambers[doorway.id] ? 'win_again' : 'win_note'), { name: midSentence(doorway.title) })}</span></p>` : ''}
-			${last ? `<p style="text-align:center">${T('win.journey_done')}</p>` : `<p style="text-align:center">${T('win.next', { stop: next.name })}<br><em>${next.sub}</em></p>`}`,
+			${last ? `<p style="text-align:center">${T('win.journey_done')}</p>` : ''}`,
 			[
-				...(doorway && !save.chambers[doorway.id]
+				// the way on first, then the doorway, if one is here, then the rest, quietly
+				last
+					? [Tplain('win.map'), openMap, { kind: 'go', icon: iconSvg('dock', 'map') }]
+					: [
+							Tplain('win.sail', { stop: next.name }),
+							() => goNext(levelIdx + 1),
+							{ kind: 'go', sub: next.sub, icon: iconSvg('ui', 'barque') },
+						],
+				...(doorway
 					? [
 							[
-								Tplain(placeKey(doorway, 'explore'), { name: midSentence(doorway.title) }),
+								Tplain(placeKey(doorway, save.chambers[doorway.id] ? 'go_back' : 'explore'), {
+									name: midSentence(doorway.title),
+								}),
 								() => startChamber(doorway, chamberFromWin(doorway, wonAt)),
+								{
+									kind: 'card',
+									dark: true,
+									oasis: !!doorway.oasis,
+									icon: iconSvg('map', placeIcon(doorway)),
+									sub: T(placeKey(doorway, save.chambers[doorway.id] ? 'win_again' : 'win_note'), {
+										name: midSentence(doorway.title),
+									}),
+								},
 							],
 						]
 					: []),
 				...(last
-					? [
-							[Tplain('win.map'), openMap],
-							[Tplain('win.play_again'), () => openStop(levelIdx)],
-						]
+					? [[Tplain('win.play_again'), () => openStop(levelIdx), { kind: 'quiet', icon: iconSvg('dock', 'restart') }]]
 					: [
-							[Tplain('win.sail', { stop: next.name }), () => goNext(levelIdx + 1)],
-							[Tplain('win.map'), openMap],
-							[Tplain('win.replay'), () => openStop(levelIdx)],
+							[Tplain('win.map'), openMap, { kind: 'quiet', icon: iconSvg('dock', 'map') }],
+							[Tplain('win.replay'), () => openStop(levelIdx), { kind: 'quiet', icon: iconSvg('dock', 'restart') }],
 						]),
-				// an explored doorway can be entered again, after the way on
-				...(doorway && save.chambers[doorway.id]
-					? [
-							[
-								Tplain(placeKey(doorway, 'go_back'), { name: midSentence(doorway.title) }),
-								() => startChamber(doorway, chamberFromWin(doorway, wonAt)),
-							],
-						]
-					: []),
 			],
 			{ noClose: true }
 		);
-		if (doorway && !save.chambers[doorway.id])
-			$('msgBody').querySelector('.actions .btn').classList.add('chamber-go');
 	}, 900);
 }
 
@@ -198,14 +201,15 @@ function levelLost() {
 					save.fails[levelIdx] = Math.max(0, f - 1);
 					persist();
 				},
+				{ kind: 'card', sub: T('lose.buy', { n: breath.give.moves }) },
 			]);
-		acts.push([Tplain('lose.try_again'), () => startLevel(levelIdx)], [Tplain('lose.map'), openMap]);
+		acts.unshift([Tplain('lose.try_again'), () => startLevel(levelIdx), { kind: 'go', icon: iconSvg('dock', 'restart') }]);
+		acts.push([Tplain('lose.map'), openMap, { kind: 'quiet', icon: iconSvg('dock', 'map') }]);
 		showMsg(
 			`<h2 id="msgTitle">${T('lose.title')}</h2>
 			<p class="lede">${T('lose.lede', { n: left })}</p>
 			<p class="persist-note">${T('lose.persist', { n: nextBonus })}${gift}.</p>
-			${canBuy ? `<p style="text-align:center">${T('lose.buy', { n: breath.give.moves })}</p>` : ''}
-			<p style="text-align:center">Aim your matches at the corners and edges early. Banded and ringed amulets reach stones that are hard to match.</p>${curseNote}`,
+			<p style="text-align:center">${T('lose.tip')}</p>${curseNote}`,
 			acts,
 			{ noClose: true }
 		);

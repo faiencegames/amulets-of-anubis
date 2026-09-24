@@ -72,7 +72,7 @@ async function open(save, { device = DESKTOP, hash = '' } = {}) {
 }
 // past the title screen, and any trial offer or banner, onto the board
 async function toBoard(page) {
-	await page.click('#ovMsg [data-t="continue"]').catch(() => {});
+	await page.click('#ovTitle [data-t="continue"]').catch(() => {});
 	await page.waitForTimeout(700);
 	for (let i = 0; i < 3; i++) {
 		if (!await page.$('.overlay.open')) break;
@@ -121,9 +121,11 @@ const SCENES = {
 		const p = await open(journeySave({ current: 2 })); await toBoard(p);
 		await shot(p, 'screenshot-giza.jpg'); await p.close();
 	},
+	// the title screen fills the window, over the scenery of the stop you're at
 	async title() {
 		const p = await open(journeySave());
-		await scroll(p, 'screenshot-title.jpg'); await p.close();
+		await p.waitForTimeout(700);
+		await shot(p, 'screenshot-title.jpg'); await p.close();
 	},
 	async map() {
 		const p = await open(journeySave()); await toBoard(p);
@@ -133,7 +135,10 @@ const SCENES = {
 	async stop() {
 		const p = await open(journeySave(), { device: TALL }); await toBoard(p);
 		await p.click('#btnMap'); await p.waitForTimeout(500);
-		await p.click('.stop-btn[data-i="1"]'); await scroll(p, 'screenshot-omens.jpg'); await p.close();
+		await p.click('.stop-btn[data-i="1"]'); await p.waitForTimeout(400);
+		// its Omens tile open, with one braved
+		await p.click('[data-part="omens"]'); await p.click('.omen >> nth=0');
+		await scroll(p, 'screenshot-omens.jpg'); await p.close();
 	},
 	async customise() {
 		const p = await open(journeySave(), { device: TALL }); await toBoard(p);
@@ -155,20 +160,32 @@ const SCENES = {
 		const p = await open(journeySave(), { device: TALL }); await toBoard(p);
 		await p.click('#btnStall'); await scroll(p, 'screenshot-stall.jpg'); await p.close();
 	},
+	// the Menu: back to the board, eight tiles, the ways out small at the foot
+	async menu() {
+		const p = await open(journeySave()); await toBoard(p);
+		await p.click('#btnMenu'); await scroll(p, 'screenshot-menu.jpg'); await p.close();
+	},
+	// a boon that asks for a square: the Hammer of Set aimed, the board glowing gold
+	async aim() {
+		const p = await open(journeySave()); await toBoard(p);
+		await p.click('.side .boon[aria-label^="Hammer"]'); await p.waitForTimeout(600);
+		await shot(p, 'screenshot-boon-aimed.jpg'); await p.close();
+	},
 	// the doorway at Giza, then the tomb itself by torchlight
 	async tomb() {
 		const p = await open(journeySave()); await toBoard(p);
 		await p.click('#btnMap'); await p.waitForTimeout(500);
 		await p.click('.stop-btn[data-i="2"]'); await p.waitForTimeout(500);
-		await p.click('#stopChamber'); await p.waitForTimeout(1500);
+		await p.click('[data-part="door"]'); await p.waitForTimeout(300);
+		await p.click('#ovMsg .act-go:not([hidden])'); await p.waitForTimeout(1500);
 		await scroll(p, 'screenshot-chamber.jpg');
-		await p.click('#ovMsg .actions .btn'); await p.waitForTimeout(2200);
+		await p.click('#ovMsg .act-go:not([hidden])'); await p.waitForTimeout(2200);
 		await shot(p, 'screenshot-tomb.jpg'); await p.close();
 	},
 	// Siwa: an oasis in daylight, some amulets under water
 	async oasis() {
 		const p = await open(null, { hash: '#try=siwa' });
-		await p.click('#ovMsg .actions .btn'); await p.waitForTimeout(2200);
+		await p.click('#ovMsg .act-go:not([hidden])'); await p.waitForTimeout(2200);
 		await p.evaluate(() => document.querySelector('.try-badge')?.remove());
 		await shot(p, 'screenshot-oasis.jpg'); await p.close();
 	},
@@ -198,7 +215,7 @@ const SCENES = {
 		for (let n = 0; n < 20; n++) {
 			await p.click('#btnMap'); await p.waitForTimeout(500);
 			await p.click('.stop-btn[data-i="5"]'); await p.waitForTimeout(500);
-			await p.click('#ovMsg .actions .btn'); await p.waitForTimeout(1600);
+			await p.click('#ovMsg .act-go:not([hidden])'); await p.waitForTimeout(1600);
 			if (await p.$('.trial-card[data-accept]')) { await shot(p, 'screenshot-phone-trial.jpg'); await p.close(); return; }
 			if (await p.$('.overlay.open')) { await p.keyboard.press('Escape'); await p.waitForTimeout(400); }
 		}

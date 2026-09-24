@@ -27,7 +27,10 @@
 		"change_difficulty": "Change the difficulty and the board",
 		"stars": "Stars",
 		"relics": "Relics",
-		"open_museum": "Visit the museum"
+		"open_museum": "Museum ›",
+		"open_museum_title": "Visit the Museum of relics",
+		"no_boons": "No boons yet. Win a trial to earn one.",
+		"boons_help": "What each boon does"
 	},
 	"dock": {
 		"controls": "Game controls",
@@ -46,28 +49,22 @@
 
 	// ---- the title screen ----
 	"title": {
-		"kicker": "Amulets of Anubis",
-		"heading_new": "The journey begins",
+		"name": "Amulets of Anubis",
+		"sub": "A journey down the Nile",
+		"heading_new": "Twelve stops from Memphis to Alexandria",
 		"heading_back": "Welcome back",
 		"status_journey": "Journey {n} · ",
 		"status": "{stop} · {stars} {stars|star|stars} · {relics} of {total} relics",
-		"description": "*From the journal of a journey down the Nile.*\nWe set out from Memphis with a chest of amulets and a map drawn in a hurry. At every stop the old floors lay grey and dull, until we set the amulets three in a row and the stone turned to gold beneath them.\nWhen the way grew hard, the Treasury and Anubis’s stall helped us. And the river kept its surprises: dark doorways in the rock, quiet oases, and now and then something we would rather not have met.",
-		"how_to_play": "How to play?",
+		"quote": "“At every stop the old floors lay grey and dull, until we set the amulets three in a row and the stone turned to gold beneath them.”",
+		"how_to_play": "How to play",
 		"difficulty_now": "Difficulty: {difficulty}",
 		"begin": "Begin the journey", "begin_sub": "Set out from {first}.",
 		"continue": "Continue", "continue_sub": "Return to {stop}.",
-		"new_journey": "New journey", "new_journey_sub": "Start again from {first}. Relics and looks are kept.",
-		"saves": "Save and restore", "saves_sub": "Copy your progress, or bring it back.",
-		"map": "Nile map", "map_sub": "Choose a stop, or replay one for more stars.",
-		"treasury": "Treasury", "treasury_sub": "Lasting upgrades, bought with gold and lapis.",
-		"museum": "Museum", "museum_sub": "The relics you have found along the river.",
-		"customise": "Customise", "customise_sub": "Amulet sets, floors, frames and sparkles.",
-		"difficulty": "Difficulty and board", "difficulty_sub": "How forgiving it is, and the size of the floor.",
-		"audio": "Sound and music", "audio_sub": "Effects and music, and their volume.",
-		"help": "How to play", "help_sub": "Everything the game can do, with pictures.",
-		"reset": "Complete reset",
-		"reset_sure": "Are you sure? This deletes everything."
+		"new_journey": "New journey",
+		"saves": "Save and restore",
+		"sound": "Sound and music"
 	},
+
 
 	// ---- the menu ----
 	"menu": {
@@ -88,7 +85,14 @@
 		"on": "on", "off": "off",
 		"help": "How to play", "help_sub": "Everything the game can do, with pictures.",
 		"pace": "Learning pace", "pace_sub": "New things arrive one at a time. Or turn everything on now.", "pace_sub_all": "Everything is on.",
-		"new_journey": "New journey", "new_journey_sub": "Start again from {first}. Relics, sets and floors are kept."
+		"new_journey": "New journey", "new_journey_sub": "Start again from {first}. Relics, sets and floors are kept.",
+		"new_journey_short": "New journey…",
+		// the eight tiles: a short name, and a word of how things stand where it helps
+		"tiles": {
+			"map": "Nile map", "treasury": "Treasury", "stall": "Anubis’s stall", "pace": "Learning pace",
+			"museum": "Museum", "museum_n": "{n} of {total}", "difficulty": "Difficulty", "customise": "Customise",
+			"audio": "Sound", "audio_state": "music {music}", "help": "How to play"
+		}
 	},
 
 	// ---- the parts of the game that arrive one at a time (content/settings.json, "staging", says when) ----
@@ -154,7 +158,12 @@
 		"total": "{n} {n|omen|omens}: rewards ×{x}",
 		"total_none": "No omens: the usual reward",
 		"set_out": "Set out",
-		"back": "Back to the map",
+		// the small tiles on a stop's card, with the gist of each part
+		"seals_gist": "{n} of {total}",
+		"omens_none": "none braved",
+		"omens_some": "{n} braved",
+		"door_open": "open",
+		"door_explored": "explored",
 		"stamped": "— stamped!",
 		"omen_row": "Omens: {names} · rewards ×{x}",
 		"cursed_mark": "· cursed",
@@ -177,7 +186,6 @@
 		"omens": "(×{x} for {n} {n|omen|omens} braved)",
 		"curse": "The trial was not met. At the next stop: {curse}.",
 		"journey_done": "So our journey down the Nile came to an end. Any stop can be played again from the map, for more stars.",
-		"next": "Next stop: **{stop}**",
 		"sail": "Sail to {stop}",
 		"map": "Nile map",
 		"replay": "Replay or brave omens",
@@ -232,7 +240,8 @@
 		"buy": "So close? Anubis will sell you {n} more {n|move|moves} right now, and you carry on where you are.",
 		"curse": "Your trial was not met either. At the next stop: {curse}.",
 		"try_again": "Try again",
-		"map": "Nile map"
+		"map": "Nile map",
+		"tip": "Aim your matches at the corners and edges early. Banded and ringed amulets reach stones that are hard to match."
 	},
 
 	// ---- difficulty (the numbers are in content/settings.json) ----
@@ -251,6 +260,10 @@
 			"floors": "Floors", "trials": "Trials", "events": "River events", "places": "Tombs & oases", "relics": "Relics",
 			"omens": "Seals & omens", "shops": "Treasury & stall"
 		},
+		// the two groups of chapters, and the page turning on narrow screens
+		"groups": { "board": "On the board", "journey": "On the journey" },
+		"contents": "Contents", "back_to_contents": "‹ Contents",
+		"chapter": "Chapter {n} of {total}",
 		"basics": {
 			"lede": "Sail down the Nile, stop by stop. At each one, match amulets to turn the stone floor to gold before your moves run out.",
 			"pieces": "The pieces",
@@ -260,7 +273,7 @@
 			"stop_works": "How a stop works",
 			"swap": "**Swap** two neighbouring amulets to line up three or more of a kind.",
 			"gilds": "**Every match gilds** the stone beneath it. The bar by the board shows how far you are.",
-			"bigger": "**Bigger matches** make special amulets that clear more at once (Specials tab).",
+			"bigger": "**Bigger matches** make special amulets that clear more at once (see Specials).",
 			"stars": "**Stars:** finish with moves to spare. Three stars need about a third of your moves left.",
 			"goes_wrong": "When it goes wrong",
 			"fail_moves": "Each failure at the same stop gives **two more moves** next try (up to six).",
@@ -370,6 +383,8 @@
 	// ---- Save and restore ----
 	"saves": {
 		"title": "Save and restore",
+		"reset": "Complete reset",
+		"reset_sure": "Are you sure? This deletes everything.",
 		"lede": "Your progress lives in this browser or app. Keep a copy of this code somewhere safe to move it or bring it back.",
 		"summary": "{stars} stars · {relics} relics · {gold} gold · {lapis} lapis",
 		"export": "Export",
@@ -422,7 +437,7 @@
 		"lapis_held": "Hold {n} lapis at once",
 		"win_streak": "Win {n} stops in a row",
 		"journeys": "Begin journey {n}",
-		"relic": "Find the {name}",
+		"relic": "Find {name}",
 		"win_moves_to_spare": "Win a stop with {n} {n|move|moves} to spare",
 		"win_on_difficulty": "Win a stop on {name}",
 		"win_at_stop": "Gild {name}",
@@ -619,6 +634,8 @@
 	// ---- tapping the stop's name ----
 	"place": {
 		"back": "Back to the board",
+		// the end of a note beside the board that is too long to show whole
+		"read_on": "Read on ›",
 		// the scroll of the amulets on the board (the Amulets button)
 		"amulets_title": "The amulets of {place}",
 		"amulets_heading": "The amulets here"

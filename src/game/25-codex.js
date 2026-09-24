@@ -1,23 +1,33 @@
 // ---------- the codex (How to play) ----------
 // Each amulet's name and what the symbol meant (AMULET_INFO) comes from
 // content/amulets/; the codex lists only amulets that some stop uses.
-const CODEX_TABS = [
-	'basics',
-	'amulets',
-	'specials',
-	'badges',
-	'boons',
-	'floors',
-	'trials',
-	'events',
-	'places',
-	'relics',
-	'omens',
-	'shops',
-].map(id => [id, T('codex.tabs.' + id)]); // names: content/text.json, "codex.tabs"
+// The chapters, in two groups. Names: content/text.json, "codex.tabs"; each
+// chapter's picture: images/icons/codex/<id>.svg.
+const CODEX_GROUPS = [
+	['board', ['basics', 'amulets', 'specials', 'badges', 'boons', 'floors']],
+	['journey', ['trials', 'events', 'places', 'relics', 'omens', 'shops']],
+];
+// the stage a chapter waits for on a first journey (26-stages.js); the rest are there from the start
+const CODEX_STAGE = { badges: 'badges', boons: 'trials', trials: 'trials', events: 'events', places: 'chambers', omens: 'seals' };
+// On a wide screen the chapters run down the margin. On a narrow one How to
+// play opens on its contents, and each chapter turns to the next like a page.
+const CODEX_NARROW = '(max-width: 640px)'; // the same width as in web/css/09-codex-and-sound.css
+let codexLast = null; // the chapter last read, to open at again on a wide screen
+
+function codexPic(id) {
+	const svg = iconSvg('codex', id);
+	return svg ? svg.match(/^<svg[^>]*>/)[0].replace('<svg', '<svg aria-hidden="true" focusable="false"') + iconArt('codex', id) + '</svg>' : '';
+}
+
 function openHelp(tab) {
-	tab = tab || 'basics';
-	clearNew('codex:' + tab);
+	const narrow = window.matchMedia && matchMedia(CODEX_NARROW).matches;
+	tab = tab || (narrow ? 'contents' : codexLast || 'basics');
+	const chapters = CODEX_GROUPS.map(([g, ids]) => [g, ids.filter(id => id === tab || stageOn(CODEX_STAGE[id] || '-'))]);
+	const order = chapters.flatMap(([, ids]) => ids);
+	if (tab !== 'contents') {
+		clearNew('codex:' + tab);
+		codexLast = tab;
+	}
 	// seen once it has been opened, however it is closed (so it does not open by itself again)
 	if (!save.seenHelp) {
 		save.seenHelp = true;
@@ -229,29 +239,34 @@ function openHelp(tab) {
 		<p>${T('codex_more.shops_treasury', { upgrades: UPGRADES.map(u => u.name).join(', '), n: RELICS.length })}</p>
 		<p>${T('codex_more.shops_customise')}</p>
 		<p>${T('codex_more.shops_stall', { items: STALL.map(x => x.name.toLowerCase()).join(', ') })}</p>`;
+	const name = id => T('codex.tabs.' + id);
+	const dot = id => (isNew('codex:' + id) ? ' has-new' : '');
+	const link = (id, cls) =>
+		`<button type="button" class="${cls}${id === tab ? ' on' : ''}${dot(id)}" data-t="${id}"${id === tab ? ' aria-current="page"' : ''}>${codexPic(id)}<span>${name(id)}</span></button>`;
+	const index = chapters
+		.map(([g, ids]) => `<h3>${T('codex.groups.' + g)}</h3>${ids.map(id => link(id, 'codex-link')).join('')}`)
+		.join('');
+	let page;
+	if (tab === 'contents') {
+		page = `<div class="codex-contents">${chapters
+			.map(([g, ids]) => `<div><h3>${T('codex.groups.' + g)}</h3>${ids.map(id => link(id, 'codex-entry')).join('')}</div>`)
+			.join('')}</div>`;
+	} else {
+		const at = order.indexOf(tab),
+			prev = order[at - 1],
+			next = order[at + 1];
+		const turn = (id, cls, text) =>
+			id ? `<button type="button" class="codex-turn-${cls}" data-t="${id}">${text}</button>` : '<span></span>';
+		page = `<div class="codex-leaf-top"><button type="button" class="codex-back" data-t="contents">${T('codex.back_to_contents')}</button>
+			<span>${T('codex.chapter', { n: at + 1, total: order.length })}</span></div>
+			<h3 class="codex-heading">${codexPic(tab)}${name(tab)}</h3>
+			<div class="codex-body">${body}</div>
+			<div class="codex-turn">${turn(prev, 'prev', '\u2039 ' + (prev ? name(prev) : ''))}${turn(next, 'next', (next ? name(next) : '') + ' \u203a')}</div>`;
+	}
 	$('msgBody').innerHTML = `<h2 id="msgTitle">${T('codex.title')}</h2>
-		<div class="codex-tabs" role="tablist">${CODEX_TABS.filter(
-			([id]) =>
-				id === tab ||
-				stageOn(
-					{
-						badges: 'badges',
-						boons: 'trials',
-						trials: 'trials',
-						events: 'events',
-						places: 'chambers',
-						omens: 'seals',
-					}[id] || '-'
-				)
-		)
-			.map(
-				([id, n]) =>
-					`<button role="tab" aria-selected="${id === tab}" class="${id === tab ? 'on' : ''}${isNew('codex:' + id) ? ' has-new' : ''}" data-t="${id}">${n}</button>`
-			)
-			.join('')}</div>
-		<div class="codex-body">${body}</div>`;
+		<div class="codex-book${tab === 'contents' ? ' at-contents' : ''}"><nav class="codex-index" aria-label="${Tplain('codex.contents')}">${index}</nav><div class="codex-page">${page}</div></div>`;
 	$('msgBody')
-		.querySelectorAll('.codex-tabs button')
+		.querySelectorAll('.codex-book [data-t]')
 		.forEach(
 			b =>
 				(b.onclick = () => {
@@ -261,5 +276,6 @@ function openHelp(tab) {
 		);
 	wirePace($('msgBody'));
 	if (!$('ovMsg').classList.contains('open')) openOverlay('ovMsg');
+	$('ovMsg').querySelector('.scroll').classList.add('wide'); // after opening, which sets the width back
 	$('msgBody').scrollTop = 0;
 }

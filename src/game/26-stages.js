@@ -32,7 +32,7 @@ const STAGES = Object.keys(STAGE_MARKS).map(id => ({
 	},
 }));
 // "The game grows as you travel": the list of what arrives when, with a tick
-// for what is already on. Shown on the title screen and in How to play.
+// for what is already on. Shown in How to play (Basics).
 function stageWhen(st) {
 	return st.at === 'journey'
 		? T('roadmap.after_journey')

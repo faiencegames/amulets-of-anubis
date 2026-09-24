@@ -28,8 +28,12 @@
 	.mobile-strip > *{ min-height:0; overflow:hidden; }
 	.mobile-strip .trial-row{ display:flex; align-items:center; }
 	.mobile-strip .boon-row{ flex-wrap:nowrap; overflow-x:auto; gap:5px; }
-	/* in the thin strip the count sits inline, where it can't be cut off */
-	.mobile-strip .boon { gap: 4px; padding: 3px 7px 3px 4px; font-size: 13px; }
+	/* on a phone the boons are icons only, big enough for a thumb; the ? at the
+	   end says what each does. The count sits inline, where it can't be cut off. */
+	.mobile-strip .boon { gap: 3px; min-width: 46px; min-height: 44px; padding: 3px 6px; justify-content: center; }
+	.mobile-strip .boon > span { display: none; }
+	.mobile-strip .boon svg { width: 28px; height: 28px; }
+	.mobile-strip .boon-help { width: 36px; height: 36px; font-size: 18px; }
 	.mobile-strip .boon-n { position: static; min-width: 0; padding: 0 4px; font-size: 10.5px; line-height: 14px; border-width: 1px; }
 	.strip-place{ padding:3px 8px !important; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 	.strip-curse{ color:#b0301c; font-style:italic; }
@@ -50,7 +54,6 @@
 	.dock{ gap:4px; padding:4px; }
 	.rbtn{ height:50px; border-radius:8px; } .rbtn svg{ width:26px; height:26px; } .rbtn em{ display:none; }
 	.overlay .sheet{ padding:15px 15px 17px; }
-	.menu-grid{ gap:6px; } .menu-grid > .menu-item{ flex-basis:100%; }
 	.menu-item{ padding:8px 10px; grid-template-columns:34px 1fr; gap:10px; } .menu-item svg{ width:34px; height:34px; padding:5px; }
 	.menu-item strong{ font-size:17px; } .menu-item .mi-text > span{ font-size:13.5px; }
 	.overlay h2{ font-size:24px; }

@@ -1,0 +1,18 @@
+<!-- How to play, the chapter picture for "trials" (in the margin index and the contents). A copy of boons/scales.svg: change it freely. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+<defs>
+<linearGradient id="cx-bnsc" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#fff2b8"/>
+<stop offset=".5" stop-color="#e8b93e"/>
+<stop offset="1" stop-color="#8a5a10"/>
+</linearGradient>
+</defs>
+<rect x="11.3" y="3" width="1.4" height="17" rx=".7" fill="url(#cx-bnsc)" stroke="#3b2406" stroke-width="1.1"/>
+<rect x="5.5" y="6" width="13" height="1.6" rx=".8" fill="url(#cx-bnsc)" stroke="#3b2406" stroke-width="1.1"/>
+<rect x="8.5" y="19.5" width="7" height="2" rx="1" fill="url(#cx-bnsc)" stroke="#3b2406" stroke-width="1.1"/>
+<path d="M6 7.6 L6 11 M18 7.6 L18 11" stroke="#3b2406" stroke-width="1"/>
+<path d="M3 11 a3 3 0 0 0 6 0 z" fill="url(#cx-bnsc)" stroke="#3b2406" stroke-width="1.2"/>
+<path d="M15 11 a3 3 0 0 0 6 0 z" fill="url(#cx-bnsc)" stroke="#3b2406" stroke-width="1.2"/>
+<circle cx="12" cy="3" r="1.8" fill="url(#cx-bnsc)" stroke="#3b2406" stroke-width="1.1"/>
+<ellipse cx="5" cy="12.5" rx="1" ry="1.4" fill="#fff" opacity=".5"/>
+</svg>

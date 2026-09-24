@@ -144,6 +144,7 @@ function setupSmallBoard(ev, at, state, sub) {
 	$('placeFact').textContent = ev.text;
 	$('legend').innerHTML = '';
 	renderCurse();
+	requestAnimationFrame(fitNote);
 	$('stripPlace').textContent = ev.title;
 	renderTrial();
 	renderBoons();
@@ -169,13 +170,14 @@ function startEvent(ev, next) {
 		${getLine(ev.reward)}
 		<p class="trial-risk calm">${T('event.no_harm')}</p></div>`,
 		[
-			[Tplain('event.begin'), () => {}],
+			[Tplain('event.begin'), () => {}, { kind: 'go', icon: iconSvg('ui', 'barque') }],
 			[
 				Tplain('event.skip'),
 				() => {
 					eventState = null;
 					startLevel(next);
 				},
+				{ kind: 'quiet' },
 			],
 		]
 	);
@@ -202,7 +204,7 @@ function eventAfterMove() {
 			showMsg(
 				`${chamberHead(c)}<p class="lede">${T(placeKey(c, 'won'))}</p>
 			<p class="river-outcome" style="text-align:center">${T('event.gain', { reward: rewardText(paid) })}</p>`,
-				[[after.label, leaveChamber]],
+				[[after.label, leaveChamber, { kind: 'go', icon: iconSvg('ui', 'barque') }]],
 				{ noClose: true }
 			);
 		}, 900);
@@ -228,6 +230,7 @@ function eventAfterMove() {
 							eventState = null;
 							startLevel(next);
 						},
+						{ kind: 'go', sub: LEVELS[next].sub, icon: iconSvg('ui', 'barque') },
 					],
 				],
 				{ noClose: true }
@@ -246,8 +249,12 @@ function eventAfterMove() {
 				`${chamberHead(c)}<p class="lede">${T(placeKey(c, 'lost'))}</p>
 			<p style="text-align:center">${T(placeKey(c, 'lost_text'))}</p>`,
 				[
-					[Tplain('event.try_again'), () => startChamber(c, after, true)],
-					[after.label, leaveChamber],
+					[
+						Tplain('event.try_again'),
+						() => startChamber(c, after, true),
+						{ kind: 'go', dark: true, oasis: !!c.oasis, icon: iconSvg('dock', 'restart') },
+					],
+					[after.label, leaveChamber, { kind: 'quiet' }],
 				],
 				{ noClose: true }
 			);
@@ -271,8 +278,9 @@ function eventAfterMove() {
 							eventState = null;
 							startLevel(next);
 						},
+						{ kind: 'go', sub: LEVELS[next].sub, icon: iconSvg('ui', 'barque') },
 					],
-					[Tplain('event.try_again'), () => startEvent(ev, next)],
+					[Tplain('event.try_again'), () => startEvent(ev, next), { kind: 'quiet', icon: iconSvg('dock', 'restart') }],
 				],
 				{ noClose: true }
 			);
@@ -352,7 +360,13 @@ function eventChoice(ev, next) {
 			() =>
 				showMsg(
 					`${riverHead(ev, next)}<p class="river-outcome" style="text-align:center">${outcome}</p>`,
-					[[Tplain('event.sail', { stop: LEVELS[next].name }), () => startLevel(next)]],
+					[
+						[
+							Tplain('event.sail', { stop: LEVELS[next].name }),
+							() => startLevel(next),
+							{ kind: 'go', sub: LEVELS[next].sub, icon: iconSvg('ui', 'barque') },
+						],
+					],
 					{ onClose: () => startLevel(next) }
 				),
 			50
@@ -360,7 +374,7 @@ function eventChoice(ev, next) {
 	};
 	showMsg(
 		`${riverHead(ev, next)}<p class="story">${ev.text}</p>${doing.map(card).join('')}`,
-		leaving.map(ch => [ch.label, () => startLevel(next)]),
+		leaving.map(ch => [ch.label, () => startLevel(next), { kind: 'quiet' }]),
 		{ onClose: () => startLevel(next) }
 	);
 	$('msgBody')
@@ -376,6 +390,4 @@ function eventChoice(ev, next) {
 				}
 			};
 		});
-	const btns = $('msgBody').querySelectorAll('.actions .btn');
-	if (btns.length === 1) btns[0].classList.add('full');
 }

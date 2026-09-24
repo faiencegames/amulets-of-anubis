@@ -2,7 +2,7 @@
 
 /* papyrus scroll */
 .scroll{ position:relative; padding:0 6px; }
-.rod{ height:16px; border-radius:8px; margin:0 -6px; position:relative; z-index:1;
+.rod{ flex:none; height:16px; /* never squeezed by a long scroll */ border-radius:8px; margin:0 -6px; position:relative; z-index:1;
 	background:linear-gradient(180deg,#8a5a2b,#5a3614 55%,#2c1806); box-shadow:0 3px 6px #0009; }
 .rod::before,.rod::after{ content:""; position:absolute; top:-3px; width:14px; height:22px; border-radius:5px; background:linear-gradient(180deg,#f6d676,#b07a17 60%,#6e4608); box-shadow:0 2px 3px #0008; }
 .rod::before{ left:-4px; } .rod::after{ right:-4px; }
@@ -18,11 +18,6 @@
 .place{ margin:0; font-family:var(--display); font-weight:700; font-size:30px; line-height:1.1; color:var(--carnelian); }
 .place-sub{ margin:2px 0 12px; font-style:italic; color:#6b4a22; }
 .fact{ margin:0; font-size:16.5px; line-height:1.55; hyphens:auto; text-align: justify;}
-.fact::first-letter{
-	float:left; font-family:var(--display); font-size:34px; line-height:1; color:var(--ink);
-	padding:4px 6px 2px; margin:3px 8px 0 0; border:1px solid #6b4a22;
-	background:linear-gradient(135deg,#f2e2b4,#cfb57c); box-shadow:2px 2px 0 #6b4a2255;
-}
 .legend{ display:flex; flex-wrap:wrap; gap:6px 14px; margin-top:14px; padding-top:10px; border-top:1px solid #8a622a55; font-size:14px; color:#4a3217; }
 .legend span{ display:inline-flex; align-items:center; gap:6px; }
 .legend i{ width:16px; height:16px; display:inline-block; border:1px solid #3a2608; }
@@ -44,9 +39,11 @@
 .place{ margin:0; font-family:var(--display); font-weight:700; font-size:27px; line-height:1.1; color:var(--carnelian); }
 .place-sub{ margin:2px 0 10px; font-style:italic; color:#6b4a22; }
 .fact{ margin:0; font-size:16px; line-height:1.5; hyphens:auto; }
-.fact::first-letter{ float:left; font-family:var(--display); font-size:32px; line-height:1; color:var(--ink);
-	padding:4px 6px 2px; margin:3px 8px 0 0; border:1px solid #6b4a22;
-	background:linear-gradient(135deg,#f2e2b4,#cfb57c); box-shadow:2px 2px 0 #6b4a2255; }
+/* the drop cap: a plain letter as tall as two lines of text, its top level
+   with the first line's capitals and its foot on the second line's baseline.
+   In em, so it keeps to two lines at every text size. */
+.fact::first-letter{ float:left; font-family:var(--display); font-size:3.9em; line-height:.72; color:var(--carnelian);
+	margin:.03em .07em 0 -.02em; padding:0; }
 .legend{ display:flex; flex-wrap:wrap; gap:5px 12px; margin-top:12px; padding-top:9px; border-top:1px solid #8a622a55; font-size:13.5px; color:#4a3217; }
 .legend span{ display:inline-flex; align-items:center; gap:6px; }
 .legend i{ width:15px; height:15px; display:inline-block; border:1px solid #3a2608; }

@@ -1,6 +1,43 @@
-/* 09-codex-and-sound.css: How to play (the codex tabs) and the sound and music screen. */
+/* 09-codex-and-sound.css: How to play (its index, contents and chapters), the tabs of Customise, and the sound and music screen. */
 
-/* codex */
+/* How to play: on a wide screen an index of chapters down the margin, the open
+   one joined to the page; on a narrow one (640px, CODEX_NARROW in
+   src/game/25-codex.js) a contents page, and chapters that turn like pages */
+.codex-book{ display:grid; grid-template-columns:178px minmax(0,1fr); margin-top:8px; }
+.codex-index{ border-right:1px solid #8a622a88; padding:2px 0 8px; position:sticky; top:0; align-self:start; }
+.codex-index h3, .codex-contents h3{ margin:8px 8px 2px; font-family:var(--display); font-weight:400; font-size:13.5px; font-style:italic; color:#6b4a22; }
+.codex-index h3:first-child{ margin-top:0; }
+.codex-link, .codex-entry{ display:flex; align-items:center; gap:8px; width:100%; text-align:left; cursor:pointer;
+	font-family:var(--display); color:#4a2c10; background:none; border:0; }
+.codex-link{ font-size:16px; padding:4px 8px; border-radius:3px 0 0 3px; }
+.codex-link svg{ width:22px; height:22px; flex:none; }
+.codex-link:hover, .codex-entry:hover{ color:var(--carnelian); background:#f3e3c066; }
+.codex-link.on{ color:var(--carnelian); background:#f3e3c0aa; box-shadow:inset 3px 0 0 var(--carnelian); margin-right:-1px; }
+.codex-link:focus-visible, .codex-entry:focus-visible, .codex-page button:focus-visible{ outline:3px solid var(--lapis); outline-offset:-3px; }
+.codex-page{ min-width:0; padding:0 0 0 18px; }
+.codex-heading{ display:flex; align-items:center; gap:10px; margin:0 0 8px; font-family:var(--display); font-weight:400; font-size:24px; color:var(--carnelian); }
+.codex-heading svg{ width:30px; height:30px; flex:none; }
+.codex-leaf-top{ display:none; }
+.codex-leaf-top, .codex-turn{ justify-content:space-between; align-items:center; gap:8px; }
+.codex-leaf-top span{ font-size:14px; font-style:italic; color:#6b4a22; }
+.codex-turn{ display:flex; margin-top:14px; padding-top:10px; border-top:1px solid #8a622a55; }
+.codex-page button.codex-back, .codex-turn button{ font-family:var(--display); font-size:15px; color:#5a3a18; cursor:pointer;
+	background:none; border:1px solid #8a622a88; border-radius:3px; padding:5px 10px; }
+.codex-page button.codex-back:hover, .codex-turn button:hover{ color:var(--carnelian); background:#f3e3c066; }
+.codex-turn-next{ margin-left:auto; }
+/* the contents page: two groups side by side, one above the other on a phone */
+.codex-contents{ display:grid; grid-template-columns:1fr 1fr; gap:4px 20px; }
+.codex-entry{ font-size:18px; padding:6px 6px; border-radius:3px; border-bottom:1px dotted #8a622a88; }
+.codex-entry svg{ width:28px; height:28px; flex:none; }
+@media (max-width: 640px){
+	.codex-book{ display:block; }
+	.codex-index{ display:none; }
+	.codex-page{ padding:0; }
+	.codex-leaf-top{ display:flex; margin:12px 0 10px; } /* clear of the × above it */
+	.codex-contents{ grid-template-columns:1fr; }
+}
+
+/* the tabs of Customise */
 .codex-tabs{ display:flex; flex-wrap:wrap; gap:4px; justify-content:center; margin:6px 0 12px; }
 .codex-tabs button{ font:inherit; font-family:var(--display); font-size:14.5px; color:var(--carnelian); cursor:pointer; padding:5px 10px; border-radius:2px;
 	background:linear-gradient(180deg,#ecd9b2,#c7a877); border:2px solid; border-color:#f7ecd4 #7a5a30 #7a5a30 #f7ecd4; }

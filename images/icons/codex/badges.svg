@@ -1,0 +1,11 @@
+<!-- How to play, the chapter picture for "badges" (in the margin index and the contents). A copy of relics/menat.svg: change it freely. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<defs>
+<linearGradient id="relicGold" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#fff3ae"/>
+<stop offset=".55" stop-color="#e0ac3a"/>
+<stop offset="1" stop-color="#8a5a10"/>
+</linearGradient>
+</defs>
+<circle cx="25.87688340595138" cy="9.748524279678152" r="1.3" fill="url(#relicGold)" stroke="#3b2406" stroke-width="0.7"/><circle cx="24.91006524188368" cy="7.368076002083626" r="1.3" fill="#38a8a0" stroke="#3b2406" stroke-width="0.7"/><circle cx="23.071067811865476" cy="5.34314575050762" r="1.3" fill="url(#relicGold)" stroke="#3b2406" stroke-width="0.7"/><circle cx="20.539904997395467" cy="3.871947806493057" r="1.3" fill="#38a8a0" stroke="#3b2406" stroke-width="0.7"/><circle cx="17.564344650402308" cy="3.098493275238898" r="1.3" fill="url(#relicGold)" stroke="#3b2406" stroke-width="0.7"/><circle cx="14.43565534959769" cy="3.0984932752388987" r="1.3" fill="#38a8a0" stroke="#3b2406" stroke-width="0.7"/><circle cx="11.460095002604529" cy="3.8719478064930586" r="1.3" fill="url(#relicGold)" stroke="#3b2406" stroke-width="0.7"/><circle cx="8.928932188134521" cy="5.343145750507622" r="1.3" fill="#38a8a0" stroke="#3b2406" stroke-width="0.7"/><circle cx="7.0899347581163195" cy="7.368076002083628" r="1.3" fill="url(#relicGold)" stroke="#3b2406" stroke-width="0.7"/><circle cx="6.123116594048623" cy="9.748524279678152" r="1.3" fill="#38a8a0" stroke="#3b2406" stroke-width="0.7"/><path d="M14 12 H18 V17 H14 Z" fill="url(#relicGold)" stroke="#3b2406" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><path d="M13 17 H19 L20 21 H12 Z" fill="url(#relicGold)" stroke="#3b2406" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="16" cy="25" r="4.8" fill="url(#relicGold)" stroke="#3b2406" stroke-width="1.3"/><circle cx="16" cy="25" r="2" fill="#b83a22" stroke="#3b2406" stroke-width="0.9"/>
+</svg>

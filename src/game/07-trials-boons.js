@@ -128,7 +128,7 @@ function offerTrial() {
 		`<h2 id="msgTitle">${T('trial.title')}</h2>
 		<p class="lede">${T('trial.lede', { stop: core.level.name })}</p>
 		${card(a, 0)}${card(b, 1)}`,
-		[[Tplain('trial.decline'), () => {}]]
+		[[Tplain('trial.decline'), () => {}, { kind: 'quiet' }]]
 	);
 	$('msgBody')
 		.querySelectorAll('.trial-card')
@@ -146,8 +146,6 @@ function offerTrial() {
 				}
 			};
 		});
-	const noBtn = $('msgBody').querySelector('.actions .btn');
-	if (noBtn) noBtn.classList.add('full');
 }
 
 function renderTrial() {
@@ -188,8 +186,11 @@ function renderBoons() {
 // kind in save.boons, so arming and spending work on indexes as before.
 function renderBoonsInto(el) {
 	if (!el) return;
+	// a ? at the end opens How to play at Boons, for when the names are hidden
+	const help = `<button type="button" class="boon-help" title="${Tplain('side.boons_help')}" aria-label="${Tplain('side.boons_help')}">?</button>`;
 	if (!save.boons.length) {
-		el.innerHTML = '<span class="boon-none">No boons yet. Win a trial to earn one.</span>';
+		el.innerHTML = `<span class="boon-none">${T('side.no_boons')}</span>${help}`;
+		wireBoonHelp(el);
 		return;
 	}
 	const kinds = [];
@@ -208,8 +209,17 @@ function renderBoonsInto(el) {
 				`${BOON_ICON[b]}<span>${boon.short}</span>${count}</button>`
 			);
 		})
-		.join('');
+		.join('') + help;
 	el.querySelectorAll('.boon').forEach(b => (b.onclick = () => armBoon(+b.dataset.i)));
+	wireBoonHelp(el);
+}
+
+function wireBoonHelp(el) {
+	el.querySelector('.boon-help').onclick = () => {
+		if (busy) return;
+		sfx('ui');
+		openHelp('boons');
+	};
 }
 
 function armBoon(i) {

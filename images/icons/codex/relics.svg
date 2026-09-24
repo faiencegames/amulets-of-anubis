@@ -1,0 +1,9 @@
+<!-- How to play, the chapter picture for "relics" (in the margin index and the contents). A copy of menu/museum.svg: change it freely. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<path d="M3 11 L16 4 L29 11 Z" fill="#e8b93e" stroke="#4a2c10" stroke-width="2" stroke-linejoin="round"/>
+<path d="M4 11 H28 V14 H4 Z" fill="#c8962e" stroke="#4a2c10" stroke-width="2" stroke-linejoin="round"/>
+<path d="M7 14 V24 M12.5 14 V24 M19.5 14 V24 M25 14 V24" stroke="#4a2c10" stroke-width="3.4" stroke-linecap="round"/>
+<path d="M7 14 V24 M12.5 14 V24 M19.5 14 V24 M25 14 V24" stroke="#e8d49e" stroke-width="1.4" stroke-linecap="round"/>
+<path d="M3 24 H29 V28 H3 Z" fill="#c8962e" stroke="#4a2c10" stroke-width="2" stroke-linejoin="round"/>
+<circle cx="16" cy="8.8" r="1.4" fill="#2f6fc0"/>
+</svg>

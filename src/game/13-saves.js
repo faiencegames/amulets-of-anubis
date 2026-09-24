@@ -37,7 +37,26 @@ function openSaves() {
 		<h3 class="shop-head">${T('saves.restore')}</h3>
 		<textarea class="code" id="importCode" rows="4" placeholder="${T('saves.paste')}"></textarea>
 		<div class="actions"><button class="btn" id="doImport">${T('saves.restore_button')}</button></div>
-		<p class="save-msg" id="importMsg"></p>`;
+		<p class="save-msg" id="importMsg"></p>
+		<hr class="title-hr">
+		<div class="title-reset"><button class="btn danger" id="saveReset">${T('saves.reset')}</button></div>`;
+	// the complete reset asks twice: the second press within four seconds deletes everything
+	$('saveReset').onclick = () => {
+		const btn = $('saveReset');
+		if (btn.dataset.confirm) {
+			localStorage.removeItem(SAVE_KEY);
+			location.reload();
+			return;
+		}
+		btn.dataset.confirm = '1';
+		btn.textContent = Tplain('saves.reset_sure');
+		setTimeout(() => {
+			if (btn.isConnected) {
+				delete btn.dataset.confirm;
+				btn.textContent = Tplain('saves.reset');
+			}
+		}, 4000);
+	};
 	$('copyCode').onclick = async () => {
 		const ta = $('exportCode');
 		let ok = false;
