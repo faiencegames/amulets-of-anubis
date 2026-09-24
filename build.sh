@@ -23,15 +23,20 @@
 # a browser's path). The Android app needs the Android SDK (set ANDROID_SDK or
 # ANDROID_HOME) and a JDK. Missing tools are skipped.
 #
+# GAME_VERSION (default 0.9.0) is the version the apps show. Android also
+# needs a version code that rises with every release; it is made from the
+# version (1.2.3 becomes 10203) unless ANDROID_VERSION_CODE says otherwise.
 # Android settings: ANDROID_BUILD_TOOLS (default 34.0.0), ANDROID_PLATFORM
-# (android-34), ANDROID_VERSION_CODE (5), ANDROID_VERSION_NAME (1.4).
-# Raise the version code for every release.
+# (android-34). The app is signed with platforms/android/release.jks and the
+# password in release.pass beside it (both kept out of git), or with
+# ANDROID_KEYSTORE and ANDROID_KEYSTORE_PASS_FILE if they are set.
 
 set -e
 cd "$(dirname "$0")"
 
 ELECTRON_VERSION="44.4.3"
-APP_NAME="Amulets of the Nile"
+APP_NAME="Amulets of Anubis"
+GAME_VERSION="${GAME_VERSION:-0.9.0}"
 GAME="dist/amulets-of-anubis.html"
 
 info() { printf '\033[1m==> %s\033[0m\n' "$*"; }
@@ -68,13 +73,14 @@ if want desktop; then
 				pack() {   # platform, arch, icon file
 						ok "$1 $2"
 						(cd "$APP" && npx electron-packager . "$APP_NAME" \
-								--platform="$1" --arch="$2" --electron-version="$ELECTRON_VERSION" \
+								--platform="$1" --arch="$2" --electron-version="$ELECTRON_VERSION" --app-version="$GAME_VERSION" \
 								--icon="$SRC/icons/$3" --out="$OUT" --overwrite --prune=false \
 								--ignore="^/node_modules" >/dev/null)
-						(cd "$OUT" && zip -qry "amulets-of-anubis-$1-$2.zip" "$APP_NAME-$1-$2" && rm -rf "$APP_NAME-$1-$2")
+						(cd "$OUT" && zip -qryX "amulets-of-anubis-$1-$2.zip" "$APP_NAME-$1-$2" && rm -rf "$APP_NAME-$1-$2")
 				}
 				pack win32  x64   icon.ico
 				pack linux  x64   icon.png
+				pack linux  arm64 icon.png
 				pack darwin arm64 icon.icns
 				pack darwin x64   icon.icns
 				rm -rf "$APP"
@@ -107,16 +113,20 @@ if want android; then
 				"$B/aapt2" compile --dir "$SRC/res" -o "$WORK/res.zip"
 				"$B/aapt2" link -o "$WORK/base.apk" -I "$J" --manifest "$SRC/AndroidManifest.xml" \
 						-A "$WORK/assets" --java "$WORK/gen" --min-sdk-version 24 --target-sdk-version 34 \
-						--version-code "${ANDROID_VERSION_CODE:-5}" --version-name "${ANDROID_VERSION_NAME:-1.4}" "$WORK/res.zip"
+						--version-code "${ANDROID_VERSION_CODE:-$(echo "$GAME_VERSION" | awk -F. '{print $1*10000 + $2*100 + $3}')}" \
+						--version-name "$GAME_VERSION" "$WORK/res.zip"
 				javac --release 8 -cp "$J" -d "$WORK/classes" \
 						"$WORK/gen/com/amulets/nile/R.java" "$SRC/MainActivity.java" "$SRC/Vibration.java"
 				"$B/d8" --min-api 24 --lib "$J" --output "$WORK/dex" $(find "$WORK/classes" -name '*.class')
 				cp "$WORK/base.apk" "$WORK/unsigned.apk"
 				(cd "$WORK/dex" && zip -q ../unsigned.apk classes.dex)
 				"$B/zipalign" -f -p 4 "$WORK/unsigned.apk" "$WORK/aligned.apk"
-				# Sign with platforms/android/release.jks if you have one. Otherwise a
-				# debug key, kept beside it so every build can update the last one.
-				KEY="$SRC/release.jks"; PASS=""
+				# Sign with the release key if there is one (its password from a file,
+				# so nothing is asked). Otherwise a debug key, kept beside it so every
+				# build can update the last one.
+				KEY="${ANDROID_KEYSTORE:-$SRC/release.jks}"; PASS=""
+				PASSFILE="${ANDROID_KEYSTORE_PASS_FILE:-$SRC/release.pass}"
+				[ -f "$KEY" ] && [ -f "$PASSFILE" ] && PASS="--ks-pass file:$PASSFILE"
 				if [ ! -f "$KEY" ]; then
 						KEY="$SRC/debug.keystore"; PASS="--ks-pass pass:android"
 						[ -f "$KEY" ] || keytool -genkeypair -keystore "$KEY" -storepass android -keypass android \
@@ -125,9 +135,9 @@ if want android; then
 						ok "No release.jks: signed with the debug key"
 				fi
 				"$B/apksigner" sign --v1-signing-enabled true --v2-signing-enabled true \
-						--ks "$KEY" $PASS --out "$OUT/AmuletsOfTheNile.apk" "$WORK/aligned.apk"
+						--ks "$KEY" $PASS --out "$OUT/amulets-of-anubis.apk" "$WORK/aligned.apk"
 				rm -rf "$WORK"
-				ok "Android app: dist/android/AmuletsOfTheNile.apk"
+				ok "Android app: dist/android/amulets-of-anubis.apk"
 		fi
 fi
 

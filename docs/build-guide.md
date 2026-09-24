@@ -142,31 +142,37 @@ cd ~/path/to/amulets-of-the-nile
 
 Five zipped apps land in `dist/desktop/`:
 
-| File                              | Platform               |
-| --------------------------------- | ---------------------- |
-| `amulets-of-anubis-win32-x64.zip` | Windows 64-bit         |
-| `amulets-of-anubis-linux-x64.zip` | Linux 64-bit           |
-| `amulets-of-anubis-darwin-arm64.zip` | macOS Apple silicon |
-| `amulets-of-anubis-darwin-x64.zip`   | macOS Intel         |
+| File | Platform |
+|---|---|
+| `amulets-of-anubis-win32-x64.zip` | Windows, 64-bit |
+| `amulets-of-anubis-linux-x64.zip` | Linux, 64-bit |
+| `amulets-of-anubis-linux-arm64.zip` | Linux on ARM (a Raspberry Pi, for instance) |
+| `amulets-of-anubis-darwin-arm64.zip` | macOS, Apple silicon |
+| `amulets-of-anubis-darwin-x64.zip` | macOS, Intel |
 
 ### Android output
 
-A single APK at `dist/android/AmuletsOfTheNile.apk`.
+A single APK at `dist/android/amulets-of-anubis.apk`.
 
 **Signing:** if `platforms/android/release.jks` does not exist, the build
 auto-generates a debug keystore (`platforms/android/debug.keystore`) and signs
 with that. The resulting APK is valid and installable. For Play Store
-distribution or a stable update identity, create a release key first:
+distribution or a stable update identity, create a release key first, with
+its password in a file beside it so the build doesn't have to ask:
 
 ```fish
+python3 -c "import secrets; print(secrets.token_urlsafe(24))" > platforms/android/release.pass
 keytool -genkeypair -v \
-  -keystore platforms/android/release.jks \
-  -alias amulets-release \
-  -keyalg RSA -keysize 2048 -validity 10000 \
-  -dname "CN=Amulets of Anubis,O=YourOrg,C=GB"
+  -keystore platforms/android/release.jks -storetype PKCS12 \
+  -storepass:file platforms/android/release.pass \
+  -alias release -keyalg RSA -keysize 4096 -validity 27000 \
+  -dname "CN=Amulets of Anubis"
 ```
 
-The build script picks up `release.jks` automatically on the next run.
+The name in `-dname` is written into every APK you sign, where anyone can
+read it, so use the game's name or a pen name rather than your own. The
+build picks up `release.jks` and `release.pass` automatically on the next
+run, and `.gitignore` keeps both out of git.
 **Keep that file safe.** Losing it means you can no longer update existing
 installs under the same identity.
 

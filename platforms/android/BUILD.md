@@ -4,8 +4,8 @@ The easy way, from the project folder:
 
     ANDROID_SDK=/path/to/android-sdk ./build.sh android
 
-It writes `dist/android/AmuletsOfTheNile.apk`, signed with `release.jks` in
-this folder if there is one, otherwise with a debug key it keeps here as
+It writes `dist/android/amulets-of-anubis.apk`, signed with `release.jks` in
+this folder if there is one (its password in `release.pass`), otherwise with a debug key it keeps here as
 `debug.keystore`. Keep both out of git (`.gitignore` does). The steps below
 are what it does, if you want to run them by hand from this folder.
 
@@ -34,7 +34,7 @@ are enough.
     # 4. pack, align, sign
     cp base.apk unsigned.apk && (cd dex && zip -q ../unsigned.apk classes.dex)
     $B/zipalign -f -p 4 unsigned.apk aligned.apk
-    $B/apksigner sign --ks release.jks --out AmuletsOfTheNile.apk aligned.apk
+    $B/apksigner sign --ks release.jks --ks-pass file:release.pass --out amulets-of-anubis.apk aligned.apk
 
 The manifest requests `android.permission.VIBRATE` (required on API 33+).
 No user prompt; it is a normal permission.
