@@ -1,0 +1,9 @@
+// A trial a priest can set at a stop. Finish it and the boon is the player’s.
+{
+	"id": "cascade",
+	"goal": "cascade",
+	"target": 4,
+	"text": "Set off a cascade of four",
+	"progress_label": "Best cascade",
+	"boon": "hammer"
+}

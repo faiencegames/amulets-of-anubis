@@ -1,0 +1,8 @@
+// Sparkle colours: the light that flies off a match. Two colours.
+{
+	"id": "ember",
+	"name": "Ember",
+	"description": "Red sparks and orange, for those who court ill omens.",
+	"unlocked_by": {"omens_braved": 12},
+	"colours": ["#ff4a2a", "#ffcf7a"]
+}

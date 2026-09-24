@@ -1,0 +1,8 @@
+// What the codex says about an amulet. The drawing itself is built in,
+// or comes from a picture in images/amulets/ with the same name as the id.
+{
+	"id": "star",
+	"name": "Tomb star",
+	"plural": "tomb stars",
+	"meaning": "The five-pointed stars painted across the ceilings of tombs and temples."
+}

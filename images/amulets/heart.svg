@@ -1,0 +1,15 @@
+<!-- The heart, ib, the seat of thought and feeling, weighed against the feather of Ma'at at the judgement of the dead, shaped like a jar with two small handles. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="carn" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#ffc0b0"/><stop offset=".35" stop-color="#e0604a"/><stop offset=".72" stop-color="#b83a22"/><stop offset="1" stop-color="#7a1f12"/></linearGradient>
+	<linearGradient id="gold" gradientUnits="userSpaceOnUse" x1="40" y1="14" x2="88" y2="34"><stop offset="0" stop-color="#fffbd8"/><stop offset=".35" stop-color="#f5d04e"/><stop offset=".72" stop-color="#c08a1c"/><stop offset="1" stop-color="#6e4608"/></linearGradient>
+</defs>
+<path d="M46 30 H82 C84 36 88 40 94 42 C104 46 106 60 102 74 C98 92 86 108 64 114 C42 108 30 92 26 74 C22 60 24 46 34 42 C40 40 44 36 46 30 Z M44 14 H84 V32 H44 Z M22 46 C12 44 12 58 22 58 M106 46 C116 44 116 58 106 58" fill="#2a1703" fill-rule="nonzero" stroke="#2a1703" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" filter="url(#sh)"/>
+<path d="M26 48 C16 46 16 58 26 58 M102 48 C112 46 112 58 102 58" fill="none" stroke="url(#gold)" stroke-width="4"/>
+<path d="M46 30 H82 C84 36 88 40 94 42 C104 46 106 60 102 74 C98 92 86 108 64 114 C42 108 30 92 26 74 C22 60 24 46 34 42 C40 40 44 36 46 30 Z" fill="url(#carn)"/>
+<path d="M44 16 H84 V32 H44 Z" fill="url(#gold)" stroke="#2a1703" stroke-width="2.6" stroke-linejoin="round"/>
+<path d="M44 24 H84" stroke="#8a5a10" stroke-width="2"/>
+<path d="M36 56 C36 50 40 46 46 46" fill="none" stroke="#fffbe0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+<path d="M34 70 C36 82 42 92 50 98" fill="none" stroke="#fffbe0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

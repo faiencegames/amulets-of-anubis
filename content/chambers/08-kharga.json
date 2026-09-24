@@ -1,0 +1,33 @@
+// An oasis beside a stop: a small board in daylight, opened once that stop
+// is gilded. Some amulets start under water: in "floor_plan", w is a stone
+// with an amulet under water on it and W a thick stone with one. An amulet
+// under water can't be moved; a match beside it lifts it out.
+// "reward" is paid the first time the oasis is explored; "return_reward" on every visit after.
+{
+	"id": "kharga",
+	"at": "deir-el-bahari",
+	"setting": "oasis",
+	"name": "The oasis of Kharga",
+	"text": "Deep in the desert west of Thebes we reached Kharga, on the Forty Days Road that caravans followed south. Its temple of Hibis, built for Amun, was finished under the Persian king Darius I.",
+	"scenery": "oasis",
+	// Three sets: each time the place opens, the game picks one at random.
+	"amulets": [
+		["palm", "grapes", "ibis", "ankh", "pomegranate"],
+		["ram", "palm", "grapes", "eye", "pomegranate"],
+		["ram", "papyrus", "grapes", "ankh", "lotus"]
+	],
+	"moves": 26,
+	"floor_plan": [
+		"..1111..",
+		".111111.",
+		"11w11w11",
+		"11111111",
+		"11W11W11",
+		"11111111",
+		".1w11w1.",
+		"..1111.."
+	],
+	"reward": {"gold": 200},
+	// "return_reward" is paid on every later visit.
+	"return_reward": {"gold": 100},
+}

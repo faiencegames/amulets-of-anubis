@@ -1,0 +1,33 @@
+// An oasis beside a stop: a small board in daylight, opened once that stop
+// is gilded. Some amulets start under water: in "floor_plan", w is a stone
+// with an amulet under water on it and W a thick stone with one. An amulet
+// under water can't be moved; a match beside it lifts it out.
+// "reward" is paid the first time the oasis is explored; "return_reward" on every visit after.
+{
+	"id": "siwa",
+	"at": "alexandria",
+	"setting": "oasis",
+	"name": "The oasis of Siwa",
+	"text": "Far out in the Western Desert, springs feed the palm groves of Siwa. We came to see where the oracle of Amun once spoke. It was famous across the Greek world, and in 331 BCE Alexander the Great crossed the desert to consult it.",
+	"scenery": "oasis",
+	// Three sets: each time the place opens, the game picks one at random.
+	"amulets": [
+		["palm", "grapes", "pomegranate", "eye", "scarab"],
+		["ram", "palm", "grapes", "pomegranate", "scarab"],
+		["coin", "papyrus", "lotus", "eye", "scarab"]
+	],
+	"moves": 26,
+	"floor_plan": [
+		"11111111",
+		"1w1111w1",
+		"11111111",
+		"111ww111",
+		"11111111",
+		"1w1111w1",
+		"11111111",
+		"........"
+	],
+	"reward": {"lapis": 25},
+	// "return_reward" is paid on every later visit.
+	"return_reward": {"lapis": 12},
+}

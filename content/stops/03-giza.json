@@ -1,0 +1,38 @@
+// Stop 3 of the journey: Giza.
+// The number at the front of the file name sets the order of the stops.
+// Every field is explained in docs/content-reference.md.
+{
+	"id": "giza",
+	"name": "Giza",
+	"subtitle": "The house of Khufu",
+	"history": "At Giza we craned our necks at the Great Pyramid of Khufu. It once stood about 146 metres tall, and for nearly four thousand years nothing made by human hands was taller. Its builders used roughly 2.3 million blocks of stone.",
+	"moves": 21,
+	// Three sets: each time the stop starts, the game picks one at random.
+	"amulets": [
+		["pyramid", "scarab", "eye", "ankh", "cat"],
+		["sphinx", "barque", "falcon", "heart", "shen"],
+		["akhet", "headrest", "ka", "nefer", "ankh"]
+	],
+	"floor_plan": [
+		"00011000",
+		"00111100",
+		"01122110",
+		"11222211",
+		"11111111",
+		"00000000",
+		"00000000",
+		"00000000"
+	],
+	"shared_floor_shapes": ["diamond", "steps"],
+	"stone_colour": "#9c7c4e",
+	"music": {"key": "C3", "scale": "double harmonic", "instrument": "oud"},
+	"frame_colours": ["#5a2e44", "#24101c", "#b8566e"],
+	"map_position": {"x": 140, "y": 98, "label": "left"},
+	// Three seals: challenges stamped the first time a win here meets them.
+	// Keep their order; saves remember seals by position.
+	"seals": [
+		{"text": "Make six special amulets", "when": {"win_specials_made": 6}},
+		{"text": "Set off a cascade of six", "when": {"win_best_cascade": 6}},
+		{"text": "Win with an omen braved", "when": {"win_with_omens": 1}}
+	]
+}

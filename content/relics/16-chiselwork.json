@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "chiselwork",
+	"name": "The mason’s chisel",
+	"description": "Crack a hundred and fifty thick stones.",
+	"found_when": {"thick_stones_cracked": 150},
+	"reward": {"gold": 250}
+}

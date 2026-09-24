@@ -1,0 +1,17 @@
+// A shared floor shape. Stops list the shapes they may use under
+// "shared_floor_shapes". . is a gap, 0 already gold, 1 bare stone, 2 thick stone.
+{
+	"id": "serpent",
+	"name": "Coils of the serpent",
+	"move_multiplier": 1.38,
+	"floor_plan": [
+		"11111111",
+		"11111111",
+		"111.....",
+		"11122111",
+		"11122111",
+		".....111",
+		"11111111",
+		"11111111"
+	]
+}

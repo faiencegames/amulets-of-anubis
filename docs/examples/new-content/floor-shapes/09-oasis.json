@@ -1,0 +1,17 @@
+// An example shared floor shape. Siwa (above) lists it under
+// "shared_floor_shapes", so Siwa sometimes uses this plan instead of its own.
+{
+  "id": "oasis",
+  "name": "The oasis",
+  "move_multiplier": 1.1,   // this shape is a little harder, so 10% more moves
+  "floor_plan": [
+    "11111111",
+    "11100111",
+    "11000011",
+    "10022001",
+    "10022001",
+    "11000011",
+    "11100111",
+    "11111111"
+  ]
+}

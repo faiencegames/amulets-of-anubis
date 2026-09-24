@@ -1,0 +1,33 @@
+// A tomb or temple chamber beside a stop: a small, dim board, opened once
+// that stop is gilded. Some amulets start buried in sand: in "floor_plan",
+// s is a stone with a buried amulet on it and S a thick stone with one.
+// A buried amulet can't be moved; a match beside it brushes the sand off.
+// "reward" is paid the first time the chamber is explored; "return_reward" on every visit after.
+{
+	"id": "osireion",
+	"at": "abydos",
+	"name": "The Osireion",
+	"text": "Behind the temple of Seti I at Abydos we went down into the Osireion, a sunken hall of massive granite pillars built as a symbolic tomb of Osiris. It lies below the level of the groundwater, and we found its central hall standing in water, as it often does.",
+	"scenery": "tomb",
+	// Three sets: each time the place opens, the game picks one at random.
+	"amulets": [
+		["djed", "torch", "jar", "ankh", "anubis"],
+		["crook", "torch", "djed", "heart", "hapy"],
+		["mask", "torch", "djed", "anubis", "shabti"]
+	],
+	"moves": 26,
+	"floor_plan": [
+		"11111111",
+		"1s1SS1s1",
+		"11111111",
+		"11211211",
+		"11111111",
+		"1s1SS1s1",
+		"11111111",
+		"........"
+	],
+	"reward": {"boon": "flood"},
+	// "return_reward" is paid on the first return; each return after pays more,
+	// as the chamber wakes a little more each time (cursed badges; see "returning" in settings.json).
+	"return_reward": {"gold": 75},
+}

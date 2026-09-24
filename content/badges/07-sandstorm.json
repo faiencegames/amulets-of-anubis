@@ -1,0 +1,31 @@
+// A badge: a small mark an amulet can fall wearing; matching the amulet uses
+// its power. Its picture is images/badges/<id>.svg (96 x 96, the badge a
+// circle of radius 24 in the middle).
+{
+	"id": "sandstorm",
+	"name": "Sandstorm of Set",
+	// how it looks, shown after its name in How to play
+	"looks": "whirl of sand",
+	// what it does, in How to play; {n} is the amount
+	"text": "Sand buries three gilded stones: they turn bare again and must be gilded anew.",
+	// what it does when the amulet is cleared, one of the powers the game
+	// knows; "amount" changes the number, and has a default:
+	//   "gild_stones"      golden light gilds n bare stones anywhere (4)
+	//   "gild_around"      gilds the stones in the nine squares around it
+	//   "row_and_column"   clears the whole row and column it sits in
+	//   "extra_moves"      n more moves (3)
+	//   "give_lapis"       n lapis into the purse (3)
+	//   "lose_moves"       n moves lost, never the last one (2)
+	//   "ungild_stones"    n gilded stones turn bare again (3)
+	"effect": "ungild_stones",
+	"amount": 3,
+	// shown on the board when it fires ({n} is the amount)
+	"popup": "Sandstorm of Set",
+	// true: a cursed badge, with a red ring; never on Relaxed or in river events
+	"cursed": true,
+	// how often it turns up when a badge falls: one with 10 comes ten times as
+	// often as one with 1; 0 switches it off
+	"weight": 1,
+	// the glow round an amulet wearing it
+	"colour": "#e0281e"
+}

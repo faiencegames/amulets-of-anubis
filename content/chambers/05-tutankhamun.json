@@ -1,0 +1,33 @@
+// A tomb or temple chamber beside a stop: a small, dim board, opened once
+// that stop is gilded. Some amulets start buried in sand: in "floor_plan",
+// s is a stone with a buried amulet on it and S a thick stone with one.
+// A buried amulet can't be moved; a match beside it brushes the sand off.
+// "reward" is paid the first time the chamber is explored; "return_reward" on every visit after.
+{
+	"id": "tutankhamun",
+	"at": "valley-of-the-kings",
+	"name": "The tomb of Tutankhamun",
+	"text": "We went down the steps Howard Carter found cut into the rock of the Valley of the Kings in November 1922. When he first came this way they led to a small tomb: an antechamber crowded with chariots, couches and chests, and beyond it a sealed burial chamber.",
+	"scenery": "tomb",
+	// Three sets: each time the place opens, the game picks one at random.
+	"amulets": [
+		["collar", "canopic", "anubis", "mummy", "torch"],
+		["shen", "hapy", "anubis", "shabti", "torch"],
+		["headrest", "imsety", "mask", "nefer", "torch"]
+	],
+	"moves": 28,
+	"floor_plan": [
+		"...11...",
+		"...11...",
+		"...11...",
+		"11111111",
+		"1s1ss111",
+		"11111SS1",
+		"1s111SS1",
+		"11111111"
+	],
+	"reward": {"gold": 250},
+	// "return_reward" is paid on the first return; each return after pays more,
+	// as the chamber wakes a little more each time (cursed badges; see "returning" in settings.json).
+	"return_reward": {"gold": 250},
+}

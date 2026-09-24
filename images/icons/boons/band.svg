@@ -1,0 +1,14 @@
+<!-- Boon icon (band). 24 by 24. Gradient ids must be unique across all icons. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+<defs>
+<linearGradient id="bnbd" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#4a6fd6"/>
+<stop offset="1" stop-color="#16307e"/>
+</linearGradient>
+</defs>
+<rect x="2" y="9" width="20" height="6" fill="url(#bnbd)" stroke="#0a1848" stroke-width="1.2"/>
+<rect x="7" y="9" width="3" height="6" fill="#c0392b"/>
+<rect x="13" y="9" width="3" height="6" fill="#2e9d72"/>
+<rect x="18" y="9" width="2" height="6" fill="#e8b93e"/>
+<rect x="2" y="9" width="20" height="1.6" fill="#fff" opacity=".25"/>
+</svg>

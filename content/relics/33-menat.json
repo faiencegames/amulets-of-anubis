@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "menat",
+	"name": "The menat necklace",
+	"description": "Make twelve special amulets at one stop.",
+	"found_when": {"win_specials_made": 12},
+	"reward": {"lapis": 15}
+}

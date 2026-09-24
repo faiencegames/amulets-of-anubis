@@ -1,0 +1,21 @@
+// Something that can happen on the river between two stops.
+{
+	"id": "barque",
+	"kind": "puzzle",
+	"title": "Aground on a sandbank",
+	"text": "Our barque ran onto a sandbank. The crew shouted for gold to pay the boatmen of the village: we had to gild the deck before the river rose.",
+	"goal": {"type": "gild"},
+	"moves": 20,
+	"amulet_types": 5,
+	"floor_plan": [
+		"........",
+		".111111.",
+		".111111.",
+		".112211.",
+		".112211.",
+		".111111.",
+		".111111.",
+		"........"
+	],
+	"reward": {"gold": 45}
+}

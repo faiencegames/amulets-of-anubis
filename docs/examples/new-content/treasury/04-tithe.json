@@ -1,0 +1,10 @@
+// An example treasury upgrade: three levels, each dearer than the last.
+{
+  "id": "tithe",
+  "name": "Temple tithe",
+  "description": "Ten more gold for every stop you gild, for each level bought.",
+  "currency": "lapis",
+  "prices": [20, 40, 80],
+  "effect": "win_gold",
+  "amount_per_level": 10
+}

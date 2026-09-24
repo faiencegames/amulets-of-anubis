@@ -1,0 +1,7 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "pharaoh",
+	"name": "Crook and flail",
+	"description": "Win any stop on Pharaoh.",
+	"found_when": {"win_on_difficulty": "Pharaoh"}
+}

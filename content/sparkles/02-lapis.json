@@ -1,0 +1,8 @@
+// Sparkle colours: the light that flies off a match. Two colours.
+{
+	"id": "lapis",
+	"name": "Lapis",
+	"description": "Bright blue with a touch of white.",
+	"unlocked_by": {"stars": 12},
+	"colours": ["#6fb0ff", "#eaf2ff"]
+}

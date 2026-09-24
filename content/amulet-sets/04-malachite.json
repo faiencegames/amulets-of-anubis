@@ -1,0 +1,8 @@
+// An amulet set: the same amulets, recoloured. Changes the look only.
+{
+	"id": "malachite",
+	"name": "Malachite inlay",
+	"description": "Ground copper ore, set by the jewellers of Karnak.",
+	"unlocked_by": {"trials_finished": 12},
+	"colour_changes": {"hue_shift": 75, "saturation": 1.25}
+}

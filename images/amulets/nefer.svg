@@ -1,0 +1,12 @@
+<!-- The nefer sign, "good" and "beautiful": a heart with the windpipe rising from it, crossed near the top. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="turq" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#d8fff8"/><stop offset=".35" stop-color="#6ed0c4"/><stop offset=".72" stop-color="#38a8a0"/><stop offset="1" stop-color="#1f6a64"/></linearGradient>
+</defs>
+<path d="M58 8 H70 V40 H82 V50 H70 V64 C84 66 96 78 96 94 C96 110 82 120 64 120 C46 120 32 110 32 94 C32 78 44 66 58 64 V50 H46 V40 H58 Z" fill="#2a1703" fill-rule="nonzero" stroke="#2a1703" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" filter="url(#sh)"/>
+<path d="M58 8 H70 V40 H82 V50 H70 V64 C84 66 96 78 96 94 C96 110 82 120 64 120 C46 120 32 110 32 94 C32 78 44 66 58 64 V50 H46 V40 H58 Z" fill="url(#turq)"/>
+<path d="M64 12 V60" stroke="#1f6a64" stroke-width="2" opacity=".6"/>
+<path d="M50 80 C56 76 72 76 78 80" fill="none" stroke="#1f6a64" stroke-width="2.4" stroke-linecap="round"/>
+<path d="M40 92 C40 82 46 74 54 72" fill="none" stroke="#fffbe0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

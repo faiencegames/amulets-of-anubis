@@ -1,0 +1,9 @@
+// A trial a priest can set at a stop. Finish it and the boon is the player’s.
+{
+	"id": "wide",
+	"goal": "clear_in_one_move",
+	"target": 10,
+	"text": "Clear ten squares in a single move",
+	"progress_label": "Best single move",
+	"boon": "scales"
+}

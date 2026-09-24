@@ -1,0 +1,8 @@
+// A floor set: the stone under the amulets. Changes the look only.
+// Its pictures are in images/floors/<id>/: bare, thick and gilded squares.
+{
+	"id": "mosaic",
+	"name": "Alexandrian mosaic",
+	"description": "Thousands of tiny stones, as on the floors of the Ptolemies’ palaces.",
+	"unlocked_by": {"stops_won": 40}
+}

@@ -1,0 +1,9 @@
+// An example trial.
+{
+  "id": "deep-cascade",
+  "goal": "cascade",
+  "target": 6,
+  "text": "Set off a cascade {target} deep",
+  "progress_label": "Deepest cascade",
+  "boon": "wisdom"
+}

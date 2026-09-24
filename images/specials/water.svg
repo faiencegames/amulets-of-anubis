@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+<!-- Water over an amulet in an oasis: a pool across the lower part of the
+     square, reeds at its edge, and a thin blue veil above, so the amulet shows
+     through. The square is 32 to 160. -->
+<defs>
+<linearGradient id="pool" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#6cc0f0" stop-opacity=".78"/>
+<stop offset="1" stop-color="#1f5f9e" stop-opacity=".9"/>
+</linearGradient>
+</defs>
+<rect x="36" y="36" width="120" height="120" rx="10" fill="#7cc4ee" opacity=".28"/>
+<path d="M36 104 C50 96 62 104 76 98 C90 92 102 102 116 96 C130 90 144 98 156 94 L156 150 Q156 156 150 156 L42 156 Q36 156 36 150 Z" fill="url(#pool)" stroke="#123f6e" stroke-width="3" stroke-linejoin="round"/>
+<g fill="none" stroke="#dff4ff" stroke-width="3" stroke-linecap="round" opacity=".85">
+<path d="M52 118 C60 114 68 114 76 118"/>
+<path d="M92 130 C102 126 112 126 122 130"/>
+<path d="M58 142 C66 139 74 139 82 142"/>
+<path d="M114 112 C120 109 128 109 134 112"/>
+</g>
+<g stroke="#2e6a2a" stroke-width="3.4" stroke-linecap="round" fill="none">
+<path d="M44 124 C44 108 46 90 50 74"/>
+<path d="M50 126 C52 110 56 96 62 84"/>
+<path d="M148 124 C148 110 146 96 142 84"/>
+</g>
+<g fill="#6e4a22"><ellipse cx="50" cy="72" rx="3.4" ry="8"/><ellipse cx="62" cy="82" rx="3" ry="7"/><ellipse cx="142" cy="82" rx="3" ry="7"/></g>
+</svg>

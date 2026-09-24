@@ -1,0 +1,12 @@
+<!-- The Nile map: land, river and labels. 360 by 560. The stops are drawn on top by the game (their places are in each stop file, "map_position"). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 560"><defs><radialGradient id="mg" cx=".35" cy=".3"><stop offset="0" stop-color="#fff4b8"/><stop offset=".6" stop-color="#e0ac3a"/><stop offset="1" stop-color="#8a5a10"/></radialGradient>
+    <pattern id="waves" width="24" height="10" patternUnits="userSpaceOnUse"><path d="M0 6 Q6 1 12 6 T24 6" fill="none" stroke="#1f3a7a" stroke-opacity=".35" stroke-width="1.5"/></pattern></defs>
+    <path d="M0 0 H360 V34 Q300 40 240 30 Q200 42 160 34 Q120 44 80 36 Q40 42 0 34 Z" fill="#6f95c8" fill-opacity=".55"/>
+    <path d="M0 0 H360 V34 Q300 40 240 30 Q200 42 160 34 Q120 44 80 36 Q40 42 0 34 Z" fill="url(#waves)"/>
+    <text x="180" y="20" text-anchor="middle" font-size="13" font-style="italic" fill="#1f3a7a">The Great Sea</text>
+    <path id="valley" d="M186 560 C186 520 180 500 190 480 C210 450 262 440 262 418 C262 390 250 360 250 330 C250 312 246 306 214 302 C180 298 150 270 144 232 C140 200 150 170 154 120 C150 90 120 60 118 36 M154 120 C170 90 196 60 202 34" fill="none" stroke="#8fa35a" stroke-opacity=".5" stroke-width="26" stroke-linecap="round"/>
+    <path d="M186 560 C186 520 180 500 190 480 C210 450 262 440 262 418 C262 390 250 360 250 330 C250 312 246 306 214 302 C180 298 150 270 144 232 C140 200 150 170 154 120 C150 90 120 60 118 36 M154 120 C170 90 196 60 202 34" fill="none" stroke="#2c5d9e" stroke-width="5" stroke-linecap="round"/>
+    <text x="40" y="300" font-size="15" font-style="italic" fill="#8a6a3a" transform="rotate(-80 40 300)">Western Desert</text>
+    <text x="318" y="200" font-size="15" font-style="italic" fill="#8a6a3a" transform="rotate(80 318 200)">Eastern Desert</text>
+    <text x="190" y="80" font-size="12" font-style="italic" fill="#6b4a22" text-anchor="start">Lower Egypt</text>
+    <text x="175" y="262" font-size="12" font-style="italic" fill="#6b4a22">Upper Egypt</text></svg>

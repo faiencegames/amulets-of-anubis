@@ -1,0 +1,15 @@
+// An amulet set: the same amulets, recoloured. Changes the look only.
+{
+	"id": "bronze",
+	"name": "Old bronze",
+	"description": "Warm and weathered, like the metal in a storeroom.",
+	"unlocked_by": {"stars": 8},
+	"colour_changes": {
+		"sepia": 0.38,
+		"saturation": 1.45,
+		"brightness": 0.94,
+		"hue_shift": -8
+	},
+	"tint": "#a0662a",
+	"tint_strength": 0.1
+}

@@ -1,0 +1,15 @@
+<!-- The throne sign, the hieroglyph of Isis's name (Aset, "seat"), which She wears as Her crown: a seat seen from the side, its back rising at the rear. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="lapis" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#c8d8ff"/><stop offset=".35" stop-color="#4f86d8"/><stop offset=".72" stop-color="#2f6fc0"/><stop offset="1" stop-color="#1d3f78"/></linearGradient>
+	<linearGradient id="gold" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#fffbd8"/><stop offset=".35" stop-color="#f5d04e"/><stop offset=".72" stop-color="#c08a1c"/><stop offset="1" stop-color="#6e4608"/></linearGradient>
+</defs>
+<path d="M16 118 V64 H76 V24 C76 18 80 14 86 14 H110 V118 Z" fill="#2a1703" fill-rule="nonzero" stroke="#2a1703" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" filter="url(#sh)"/>
+<path d="M16 118 V64 H76 V24 C76 18 80 14 86 14 H110 V118 Z" fill="url(#gold)"/>
+<path d="M26 74 H100 V108 H26 Z" fill="url(#lapis)" stroke="#2a1703" stroke-width="2.6"/>
+<path d="M26 86 H100 M26 97 H100" stroke="#f5d04e" stroke-width="2"/>
+<path d="M32 76 V84 M41 76 V84 M50 76 V84 M59 76 V84 M68 76 V84 M77 76 V84 M86 76 V84 M95 76 V84 M32 88 V96 M41 88 V96 M50 88 V96 M59 88 V96 M68 88 V96 M77 88 V96 M86 88 V96 M95 88 V96 M32 99 V107 M41 99 V107 M50 99 V107 M59 99 V107 M68 99 V107 M77 99 V107 M86 99 V107 M95 99 V107" stroke="#9fb8ff" stroke-width="2" stroke-linecap="round"/>
+<path d="M16 64 H76 V24" fill="none" stroke="#2a1703" stroke-width="2.6"/>
+<path d="M82 58 V26 C82 22 84 20 88 20" fill="none" stroke="#fffbe0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

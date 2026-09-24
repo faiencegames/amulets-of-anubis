@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "deben",
+	"name": "The deben weight",
+	"description": "Hold three thousand gold at once.",
+	"found_when": {"gold_held": 3000},
+	"reward": {"lapis": 30}
+}

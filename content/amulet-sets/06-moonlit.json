@@ -1,0 +1,11 @@
+// An amulet set: the same amulets, recoloured. Changes the look only.
+{
+	"id": "moonlit",
+	"name": "Moonlit tomb",
+	"description": "Everything seen by lamplight, glowing faintly in the dark.",
+	"unlocked_by": {"relic": "journey"},
+	"colour_changes": {"brightness": 0.75, "contrast": 1.22, "saturation": 0.95},
+	"tint": "#3a5aa8",
+	"tint_strength": 0.21,
+	"glow": "rgba(150,200,255,.75)"
+}

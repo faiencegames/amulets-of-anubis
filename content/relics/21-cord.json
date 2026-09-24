@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "cord",
+	"name": "The surveyor’s cord",
+	"description": "Crack six hundred thick stones.",
+	"found_when": {"thick_stones_cracked": 600},
+	"reward": {"boon": "seshat"}
+}

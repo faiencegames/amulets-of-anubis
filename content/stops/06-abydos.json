@@ -1,0 +1,38 @@
+// Stop 6 of the journey: Abydos.
+// The number at the front of the file name sets the order of the stops.
+// Every field is explained in docs/content-reference.md.
+{
+	"id": "abydos",
+	"name": "Abydos",
+	"subtitle": "Resting place of Osiris",
+	"history": "We came next to Abydos, sacred to Osiris, lord of the dead. Pilgrims once travelled here for His festival, and many set up stone tablets asking to share in the God’s rebirth. In the temple of Seti I we saw a famous carved list of earlier kings.",
+	"moves": 28,
+	// Three sets: each time the stop starts, the game picks one at random.
+	"amulets": [
+		["djed", "tyet", "feather", "ankh", "anubis"],
+		["crook", "shabti", "djed", "heart", "feather"],
+		["mask", "anubis", "tyet", "nefer", "imsety"]
+	],
+	"floor_plan": [
+		"..1111..",
+		".111111.",
+		".11..11.",
+		".111111.",
+		"22222222",
+		"22222222",
+		"..1111..",
+		"..1111.."
+	],
+	"shared_floor_shapes": ["cross", "obelisk", "ankh"],
+	"stone_colour": "#827d8a",
+	"music": {"key": "A2", "scale": "minor pentatonic", "instrument": "flute"},
+	"frame_colours": ["#343a60", "#12142a", "#8a92c8"],
+	"map_position": {"x": 180, "y": 289, "label": "left"},
+	// Three seals: challenges stamped the first time a win here meets them.
+	// Keep their order; saves remember seals by position.
+	"seals": [
+		{"text": "Win without spending a boon", "when": {"win_without_boons": true}},
+		{"text": "Win with ten moves to spare", "when": {"win_moves_to_spare": 10}},
+		{"text": "Win with two omens braved", "when": {"win_with_omens": 2}}
+	]
+}

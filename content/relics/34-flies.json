@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "flies",
+	"name": "The golden flies of valour",
+	"description": "Win a stop with all five omens braved.",
+	"found_when": {"win_with_omens": 5},
+	"reward": {"gold": 600}
+}

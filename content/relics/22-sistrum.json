@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "sistrum",
+	"name": "The sistrum of Hathor",
+	"description": "Meet twelve river events.",
+	"found_when": {"river_events": 12},
+	"reward": {"gold": 150}
+}

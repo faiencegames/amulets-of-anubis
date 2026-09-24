@@ -1,0 +1,8 @@
+// What the codex says about an amulet. The drawing itself is built in,
+// or comes from a picture in images/amulets/ with the same name as the id.
+{
+	"id": "pyramid",
+	"name": "Pyramid",
+	"plural": "pyramids",
+	"meaning": "A royal tomb shaped like the first mound that rose from the waters of creation."
+}

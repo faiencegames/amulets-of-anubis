@@ -1,0 +1,20 @@
+<!-- A tilapia, the bolti of the Nile: worn as an amulet of rebirth, as the fish was thought to hatch its young anew from its mouth. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="fish" gradientUnits="userSpaceOnUse" x1="20" y1="30" x2="110" y2="100"><stop offset="0" stop-color="#c8d8ff"/><stop offset=".35" stop-color="#4f86d8"/><stop offset=".72" stop-color="#2f6fc0"/><stop offset="1" stop-color="#1d3f78"/></linearGradient>
+	<linearGradient id="fin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fb8ff"/><stop offset="1" stop-color="#2f5a9e"/></linearGradient>
+</defs>
+<path d="M16 66 C24 44 46 32 70 34 C86 35 96 42 102 52 L118 34 C123 52 123 78 118 94 L102 78 C94 90 80 97 62 97 C38 97 22 84 16 66 Z M40 40 C50 22 78 18 98 42 C86 38 70 36 56 38 Z M58 94 C58 104 64 110 72 112 C74 104 72 98 70 95 Z" fill="#2a1703" fill-rule="nonzero" stroke="#2a1703" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" filter="url(#sh)"/>
+<path d="M40 40 C50 22 78 18 98 42 C86 38 70 36 56 38 Z" fill="url(#fin)"/>
+<path d="M58 94 C58 104 64 110 72 112 C74 104 72 98 70 95 Z" fill="url(#fin)"/>
+<path d="M16 66 C24 44 46 32 70 34 C86 35 96 42 102 52 L118 34 C123 52 123 78 118 94 L102 78 C94 90 80 97 62 97 C38 97 22 84 16 66 Z" fill="url(#fish)"/>
+<clipPath id="fb"><path d="M16 66 C24 44 46 32 70 34 C86 35 96 42 102 52 L118 34 C123 52 123 78 118 94 L102 78 C94 90 80 97 62 97 C38 97 22 84 16 66 Z"/></clipPath>
+<path d="M48 48 q5 5 0 10 M58 48 q5 5 0 10 M68 48 q5 5 0 10 M78 48 q5 5 0 10 M88 48 q5 5 0 10 M98 48 q5 5 0 10 M53 57 q5 5 0 10 M63 57 q5 5 0 10 M73 57 q5 5 0 10 M83 57 q5 5 0 10 M93 57 q5 5 0 10 M103 57 q5 5 0 10 M48 66 q5 5 0 10 M58 66 q5 5 0 10 M68 66 q5 5 0 10 M78 66 q5 5 0 10 M88 66 q5 5 0 10 M98 66 q5 5 0 10 M53 75 q5 5 0 10 M63 75 q5 5 0 10 M73 75 q5 5 0 10 M83 75 q5 5 0 10 M93 75 q5 5 0 10 M103 75 q5 5 0 10 M48 84 q5 5 0 10 M58 84 q5 5 0 10 M68 84 q5 5 0 10 M78 84 q5 5 0 10 M88 84 q5 5 0 10 M98 84 q5 5 0 10 M53 93 q5 5 0 10 M63 93 q5 5 0 10 M73 93 q5 5 0 10 M83 93 q5 5 0 10 M93 93 q5 5 0 10 M103 93 q5 5 0 10" fill="none" stroke="#1d3f78" stroke-width="1.6" opacity=".35" clip-path="url(#fb)"/>
+<path d="M52 37 L50 28 M62 35 L62 24 M72 35 L74 24 M82 37 L86 28" stroke="#1d3f78" stroke-width="1.6" opacity=".5" stroke-linecap="round"/>
+<path d="M104 58 L116 44 M104 66 L119 66 M104 74 L116 86" stroke="#1d3f78" stroke-width="1.6" opacity=".45" stroke-linecap="round"/>
+<path d="M44 44 C38 56 38 74 46 88" fill="none" stroke="#1d3f78" stroke-width="2.6" stroke-linecap="round"/>
+<circle cx="30" cy="58" r="7" fill="#fffdf6" stroke="#2a1703" stroke-width="2.6"/><circle cx="29" cy="58" r="3.4" fill="#2a1703"/>
+<path d="M17 68 C20 70 23 70 26 68" fill="none" stroke="#2a1703" stroke-width="2.4" stroke-linecap="round"/>
+<path d="M30 46 C40 38 54 36 66 38" fill="none" stroke="#fffbe0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

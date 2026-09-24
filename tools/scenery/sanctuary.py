@@ -1,0 +1,107 @@
+"""The sanctuary of Abu Simbel: four seated Gods at the back of the temple.
+
+From the left: Ptah, Amun-Ra, the deified Ramesses II, Ra-Horakhty. Twice a
+year the rising sun reaches down the temple's axis and lights three of them;
+Ptah, a God of the underworld, stays in the dark.
+"""
+
+out = []
+w = out.append
+
+INK = '#22160a'
+
+
+def statue(x, y, s, head, lit):
+	stone = '#c8955a' if lit else '#6a4a2c'
+	shade = '#8a5a30' if lit else '#3e2a16'
+	dark = '#5a3a1c' if lit else '#2a1c0e'
+	sw = 6
+	g = [f'<g transform="translate({x} {y}) scale({s})" stroke="{INK}" stroke-width="{sw}" stroke-linejoin="round">']
+	# throne, with the side of the block showing
+	g.append(f'<path d="M-140 -400 H140 V0 H-140 Z" fill="{dark}"/>')
+	g.append(f'<path d="M-140 -310 H140 V0 H-140 Z" fill="{shade}"/>')
+	g.append(f'<path d="M-140 -310 H-116 V0 H-140 Z M116 -310 H140 V0 H116 Z" fill="{dark}"/>')
+	# feet and footboard
+	g.append(f'<path d="M-96 -26 H96 V0 H-96 Z" fill="{dark}"/>')
+	# shins
+	g.append(f'<path d="M-84 -312 H-10 L-12 -30 H-80 Z M10 -312 H84 L80 -30 H12 Z" fill="{stone}"/>')
+	# lap
+	g.append(f'<path d="M-92 -350 H92 L88 -300 H-88 Z" fill="{stone}"/>')
+	# kilt front
+	g.append(f'<path d="M-30 -350 H30 L24 -300 H-24 Z" fill="{shade}"/>')
+	# torso
+	g.append(f'<path d="M-82 -500 H82 L60 -350 H-60 Z" fill="{stone}"/>')
+	# arms, hands flat on the knees
+	g.append(f'<path d="M-82 -500 L-106 -484 L-104 -400 L-88 -330 L-40 -318 L-44 -346 L-70 -362 L-70 -430 Z" fill="{stone}"/>')
+	g.append(f'<path d="M82 -500 L106 -484 L104 -400 L88 -330 L40 -318 L44 -346 L70 -362 L70 -430 Z" fill="{stone}"/>')
+	# broad collar
+	g.append(f'<path d="M-68 -500 C-48 -446 48 -446 68 -500 Z" fill="{shade}"/>')
+	# neck and face
+	g.append(f'<path d="M-24 -530 H24 V-496 H-24 Z" fill="{stone}"/>')
+	g.append(f'<ellipse cx="0" cy="-574" rx="44" ry="54" fill="{stone}"/>')
+	if head != 'falcon':
+		g.append(f'<path d="M-10 -526 H10 V-486 H-10 Z" fill="{shade}"/>')  # beard
+	if head == 'ptah':
+		# close cap
+		g.append(f'<path d="M-46 -574 C-48 -646 48 -646 46 -574 C34 -598 -34 -598 -46 -574 Z" fill="{dark}"/>')
+	elif head == 'amun':
+		# flat crown with two tall plumes
+		g.append(f'<path d="M-46 -600 H46 V-646 H-46 Z" fill="{dark}"/>')
+		g.append(f'<path d="M-36 -646 L-20 -780 L0 -646 Z M0 -646 L20 -780 L36 -646 Z" fill="{shade}"/>')
+	elif head == 'king':
+		# the nemes headcloth, falling to the shoulders, with the cobra at the brow
+		cloth = '#2f6fc0' if lit else '#2a3448'
+		g.append(f'<path d="M-46 -586 C-50 -652 50 -652 46 -586 L74 -496 H46 L36 -556 C24 -596 -24 -596 -36 -556 L-46 -496 H-74 Z" fill="{cloth}"/>')
+		g.append(f'<path d="M-46 -612 H46 M-56 -560 L-62 -520 M56 -560 L62 -520" fill="none" stroke-width="4"/>')
+		g.append(f'<path d="M-9 -638 C-9 -660 9 -660 9 -638 V-620 H-9 Z" fill="#e0ac3a"/>')
+	elif head == 'falcon':
+		# falcon head: the beak to one side, a sun disc above
+		g.append(f'<path d="M-46 -574 C-50 -640 46 -646 50 -582 L72 -554 L46 -546 L42 -520 H-42 Z" fill="{stone}"/>')
+		g.append(f'<path d="M42 -574 L72 -554 L46 -546 Z" fill="{dark}"/>')
+		g.append(f'<circle cx="-6" cy="-586" r="8" fill="{INK}"/>')
+		g.append(f'<path d="M-46 -530 L-76 -494 H-46 Z M42 -530 L76 -494 H46 Z" fill="{shade}"/>')
+		g.append(f'<circle cx="0" cy="-696" r="58" fill="{"#e0ac3a" if lit else dark}"/>')
+	g.append('</g>')
+	w(''.join(g))
+
+
+w('<!-- The sanctuary of Abu Simbel: four seated Gods cut from the rock at the back of the temple, from the left Ptah, Amun-Ra, the deified Ramesses II and Ra-Horakhty. Twice a year the rising sun reaches down the temple and lights three of them; Ptah stays in the dark. A stone stand for the sacred boat before them. Drawn by a script. 1600 by 1000. -->')
+w('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000">')
+w('<defs>')
+w('<linearGradient id="saRock" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a1008"/><stop offset=".6" stop-color="#3a2614"/><stop offset="1" stop-color="#2a1a0c"/></linearGradient>')
+w('<linearGradient id="saNiche" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1a0c"/><stop offset="1" stop-color="#4a3018"/></linearGradient>')
+w('<linearGradient id="saFloor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a3018"/><stop offset="1" stop-color="#1e1208"/></linearGradient>')
+w('<radialGradient id="saPatch" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffd68a" stop-opacity=".5"/><stop offset=".75" stop-color="#ffc060" stop-opacity=".22"/><stop offset="1" stop-color="#ffc060" stop-opacity="0"/></radialGradient>')
+w('<linearGradient id="saShaft" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ffe0a0" stop-opacity=".2"/><stop offset="1" stop-color="#ffe0a0" stop-opacity="0"/></linearGradient>')
+w('<radialGradient id="saDark" cx=".5" cy=".5" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".6"/></radialGradient>')
+w('<filter id="saSoft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="28"/></filter>')
+w('</defs>')
+
+# rock of the mountain, the room and its floor
+w('<rect width="1600" height="1000" fill="url(#saRock)"/>')
+w('<path d="M0 800 H1600 V1000 H0 Z" fill="url(#saFloor)"/>')
+# the niche the Gods sit in, with a lintel
+w(f'<path d="M190 150 H1410 V800 H190 Z" fill="url(#saNiche)" stroke="{INK}" stroke-width="10"/>')
+w(f'<path d="M160 110 H1440 V160 H160 Z" fill="#4a3018" stroke="{INK}" stroke-width="8"/>')
+w(f'<path d="M190 790 H1410 V830 H190 Z" fill="#5a3a1c" stroke="{INK}" stroke-width="6"/>')
+
+# the sun's patch on the back wall, over the three on the right
+w('<ellipse cx="930" cy="500" rx="560" ry="360" fill="url(#saPatch)"/>')
+
+for i, (head, lit) in enumerate([('ptah', False), ('amun', True), ('king', True), ('falcon', True)]):
+	statue(340 + i * 306, 790, 0.8, head, lit)
+
+# the sun on the statues again, laid over them so the light sits on the stone
+w('<ellipse cx="960" cy="520" rx="480" ry="300" fill="url(#saPatch)" style="mix-blend-mode:screen"/>')
+
+# the stand for the sacred boat, in front of the Gods
+w(f'<path d="M680 840 H920 V900 H680 Z" fill="#6a4424" stroke="{INK}" stroke-width="6"/>')
+w(f'<path d="M660 820 H940 V842 H660 Z" fill="#8a5a30" stroke="{INK}" stroke-width="6"/>')
+
+# the shaft of light, coming from the door behind us
+w('<path d="M560 1000 L700 160 H1320 L1500 1000 Z" fill="url(#saShaft)" filter="url(#saSoft)"/>')
+
+# the edges of the room fall into darkness
+w('<rect width="1600" height="1000" fill="url(#saDark)"/>')
+w('</svg>')
+print('\n'.join(out))

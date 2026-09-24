@@ -1,0 +1,8 @@
+// Sparkle colours: the light that flies off a match. Two colours.
+{
+	"id": "amethyst",
+	"name": "Amethyst",
+	"description": "Violet and pale lilac, cool and bright.",
+	"unlocked_by": {"relics_found": 15},
+	"colours": ["#b67cff", "#f2e6ff"]
+}

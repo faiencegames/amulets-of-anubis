@@ -1,0 +1,8 @@
+// A floor set: the stone under the amulets. Changes the look only.
+// Its pictures are in images/floors/<id>/: bare, thick and gilded squares.
+{
+	"id": "alabaster",
+	"name": "Alabaster",
+	"description": "White calcite, smooth and faintly warm, like the finest vessels.",
+	"unlocked_by": {"three_star_stops": 12}
+}

@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "lamp",
+	"name": "The workmen’s lamp",
+	"description": "Explore a tomb or temple chamber.",
+	"found_when": {"chambers_explored": 1},
+	"reward": {"lapis": 10}
+}

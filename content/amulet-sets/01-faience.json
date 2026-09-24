@@ -1,0 +1,7 @@
+// An amulet set: the same amulets, recoloured. Changes the look only.
+{
+	"id": "faience",
+	"name": "Painted faience",
+	"description": "The amulets as the craftsmen of Memphis glazed them.",
+	"unlocked_by": null
+}

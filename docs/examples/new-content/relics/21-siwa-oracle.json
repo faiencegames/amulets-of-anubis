@@ -1,0 +1,11 @@
+// An example relic: found by gilding Siwa with ten moves or more to spare.
+{
+  "id": "siwa-oracle",
+  "name": "Oracle’s token",
+  "description": "Gild Siwa with ten moves to spare.",
+  "found_when": {"win_at_stop": "siwa", "win_moves_to_spare": 10},
+  "reward": {"lapis": 10},
+
+  // Borrow the drawing of another relic, or drop in images/relics/siwa-oracle.png.
+  "icon": "wanderer"
+}

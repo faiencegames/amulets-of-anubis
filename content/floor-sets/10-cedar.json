@@ -1,0 +1,8 @@
+// A floor set: the stone under the amulets. Changes the look only.
+// Its pictures are in images/floors/<id>/: bare, thick and gilded squares.
+{
+	"id": "cedar",
+	"name": "Cedar deck",
+	"description": "Planks of cedar from Byblos, the wood of the royal barques, gilded like a shrine on board.",
+	"unlocked_by": {"river_events": 16}
+}

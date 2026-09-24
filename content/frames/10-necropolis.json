@@ -1,0 +1,8 @@
+// A board frame: the carved edge round the floor. Changes the look only.
+{
+	"id": "necropolis",
+	"name": "Necropolis seal",
+	"description": "Dark sealing clay, like the plaster stamped over the doors of royal tombs.",
+	"unlocked_by": {"seals_stamped": 18},
+	"colours": {"face": "#5a3a28", "shade": "#24140a", "edge": "#c8784a"}
+}

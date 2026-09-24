@@ -1,0 +1,29 @@
+/* 09-codex-and-sound.css: How to play (the codex tabs) and the sound and music screen. */
+
+/* codex */
+.codex-tabs{ display:flex; flex-wrap:wrap; gap:4px; justify-content:center; margin:6px 0 12px; }
+.codex-tabs button{ font:inherit; font-family:var(--display); font-size:14.5px; color:var(--carnelian); cursor:pointer; padding:5px 10px; border-radius:2px;
+	background:linear-gradient(180deg,#ecd9b2,#c7a877); border:2px solid; border-color:#f7ecd4 #7a5a30 #7a5a30 #f7ecd4; }
+.codex-tabs button.on{ border-color:#7a5a30 #f7ecd4 #f7ecd4 #7a5a30; background:linear-gradient(180deg,#f6e6bf,#d9bd8c); box-shadow:0 0 0 2px var(--gold); }
+.help-list.codex li{ grid-template-columns:52px 1fr; }
+.help-list li > div{ font-size:15px; line-height:1.4; }
+.help-list .where{ font-size:12.5px; color:#6b4a22; }
+.help-list .relic-svg{ width:44px; height:44px; }
+ul.plain{ margin:6px 0 10px; padding-left:20px; } ul.plain li{ margin:3px 0; }
+.trial-risk{ margin:8px 0 0; font-size:13.5px; color:#7a2a18; }
+.curse-row{ grid-column:1 / -1; font-size:13px; color:#8e2415; font-style:italic; padding-top:5px; }
+.mobile-strip .curse-row{ padding:3px 6px; border-radius:3px; background:#e8c7a8; }
+.trial-row.failed{ color:#8e2415; text-decoration:line-through; text-decoration-thickness:1px; }
+.trial-row.failed strong{ text-decoration:none; color:#8e2415; }
+.curse-note{ text-align:center; color:#8e2415; font-style:italic; }
+
+.persist-note{ text-align:center; color:#1f5a8a; background:#e8e2cc; border:1px solid #9ab0c8; padding:7px 10px; border-radius:3px; }
+
+/* sound and music */
+.audio-row{ display:grid; grid-template-columns:170px 1fr; gap:12px; align-items:center; padding:10px 0; border-top:1px solid #8a622a44; }
+.audio-row .fill-toggle{ margin:0; font-family:var(--display); font-size:17px; color:var(--carnelian); }
+.audio-row input[type=range]{ width:100%; accent-color:#b07a17; }
+@media (max-width:520px){ .audio-row{ grid-template-columns:1fr; gap:4px; } }
+
+.harm-toggle{ margin:0 0 6px 2px; font-size:14px; }
+.harm-toggle input[disabled] + *{ opacity:.5; }

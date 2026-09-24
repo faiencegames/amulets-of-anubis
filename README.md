@@ -1,0 +1,149 @@
+# Amulets of Anubis
+
+![A tomb by torchlight: the Grand Gallery at Giza, with some amulets buried in sand](docs/images/screenshot-tomb.jpg)
+
+Amulets of Anubis is a match-3 game about a journey down the Nile. You sail
+from Memphis to Alexandria and stop at twelve places along the way. At each
+one you swap amulets into rows of three until the grey stone floor has turned
+to gold. Every stop has its own amulets, scenery, floor plans and music, and a
+short note on its history that I have tried hard to get right.
+
+The whole game is a single HTML file. There is nothing to install and no
+account to make, and it never goes online: no ads, no tracking, and no update
+that changes it behind your back. Open the file in a browser and it works, and
+it should still work in twenty years. It can also be installed as a web app,
+and there are Android and desktop versions.
+
+I also wanted it to be easy to change. Almost everything you see, from the
+stops and their history notes to the prices in the shop and every picture,
+lives in small text files that explain themselves. You can make your own
+version without writing any code.
+
+<div class="start">
+<p><a href="docs/beginners-guide.md"><b>Change the game</b><br><span>Your own pictures, words and prices, a new stop or tomb. Step by step, no programming.</span></a></p>
+<p><a href="docs/content-reference.md"><b>Look something up</b><br><span>Every field of every content file, and every name the build knows.</span></a></p>
+<p><a href="docs/build-guide.md"><b>Build the apps</b><br><span>The Android and desktop apps, from this one folder.</span></a></p>
+<p><a href="docs/developer-guide.md"><b>Work on the code</b><br><span>How the game works inside: rules, drawing, sound, balance.</span></a></p>
+</div>
+
+## What's in it
+
+- **Twelve stops down the Nile**, from Memphis to Alexandria, each with its own
+  floor plans, amulets and scenery. The music is composed while you play, in
+  the stop's own key and on its own instrument.
+- **Special amulets.** Four in a row makes a banded amulet, an L or a T makes
+  a ringed one, and five in a row makes the winged sun. Some amulets also fall
+  wearing a badge with a power of its own, and a few rare badges are cursed.
+- **Boons, trials and shops.** Priests set you trials and reward you with
+  boons, which you keep until you need them. Between stops there are puzzles
+  and choices on the river. Anubis runs a stall for one-off help, and the
+  Treasury sells lasting upgrades.
+- **Tombs, temples and oases** open up beside nine of the stops once you have
+  gilded them. The tombs are lit by torches and some of their amulets are
+  buried in sand. The oases lie among date palms, with amulets under water.
+- **Reasons to come back:** three seals at every stop, omens you can brave for
+  a bigger reward, 40 relics for the museum, and amulet sets, floors, frames
+  and sparkles to earn.
+- **A gentle start.** On your first journey the game brings in its parts one
+  at a time, each with a short note. If you would rather have everything at
+  once, you can.
+- **Four board sizes, four difficulties**, full keyboard controls and support
+  for reduced motion.
+
+There are more pictures on the [screenshots page](docs/screenshots.md).
+
+## Playing it
+
+Build it once (see below), then open `dist/amulets-of-anubis.html` in a
+browser. That one file is the entire game, so you can copy it anywhere and
+keep it.
+
+> **Note:** Your progress is saved in the browser you play in. To move it to
+> another copy of the game, use Menu → Save and restore, which gives you a
+> code you can paste in somewhere else.
+
+## Building it
+
+All you need is Python 3.
+
+```sh
+python3 build.py            # or double-click build.bat on Windows
+```
+
+The build checks every content file before it writes anything. If something
+is wrong, it tells you which file and which line in plain words, and leaves
+your last working game alone. Otherwise it writes
+`dist/amulets-of-anubis.html`.
+
+A few other commands come in handy while you work:
+
+| Command | What it does |
+|---|---|
+| `python3 build.py --check` | checks the content without writing anything |
+| `python3 build.py --watch` | rebuilds every time you save a file (`scripts/watch.bat` on Windows) |
+| `python3 scripts/new.py` | starts a new stop, tomb, boon, relic, river event, look and so on from a ready-made file (`scripts/new.bat`) |
+| `dist/try-it.html` | opens the game in try-out mode, with its own save and everything unlocked, right at the thing you changed last |
+
+`./build.sh` builds the Android and desktop apps as well, along with the
+documentation and fresh screenshots. The [build guide](docs/build-guide.md)
+says what each of them needs. Everything the build makes ends up in `dist/`.
+
+## Making it your own
+
+Most of the game is content rather than code:
+
+| To change | Edit |
+|---|---|
+| stops, tombs and temples, boons, badges, curses, omens, relics, trials, river events, shop items and looks | one small file each in `content/` |
+| the words on every screen | `content/text.json` |
+| the numbers that tune it: rewards, difficulty, stars, when each part arrives | `content/settings.json` |
+| every picture: amulets, scenery, floors, badges and icons | files in `images/` (mostly SVG, see `images/README.md`) |
+
+If you have never programmed, start with the
+**[beginner's guide](docs/beginners-guide.md)**. It walks you through changing
+pictures, words and numbers and adding a new stop, with pictures at every step.
+
+## Documentation
+
+| | |
+|---|---|
+| [Beginner's guide](docs/beginners-guide.md) | pictures, words, numbers and new stops, step by step |
+| [Content reference](docs/content-reference.md) | every field of every kind of content file |
+| [Developer guide](docs/developer-guide.md) | how the game works inside: balancing, performance, the stylesheet |
+| [Build guide](docs/build-guide.md) | the Android and desktop apps |
+| [Screenshots](docs/screenshots.md) | pictures of every part of the game |
+
+## Licence
+
+Amulets of Anubis © 2026 faiencegames.
+
+* **The code** (the game, the build, the tools and the scripts) is free
+  software under the GNU General Public License, version 3 or (at your option)
+  any later version: see [LICENSE](LICENSE). You may use it, study it, change
+  it and share it, as long as what you share stays under the same licence.
+* **The pictures** in `images/` and `docs/` are in the public domain under
+  [CC0 1.0](LICENSES/CC0-1.0.txt), so you can use them for anything without
+  asking. The few exceptions are listed with their own terms in
+  [images/CREDITS.md](images/CREDITS.md). (The David Roberts prints there are
+  public domain too.)
+* **The two typefaces** in `web/fonts.css`, IM Fell Double Pica and IM Fell
+  English, were digitised by Igino Marini from the Fell Types and are under
+  the SIL Open Font License 1.1
+  ([Double Pica](LICENSES/OFL-1.1-IM-Fell-Double-Pica.txt),
+  [English](LICENSES/OFL-1.1-IM-Fell-English.txt)).
+
+## Project layout
+
+```
+build.py        builds the game into dist/ (build.bat on Windows)
+build.sh        builds everything: game, apps, docs and website, all into dist/
+content/        stops, relics, events, shop items, looks, text.json, settings.json, icons/
+images/         every picture: amulets, scenery, floors, specials, badges, icons
+src/            the code: the rules (01-core.js) and the game (game/, one file per part)
+web/            the page shell, stylesheet (css/), fonts, web-app files
+scripts/        new.py (start new content), watch (rebuild on save)
+tools/          simulators for balance and economy, performance tests, screenshots
+docs/           the guides, screenshots and examples
+platforms/      the Android and desktop app wrappers (sources only)
+dist/           everything built: the game, apps, docs/ and website/ (not kept in git)
+```

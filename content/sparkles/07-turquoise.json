@@ -1,0 +1,8 @@
+// Sparkle colours: the light that flies off a match. Two colours.
+{
+	"id": "turquoise",
+	"name": "Turquoise",
+	"description": "Sea-green light from the mines of Sinai.",
+	"unlocked_by": {"river_events": 10},
+	"colours": ["#3fd9cf", "#e2fffb"]
+}

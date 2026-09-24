@@ -1,0 +1,8 @@
+// A board frame: the carved edge round the floor. Changes the look only.
+{
+	"id": "ebony",
+	"name": "Ebony and gold",
+	"description": "Dark wood from the south, inlaid with a band of gold, as on a royal chest.",
+	"unlocked_by": {"relic": "sistrum"},
+	"colours": {"face": "#2b1a10", "shade": "#0e0804", "edge": "#e8b93e"}
+}

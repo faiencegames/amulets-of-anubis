@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "offering",
+	"name": "The offering table",
+	"description": "Finish twenty-five trials.",
+	"found_when": {"trials_finished": 25},
+	"reward": {"lapis": 20}
+}

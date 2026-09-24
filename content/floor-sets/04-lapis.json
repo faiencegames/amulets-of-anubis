@@ -1,0 +1,8 @@
+// A floor set: the stone under the amulets. Changes the look only.
+// Its pictures are in images/floors/<id>/: bare, thick and gilded squares.
+{
+	"id": "lapis",
+	"name": "Lapis pavement",
+	"description": "Deep blue stone flecked with gold, laid for a God’s procession.",
+	"unlocked_by": {"river_events": 6}
+}

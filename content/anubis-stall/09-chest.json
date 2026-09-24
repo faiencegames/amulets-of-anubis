@@ -1,0 +1,9 @@
+// Something Anubis sells: bought for one stop, used once.
+{
+	"id": "chest",
+	"name": "Priest’s chest",
+	"description": "A random great boon: flood, hammer, wisdom, scales, Ra, Seshat or Sekhmet.",
+	"currency": "lapis",
+	"price": 80,
+	"gives": {"boon": "random"}
+}

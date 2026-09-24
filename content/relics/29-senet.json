@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "senet",
+	"name": "The senet board",
+	"description": "Win eight stops in a row, without failing one in between.",
+	"found_when": {"win_streak": 8},
+	"reward": {"lapis": 20}
+}

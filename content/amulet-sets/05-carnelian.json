@@ -1,0 +1,8 @@
+// An amulet set: the same amulets, recoloured. Changes the look only.
+{
+	"id": "carnelian",
+	"name": "Carnelian and jasper",
+	"description": "Desert stones, red and orange, cut in the Eastern hills.",
+	"unlocked_by": {"relics_found": 5},
+	"colour_changes": {"hue_shift": -35, "saturation": 1.35, "brightness": 1.04}
+}

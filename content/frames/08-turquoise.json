@@ -1,0 +1,8 @@
+// A board frame: the carved edge round the floor. Changes the look only.
+{
+	"id": "turquoise",
+	"name": "Turquoise faience",
+	"description": "Glazed blue-green, as on the tiles of the Step Pyramid.",
+	"unlocked_by": {"thick_stones_cracked": 350},
+	"colours": {"face": "#2a9a94", "shade": "#0f423f", "edge": "#b8f2e8"}
+}

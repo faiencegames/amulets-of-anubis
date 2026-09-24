@@ -1,0 +1,38 @@
+// Stop 2 of the journey: Saqqara.
+// The number at the front of the file name sets the order of the stops.
+// Every field is explained in docs/content-reference.md.
+{
+	"id": "saqqara",
+	"name": "Saqqara",
+	"subtitle": "Imhotep’s staircase to the sky",
+	"history": "At Saqqara we stood beneath the Step Pyramid of King Djoser, raised around 2650 BCE: the oldest large monument built entirely of cut stone. Its architect Imhotep was so admired that later Egyptians worshipped him as a God of wisdom and healing.",
+	"moves": 24,
+	// Three sets: each time the stop starts, the game picks one at random.
+	"amulets": [
+		["ankh", "scarab", "eye", "djed", "pyramid"],
+		["bull", "ibis", "falcon", "heart", "pyramid"],
+		["baboon", "cat", "ka", "was", "shen"]
+	],
+	"floor_plan": [
+		"...11...",
+		"..1111..",
+		"..1111..",
+		".111111.",
+		".111111.",
+		"11111111",
+		"11111111",
+		"00000000"
+	],
+	"shared_floor_shapes": ["steps", "obelisk"],
+	"stone_colour": "#a38b62",
+	"music": {"key": "E3", "scale": "dorian", "instrument": "lyre"},
+	"frame_colours": ["#a8844e", "#5a3e1e", "#e0c08a"],
+	"map_position": {"x": 140, "y": 134, "label": "left"},
+	// Three seals: challenges stamped the first time a win here meets them.
+	// Keep their order; saves remember seals by position.
+	"seals": [
+		{"text": "Win with eight moves to spare", "when": {"win_moves_to_spare": 8}},
+		{"text": "Forge a winged sun on Djoser’s floor", "when": {"win_suns_forged": 1}},
+		{"text": "Win with an omen braved", "when": {"win_with_omens": 1}}
+	]
+}

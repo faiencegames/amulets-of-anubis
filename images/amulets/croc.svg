@@ -1,0 +1,22 @@
+<!-- The crocodile of Sobek, God of the Nile's waters: a crocodile's head and neck in profile, the raised eye, the long toothed snout and the scutes down the neck. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="green" gradientUnits="userSpaceOnUse" x1="20" y1="30" x2="110" y2="110"><stop offset="0" stop-color="#c8e08a"/><stop offset=".35" stop-color="#6a9a3a"/><stop offset=".72" stop-color="#3e6a22"/><stop offset="1" stop-color="#22401a"/></linearGradient>
+	<linearGradient id="belly" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d8dc98"/><stop offset="1" stop-color="#a0a860"/></linearGradient>
+</defs>
+<path d="M12 122 C10 98 14 76 22 60 C28 44 38 32 54 32 C62 32 68 38 70 44 C86 46 104 50 115 56 C122 60 122 68 116 72 C108 76 96 80 84 82 C72 84 62 86 56 92 C48 100 44 110 44 122 Z M19 61 C16 52 26 48 28 56 Z M14 75 C11 66 21 62 23 70 Z M10 89 C7 80 17 76 19 84 Z M8 103 C5 94 15 90 17 98 Z M7 117 C4 108 14 104 16 112 Z" fill="#2a1703" fill-rule="nonzero" stroke="#2a1703" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" filter="url(#sh)"/>
+<path d="M19 61 C16 52 26 48 28 56 Z M14 75 C11 66 21 62 23 70 Z M10 89 C7 80 17 76 19 84 Z M8 103 C5 94 15 90 17 98 Z M7 117 C4 108 14 104 16 112 Z" fill="#4a7a2a"/>
+<path d="M12 122 C10 98 14 76 22 60 C28 44 38 32 54 32 C62 32 68 38 70 44 C86 46 104 50 115 56 C122 60 122 68 116 72 C108 76 96 80 84 82 C72 84 62 86 56 92 C48 100 44 110 44 122 Z" fill="url(#green)"/>
+<clipPath id="cc"><path d="M12 122 C10 98 14 76 22 60 C28 44 38 32 54 32 C62 32 68 38 70 44 C86 46 104 50 115 56 C122 60 122 68 116 72 C108 76 96 80 84 82 C72 84 62 86 56 92 C48 100 44 110 44 122 Z"/></clipPath>
+<path d="M54 76 C70 74 96 72 118 68 V92 H58 C50 98 46 110 46 124 H38 C38 104 44 88 54 76 Z" fill="url(#belly)" clip-path="url(#cc)"/>
+<path d="M116 68 C100 70 82 72 66 72 C60 72 56 74 54 78" fill="none" stroke="#2a1703" stroke-width="3.4" stroke-linecap="round"/>
+<path d="M70 71.6 l3 5 l3 -5 Z M78 70.9 l3 -5 l3 5 Z M86 70.2 l3 5 l3 -5 Z M94 69.5 l3 -5 l3 5 Z M102 68.8 l3 5 l3 -5 Z M110 68.0 l3 -5 l3 5 Z" fill="#fffdf6" stroke="#2a1703" stroke-width="1.4" stroke-linejoin="round"/>
+<g fill="#2e5a1a" opacity=".45" clip-path="url(#cc)"><ellipse cx="82" cy="57" rx="3.2" ry="2.2"/><ellipse cx="94" cy="59" rx="3.2" ry="2.2"/><ellipse cx="88" cy="64" rx="3.2" ry="2.2"/><ellipse cx="30" cy="74" rx="3.2" ry="2.2"/><ellipse cx="26" cy="88" rx="3.2" ry="2.2"/><ellipse cx="34" cy="86" rx="3.2" ry="2.2"/><ellipse cx="24" cy="102" rx="3.2" ry="2.2"/><ellipse cx="32" cy="100" rx="3.2" ry="2.2"/></g>
+<ellipse cx="112" cy="58" rx="3" ry="2" fill="#2a1703"/>
+<path d="M44 42 C46 32 60 30 64 40 Z" fill="#6a9a3a" stroke="#2a1703" stroke-width="3" stroke-linejoin="round"/>
+<ellipse cx="55" cy="42" rx="7" ry="5" fill="#f5d04e" stroke="#2a1703" stroke-width="2.4"/>
+<path d="M55 38 V46" stroke="#2a1703" stroke-width="2.6" stroke-linecap="round"/>
+<path d="M30 52 C36 42 44 36 52 35" fill="none" stroke="#fffbe0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+<path d="M76 49 C88 50 100 53 108 56" fill="none" stroke="#fffbe0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

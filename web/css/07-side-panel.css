@@ -1,0 +1,126 @@
+/* 07-side-panel.css: The side panel beside the board: trial and boon rows, place notes, relic strip. */
+
+/* trials and boons */
+.trial-row, .boon-row{ grid-column:1 / -1; }
+.trial-row[hidden]{ display:none !important; }
+.trial-row{ display:flex; gap:10px; justify-content:space-between; align-items:baseline; font-size:14px; color:#4a3217;
+	border-top:1px solid #8a6a3a55; margin-top:6px; padding-top:7px; }
+.trial-row strong{ font-family:var(--display); font-size:16px; color:#3a220b; white-space:nowrap; }
+.trial-row.done{ color:var(--malachite); }
+.boon-row{ display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:7px; padding-top:7px; border-top:1px solid #8a6a3a55; }
+.boon-none{ font-size:13px; font-style:italic; color:#6b5230; }
+.boon{ display:inline-flex; align-items:center; gap:6px; font:inherit; font-family:var(--display); font-size:14px; color:var(--carnelian);
+	padding:4px 9px 4px 5px; min-height:38px; cursor:pointer; border-radius:2px;
+	background:linear-gradient(180deg,#ecd9b2,#c7a877); border:3px solid; border-color:#f7ecd4 #7a5a30 #7a5a30 #f7ecd4; }
+.boon svg{ width:22px; height:22px; flex:none; filter:drop-shadow(0 1px 1px rgba(25,12,0,.35)); }
+.boon.armed{ border-color:#7a5a30 #f7ecd4 #f7ecd4 #7a5a30; background:linear-gradient(180deg,#f6e6bf,#d9bd8c); box-shadow:0 0 0 2px var(--gold), 0 0 12px #ffd65a88; }
+.boon:focus-visible{ outline:3px solid var(--lapis); outline-offset:2px; }
+.boon { position: relative; }
+.boon-n {
+	position: absolute; top: -7px; right: -7px; min-width: 20px; padding: 1px 4px;
+	font: 700 11.5px/16px var(--display); color: #fff3d0; text-align: center;
+	background: var(--carnelian); border: 1.5px solid #f7ecd4; border-radius: 9px;
+}
+/* beside the board: equal tiles in a grid, the icon over its short name */
+.side .boon-row {
+	display: grid; grid-template-columns: repeat(auto-fill, minmax(54px, 1fr));
+	gap: 8px 6px; align-items: stretch;
+}
+.side .boon-none { grid-column: 1 / -1; }
+.side .boon {
+	flex-direction: column; justify-content: center; gap: 2px;
+	min-height: 54px; padding: 5px 2px 4px;
+	font-size: 12.5px; line-height: 1.1;
+}
+.side .boon svg { width: 24px; height: 24px; }
+.trial-card{ display:block; width:100%; text-align:left; font:inherit; color:#2b1a0b; cursor:pointer; padding:11px 12px; margin:10px 0; border-radius:4px; background:#f6ecd2; border:1px solid #a8844e; box-shadow:0 2px 0 #7a5a3055; }
+.trial-card:hover{ background:#fbf3de; border-color:#7a5a30; }
+.trial-card:active{ transform:translateY(1px); box-shadow:none; }
+.trial-card:focus-visible{ outline:3px solid var(--lapis); outline-offset:2px; }
+.trial-goal{ margin:0 0 6px; font-family:var(--display); font-size:19px; color:var(--carnelian); }
+.trial-prize{ display:flex; gap:10px; align-items:center; margin:0; font-size:14.5px; }
+.trial-prize svg{ width:30px; height:30px; flex:none; filter:drop-shadow(0 1px 1px rgba(25,12,0,.35)); }
+.arrow-label{ display:inline-block; font-size:12px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:#7a5a10; margin:0 8px 0 0; vertical-align:middle; }
+.trial-goal .arrow-label{ vertical-align:baseline; }
+.actions .btn.full{ width:100%; flex:1 1 100%; }
+
+/* river events: "On the river", the barque between two stops, choice cards */
+.river-kicker{ margin:0 0 2px; text-align:center; }
+.river-kicker .arrow-label{ margin:0; color:#2d5a8a; }
+.route{ display:flex; align-items:center; gap:8px; max-width:440px; margin:2px auto 14px; font-family:var(--display); font-size:15px; color:#4a3217; }
+.route-stop{ flex:none; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; }
+.route-stop::before{ content:""; width:9px; height:9px; border-radius:50%; background:#e0ac3a; box-shadow:0 0 0 1.5px #3b2406; }
+.route-stop.from{ color:#7a6040; }
+.route-stop.from::before{ background:#c9b48a; }
+.route-water{ flex:1; min-width:60px; position:relative; height:28px;
+	background:repeating-linear-gradient(90deg,#2d6fb0 0 7px,transparent 7px 11px) left 21px/100% 2px no-repeat; }
+.route-boat{ position:absolute; left:50%; top:0; width:40px; height:24px; margin-left:-20px; }
+@media (prefers-reduced-motion: no-preference){ .route-boat{ animation:boat-bob 3.2s ease-in-out infinite; } }
+@keyframes boat-bob{ 0%,100%{ transform:translateY(0) rotate(0); } 50%{ transform:translateY(1.5px) rotate(-2deg); } }
+.overlay .river-card p{ margin:0; }
+.overlay .river-card p + p{ margin-top:8px; }
+.river-outcome .g-ico{ display:inline-block; vertical-align:-2px; margin:0 7px 0 4px; }
+.river-card.static{ cursor:default; }
+.river-card.static:hover{ background:#f6ecd2; border-color:#a8844e; }
+.river-card.static:active{ transform:none; box-shadow:0 2px 0 #7a5a3055; }
+.river-card.blocked{ cursor:not-allowed; opacity:.6; }
+.river-card.blocked:hover{ background:#f6ecd2; border-color:#a8844e; }
+.river-card.blocked:active{ transform:none; box-shadow:0 2px 0 #7a5a3055; }
+.trial-prize .g-ico{ display:inline-block; vertical-align:-2px; margin:0 7px 0 1px; }
+.trial-risk.calm{ color:#6b4a22; }
+
+/* collapsible place notes */
+#infoSheet summary{ list-style:none; cursor:pointer; }
+#infoSheet summary::-webkit-details-marker{ display:none; }
+#infoSheet summary h2, #infoSheet summary p{ display:inline-block; margin:0; }
+#infoSheet[open] summary{ margin-bottom:10px; }
+#infoSheet summary .place-sub{ margin-left:0; display:block; }
+
+.collection{ flex:none; }
+.relic-strip{ display:flex; gap:4px; margin:7px 0 6px; overflow-x:hidden; overflow-y:auto; -webkit-overflow-scrolling:touch; flex-wrap:wrap; height:50px; }
+.relic-slot{ width:36px; height:36px; flex-shrink:0; border-radius:50%; border:1px solid #8a6a3a; background:radial-gradient(circle at 40% 35%, #efe0bb, #cdb37f); display:grid; place-items:center; }
+.relic-slot .relic-svg{ width:78%; height:78%; }
+.relic-slot.has{ background:radial-gradient(circle at 40% 35%, #fff6d6, #e8c77a); border-color:#c8962e; box-shadow:0 0 7px #e0ac3a99; }
+
+/* tomb and temple chambers: darker scenery, the doorway note and marks */
+#backdrop::before{ content:""; position:absolute; inset:0; z-index:1; pointer-events:none; background:#120903; opacity:0; transition:opacity 1.1s ease; }
+body.in-chamber #backdrop::before{ opacity:.66; }
+@media (prefers-reduced-motion: reduce){ #backdrop::before{ transition:none; } }
+.chamber-kicker .arrow-label{ color:#8a4a10; }
+.chamber-note{ display:flex; gap:9px; align-items:center; justify-content:center; margin:8px 0 4px; text-align:left; }
+.chamber-note svg{ width:24px; height:26px; flex:none; }
+.trial-goal .door-ico{ width:20px; height:22px; vertical-align:-3px; margin-right:8px; }
+
+/* a chamber's scroll: the entrance at the top, the task carved on a plaque,
+	 and a torch-lit button to go in */
+.chamber-portal { max-width: 380px; margin: 0 auto 4px; }
+.chamber-portal svg { display: block; width: 100%; height: auto; border-radius: 6px; }
+.chamber-portal .torch-flame { transform-box: fill-box; transform-origin: 50% 100%; animation: torch-pulse 3.2s ease-in-out infinite; }
+.chamber-portal .torch-glow { animation: torch-glow 3.2s ease-in-out infinite; }
+.chamber-portal g:last-of-type .torch-flame, .chamber-portal g:last-of-type .torch-glow { animation-delay: -1.1s; }
+/* a slow breath of the flame, not a flicker */
+@keyframes torch-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04, 1.06); } }
+@keyframes torch-glow { 0%, 100% { opacity: .8; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+	.chamber-portal .torch-flame, .chamber-portal .torch-glow { animation: none; }
+}
+.overlay p.chamber-text { margin-bottom: 12px; }
+/* the story on a river event's or a chamber's scroll: set as a block */
+.overlay p.story { margin-top: 8px; text-align: justify; hyphens: auto; -webkit-hyphens: auto; }
+.plaque-sand, .plaque-again { text-align: justify; hyphens: auto; -webkit-hyphens: auto; }
+.chamber-plaque {
+	margin: 10px 0 4px; padding: 12px 14px;
+	color: #2b1a0b; border-radius: 3px;
+	background: linear-gradient(180deg, #dcc190, #c7a66e);
+	border: 2px solid #6b4a22;
+	box-shadow: inset 0 0 0 3px #ead5a8, inset 0 0 0 4px #9a7440;   /* a carved double edge */
+}
+.overlay .chamber-plaque p { margin: 0; }
+.overlay .chamber-plaque p + p { margin-top: 8px; }
+.plaque-goal { font-family: var(--display); font-size: 19px; color: #7a1e10; }
+.plaque-sand, .plaque-again { font-size: 13.5px; font-style: italic; color: #4a3014; }
+.btn.torch-go { color: #ffe3a0; background: linear-gradient(180deg, #6a3f16, #3e2208); border-color: #a8783a #24130a #24130a #a8783a; }
+.btn.torch-go:hover { color: #fff0c4; background: linear-gradient(180deg, #7a4a1c, #4a2a0c); }
+/* an oasis's button to go in: water and daylight rather than torchlight */
+.btn.oasis-go { color: #fffbe8; background: linear-gradient(180deg, #4aa0d8, #1f5f9e); border-color: #9fd4f4 #123f6e #123f6e #9fd4f4; text-shadow: 0 1px 0 #123f6e; }
+.btn.oasis-go:hover { color: #ffffff; background: linear-gradient(180deg, #5cb2e8, #2a6eae); }

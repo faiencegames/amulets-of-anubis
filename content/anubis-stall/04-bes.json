@@ -1,0 +1,9 @@
+// Something Anubis sells: bought for one stop, used once.
+{
+	"id": "bes",
+	"name": "Dance of Bes",
+	"description": "A boon: reshuffle every amulet and gain two moves, whenever you like.",
+	"currency": "gold",
+	"price": 420,
+	"gives": {"boon": "bes"}
+}

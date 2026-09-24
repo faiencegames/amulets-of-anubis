@@ -1,0 +1,8 @@
+// What the codex says about an amulet. The drawing itself is built in,
+// or comes from a picture in images/amulets/ with the same name as the id.
+{
+	"id": "coin",
+	"name": "Ptolemaic coin",
+	"plural": "Ptolemaic coins",
+	"meaning": "Silver coins of the Ptolemies, the Greek kings who ruled Egypt from Alexandria, showed an eagle standing on a thunderbolt."
+}

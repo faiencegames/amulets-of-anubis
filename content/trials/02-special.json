@@ -1,0 +1,9 @@
+// A trial a priest can set at a stop. Finish it and the boon is the player’s.
+{
+	"id": "special",
+	"goal": "make_specials",
+	"target": 4,
+	"text": "Make 4 special amulets",
+	"progress_label": "Specials made",
+	"boon": "sun"
+}

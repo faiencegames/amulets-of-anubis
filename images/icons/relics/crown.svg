@@ -1,0 +1,11 @@
+<!-- Relic icon (crown): The blue crown, the khepresh, covered in small gold discs, with the cobra at the brow. 32 by 32. "relicGold" is the shared gold gradient. Drawn by tools/icons/relics.py. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<defs>
+<linearGradient id="relicGold" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#fff3ae"/>
+<stop offset=".55" stop-color="#e0ac3a"/>
+<stop offset="1" stop-color="#8a5a10"/>
+</linearGradient>
+</defs>
+<path d="M7 27 V15 C7 10 10 6.5 14 4.5 C18 3 23 2.5 27 3 C28.5 7 28.5 13 27 17.5 C26 20.5 24.5 22.5 24.5 27 Z" fill="#2f6fc0" stroke="#3b2406" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><clipPath id="rcr"><path d="M7 27 V15 C7 10 10 6.5 14 4.5 C18 3 23 2.5 27 3 C28.5 7 28.5 13 27 17.5 C26 20.5 24.5 22.5 24.5 27 Z"/></clipPath><g clip-path="url(#rcr)"><circle cx="10" cy="8" r=".75" fill="#f5d04e"/><circle cx="14" cy="8" r=".75" fill="#f5d04e"/><circle cx="18" cy="8" r=".75" fill="#f5d04e"/><circle cx="22" cy="8" r=".75" fill="#f5d04e"/><circle cx="26" cy="8" r=".75" fill="#f5d04e"/><circle cx="12" cy="12" r=".75" fill="#f5d04e"/><circle cx="16" cy="12" r=".75" fill="#f5d04e"/><circle cx="20" cy="12" r=".75" fill="#f5d04e"/><circle cx="24" cy="12" r=".75" fill="#f5d04e"/><circle cx="28" cy="12" r=".75" fill="#f5d04e"/><circle cx="10" cy="16" r=".75" fill="#f5d04e"/><circle cx="14" cy="16" r=".75" fill="#f5d04e"/><circle cx="18" cy="16" r=".75" fill="#f5d04e"/><circle cx="22" cy="16" r=".75" fill="#f5d04e"/><circle cx="26" cy="16" r=".75" fill="#f5d04e"/><circle cx="12" cy="20" r=".75" fill="#f5d04e"/><circle cx="16" cy="20" r=".75" fill="#f5d04e"/><circle cx="20" cy="20" r=".75" fill="#f5d04e"/><circle cx="24" cy="20" r=".75" fill="#f5d04e"/><circle cx="28" cy="20" r=".75" fill="#f5d04e"/></g><path d="M7 23 H24.5 V27 H7 Z" fill="url(#relicGold)" stroke="#3b2406" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><path d="M7.5 22.5 C4.5 21 4 17 5.5 14.5 C6.5 13 8 13.5 8.5 14.5 C8.5 17 8 19.5 9 21.5 Z" fill="url(#relicGold)" stroke="#3b2406" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,8 @@
+<!-- Button along the bottom: stall, the head of Anubis, who keeps the stall. The same head as the Anubis amulet, turned to face right. 32 by 32. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<g transform="translate(32 0.5) scale(-0.25 0.25)">
+<path d="M56 124 C54 110 50 100 44 95 C34 90 20 86 10 81 C4 78 3 71 6 67 C10 63 18 61 28 59 C38 57 46 51 52 44 L56 6 L66 30 L74 30 L100 2 L95 50 C102 62 101 76 95 84 C90 92 90 108 93 124 Z" fill="#1a1410" stroke="#c8962e" stroke-width="5.6" stroke-linejoin="round"/>
+<path d="M77 30 L100 2 L95 48 C89 42 83 36 77 30 Z" fill="#e8b93e"/>
+<path d="M36 63 C40 57 48 56 54 61 C48 65 42 66 36 63 Z M54 61 L68 60" fill="#e8b93e" stroke="#e8b93e" stroke-width="3" stroke-linejoin="round"/>
+</g>
+</svg>

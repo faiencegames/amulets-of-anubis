@@ -1,0 +1,10 @@
+// A lasting upgrade sold in the treasury. One price per level.
+{
+	"id": "granary",
+	"name": "Temple granary",
+	"description": "Ten more gold for every stop you gild, for each level bought.",
+	"currency": "lapis",
+	"prices": [70, 150, 300],
+	"effect": "win_gold",
+	"amount_per_level": 10
+}

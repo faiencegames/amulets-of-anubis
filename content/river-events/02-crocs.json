@@ -1,0 +1,22 @@
+// Something that can happen on the river between two stops.
+{
+	"id": "crocs",
+	"kind": "puzzle",
+	"title": "Crocodiles in the reeds",
+	"text": "Sobek’s children crowded the channel, jaws on the water. We had to drive off fifteen crocodiles before the way was open.",
+	"goal": {"type": "collect", "amulet": "croc", "count": 15},
+	"moves": 13,
+	"amulet_types": 5,
+	"amulets": ["croc", "bluelotus", "fish", "papyrus", "ankh"],
+	"floor_plan": [
+		"00000000",
+		"00000000",
+		"00000000",
+		"00000000",
+		"00000000",
+		"00000000",
+		"00000000",
+		"00000000"
+	],
+	"reward": {"boon": "hammer"}
+}

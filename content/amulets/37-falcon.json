@@ -1,0 +1,8 @@
+// What the codex says about an amulet. The drawing itself is built in,
+// or comes from a picture in images/amulets/ with the same name as the id.
+{
+	"id": "falcon",
+	"name": "Horus",
+	"plural": "falcons of Horus",
+	"meaning": "Horus, the falcon God of the sky and of kingship. Every living king was seen as Horus on earth."
+}

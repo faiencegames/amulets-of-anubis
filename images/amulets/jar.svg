@@ -1,0 +1,18 @@
+<!-- A cracked jar: blue-painted pottery with bands of blue and a row of petals, split by a crack. 128 by 128. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+<linearGradient id="clay" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6e8c8"/><stop offset=".6" stop-color="#dcc39a"/><stop offset="1" stop-color="#a88a5c"/></linearGradient>
+</defs>
+<path d="M46 16 H82 L80 28 C98 36 110 54 110 76 C110 102 90 122 64 122 C38 122 18 102 18 76 C18 54 30 36 48 28 Z" fill="url(#clay)" stroke="#2a1703" stroke-width="7" stroke-linejoin="round" filter="url(#sh)"/>
+<path d="M42 14 H86" stroke="#2a1703" stroke-width="7" stroke-linecap="round"/>
+<path d="M44 14 H84" stroke="#e8d3a6" stroke-width="3" stroke-linecap="round"/>
+<path d="M27 56 H101" stroke="#2f6fc0" stroke-width="7"/>
+<path d="M21 88 H107" stroke="#2f6fc0" stroke-width="6"/>
+<g fill="#3a86d0" stroke="#1d3f78" stroke-width="1.4">
+<path d="M28 62 C30 72 36 76 38 76 C40 72 38 66 36 62 Z M44 62 C46 72 52 76 54 76 C56 72 54 66 52 62 Z M60 62 C62 72 68 76 70 76 C72 72 70 66 68 62 Z M76 62 C78 72 84 76 86 76 C88 72 86 66 84 62 Z M92 62 C93 70 96 74 98 74 C99 70 98 66 97 62 Z"/>
+</g>
+<path d="M30 97 H98 M38 105 H90" stroke="#b83a22" stroke-width="3" stroke-linecap="round"/>
+<path d="M70 18 L66 34 L74 46 L64 62 L70 76 L62 92 L66 108" fill="none" stroke="#1a0f05" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M72 18 L68 34 L76 46" fill="none" stroke="#fff6dc" stroke-width="1.4" opacity=".7"/>
+</svg>

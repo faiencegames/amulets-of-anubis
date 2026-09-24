@@ -1,0 +1,46 @@
+<!-- Deir el-Bahari: Hatshepsut's terraced temple against the bay of cliffs, three pillared terraces joined by ramps, and trees in planting pits in the forecourt, as the temple had myrrh trees brought from Punt. Drawn by tools/scenery/deir_el_bahari.py. 1600 by 1000. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000">
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6ea2cc"/><stop offset=".5" stop-color="#b4d0de"/><stop offset=".62" stop-color="#f0dcb4"/></linearGradient>
+  <linearGradient id="plain" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e2be86"/><stop offset="1" stop-color="#b08048"/></linearGradient>
+</defs>
+<rect width="1600" height="1000" fill="url(#sky)"/>
+<!-- the bay of cliffs: a curved wall of buttresses, lit and shaded -->
+<path d="M0 210 L140 200 L260 230 L380 190 L520 214 L640 180 L760 204 L880 176 L1000 206 L1120 184 L1240 214 L1360 196 L1480 222 L1600 204 V720 H0 Z" fill="#dcaa6e"/>
+<g fill="#b77e46">
+  <path d="M60 206 L90 720 H40 L20 208 Z"/><path d="M200 216 L236 720 H176 L150 212 Z"/><path d="M330 200 L372 720 H300 L280 206 Z"/><path d="M470 208 L512 720 H440 L420 206 Z"/>
+  <path d="M600 190 L640 720 H570 L560 194 Z"/><path d="M740 200 L776 720 H716 L700 196 Z"/><path d="M880 180 L910 720 H850 L840 184 Z"/>
+  <path d="M1010 204 L1040 720 H980 L970 200 Z"/><path d="M1150 190 L1186 720 H1126 L1110 196 Z"/><path d="M1290 204 L1330 720 H1266 L1250 206 Z"/><path d="M1430 212 L1474 720 H1400 L1390 210 Z"/><path d="M1560 206 L1600 720 H1540 L1520 208 Z"/>
+</g>
+<g fill="#eec48a" opacity=".6">
+  <path d="M120 204 L140 720 H124 L110 204 Z"/><path d="M400 196 L420 720 H404 L390 196 Z"/><path d="M680 186 L700 720 H684 L670 186 Z"/><path d="M960 196 L980 720 H964 L950 196 Z"/><path d="M1220 208 L1240 720 H1224 L1210 208 Z"/><path d="M1500 216 L1520 720 H1504 L1490 216 Z"/>
+</g>
+<g fill="#a86e3c" opacity=".45">
+  <path d="M0 300 C400 290 800 306 1200 292 C1400 286 1500 296 1600 290 V304 C1400 312 1000 300 600 316 C300 322 100 312 0 318 Z"/>
+  <path d="M0 400 C300 390 700 404 1100 392 C1300 388 1500 398 1600 394 V406 C1300 414 900 402 500 416 C250 420 80 412 0 416 Z"/>
+</g>
+<path d="M0 210 L140 200 L260 230 L380 190 L520 214 L640 180 L760 204 L880 176 L1000 206 L1120 184 L1240 214 L1360 196 L1480 222 L1600 204 V232 L1480 250 L1360 224 L1240 242 L1120 212 L1000 234 L880 204 L760 232 L640 208 L520 242 L380 218 L260 258 L140 228 L0 238 Z" fill="#9a6232" opacity=".55"/>
+<path d="M0 470 C300 452 600 470 800 460 C1000 450 1300 468 1600 456 V720 H0 Z" fill="#c9955a" opacity=".45"/>
+
+<path d="M500 505 H1100 V565 H500 Z" fill="#8a6a48" stroke="#6a4a2c" stroke-width="2"/>
+<path d="M494 495 H1106 V509 H494 Z" fill="#fcf0d6" stroke="#6a4a2c" stroke-width="2"/>
+<path d="M512 509 h14 V565 h-14 Z M538 509 h14 V565 h-14 Z M564 509 h14 V565 h-14 Z M590 509 h14 V565 h-14 Z M616 509 h14 V565 h-14 Z M642 509 h14 V565 h-14 Z M668 509 h14 V565 h-14 Z M694 509 h14 V565 h-14 Z M720 509 h14 V565 h-14 Z M746 509 h14 V565 h-14 Z M824 509 h14 V565 h-14 Z M850 509 h14 V565 h-14 Z M876 509 h14 V565 h-14 Z M902 509 h14 V565 h-14 Z M928 509 h14 V565 h-14 Z M954 509 h14 V565 h-14 Z M980 509 h14 V565 h-14 Z M1006 509 h14 V565 h-14 Z M1032 509 h14 V565 h-14 Z M1058 509 h14 V565 h-14 Z" fill="#f4e6c8" stroke="#6a4a2c" stroke-width="1.5"/>
+<path d="M400 575 H1200 V648 H400 Z" fill="#8a6a48" stroke="#6a4a2c" stroke-width="2"/>
+<path d="M394 565 H1206 V579 H394 Z" fill="#fcf0d6" stroke="#6a4a2c" stroke-width="2"/>
+<path d="M416 579 h16 V648 h-16 Z M448 579 h16 V648 h-16 Z M480 579 h16 V648 h-16 Z M512 579 h16 V648 h-16 Z M544 579 h16 V648 h-16 Z M576 579 h16 V648 h-16 Z M608 579 h16 V648 h-16 Z M640 579 h16 V648 h-16 Z M672 579 h16 V648 h-16 Z M704 579 h16 V648 h-16 Z M864 579 h16 V648 h-16 Z M896 579 h16 V648 h-16 Z M928 579 h16 V648 h-16 Z M960 579 h16 V648 h-16 Z M992 579 h16 V648 h-16 Z M1024 579 h16 V648 h-16 Z M1056 579 h16 V648 h-16 Z M1088 579 h16 V648 h-16 Z M1120 579 h16 V648 h-16 Z M1152 579 h16 V648 h-16 Z" fill="#f4e6c8" stroke="#6a4a2c" stroke-width="1.5"/>
+<path d="M0 718 H1600 V1000 H0 Z" fill="url(#plain)"/>
+<path d="M280 660 H1320 V734 H280 Z" fill="#8a6a48" stroke="#6a4a2c" stroke-width="2"/>
+<path d="M274 650 H1326 V664 H274 Z" fill="#fcf0d6" stroke="#6a4a2c" stroke-width="2"/>
+<path d="M300 664 h18 V734 h-18 Z M338 664 h18 V734 h-18 Z M376 664 h18 V734 h-18 Z M414 664 h18 V734 h-18 Z M452 664 h18 V734 h-18 Z M490 664 h18 V734 h-18 Z M528 664 h18 V734 h-18 Z M566 664 h18 V734 h-18 Z M604 664 h18 V734 h-18 Z M642 664 h18 V734 h-18 Z M680 664 h18 V734 h-18 Z M870 664 h18 V734 h-18 Z M908 664 h18 V734 h-18 Z M946 664 h18 V734 h-18 Z M984 664 h18 V734 h-18 Z M1022 664 h18 V734 h-18 Z M1060 664 h18 V734 h-18 Z M1098 664 h18 V734 h-18 Z M1136 664 h18 V734 h-18 Z M1174 664 h18 V734 h-18 Z M1212 664 h18 V734 h-18 Z M1250 664 h18 V734 h-18 Z" fill="#f4e6c8" stroke="#6a4a2c" stroke-width="1.5"/>
+<path d="M740 660 L756 570 H844 L860 660 Z" fill="#ecdcb8" stroke="#6a4a2c" stroke-width="2" stroke-linejoin="round"/>
+<path d="M740 660 L756 570 M860 660 L844 570" stroke="#d2b88a" stroke-width="8"/>
+<path d="M710 820 H890 L990 1000 H610 Z" fill="#ead6ae"/>
+<path d="M710 820 L742 655 H858 L890 820 Z" fill="#ecdcb8" stroke="#6a4a2c" stroke-width="2" stroke-linejoin="round"/>
+<path d="M710 820 L742 655 M890 820 L858 655" stroke="#d2b88a" stroke-width="8"/>
+<g transform="translate(650 780) scale(0.9)"><ellipse cx="0" cy="4" rx="34" ry="9" fill="#8a6038" opacity=".55"/><path d="M-3 4 L-2 -26 H2 L3 4 Z" fill="#6a4a2a"/><circle cx="-14" cy="-34" r="16" fill="#3f6a32"/><circle cx="14" cy="-34" r="16" fill="#3f6a32"/><circle cx="0" cy="-46" r="18" fill="#4f7a3a"/><circle cx="-5" cy="-51" r="7" fill="#6f9a4a"/></g>
+<g transform="translate(950 780) scale(0.9)"><ellipse cx="0" cy="4" rx="34" ry="9" fill="#8a6038" opacity=".55"/><path d="M-3 4 L-2 -26 H2 L3 4 Z" fill="#6a4a2a"/><circle cx="-14" cy="-34" r="16" fill="#3f6a32"/><circle cx="14" cy="-34" r="16" fill="#3f6a32"/><circle cx="0" cy="-46" r="18" fill="#4f7a3a"/><circle cx="-5" cy="-51" r="7" fill="#6f9a4a"/></g>
+<g transform="translate(580 850) scale(1.25)"><ellipse cx="0" cy="4" rx="34" ry="9" fill="#8a6038" opacity=".55"/><path d="M-3 4 L-2 -26 H2 L3 4 Z" fill="#6a4a2a"/><circle cx="-14" cy="-34" r="16" fill="#3f6a32"/><circle cx="14" cy="-34" r="16" fill="#3f6a32"/><circle cx="0" cy="-46" r="18" fill="#4f7a3a"/><circle cx="-5" cy="-51" r="7" fill="#6f9a4a"/></g>
+<g transform="translate(1020 850) scale(1.25)"><ellipse cx="0" cy="4" rx="34" ry="9" fill="#8a6038" opacity=".55"/><path d="M-3 4 L-2 -26 H2 L3 4 Z" fill="#6a4a2a"/><circle cx="-14" cy="-34" r="16" fill="#3f6a32"/><circle cx="14" cy="-34" r="16" fill="#3f6a32"/><circle cx="0" cy="-46" r="18" fill="#4f7a3a"/><circle cx="-5" cy="-51" r="7" fill="#6f9a4a"/></g>
+<g transform="translate(510 940) scale(1.6)"><ellipse cx="0" cy="4" rx="34" ry="9" fill="#8a6038" opacity=".55"/><path d="M-3 4 L-2 -26 H2 L3 4 Z" fill="#6a4a2a"/><circle cx="-14" cy="-34" r="16" fill="#3f6a32"/><circle cx="14" cy="-34" r="16" fill="#3f6a32"/><circle cx="0" cy="-46" r="18" fill="#4f7a3a"/><circle cx="-5" cy="-51" r="7" fill="#6f9a4a"/></g>
+<g transform="translate(1090 940) scale(1.6)"><ellipse cx="0" cy="4" rx="34" ry="9" fill="#8a6038" opacity=".55"/><path d="M-3 4 L-2 -26 H2 L3 4 Z" fill="#6a4a2a"/><circle cx="-14" cy="-34" r="16" fill="#3f6a32"/><circle cx="14" cy="-34" r="16" fill="#3f6a32"/><circle cx="0" cy="-46" r="18" fill="#4f7a3a"/><circle cx="-5" cy="-51" r="7" fill="#6f9a4a"/></g>
+</svg>

@@ -1,0 +1,8 @@
+// What the codex says about an amulet. The drawing itself is built in,
+// or comes from a picture in images/amulets/ with the same name as the id.
+{
+	"id": "papyrus",
+	"name": "Papyrus",
+	"plural": "papyrus stems",
+	"meaning": "The reed of the marshes and the emblem of Lower Egypt."
+}

@@ -1,0 +1,9 @@
+// Something Anubis sells: bought for one stop, used once.
+{
+	"id": "seshat",
+	"name": "Cord of Seshat",
+	"description": "A boon: every stone in the row you choose loses a layer.",
+	"currency": "lapis",
+	"price": 60,
+	"gives": {"boon": "seshat"}
+}

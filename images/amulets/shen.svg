@@ -1,0 +1,16 @@
+<!-- The shen ring, a loop of rope tied with no end: the sign of eternity and protection, from which the cartouche grew. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="gold" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#fffbd8"/><stop offset=".35" stop-color="#f5d04e"/><stop offset=".72" stop-color="#c08a1c"/><stop offset="1" stop-color="#6e4608"/></linearGradient>
+	<linearGradient id="lapis" gradientUnits="userSpaceOnUse" x1="40" y1="28" x2="88" y2="80"><stop offset="0" stop-color="#c8d8ff"/><stop offset=".35" stop-color="#4f86d8"/><stop offset=".72" stop-color="#2f6fc0"/><stop offset="1" stop-color="#1d3f78"/></linearGradient>
+</defs>
+<path d="M64 12 C88 12 104 30 104 54 C104 78 88 94 64 94 C40 94 24 78 24 54 C24 30 40 12 64 12 Z M64 30 C78 30 86 40 86 54 C86 68 78 78 64 78 C50 78 42 68 42 54 C42 40 50 30 64 30 Z M26 100 H102 V116 H26 Z" fill="#2a1703" fill-rule="evenodd" stroke="#2a1703" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" filter="url(#sh)"/>
+<path d="M64 12 C88 12 104 30 104 54 C104 78 88 94 64 94 C40 94 24 78 24 54 C24 30 40 12 64 12 Z M64 30 C78 30 86 40 86 54 C86 68 78 78 64 78 C50 78 42 68 42 54 C42 40 50 30 64 30 Z" fill="url(#gold)" fill-rule="evenodd"/>
+<path d="M64 30 C78 30 86 40 86 54 C86 68 78 78 64 78 C50 78 42 68 42 54 C42 40 50 30 64 30 Z" fill="none" stroke="#2a1703" stroke-width="4"/>
+<path d="M96.0 54.0 L103.7 58.8 M94.1 64.9 L99.7 72.1 M88.5 74.6 L91.3 83.2 M80.0 81.7 L79.7 90.8 M69.6 85.5 L66.2 93.9 M58.4 85.5 L52.4 92.3 M48.0 81.7 L40.0 86.0 M39.5 74.6 L30.5 75.9 M33.9 64.9 L25.0 63.1 M32.0 54.0 L24.3 49.2 M33.9 43.1 L28.3 35.9 M39.5 33.4 L36.7 24.8 M48.0 26.3 L48.3 17.2 M58.4 22.5 L61.8 14.1 M69.6 22.5 L75.6 15.7 M80.0 26.3 L88.0 22.0 M88.5 33.4 L97.5 32.1 M94.1 43.1 L103.0 44.9" stroke="#8a5a10" stroke-width="1.8" stroke-linecap="round"/>
+<path d="M54 92 L50 102 M74 92 L78 102" stroke="#2a1703" stroke-width="7" stroke-linecap="round"/><path d="M54 92 L50 102 M74 92 L78 102" stroke="url(#gold)" stroke-width="3.4" stroke-linecap="round"/>
+<path d="M26 100 H102 V116 H26 Z" fill="url(#gold)"/>
+<path d="M34 108 H94" stroke="#8a5a10" stroke-width="2" stroke-dasharray="6 3"/>
+<path d="M34 44 C38 30 50 20 62 18" fill="none" stroke="#fffbe0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

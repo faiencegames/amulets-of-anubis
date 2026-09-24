@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+<!-- Sand over a buried amulet: a drift across the lower part of the square
+     and a thin veil above, so the amulet shows through. The square is 32 to 160. -->
+<defs>
+<linearGradient id="sandDrift" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#e8c98a"/>
+<stop offset=".5" stop-color="#d2a960"/>
+<stop offset="1" stop-color="#a87c3c"/>
+</linearGradient>
+</defs>
+<rect x="36" y="36" width="120" height="120" rx="10" fill="#d9b574" opacity=".42"/>
+<path d="M36 112 C52 92 70 100 84 94 C100 87 112 70 128 78 C142 84 150 96 156 100 L156 150 Q156 156 150 156 L42 156 Q36 156 36 150 Z" fill="url(#sandDrift)" stroke="#6b4a1e" stroke-width="3" stroke-linejoin="round"/>
+<path d="M50 118 C64 110 76 114 90 108 M104 98 C116 90 128 92 140 102 M58 136 C74 128 96 132 112 124 C124 118 136 122 146 128" fill="none" stroke="#f4dca4" stroke-width="3" stroke-linecap="round" opacity=".8"/>
+<g fill="#8a6230" opacity=".7">
+<circle cx="62" cy="128" r="2.2"/><circle cx="80" cy="140" r="1.8"/><circle cx="100" cy="116" r="2"/><circle cx="118" cy="140" r="2.2"/>
+<circle cx="136" cy="112" r="1.8"/><circle cx="144" cy="142" r="2"/><circle cx="72" cy="112" r="1.6"/><circle cx="126" cy="126" r="1.6"/>
+</g>
+<g fill="#f4dca4" opacity=".75"><circle cx="90" cy="130" r="1.6"/><circle cx="110" cy="146" r="1.6"/><circle cx="54" cy="146" r="1.4"/><circle cx="132" cy="96" r="1.4"/></g>
+</svg>

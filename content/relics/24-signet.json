@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "signet",
+	"name": "The sealer’s signet",
+	"description": "Stamp every seal on the journey.",
+	"found_when": {"seals_stamped": 36},
+	"reward": {"lapis": 40}
+}

@@ -1,0 +1,22 @@
+// An example puzzle event: a short board with its own goal.
+{
+	"id": "reeds",
+	"kind": "puzzle",
+	"title": "Lost in the papyrus",
+	"text": "The channel narrowed into a maze of tall papyrus. We had to cut twelve stems to find the way through.",
+	"goal": {"type": "collect", "amulet": "papyrus", "count": 12},
+	"moves": 14,
+	"amulet_types": 5,
+	"amulets": ["papyrus", "bluelotus", "fish", "croc", "ankh"],
+	"floor_plan": [
+		"00000000",
+		"00000000",
+		"00000000",
+		"00000000",
+		"00000000",
+		"00000000",
+		"00000000",
+		"00000000"
+	],
+	"reward": {"gold": 60}
+}

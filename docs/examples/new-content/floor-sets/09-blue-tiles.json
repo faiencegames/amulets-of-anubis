@@ -1,0 +1,8 @@
+// An example floor set. Its pictures are images/floors/blue-tiles/ in the game
+// folder: bare, thick and gilded-1 to gilded-4.
+{
+  "id": "blue-tiles",
+  "name": "Glazed tiles",
+  "description": "Blue glazed tiles, like the ones in Djoser's chambers.",
+  "unlocked_by": {"stops_won": 3}
+}

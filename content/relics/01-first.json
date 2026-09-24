@@ -1,0 +1,7 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "first",
+	"name": "Scribe’s palette",
+	"description": "Gild your first floor.",
+	"found_when": {"stops_won": 1}
+}

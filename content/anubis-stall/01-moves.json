@@ -1,0 +1,9 @@
+// Something Anubis sells: bought for one stop, used once.
+{
+	"id": "moves",
+	"name": "Three more breaths",
+	"description": "Three extra moves, right now.",
+	"currency": "gold",
+	"price": 500,
+	"gives": {"moves": 3}
+}

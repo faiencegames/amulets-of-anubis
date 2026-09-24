@@ -1,0 +1,16 @@
+<!-- The ka, a person's life force, written as two arms raised up from the elbows. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="carn" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#ffc0b0"/><stop offset=".35" stop-color="#e0604a"/><stop offset=".72" stop-color="#b83a22"/><stop offset="1" stop-color="#7a1f12"/></linearGradient>
+</defs>
+<path d="M20 110 V40 H42 V94 H86 V40 H108 V110 C108 115 104 118 98 118 H30 C24 118 20 115 20 110 Z" fill="#2a1703" fill-rule="nonzero" stroke="#2a1703" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" filter="url(#sh)"/>
+<path d="M20 110 V40 H42 V94 H86 V40 H108 V110 C108 115 104 118 98 118 H30 C24 118 20 115 20 110 Z" fill="url(#carn)"/>
+<path d="M21 42 C21 24 23 12 31 10 C39 12 41 24 41 42 Z" fill="url(#carn)" stroke="#2a1703" stroke-width="3.2" stroke-linejoin="round"/>
+<path d="M27 30 V18 M33 30 V16" stroke="#7a1f12" stroke-width="1.8" stroke-linecap="round"/>
+<path d="M87 42 C87 24 89 12 97 10 C105 12 107 24 107 42 Z" fill="url(#carn)" stroke="#2a1703" stroke-width="3.2" stroke-linejoin="round"/>
+<path d="M93 30 V18 M99 30 V16" stroke="#7a1f12" stroke-width="1.8" stroke-linecap="round"/>
+<path d="M30 100 H98" stroke="#7a1f12" stroke-width="2" stroke-linecap="round"/>
+<path d="M28 96 V46" fill="none" stroke="#fffbe0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+<path d="M94 96 V46" fill="none" stroke="#fffbe0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

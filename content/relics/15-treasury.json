@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "treasury",
+	"name": "The treasury chest",
+	"description": "Hold a thousand lapis at once.",
+	"found_when": {"lapis_held": 1000},
+	"reward": {"gold": 400}
+}

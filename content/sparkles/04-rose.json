@@ -1,0 +1,8 @@
+// Sparkle colours: the light that flies off a match. Two colours.
+{
+	"id": "rose",
+	"name": "Rose",
+	"description": "Soft rose gold, warm and bright.",
+	"unlocked_by": {"relics_found": 3},
+	"colours": ["#ff9fb0", "#fff0f2"]
+}

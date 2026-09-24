@@ -1,0 +1,8 @@
+// Sparkle colours: the light that flies off a match. Two colours.
+{
+	"id": "gold",
+	"name": "Gold",
+	"description": "Warm gold and pale cream.",
+	"unlocked_by": null,
+	"colours": ["#ffd65a", "#fffbe8"]
+}

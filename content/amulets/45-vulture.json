@@ -1,0 +1,8 @@
+// What the codex says about an amulet. The drawing itself is built in,
+// or comes from a picture in images/amulets/ with the same name as the id.
+{
+	"id": "vulture",
+	"name": "Vulture",
+	"plural": "vultures",
+	"meaning": "Vultures were sacred to Nekhbet, the Goddess of Upper Egypt, and to Mut, the mother Goddess of Thebes. The Egyptian vulture, white with a yellow face, is also one of the commonest hieroglyphs."
+}

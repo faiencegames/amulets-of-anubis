@@ -1,0 +1,57 @@
+/* 13-overlays.css: Overlays (every scroll screen), help lists, the Basics legend, and the Nile map. */
+
+/* overlays */
+.overlay{ position:fixed; inset:0; z-index:10; display:none; align-items:center; justify-content:center; padding:max(14px, env(safe-area-inset-top,0px)) 14px max(14px, env(safe-area-inset-bottom,0px)); background:#0b0703cc; }
+.overlay.open{ display:flex; }
+.overlay .scroll{ width:min(520px,100%); max-height:100%; display:flex; flex-direction:column; }
+.overlay .sheet{ overflow:auto; padding:20px 24px 22px; }
+@media (prefers-reduced-motion: reduce){ .groove div{ transition:none; } }
+.overlay h2{ margin:0 0 4px; font-family:var(--display); font-size:30px; line-height:1.15; color:var(--carnelian); text-align:center; }
+.overlay .lede{ margin:0 0 12px; text-align:center; font-style:italic; color:#4a3217; }
+.overlay p{ margin:0 0 10px; }
+.actions{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:16px; }
+.actions .btn{ flex:0 1 auto; }
+.stars{ display:flex; justify-content:center; gap:10px; margin:6px 0 10px; }
+.stars svg{ width:44px; height:44px; }
+.help-list{ list-style:none; margin:8px 0 0; padding:0; }
+.help-list li{ display:grid; grid-template-columns:52px 1fr; gap:12px; align-items:center; padding:7px 0; border-top:1px solid #8a622a44; }
+.help-list li.no-ico{ grid-template-columns:1fr; }   /* a row with no picture: text takes the full width */
+.help-list img{ width:52px; height:52px; }
+/* the little picture legend on the Basics tab, and currency icons in help text */
+.basics-legend{ margin:6px 0 2px; }
+.legend-row{ display:grid; grid-template-columns:44px 1fr; gap:12px; align-items:center; padding:7px 0; border-top:1px solid #8a622a44; }
+.legend-row:first-child{ border-top:none; }
+.legend-row img{ width:44px; height:44px; }
+.legend-row > div{ font-size:15px; line-height:1.4; }
+.codex-body .g-ico{ display:inline-block; vertical-align:-2px; margin:0 3px; }
+#mapSvg{ width:100%; height:auto; display:block; }
+.map-scroll{ overflow:auto; border-radius:4px; -webkit-overflow-scrolling:touch; }
+#mapSvg .hit{ cursor:pointer; }
+.stop-list{ display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:6px; }
+.stop-btn{ display:grid; grid-template-columns:26px 1fr auto; gap:6px; align-items:center; min-height:40px; padding:5px 9px; cursor:pointer;
+	font:inherit; text-align:left; color:#2b1a0b; background:#f6ecd2; border:1px solid #a8844e; border-radius:4px; box-shadow:0 2px 0 #7a5a3055; }
+.stop-btn b{ font-family:var(--display); color:#7a1f12; text-align:center; }
+/* number | name, stars | and below the name, what else is there, in words */
+.stop-btn { grid-template-areas: "num name stars" "num meta meta"; row-gap: 2px; align-content: center; text-align: left; }
+.stop-btn b { grid-area: num; }
+.stop-name { grid-area: name; font-family: var(--display); font-size: 15.5px; line-height: 1.1; }
+.stop-stars { grid-area: stars; }
+.stop-meta { grid-area: meta; font-size: 12.5px; line-height: 1.3; color: #6b4a22; }
+.stop-meta > span { white-space: nowrap; }
+.stop-meta .door-ico { width: 11px; height: 12px; vertical-align: -1px; margin-right: 3px; }
+.stop-stars { font-style: normal; font-size: 16px; letter-spacing: 1px; color: #b07a12; white-space: nowrap; }
+.stop-btn.cur{ background:linear-gradient(180deg,#f7dd8c,#e2b654); border-color:#8a5a10; }
+.stop-btn[disabled]{ opacity:.5; cursor:not-allowed; box-shadow:none; }
+.stop-btn:focus-visible{ outline:3px solid var(--lapis); outline-offset:2px; }
+@media (max-width: 860px){
+	.map-scroll{ max-height:52vh; border:1px solid #a8844e; background:#e9d8a8; }
+	.map-scroll #mapSvg{ width:150%; max-width:none; }
+	.stop-list{ grid-template-columns:1fr 1fr; }
+}
+@media (max-width: 560px) { .stop-list { grid-template-columns: 1fr; } }   /* phones: one stop per row */
+#mapSvg .site{ cursor:pointer; outline:none; }
+#mapSvg .site:focus-visible circle.mark{ stroke:var(--lapis); stroke-width:4; }
+#mapSvg text{ font-family:var(--display); }
+
+/* How to play, "Tombs & oases": the doorway or palm beside each place */
+.help-list .place-ico { width: 34px; height: 36px; flex: none; }

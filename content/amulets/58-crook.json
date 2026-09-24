@@ -1,0 +1,8 @@
+// What the codex says about an amulet. The drawing itself is built in,
+// or comes from a picture in images/amulets/ with the same name as the id.
+{
+	"id": "crook",
+	"name": "Crook and flail",
+	"plural": "crooks and flails",
+	"meaning": "The crook and flail were held by Osiris and by kings. The shepherd's crook stood for the ruler's care of the people."
+}

@@ -1,0 +1,33 @@
+/* 03-hud.css: The top bar: title, gauges (moves, gold, lapis, relics, score, stop). */
+
+/* ---------- top HUD ---------- */
+.hud{ display:flex; align-items:center; gap:10px; padding:5px 10px; border-radius:4px; min-height:0; min-width:0; overflow:hidden; }
+.hud-title{ display:flex; align-items:center; gap:8px; flex:0 1 auto; min-width:0; overflow:hidden; }
+.hud h1{ overflow:hidden; text-overflow:ellipsis; }
+.hud-title .orn{ width:20px; height:29px; flex:none; }
+.hud h1{ margin:0; font-family:var(--display); font-weight:700; font-size:clamp(17px,2.1vw,27px); line-height:1.1; white-space:nowrap;
+	color:#4a2c10; text-shadow:0 1px 0 #f5e6c2, 0 -1px 0 #6d4a22; }
+.gauges{ margin-left:auto; display:flex; gap:6px; flex-wrap:nowrap; min-width:0; }
+.gauge{ display:flex; align-items:baseline; gap:5px; padding:3px 9px; border-radius:3px; min-width:66px; justify-content:center;
+	background:linear-gradient(180deg,#8a6c40,#b59259); border:2px solid; border-color:#6a4e28 #e6cf9e #e6cf9e #6a4e28;
+	box-shadow:inset 0 2px 5px #0007; }
+.gauge b{ font-family:var(--display); font-size:19px; color:#fff1c4; text-shadow:0 1px 2px #000a; }
+.gauge small{ font-size:11px; color:#f0dcae; opacity:.85; text-transform:lowercase; }
+.gauge.wide{ min-width:92px; }
+.g-ico{ width:14px; height:14px; border-radius:50%; flex:none; align-self:center; }
+.g-ico.gold{ background:radial-gradient(circle at 34% 30%,#fff3ae,#e0ac3a 60%,#8a5a10); box-shadow:0 0 0 1px #4a2c10; }
+.g-ico.lapis{ background:radial-gradient(circle at 34% 30%,#9fb8ff,#2a49b8 60%,#0d1a56); box-shadow:0 0 0 1px #4a2c10; border-radius:2px; transform:rotate(45deg); }
+.g-ico.relic{ background:radial-gradient(circle at 34% 30%,#f0e6c8,#b09a6a 60%,#5a4a26); box-shadow:0 0 0 1px #4a2c10; border-radius:3px 3px 6px 6px; }
+.gauge span.g-ico:not(.gold):not(.lapis):not(.relic){ font-size:13px; color:#f0dcae; width:auto; }
+
+/* the moves gauge matters most: it stands out, and warns when moves run low */
+.gauge.g-moves{ background:linear-gradient(180deg,#5a3a18,#8a6030); border-color:#3a2208 #f0d898 #f0d898 #3a2208; }
+.gauge.g-moves b{ color:#fff6d0; }
+.gauge.g-moves.low{ background:linear-gradient(180deg,#6a1a0c,#a8321c); animation:lowpulse 1s ease-in-out infinite; }
+@keyframes lowpulse{ 50%{ box-shadow:inset 0 2px 5px #0007, 0 0 12px 2px #ff5a3a99; } }
+@media (prefers-reduced-motion: reduce){ .gauge.g-moves.low{ animation:none; } }
+
+/* the relics counter opens the museum */
+.gauge.clickable{ cursor:pointer; }
+.gauge.clickable:hover{ filter:brightness(1.06); }
+.gauge.clickable:focus-visible{ outline:3px solid var(--lapis); outline-offset:2px; }

@@ -1,0 +1,8 @@
+// What the codex says about an amulet. The drawing itself is built in,
+// or comes from a picture in images/amulets/ with the same name as the id.
+{
+	"id": "nefer",
+	"name": "Nefer",
+	"plural": "nefer signs",
+	"meaning": "The sign nefer meant “good” and “beautiful”, as in the name Nefertiti. It is thought to show a heart and windpipe."
+}

@@ -1,0 +1,8 @@
+// What the codex says about an amulet. The drawing itself is built in,
+// or comes from a picture in images/amulets/ with the same name as the id.
+{
+	"id": "crown",
+	"name": "Blue crown",
+	"plural": "blue crowns",
+	"meaning": "The blue crown, the khepresh, worn by the kings of the New Kingdom. Akhenaten is often shown wearing it."
+}

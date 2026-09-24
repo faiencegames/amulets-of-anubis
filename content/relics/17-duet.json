@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "duet",
+	"name": "The double chord",
+	"description": "Set off two special amulets at once.",
+	"found_when": {"win_two_specials_at_once": true},
+	"reward": {"lapis": 25}
+}

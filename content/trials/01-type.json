@@ -1,0 +1,9 @@
+// A trial a priest can set at a stop. Finish it and the boon is the player’s.
+{
+	"id": "type",
+	"goal": "clear_amulets",
+	"target": 14,
+	"text": "Clear {target} {amulets}",
+	"progress_label": "Cleared",
+	"boon": "flood"
+}

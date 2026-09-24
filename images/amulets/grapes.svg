@@ -1,0 +1,16 @@
+<!-- A bunch of grapes: purple fruit hanging from a green vine leaf and a stalk. 128 by 128. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+<radialGradient id="grape" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#c9a0ff"/><stop offset=".5" stop-color="#7a3cc0"/><stop offset="1" stop-color="#3a1466"/></radialGradient>
+</defs>
+<path d="M64 26 C70 16 80 10 92 10 C88 16 84 22 76 26 C86 24 98 28 104 36 C94 38 84 36 76 32 Z" fill="#4aa04a" stroke="#2a1703" stroke-width="5" stroke-linejoin="round" filter="url(#sh)"/>
+<path d="M64 12 C64 20 64 26 64 32" stroke="#6e4220" stroke-width="5" stroke-linecap="round"/>
+<g fill="url(#grape)" stroke="#2a1703" stroke-width="4" filter="url(#sh)">
+<circle cx="42" cy="44" r="13"/><circle cx="64" cy="42" r="13"/><circle cx="86" cy="44" r="13"/>
+<circle cx="32" cy="66" r="13"/><circle cx="54" cy="64" r="13"/><circle cx="76" cy="64" r="13"/><circle cx="96" cy="66" r="12"/>
+<circle cx="44" cy="86" r="13"/><circle cx="66" cy="86" r="13"/><circle cx="86" cy="86" r="12"/>
+<circle cx="56" cy="106" r="12"/><circle cx="76" cy="106" r="11"/>
+</g>
+<g fill="#ffffff" opacity=".55"><circle cx="38" cy="40" r="3"/><circle cx="60" cy="38" r="3"/><circle cx="50" cy="60" r="3"/><circle cx="72" cy="60" r="3"/><circle cx="62" cy="82" r="3"/></g>
+</svg>

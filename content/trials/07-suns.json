@@ -1,0 +1,9 @@
+// A trial a priest can set at a stop. Finish it and the boon is the player’s.
+{
+	"id": "suns",
+	"goal": "make_suns",
+	"target": 1,
+	"text": "Forge a winged sun",
+	"progress_label": "Suns forged",
+	"boon": "hammer"
+}

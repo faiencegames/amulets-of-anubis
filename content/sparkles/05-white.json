@@ -1,0 +1,8 @@
+// Sparkle colours: the light that flies off a match. Two colours.
+{
+	"id": "white",
+	"name": "White",
+	"description": "A cool white, like lamplight on the floor.",
+	"unlocked_by": {"river_events": 4},
+	"colours": ["#ffffff", "#dbe8ff"]
+}

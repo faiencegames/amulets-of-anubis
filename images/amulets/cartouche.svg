@@ -1,0 +1,20 @@
+<!-- A cartouche, the oval that encloses a king's name: here Thutmose III's throne name, Men-kheper-Ra, written with the sun disc, the gaming board and the scarab. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="gold" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#fffbd8"/><stop offset=".35" stop-color="#f5d04e"/><stop offset=".72" stop-color="#c08a1c"/><stop offset="1" stop-color="#6e4608"/></linearGradient>
+	<linearGradient id="field" gradientUnits="userSpaceOnUse" x1="40" y1="14" x2="90" y2="104"><stop offset="0" stop-color="#ffffff"/><stop offset=".35" stop-color="#fffdf6"/><stop offset=".72" stop-color="#ece3cc"/><stop offset="1" stop-color="#b8aa88"/></linearGradient>
+</defs>
+<path d="M64 8 C82 8 94 20 94 38 V84 C94 100 82 108 64 108 C46 108 34 100 34 84 V38 C34 20 46 8 64 8 Z M26 106 H102 V120 H26 Z" fill="#2a1703" fill-rule="nonzero" stroke="#2a1703" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" filter="url(#sh)"/>
+<path d="M64 8 C82 8 94 20 94 38 V84 C94 100 82 108 64 108 C46 108 34 100 34 84 V38 C34 20 46 8 64 8 Z" fill="url(#gold)"/>
+<path d="M26 106 H102 V120 H26 Z" fill="url(#gold)"/>
+<path d="M64 17 C77 17 85 26 85 40 V82 C85 94 77 99 64 99 C51 99 43 94 43 82 V40 C43 26 51 17 64 17 Z" fill="url(#field)" stroke="#2a1703" stroke-width="3"/>
+<circle cx="64" cy="33" r="8.5" fill="#d8482a" stroke="#2a1703" stroke-width="2.4"/>
+<path d="M50 56 H78 V62 H50 Z" fill="#2f6fc0" stroke="#2a1703" stroke-width="2.2"/>
+<path d="M52 56 V50 M57 56 V50 M62 56 V50 M67 56 V50 M72 56 V50 M77 56 V50" stroke="#2f6fc0" stroke-width="3"/>
+<ellipse cx="64" cy="82" rx="10" ry="11" fill="#2f6fc0" stroke="#2a1703" stroke-width="2.2"/>
+<path d="M58 72 C60 68 68 68 70 72 Z" fill="#1d3f78" stroke="#2a1703" stroke-width="2"/>
+<path d="M64 73 V93 M54 76 L49 72 M74 76 L79 72 M54 88 L49 92 M74 88 L79 92" stroke="#2a1703" stroke-width="2" stroke-linecap="round"/>
+<path d="M40 36 C40 24 48 14 60 12" fill="none" stroke="#fffbe0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+<path d="M32 110 H60" fill="none" stroke="#fffbe0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

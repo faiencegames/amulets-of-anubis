@@ -1,0 +1,36 @@
+/* 11-journey.css: Seals and omens, Learning pace, and "The game grows as you travel". */
+
+/* seals and omens (stop scroll, map, victory screen) */
+.seal-list{ list-style:none; padding:0; margin:6px auto 10px; max-width:420px; }
+.seal-list li{ display:flex; gap:8px; align-items:baseline; padding:4px 0; border-bottom:1px dotted #b8955a; font-size:15px; }
+.seal-list li.got{ color:#6b4a22; }
+.seal-list li.fresh{ color:var(--carnelian); }
+.seal-ok{ color:#2e7d5b; font-weight:700; }
+.seal-dot{ color:#a8341c; font-size:14px; flex:none; }
+.omen-list{ display:grid; gap:6px; max-width:440px; margin:0 auto; }
+.fill-toggle.omen{ align-items:flex-start; }
+.omen-total{ font-family:var(--display); font-size:17px; color:var(--carnelian); margin-top:8px; }
+
+/* Learning pace */
+.pace-pick{ display:grid; gap:8px; max-width:440px; margin:10px auto; }
+.pace-pick button{ display:grid; gap:2px; text-align:left; }
+.pace-pick button span{ font-size:13.5px; }
+
+/* "The game grows as you travel": title screen and How to play */
+.roadmap{ margin:12px auto;padding:10px 14px 8px; border-radius:6px; background:#f6ead0; border:1px solid #c9a15c; box-shadow:inset 0 0 0 3px #f9f1dd; }
+.rm-head{ margin:0 0 6px; font-size:15px; line-height:1.4; }
+.rm-list{ list-style:none; margin:0; padding:0; }
+.rm-list li{ display:grid; grid-template-columns:20px 1fr auto; gap:8px; align-items:baseline; padding:5px 0; border-top:1px dotted #c9a15c; font-size:14.5px; line-height:1.3; }
+.rm-mark{ color:#9a7a4a; text-align:center; }
+.rm-list li.on .rm-mark{ color:#2e7d5b; font-weight:700; }
+.rm-what{ color:#6b4a22; }
+.rm-when{ font-size:12.5px; color:#8e2415; white-space:nowrap; font-style:italic; }
+.rm-list li.on .rm-when{ color:#2e7d5b; font-style:normal; }
+.rm-foot{ margin:8px 0 2px; font-size:14px; text-align:center; }
+.btn.small{ padding:4px 10px; font-size:13.5px; min-height:0; }
+.roadmap.compact .rm-what{ display:none; }
+@media (max-width: 430px){ .roadmap:not(.compact) .rm-list li{ grid-template-columns:18px 1fr; } .roadmap:not(.compact) .rm-when{ grid-column:2; white-space:normal; } }
+.help-points .g-ico{ display:inline-block; vertical-align:-2px; margin-right:2px; }
+.help-h{ font-family:var(--display); color:var(--carnelian); font-size:20px; margin:18px 0 6px; padding-bottom:3px; border-bottom:1px solid #c9a15c88; }
+.help-points{ margin:4px 0 8px; padding-left:20px; }
+.help-points li{ margin:5px 0; line-height:1.45; }

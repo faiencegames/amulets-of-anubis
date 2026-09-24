@@ -1,0 +1,8 @@
+// Sparkle colours: the light that flies off a match. Two colours.
+{
+	"id": "emerald",
+	"name": "Emerald",
+	"description": "Green light, like the inlay in the workshop.",
+	"unlocked_by": {"trials_finished": 8},
+	"colours": ["#63e39a", "#eafff1"]
+}

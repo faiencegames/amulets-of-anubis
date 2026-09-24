@@ -1,0 +1,18 @@
+<!-- A sacred barque, the boat in which a God's image travelled: a curved hull ending in papyrus-flower tips, a shrine amidships, steering oars at the stern. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="gold" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#fffbd8"/><stop offset=".35" stop-color="#f5d04e"/><stop offset=".72" stop-color="#c08a1c"/><stop offset="1" stop-color="#6e4608"/></linearGradient>
+	<linearGradient id="wood" gradientUnits="userSpaceOnUse" x1="6" y1="60" x2="122" y2="104"><stop offset="0" stop-color="#f0c890"/><stop offset="0.5" stop-color="#a86a30"/><stop offset="1" stop-color="#5a3010"/></linearGradient>
+	<linearGradient id="lapis" gradientUnits="userSpaceOnUse" x1="50" y1="40" x2="80" y2="88"><stop offset="0" stop-color="#c8d8ff"/><stop offset=".35" stop-color="#4f86d8"/><stop offset=".72" stop-color="#2f6fc0"/><stop offset="1" stop-color="#1d3f78"/></linearGradient>
+</defs>
+<path d="M6 70 C18 84 40 92 64 92 C88 92 110 84 122 70 C116 90 96 104 64 104 C32 104 12 90 6 70 Z M48 88 V58 C48 50 80 50 80 58 V88 Z M6 70 C4 58 8 46 16 42 C18 50 16 60 14 70 Z M122 70 C124 58 120 46 112 42 C110 50 112 60 114 70 Z" fill="#2a1703" fill-rule="nonzero" stroke="#2a1703" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" filter="url(#sh)"/>
+<path d="M6 70 C4 58 8 46 16 42 C18 50 16 60 14 70 Z M122 70 C124 58 120 46 112 42 C110 50 112 60 114 70 Z" fill="url(#gold)" stroke="#2a1703" stroke-width="2.4" stroke-linejoin="round"/>
+<path d="M100 60 L112 108 M92 62 L104 110" stroke="#2a1703" stroke-width="6" stroke-linecap="round"/><path d="M100 60 L112 108 M92 62 L104 110" stroke="#c89048" stroke-width="3" stroke-linecap="round"/>
+<path d="M6 70 C18 84 40 92 64 92 C88 92 110 84 122 70 C116 90 96 104 64 104 C32 104 12 90 6 70 Z" fill="url(#wood)"/>
+<path d="M14 80 C34 92 94 92 114 80" fill="none" stroke="url(#gold)" stroke-width="3"/>
+<path d="M48 88 V58 C48 50 80 50 80 58 V88 Z" fill="url(#lapis)" stroke="#2a1703" stroke-width="2.6" stroke-linejoin="round"/>
+<path d="M48 58 C48 50 80 50 80 58 V62 H48 Z" fill="url(#gold)" stroke="#2a1703" stroke-width="2"/>
+<path d="M58 70 H70 V88 H58 Z" fill="#f5d04e" stroke="#2a1703" stroke-width="1.6"/>
+<path d="M16 78 C28 86 44 90 56 90" fill="none" stroke="#fffbe0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

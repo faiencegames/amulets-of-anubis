@@ -1,0 +1,7 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "stars",
+	"name": "Mason’s plumb",
+	"description": "Earn three stars at ten stops on one journey.",
+	"found_when": {"three_star_stops": 10}
+}

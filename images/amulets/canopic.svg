@@ -1,0 +1,23 @@
+<!-- A canopic jar: a wide calcite jar with a column of writing, its lid the jackal head of Duamutef, one of the four sons of Horus, who guarded the stomach. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="calcite" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#ffffff"/><stop offset=".35" stop-color="#f6f0e0"/><stop offset=".72" stop-color="#e2d6b8"/><stop offset="1" stop-color="#a8987a"/></linearGradient>
+	<linearGradient id="lapis" gradientUnits="userSpaceOnUse" x1="36" y1="20" x2="92" y2="64"><stop offset="0" stop-color="#c8d8ff"/><stop offset=".35" stop-color="#4f86d8"/><stop offset=".72" stop-color="#2f6fc0"/><stop offset="1" stop-color="#1d3f78"/></linearGradient>
+	<linearGradient id="gold" gradientUnits="userSpaceOnUse" x1="26" y1="58" x2="102" y2="72"><stop offset="0" stop-color="#fffbd8"/><stop offset=".35" stop-color="#f5d04e"/><stop offset=".72" stop-color="#c08a1c"/><stop offset="1" stop-color="#6e4608"/></linearGradient>
+	<linearGradient id="black" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5a5660"/><stop offset=".5" stop-color="#2a2830"/><stop offset="1" stop-color="#121016"/></linearGradient>
+</defs>
+<path d="M28 66 C20 84 24 106 40 116 C48 121 80 121 88 116 C104 106 108 84 100 66 Z M38 64 C36 48 40 36 48 30 L44 6 L58 22 H70 L84 6 L80 30 C88 36 92 48 90 64 Z" fill="#2a1703" fill-rule="nonzero" stroke="#2a1703" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" filter="url(#sh)"/>
+<path d="M28 66 C20 84 24 106 40 116 C48 121 80 121 88 116 C104 106 108 84 100 66 Z" fill="url(#calcite)"/>
+<path d="M58 76 H70 V110 H58 Z" fill="#2f6fc0" stroke="#1d3f78" stroke-width="1.6"/>
+<path d="M61 82 H67 M61 89 H67 M60 96 H68 M61 103 H67" stroke="#e8f0ff" stroke-width="2" stroke-linecap="round"/>
+<path d="M26 62 H102 V70 H26 Z" fill="url(#gold)" stroke="#2a1703" stroke-width="3.4" stroke-linejoin="round"/>
+<path d="M36 64 C34 50 38 40 46 36 H82 C90 40 94 50 92 64 Z" fill="url(#lapis)" stroke="#2a1703" stroke-width="3.4" stroke-linejoin="round"/>
+<path d="M38 56 H48 M39 48 H48 M80 48 H89 M80 56 H90" stroke="#f0c850" stroke-width="3"/>
+<path d="M48 62 C46 50 48 40 52 32 L46 8 L60 24 H68 L82 8 L76 32 C80 40 82 50 80 62 C76 66 70 68 64 68 C58 68 52 66 48 62 Z" fill="url(#black)" stroke="#2a1703" stroke-width="3.4" stroke-linejoin="round"/>
+<path d="M50 12 L57 26 M78 12 L71 26" stroke="#c08a1c" stroke-width="2.4" stroke-linecap="round"/>
+<path d="M54 40 L61 42 L55 45 Z M74 40 L67 42 L73 45 Z" fill="#f5d04e" stroke="#6e4608" stroke-width="1"/>
+<path d="M64 48 V60 M59 62 C62 64 66 64 69 62" fill="none" stroke="#6a6670" stroke-width="2" stroke-linecap="round"/>
+<ellipse cx="64" cy="60" rx="4" ry="3" fill="#0a0808"/>
+<path d="M34 80 C32 92 36 104 44 110" fill="none" stroke="#fffbe0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

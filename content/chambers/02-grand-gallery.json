@@ -1,0 +1,33 @@
+// A tomb or temple chamber beside a stop: a small, dim board, opened once
+// that stop is gilded. Some amulets start buried in sand: in "floor_plan",
+// s is a stone with a buried amulet on it and S a thick stone with one.
+// A buried amulet can't be moved; a match beside it brushes the sand off.
+// "reward" is paid the first time the chamber is explored; "return_reward" on every visit after.
+{
+	"id": "grand-gallery",
+	"at": "giza",
+	"name": "The Grand Gallery",
+	"text": "Inside the Great Pyramid of Khufu we climbed a steep passage towards the King’s Chamber. The Grand Gallery is nearly nine metres high and almost fifty metres long, its walls stepping inwards towards the roof.",
+	"scenery": "tomb",
+	// Three sets: each time the place opens, the game picks one at random.
+	"amulets": [
+		["torch", "collar", "canopic", "scarab", "anubis"],
+		["torch", "headrest", "imsety", "vulture", "ka"],
+		["torch", "barque", "qebehsenuef", "scarab", "nefer"]
+	],
+	"moves": 28,
+	"floor_plan": [
+		"...11...",
+		"..1111..",
+		"..1ss1..",
+		".111111.",
+		".1s11s1.",
+		"11111111",
+		"1s1SS1s1",
+		"11111111"
+	],
+	"reward": {"gold": 150},
+	// "return_reward" is paid on the first return; each return after pays more,
+	// as the chamber wakes a little more each time (cursed badges; see "returning" in settings.json).
+	"return_reward": {"gold": 150},
+}

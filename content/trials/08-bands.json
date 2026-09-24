@@ -1,0 +1,9 @@
+// A trial a priest can set at a stop. Finish it and the boon is the player’s.
+{
+	"id": "bands",
+	"goal": "make_bands",
+	"target": 3,
+	"text": "Make three banded amulets",
+	"progress_label": "Bands made",
+	"boon": "seshat"
+}

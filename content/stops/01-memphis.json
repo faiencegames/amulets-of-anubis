@@ -1,0 +1,38 @@
+// Stop 1 of the journey: Memphis.
+// The number at the front of the file name sets the order of the stops.
+// Every field is explained in docs/content-reference.md.
+{
+	"id": "memphis",
+	"name": "Memphis",
+	"subtitle": "The white walls of Ptah",
+	"history": "We set out from Memphis, at the point where Upper and Lower Egypt meet. Tradition credits King Menes with founding the city around 3100 BCE. Through much of the Old Kingdom it was the seat of royal power, and its patron God was Ptah, protector of craftsmen.",
+	"moves": 22,
+	// Three sets: each time the stop starts, the game picks one at random.
+	"amulets": [
+		["ankh", "scarab", "eye", "lotus", "pyramid"],
+		["bull", "doublecrown", "was", "djed", "sphinx"],
+		["bee", "papyrus", "ka", "scarab", "nefer"]
+	],
+	"floor_plan": [
+		"00000000",
+		"01111110",
+		"01111110",
+		"01111110",
+		"01111110",
+		"01111110",
+		"01111110",
+		"00000000"
+	],
+	"shared_floor_shapes": ["diamond", "cross"],
+	"stone_colour": "#a8977a",
+	"music": {"key": "D3", "scale": "hijaz", "instrument": "harp"},
+	"frame_colours": ["#6a4524", "#2a1808", "#a07a44"],
+	"map_position": {"x": 164, "y": 116, "label": "right"},
+	// Three seals: challenges stamped the first time a win here meets them.
+	// Keep their order; saves remember seals by position.
+	"seals": [
+		{"text": "Win without spending a boon", "when": {"win_without_boons": true}},
+		{"text": "Set off two specials in one move", "when": {"win_two_specials_at_once": true}},
+		{"text": "Win with an omen braved", "when": {"win_with_omens": 1}}
+	]
+}

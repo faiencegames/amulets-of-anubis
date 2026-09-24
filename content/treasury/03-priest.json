@@ -1,0 +1,10 @@
+// A lasting upgrade sold in the treasury. One price per level.
+{
+	"id": "priest",
+	"name": "Ear of the priest",
+	"description": "Trials are offered more often.",
+	"currency": "lapis",
+	"prices": [50, 110, 200],
+	"effect": "trial_chance",
+	"amount_per_level": 12
+}

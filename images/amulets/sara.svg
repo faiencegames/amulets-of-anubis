@@ -1,0 +1,23 @@
+<!-- "Son of Ra": the title written before a king's birth name, with the pintail duck (sa, "son") and the sun's disc (Ra), painted as in the temples. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="carn" gradientUnits="userSpaceOnUse" x1="78" y1="10" x2="106" y2="42"><stop offset="0" stop-color="#ffc0b0"/><stop offset=".35" stop-color="#e0604a"/><stop offset=".72" stop-color="#b83a22"/><stop offset="1" stop-color="#7a1f12"/></linearGradient>
+	<linearGradient id="dark" gradientUnits="userSpaceOnUse" x1="20" y1="30" x2="60" y2="90"><stop offset="0" stop-color="#4a5a6a"/><stop offset="1" stop-color="#10181e"/></linearGradient>
+	<linearGradient id="white" gradientUnits="userSpaceOnUse" x1="30" y1="60" x2="90" y2="90"><stop offset="0" stop-color="#ffffff"/><stop offset="0.35" stop-color="#f6ecd6"/><stop offset="0.72" stop-color="#dccaa4"/><stop offset="1" stop-color="#9a8660"/></linearGradient>
+</defs>
+<g filter="url(#sh)"><path d="M52 86 L48 108 M64 86 L68 108 M38 108 H54 M60 108 H76" stroke="#2a1703" stroke-width="7" stroke-linecap="round" fill="none"/><path d="M20 36 C20 28 26 24 32 24 C40 24 44 30 42 38 C40 46 38 52 40 58 C56 54 78 60 100 66 L122 70 C112 76 100 80 88 82 C72 88 52 90 42 86 C32 82 28 72 30 62 C30 54 32 48 30 44 C24 42 20 40 20 36 Z M78 26 C78 10 106 10 106 26 C106 42 78 42 78 26 Z M21 34 L6 40 L22 42 Z" fill="#2a1703" stroke="#2a1703" stroke-width="9" stroke-linejoin="round"/></g>
+<path d="M52 86 L48 108 M64 86 L68 108 M38 108 H54 M60 108 H76" stroke="#3a3640" stroke-width="3" stroke-linecap="round" fill="none"/>
+<path d="M78 26 C78 10 106 10 106 26 C106 42 78 42 78 26 Z" fill="url(#carn)"/>
+<path d="M20 36 C20 28 26 24 32 24 C40 24 44 30 42 38 C40 46 38 52 40 58 C56 54 78 60 100 66 L122 70 C112 76 100 80 88 82 C72 88 52 90 42 86 C32 82 28 72 30 62 C30 54 32 48 30 44 C24 42 20 40 20 36 Z" fill="url(#white)"/>
+<path d="M30 44 C24 42 20 40 20 36 C24 40 36 42 42 38 C40 46 38 52 40 58 C50 58 58 62 62 68 C56 76 44 78 34 76 C30 70 28 62 30 56 C30 52 32 48 30 44 Z" fill="url(#dark)"/>
+<path d="M20 36 C20 28 26 24 32 24 C40 24 44 30 42 38 C36 40 26 40 20 36 Z" fill="#b8502a" stroke="#2a1703" stroke-width="2" stroke-linejoin="round"/>
+<circle cx="30" cy="31" r="2.4" fill="#2a1703"/>
+<path d="M22 34 L6 40 L22 42 Z" fill="#3a3640" stroke="#2a1703" stroke-width="1.6" stroke-linejoin="round"/>
+<clipPath id="dw"><path d="M56 60 C72 58 94 62 112 70 C98 78 76 80 60 76 C54 72 52 64 56 60 Z"/></clipPath>
+<path d="M56 60 C72 58 94 62 112 70 C98 78 76 80 60 76 C54 72 52 64 56 60 Z" fill="#f0e0b8"/>
+<g clip-path="url(#dw)"><rect x="50" y="54" width="4" height="30" fill="#b8502a" transform="rotate(-20 52 70)"/><rect x="58" y="54" width="4" height="30" fill="#b8502a" transform="rotate(-20 60 70)"/><rect x="66" y="54" width="4" height="30" fill="#b8502a" transform="rotate(-20 68 70)"/><rect x="74" y="54" width="4" height="30" fill="#b8502a" transform="rotate(-20 76 70)"/><rect x="82" y="54" width="4" height="30" fill="#b8502a" transform="rotate(-20 84 70)"/><rect x="90" y="54" width="4" height="30" fill="#b8502a" transform="rotate(-20 92 70)"/><rect x="98" y="54" width="4" height="30" fill="#b8502a" transform="rotate(-20 100 70)"/><rect x="106" y="54" width="4" height="30" fill="#b8502a" transform="rotate(-20 108 70)"/></g>
+<path d="M56 60 C72 58 94 62 112 70 C98 78 76 80 60 76 C54 72 52 64 56 60 Z" fill="none" stroke="#2a1703" stroke-width="2.4" stroke-linejoin="round"/>
+<path d="M40 80 C48 84 60 86 72 84" fill="none" stroke="#2a1703" stroke-width="2" stroke-dasharray="1 3" stroke-linecap="round"/>
+<path d="M36 64 C36 58 40 54 44 52" fill="none" stroke="#fffbe0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

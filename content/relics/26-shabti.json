@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "shabti",
+	"name": "The shabti",
+	"description": "Gild fifty stops.",
+	"found_when": {"stops_won": 50},
+	"reward": {"lapis": 25}
+}

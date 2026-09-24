@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "granary",
+	"name": "The royal granary",
+	"description": "Earn ten thousand gold in all.",
+	"found_when": {"gold_earned": 10000},
+	"reward": {"boon": "flood"}
+}

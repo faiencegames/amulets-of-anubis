@@ -1,0 +1,10 @@
+// A lasting upgrade sold in the treasury. One price per level.
+{
+	"id": "moves",
+	"name": "Mason’s favour",
+	"description": "One extra move at every stop, for each level bought.",
+	"currency": "gold",
+	"prices": [500, 1000, 2000, 4000, 8000],
+	"effect": "extra_moves",
+	"amount_per_level": 1
+}

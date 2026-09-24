@@ -1,0 +1,11 @@
+<!-- A headrest, weres: people slept on them, and small ones were laid with the dead to lift and protect the head. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="stone" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#c8c8d8"/><stop offset="0.35" stop-color="#6a6a80"/><stop offset="0.72" stop-color="#3a3a4c"/><stop offset="1" stop-color="#1a1a24"/></linearGradient>
+</defs>
+<path d="M14 30 C24 44 44 52 64 52 C84 52 104 44 114 30 L118 36 C108 54 88 62 72 64 V92 H96 C104 92 108 98 108 106 V114 H20 V106 C20 98 24 92 32 92 H56 V64 C40 62 20 54 10 36 Z" fill="#2a1703" fill-rule="nonzero" stroke="#2a1703" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" filter="url(#sh)"/>
+<path d="M14 30 C24 44 44 52 64 52 C84 52 104 44 114 30 L118 36 C108 54 88 62 72 64 V92 H96 C104 92 108 98 108 106 V114 H20 V106 C20 98 24 92 32 92 H56 V64 C40 62 20 54 10 36 Z" fill="url(#stone)"/>
+<path d="M60 70 V88 M68 70 V88" stroke="#1a1a24" stroke-width="2" opacity=".6"/>
+<path d="M20 38 C32 48 48 54 60 55" fill="none" stroke="#fffbe0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

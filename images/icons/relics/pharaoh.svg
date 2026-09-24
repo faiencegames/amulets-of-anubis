@@ -1,0 +1,11 @@
+<!-- Relic icon (pharaoh): The crook and flail, crossed, as Osiris and the kings held them. 32 by 32. "relicGold" is the shared gold gradient. Drawn by tools/icons/relics.py. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<defs>
+<linearGradient id="relicGold" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#fff3ae"/>
+<stop offset=".55" stop-color="#e0ac3a"/>
+<stop offset="1" stop-color="#8a5a10"/>
+</linearGradient>
+</defs>
+<path d="M9 29 L21 7 C22.5 4 26 4 27 6.5 C28 9 26 10.5 24.5 9.5" fill="none" stroke="#3b2406" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 29 L21 7 C22.5 4 26 4 27 6.5 C28 9 26 10.5 24.5 9.5" fill="none" stroke="#2f6fc0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 29 L21 7 C22.5 4 26 4 27 6.5 C28 9 26 10.5 24.5 9.5" fill="none" stroke="url(#relicGold)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2"/><path d="M24 29 L9 7" fill="none" stroke="#3b2406" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 29 L9 7" fill="none" stroke="url(#relicGold)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 7 L4 3 M9 7 L3 7.5 M9 7 L6.5 2" fill="none" stroke="#3b2406" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 7 L4 3 M9 7 L3 7.5 M9 7 L6.5 2" fill="none" stroke="#b83a22" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1.6 0.8"/>
+</svg>

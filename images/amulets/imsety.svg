@@ -1,0 +1,19 @@
+<!-- A canopic jar with the human head of Imsety, one of the four sons of Horus, who guarded the liver. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="calcite" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#ffffff"/><stop offset=".35" stop-color="#f6f0e0"/><stop offset=".72" stop-color="#e2d6b8"/><stop offset="1" stop-color="#a8987a"/></linearGradient>
+	<linearGradient id="lapis" gradientUnits="userSpaceOnUse" x1="36" y1="20" x2="92" y2="64"><stop offset="0" stop-color="#c8d8ff"/><stop offset=".35" stop-color="#4f86d8"/><stop offset=".72" stop-color="#2f6fc0"/><stop offset="1" stop-color="#1d3f78"/></linearGradient>
+	<linearGradient id="gold" gradientUnits="userSpaceOnUse" x1="26" y1="58" x2="102" y2="72"><stop offset="0" stop-color="#fffbd8"/><stop offset=".35" stop-color="#f5d04e"/><stop offset=".72" stop-color="#c08a1c"/><stop offset="1" stop-color="#6e4608"/></linearGradient>
+	<linearGradient id="skin" gradientUnits="userSpaceOnUse" x1="50" y1="14" x2="78" y2="64"><stop offset="0" stop-color="#f3d9a8"/><stop offset="1" stop-color="#c49a5c"/></linearGradient>
+</defs>
+<path d="M28 66 C20 84 24 106 40 116 C48 121 80 121 88 116 C104 106 108 84 100 66 Z M36 64 C34 40 44 16 64 14 C84 16 94 40 92 64 Z" fill="#2a1703" fill-rule="nonzero" stroke="#2a1703" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" filter="url(#sh)"/>
+<path d="M28 66 C20 84 24 106 40 116 C48 121 80 121 88 116 C104 106 108 84 100 66 Z" fill="url(#calcite)"/>
+<path d="M58 76 H70 V110 H58 Z" fill="#2f6fc0" stroke="#1d3f78" stroke-width="1.6"/>
+<path d="M61 82 H67 M61 89 H67 M60 96 H68 M61 103 H67" stroke="#e8f0ff" stroke-width="2" stroke-linecap="round"/>
+<path d="M26 62 H102 V70 H26 Z" fill="url(#gold)" stroke="#2a1703" stroke-width="3.4" stroke-linejoin="round"/>
+<path d="M36 64 C34 48 38 36 46 30 H82 C90 36 94 48 92 64 Z" fill="url(#lapis)" stroke="#2a1703" stroke-width="3.4" stroke-linejoin="round"/>
+<path d="M38 56 H48 M39 48 H48 M41 40 H49 M80 40 H87 M80 48 H89 M80 56 H90" stroke="#f0c850" stroke-width="3"/>
+<path d="M50 30 C50 20 56 14 64 14 C72 14 78 20 78 30 V50 C78 58 72 64 64 64 C56 64 50 58 50 50 Z" fill="url(#skin)" stroke="#2a1703" stroke-width="3.2"/><path d="M50 30 C50 20 56 14 64 14 C72 14 78 20 78 30 C72 26 56 26 50 30 Z" fill="url(#lapis)" stroke="#2a1703" stroke-width="2.6"/><path d="M56 38 H61 M67 38 H72" stroke="#1a0f05" stroke-width="2.6" stroke-linecap="round"/><path d="M63 44 L64 49 L65 44 M60 54 C62 56 66 56 68 54" fill="none" stroke="#6a4420" stroke-width="1.8" stroke-linecap="round"/><path d="M61 64 H67 V72 H61 Z" fill="#2f6fc0" stroke="#2a1703" stroke-width="1.6"/>
+<path d="M34 80 C32 92 36 104 44 110" fill="none" stroke="#fffbe0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

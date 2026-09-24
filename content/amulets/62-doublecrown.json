@@ -1,0 +1,8 @@
+// What the codex says about an amulet. The drawing itself is built in,
+// or comes from a picture in images/amulets/ with the same name as the id.
+{
+	"id": "doublecrown",
+	"name": "Double crown",
+	"plural": "double crowns",
+	"meaning": "The double crown joined the white crown of Upper Egypt and the red crown of Lower Egypt. Memphis was founded where the two lands meet."
+}

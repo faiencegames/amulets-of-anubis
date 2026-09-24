@@ -1,0 +1,7 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "journey",
+	"name": "Golden barque",
+	"description": "Reach Alexandria and gild it.",
+	"found_when": {"win_at_stop": "alexandria"}
+}

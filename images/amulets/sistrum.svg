@@ -1,0 +1,18 @@
+<!-- The sistrum, the rattle shaken in the worship of Hathor: Her face, with cow's ears, on the handle, and a loop crossed by rattling rods. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="gold" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#fffbd8"/><stop offset=".35" stop-color="#f5d04e"/><stop offset=".72" stop-color="#c08a1c"/><stop offset="1" stop-color="#6e4608"/></linearGradient>
+	<linearGradient id="face" gradientUnits="userSpaceOnUse" x1="40" y1="58" x2="90" y2="96"><stop offset="0" stop-color="#f3d9a8"/><stop offset="1" stop-color="#c49a5c"/></linearGradient>
+	<linearGradient id="lapis" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#c8d8ff"/><stop offset=".35" stop-color="#4f86d8"/><stop offset=".72" stop-color="#2f6fc0"/><stop offset="1" stop-color="#1d3f78"/></linearGradient>
+</defs>
+<path d="M42 58 V30 C42 14 52 6 64 6 C76 6 86 14 86 30 V58 Z M46 60 H82 V80 C82 92 74 98 64 98 C54 98 46 92 46 80 Z M46 66 C36 62 30 66 30 72 C36 76 42 76 46 74 Z M82 66 C92 62 98 66 98 72 C92 76 86 76 82 74 Z M58 96 H70 V124 H58 Z" fill="#2a1703" fill-rule="nonzero" stroke="#2a1703" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" filter="url(#sh)"/>
+<path d="M42 58 V30 C42 14 52 6 64 6 C76 6 86 14 86 30 V58 Z M52 58 V30 C52 20 58 16 64 16 C70 16 76 20 76 30 V58 Z" fill="url(#gold)" fill-rule="evenodd"/>
+<path d="M40 26 H88 M40 38 H88 M40 50 H88" stroke="#2a1703" stroke-width="4.6" stroke-linecap="round"/><path d="M40 26 H88 M40 38 H88 M40 50 H88" stroke="url(#gold)" stroke-width="2" stroke-linecap="round"/>
+<path d="M58 96 H70 V124 H58 Z" fill="url(#lapis)"/>
+<path d="M46 66 C36 62 30 66 30 72 C36 76 42 76 46 74 Z M82 66 C92 62 98 66 98 72 C92 76 86 76 82 74 Z" fill="url(#face)" stroke="#2a1703" stroke-width="2.4" stroke-linejoin="round"/>
+<path d="M46 60 H82 V80 C82 92 74 98 64 98 C54 98 46 92 46 80 Z" fill="url(#face)" stroke="#2a1703" stroke-width="2.6"/>
+<path d="M46 60 H82 V66 H46 Z" fill="#1d3f78"/>
+<path d="M54 74 H60 M68 74 H74 M60 88 C62 90 66 90 68 88" fill="none" stroke="#3a2410" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M46 44 V30 C46 20 52 12 60 11" fill="none" stroke="#fffbe0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

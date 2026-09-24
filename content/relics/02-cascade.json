@@ -1,0 +1,7 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "cascade",
+	"name": "Falling waters",
+	"description": "Set off a cascade of five.",
+	"found_when": {"best_cascade": 5}
+}

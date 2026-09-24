@@ -1,0 +1,8 @@
+// What the codex says about an amulet. The drawing itself is built in,
+// or comes from a picture in images/amulets/ with the same name as the id.
+{
+	"id": "bluelotus",
+	"name": "Blue lotus",
+	"plural": "blue lotuses",
+	"meaning": "The sacred water lily of the Nile, linked with the sun God."
+}

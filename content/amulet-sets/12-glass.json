@@ -1,0 +1,9 @@
+// An amulet set: the same amulets, recoloured. Changes the look only.
+{
+	"id": "glass",
+	"name": "Amarna glass",
+	"description": "Bright coloured glass, as it was made and inlaid in the workshops of Akhenaten’s city.",
+	"unlocked_by": {"relic": "cord"},
+	"colour_changes": {"saturation": 1.9, "contrast": 1.12, "brightness": 1.06},
+	"glow": "rgba(255,255,255,.45)"
+}

@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "omega",
+	"name": "The great flood",
+	"description": "Gild an Omega board, the whole screen at once.",
+	"found_when": {"win_on_board": "omega"},
+	"reward": {"gold": 500}
+}

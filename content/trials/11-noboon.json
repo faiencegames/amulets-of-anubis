@@ -1,0 +1,9 @@
+// A trial a priest can set at a stop. Finish it and the boon is the player’s.
+{
+	"id": "noboon",
+	"goal": "no_boons",
+	"target": 1,
+	"text": "Finish the stop without using a boon",
+	"progress_label": "No boons spent",
+	"boon": "sun"
+}

@@ -1,0 +1,18 @@
+<!-- The sacred ibis, the bird of Thoth: a white body, the bare black head and neck, a long curved beak and black plumes over the tail. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="white" gradientUnits="userSpaceOnUse" x1="40" y1="36" x2="110" y2="92"><stop offset="0" stop-color="#ffffff"/><stop offset=".35" stop-color="#fffdf6"/><stop offset=".72" stop-color="#ece3cc"/><stop offset="1" stop-color="#b8aa88"/></linearGradient>
+	<linearGradient id="black" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5a5660"/><stop offset="1" stop-color="#16141a"/></linearGradient>
+</defs>
+<g filter="url(#sh)"><path d="M68 86 L64 116 M82 86 L86 116 M56 116 H70 M80 116 H94" stroke="#2a1703" stroke-width="8" stroke-linecap="round" fill="none"/><path d="M37 20 C26 26 18 38 16 52" stroke="#2a1703" stroke-width="9" stroke-linecap="round" fill="none"/><path d="M52 56 C44 46 40 34 42 22" stroke="#2a1703" stroke-width="15" stroke-linecap="round" fill="none"/><circle cx="42" cy="20" r="11" fill="#2a1703"/><path d="M42 62 C42 46 60 38 78 42 C96 46 108 58 112 70 C104 80 92 88 76 88 C58 88 42 80 42 62 Z M92 60 C106 64 116 76 118 90 C108 88 98 82 90 74 Z" fill="#2a1703" stroke="#2a1703" stroke-width="9" stroke-linejoin="round"/></g>
+<path d="M68 86 L64 116 M82 86 L86 116 M56 116 H70 M80 116 H94" stroke="#4a3a30" stroke-width="3.6" stroke-linecap="round" fill="none"/>
+<path d="M37 20 C26 26 18 38 16 52" stroke="#3a3640" stroke-width="4" stroke-linecap="round" fill="none"/>
+<path d="M52 56 C44 46 40 34 42 22" stroke="url(#black)" stroke-width="8" stroke-linecap="round" fill="none"/>
+<circle cx="42" cy="20" r="6.5" fill="url(#black)"/>
+<path d="M42 62 C42 46 60 38 78 42 C96 46 108 58 112 70 C104 80 92 88 76 88 C58 88 42 80 42 62 Z" fill="url(#white)"/>
+<path d="M92 60 C106 64 116 76 118 90 C108 88 98 82 90 74 Z" fill="url(#black)" stroke="#2a1703" stroke-width="2.4" stroke-linejoin="round"/>
+<path d="M72 56 C82 58 92 64 98 72" fill="none" stroke="#b8aa88" stroke-width="2.4" stroke-linecap="round"/>
+<circle cx="44" cy="18" r="1.8" fill="#fffdf6"/>
+<path d="M50 56 C54 48 64 44 74 44" fill="none" stroke="#fffbe0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

@@ -1,0 +1,9 @@
+// Sparkle colours: the light that flies off a match. Two colours.
+{
+	"id": "lotus",
+	"name": "Blue lotus",
+	"description": "Petal blue with a heart of gold, like the flower at dawn.",
+	"unlocked_by": {"win_streak": 6},
+	"how_to_unlock": "Win six stops in a row",
+	"colours": ["#7aa8ff", "#ffd65a"]
+}

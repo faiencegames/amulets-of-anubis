@@ -1,0 +1,17 @@
+// A shared floor shape. Stops list the shapes they may use under
+// "shared_floor_shapes". . is a gap, 0 already gold, 1 bare stone, 2 thick stone.
+{
+	"id": "eye",
+	"name": "Eye of Horus",
+	"move_multiplier": 1,
+	"floor_plan": [
+		"..1111..",
+		".111111.",
+		"11111111",
+		"11122111",
+		"11122111",
+		"11111111",
+		".111111.",
+		"..1111.."
+	]
+}

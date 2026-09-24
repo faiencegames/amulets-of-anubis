@@ -1,0 +1,8 @@
+// An amulet set: the same amulets, recoloured. Changes the look only.
+{
+	"id": "turquoise",
+	"name": "Turquoise and gold",
+	"description": "The bright blue of faience, set against a warmer floor.",
+	"unlocked_by": {"stops_gilded": 5},
+	"colour_changes": {"hue_shift": 190, "saturation": 1.28, "brightness": 1.05}
+}

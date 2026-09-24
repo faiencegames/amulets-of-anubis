@@ -1,0 +1,8 @@
+// What the codex says about an amulet. The drawing itself is built in,
+// or comes from a picture in images/amulets/ with the same name as the id.
+{
+	"id": "imsety",
+	"name": "Jar of Imsety",
+	"plural": "jars of Imsety",
+	"meaning": "A canopic jar with the head of Imsety, the human-headed son of Horus, who guarded the liver taken out during embalming."
+}

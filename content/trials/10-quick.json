@@ -1,0 +1,10 @@
+// A trial a priest can set at a stop. Finish it and the boon is the player’s.
+{
+	"id": "quick",
+	"goal": "gild_half_quickly",
+	"target": 1,
+	"text": "Gild half the floor within ten moves",
+	"progress_label": "Half gilded in time",
+	"boon": "wisdom",
+	"within_moves": 10
+}

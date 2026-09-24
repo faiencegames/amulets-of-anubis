@@ -1,0 +1,11 @@
+<!-- Relic icon (first): The scribe's palette: a long board with cakes of black and red ink and a slot of reed pens. 32 by 32. "relicGold" is the shared gold gradient. Drawn by tools/icons/relics.py. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<defs>
+<linearGradient id="relicGold" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#fff3ae"/>
+<stop offset=".55" stop-color="#e0ac3a"/>
+<stop offset="1" stop-color="#8a5a10"/>
+</linearGradient>
+</defs>
+<path d="M9 3.5 H23 C24 3.5 24.5 4 24.5 5 V27 C24.5 28 24 28.5 23 28.5 H9 C8 28.5 7.5 28 7.5 27 V5 C7.5 4 8 3.5 9 3.5 Z" fill="url(#relicGold)" stroke="#3b2406" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="13" cy="8" r="2.4" fill="#1a1410" stroke="#3b2406" stroke-width="1.3"/><circle cx="19" cy="8" r="2.4" fill="#b83a22" stroke="#3b2406" stroke-width="1.3"/><path d="M14 13 H18 V26 H14 Z" fill="#8a5a10" stroke="#3b2406" stroke-width="1.1" stroke-linejoin="round" stroke-linecap="round"/><path d="M15.3 14 V25 M16.7 14 V25" fill="none" stroke="#fff3ae" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

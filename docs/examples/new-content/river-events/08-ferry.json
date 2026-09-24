@@ -1,0 +1,13 @@
+// An example choice event: no puzzle, just a decision.
+{
+  "id": "ferry",
+  "kind": "choice",
+  "title": "The old ferryman",
+  "text": "An old ferryman hails you from the bank. He knows a quicker channel, he says, for a price.",
+  "weight": 1,    // 2 would make it come up twice as often as the others
+  "choices": [
+    {"label": "Pay him 20 lapis", "cost": {"lapis": 20}, "give": {"boon": "wisdom"}},
+    {"label": "Trust to the Gods", "gamble": true},
+    {"label": "Row on yourselves"}
+  ]
+}

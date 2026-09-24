@@ -1,0 +1,13 @@
+<!-- The crook and flail, crossed: held by Osiris and by kings, the shepherd's crook and the flail. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="gold" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#fffbd8"/><stop offset=".35" stop-color="#f5d04e"/><stop offset=".72" stop-color="#c08a1c"/><stop offset="1" stop-color="#6e4608"/></linearGradient>
+	<linearGradient id="lapis" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#c8d8ff"/><stop offset=".35" stop-color="#4f86d8"/><stop offset=".72" stop-color="#2f6fc0"/><stop offset="1" stop-color="#1d3f78"/></linearGradient>
+</defs>
+<g filter="url(#sh)"><path d="M38 118 L82 30 C88 18 100 16 106 26 C110 34 104 42 98 38 M90 118 L38 34" fill="none" stroke="#2a1703" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/><path d="M38 34 L22 18 M38 34 L20 30 M38 34 L28 12" fill="none" stroke="#2a1703" stroke-width="11" stroke-linecap="round"/></g>
+<path d="M90 118 L38 34" stroke="url(#gold)" stroke-width="7" stroke-linecap="round"/>
+<path d="M38 34 L22 18 M38 34 L20 30 M38 34 L28 12" stroke="#b83a22" stroke-width="5" stroke-linecap="round" stroke-dasharray="4 2.4"/>
+<path d="M38 118 L82 30 C88 18 100 16 106 26 C110 34 104 42 98 38" fill="none" stroke="url(#lapis)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M38 118 L82 30 C88 18 100 16 106 26 C110 34 104 42 98 38" fill="none" stroke="url(#gold)" stroke-width="7" stroke-dasharray="5 5" stroke-linejoin="round"/>
+</svg>

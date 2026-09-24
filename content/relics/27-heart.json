@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "heart",
+	"name": "The heart scarab",
+	"description": "Win ten stops on Hard or Pharaoh.",
+	"found_when": {"hard_wins": 10},
+	"reward": {"boon": "wisdom"}
+}

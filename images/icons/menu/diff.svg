@@ -1,0 +1,4 @@
+<!-- Menu and title-screen icon (diff). 32 by 32. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<path d="M4 24h6V14H4zM13 24h6V8h-6zM22 24h6V17h-6z" fill="#e8d49e" stroke="#4a2c10" stroke-width="2" stroke-linejoin="round"/>
+</svg>

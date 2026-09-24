@@ -1,0 +1,9 @@
+// Something Anubis sells: bought for one stop, used once.
+{
+	"id": "chisel",
+	"name": "Chisel of Ptah",
+	"description": "A boon: shatter one amulet you choose; the stone beneath is gilded.",
+	"currency": "gold",
+	"price": 340,
+	"gives": {"boon": "chisel"}
+}

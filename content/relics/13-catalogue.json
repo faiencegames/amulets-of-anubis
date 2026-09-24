@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "catalogue",
+	"name": "The scribe’s catalogue",
+	"description": "Find twelve relics for the museum.",
+	"found_when": {"relics_found": 12},
+	"reward": {"lapis": 30}
+}

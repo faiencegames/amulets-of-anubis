@@ -1,0 +1,12 @@
+// Something that can happen on the river between two stops.
+{
+	"id": "bes",
+	"kind": "choice",
+	"title": "A shrine of Bes",
+	"text": "In a village by the bank, children were dancing round a little shrine of Bes, the laughing dwarf God who keeps homes and babies safe. A woman asked us for an offering.",
+	"choices": [
+		{"label": "Leave an offering at the shrine", "cost": {"gold": 100}, "give": {"boon": "bes"}},
+		{"label": "Join the dance", "gamble": true},
+		{"label": "Wave and sail on"}
+	]
+}

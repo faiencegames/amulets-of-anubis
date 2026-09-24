@@ -1,0 +1,7 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "trials",
+	"name": "Priest’s seal",
+	"description": "Finish five trials.",
+	"found_when": {"trials_finished": 5}
+}

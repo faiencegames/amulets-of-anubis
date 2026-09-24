@@ -1,0 +1,42 @@
+// An example 13th stop: the oasis of Siwa, far out in the Western Desert.
+// Copy this file into content/stops/ and build. The "13-" at the front puts
+// it after Alexandria, which is stop 12.
+{
+  "id": "siwa",
+  "name": "Siwa",
+  "subtitle": "The oracle in the oasis",
+
+  // A long text can be split into a list of lines; they are joined with spaces.
+  "history": [
+    "In 331 BC Alexander the Great crossed the Western Desert to consult the",
+    "oracle of Amun at Siwa. The priests greeted him as the son of the God."
+  ],
+
+  "moves": 24,
+  "amulets": ["ankh", "scarab", "eye", "lotus", "cat"],
+
+  // . gap   0 already gold   1 bare stone   2 thick stone
+  "floor_plan": [
+    "..1111..",
+    ".111111.",
+    "11122111",
+    "11222211",
+    "11222211",
+    "11122111",
+    ".111111.",
+    "..1111.."
+  ],
+  "shared_floor_shapes": ["pools", "oasis"],
+
+  "stone_colour": "#b89a6a",
+  "music": {"key": "E3", "scale": "phrygian", "instrument": "flute"},
+
+  // Its pictures: images/backdrops/siwa.svg and images/boards/siwa.svg
+  // (copy them from images/ in this folder too).
+
+  "frame_colours": ["#6a4524", "#2a1808", "#a07a44"],
+
+  // Siwa is really far west of the map's edge, so it sits at the left side,
+  // level with the Faiyum.
+  "map_position": {"x": 24, "y": 166, "label": "right"}
+}

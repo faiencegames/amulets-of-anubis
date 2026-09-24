@@ -1,0 +1,15 @@
+// An amulet set: the same amulets, recoloured. Changes the look only.
+{
+	"id": "obsidian",
+	"name": "Obsidian inlay",
+	"description": "Black glass from the volcanic hills, with a cold sheen.",
+	"unlocked_by": {"relic": "pharaoh"},
+	"colour_changes": {
+		"brightness": 0.76,
+		"contrast": 1.4,
+		"saturation": 0.85
+	},
+	"tint": "#0a0a14",
+	"tint_strength": 0.14,
+	"glow": "rgba(205,225,255,.42)"
+}

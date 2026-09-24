@@ -1,0 +1,8 @@
+// What the codex says about an amulet. The drawing itself is built in,
+// or comes from a picture in images/amulets/ with the same name as the id.
+{
+	"id": "barque",
+	"name": "Sacred barque",
+	"plural": "sacred barques",
+	"meaning": "A God's statue travelled in a barque, hidden in its shrine, carried on the shoulders of priests or sailed on the river at festivals."
+}

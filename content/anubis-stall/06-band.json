@@ -1,0 +1,9 @@
+// Something Anubis sells: bought for one stop, used once.
+{
+	"id": "band",
+	"name": "Scribe’s band",
+	"description": "A boon: turn any amulet into a banded one.",
+	"currency": "lapis",
+	"price": 40,
+	"gives": {"boon": "band"}
+}

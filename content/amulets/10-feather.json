@@ -1,0 +1,8 @@
+// What the codex says about an amulet. The drawing itself is built in,
+// or comes from a picture in images/amulets/ with the same name as the id.
+{
+	"id": "feather",
+	"name": "Feather of Ma’at",
+	"plural": "feathers of Ma’at",
+	"meaning": "Truth and cosmic order; in the afterlife the heart was weighed against it."
+}

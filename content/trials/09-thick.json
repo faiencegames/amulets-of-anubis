@@ -1,0 +1,10 @@
+// A trial a priest can set at a stop. Finish it and the boon is the player’s.
+{
+	"id": "thick",
+	"goal": "crack_thick",
+	"target": 8,
+	"text": "Crack eight thick stones",
+	"progress_label": "Thick stones cracked",
+	"boon": "scales",
+	"only_if_thick_stones": 12
+}

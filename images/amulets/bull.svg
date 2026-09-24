@@ -1,0 +1,18 @@
+<!-- The Apis bull of Memphis: black, with a white mark on His brow, and the sun's disc and a cobra between His horns. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="black" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#6a6670"/><stop offset="0.4" stop-color="#2e2c34"/><stop offset="1" stop-color="#0e0c12"/></linearGradient>
+	<linearGradient id="gold" gradientUnits="userSpaceOnUse" x1="14" y1="14" x2="40" y2="44"><stop offset="0" stop-color="#fffbd8"/><stop offset=".35" stop-color="#f5d04e"/><stop offset=".72" stop-color="#c08a1c"/><stop offset="1" stop-color="#6e4608"/></linearGradient>
+	<linearGradient id="carn" gradientUnits="userSpaceOnUse" x1="14" y1="10" x2="40" y2="40"><stop offset="0" stop-color="#ffc0b0"/><stop offset=".35" stop-color="#e0604a"/><stop offset=".72" stop-color="#b83a22"/><stop offset="1" stop-color="#7a1f12"/></linearGradient>
+</defs>
+<g filter="url(#sh)"><path d="M16 46 C10 40 12 32 18 30 M36 44 C42 38 40 30 34 30" stroke="#2a1703" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M14 70 C14 58 20 50 30 48 L34 40 L40 46 C56 42 76 42 92 46 C104 48 112 56 114 66 L118 78 L112 80 L110 70 C108 76 104 80 100 82 L100 108 H92 L90 86 H52 L50 108 H42 L40 84 C34 82 30 80 26 78 L22 84 C18 86 12 82 12 76 Z M18 30 C18 20 34 20 34 30 C34 40 18 40 18 30 Z" fill="#2a1703" stroke="#2a1703" stroke-width="9" stroke-linejoin="round"/></g>
+<path d="M14 70 C14 58 20 50 30 48 L34 40 L40 46 C56 42 76 42 92 46 C104 48 112 56 114 66 L118 78 L112 80 L110 70 C108 76 104 80 100 82 L100 108 H92 L90 86 H52 L50 108 H42 L40 84 C34 82 30 80 26 78 L22 84 C18 86 12 82 12 76 Z" fill="url(#black)"/>
+<path d="M16 46 C10 40 12 32 18 30 M36 44 C42 38 40 30 34 30" stroke="url(#gold)" stroke-width="4" fill="none" stroke-linecap="round"/>
+<path d="M18 30 C18 20 34 20 34 30 C34 40 18 40 18 30 Z" fill="url(#carn)" stroke="#2a1703" stroke-width="2.4"/>
+<path d="M24 52 L32 50 L28 60 Z" fill="#fffdf6"/>
+<path d="M62 50 C70 48 78 50 82 54 C76 58 66 58 62 50 Z" fill="#fffdf6" opacity=".9"/>
+<circle cx="24" cy="62" r="2.2" fill="#f5d04e"/>
+<path d="M52 48 C62 46 76 46 86 48 L84 62 C74 64 62 64 54 62 Z" fill="#b83a22" stroke="#2a1703" stroke-width="2" stroke-linejoin="round" opacity=".85"/>
+<path d="M40 50 C54 46 72 45 88 48" fill="none" stroke="#fffbe0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

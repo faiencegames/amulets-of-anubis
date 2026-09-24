@@ -1,0 +1,21 @@
+// Something that can happen on the river between two stops.
+{
+	"id": "cache",
+	"kind": "puzzle",
+	"title": "A tomb robber’s cache",
+	"text": "In a hollow of the cliff we came upon a robber’s hoard, half-buried. The guards would soon pass, and we gathered what we could to bring back to the temple.",
+	"goal": {"type": "score", "points": 3500},
+	"moves": 9,
+	"amulet_types": 4,
+	"floor_plan": [
+		"00000000",
+		"00000000",
+		"00000000",
+		"00000000",
+		"00000000",
+		"00000000",
+		"00000000",
+		"00000000"
+	],
+	"reward": {"lapis": 8}
+}

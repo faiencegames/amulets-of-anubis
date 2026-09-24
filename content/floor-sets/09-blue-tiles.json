@@ -1,0 +1,7 @@
+// An example floor set, with glazed tiles, a mosaic and speckled gold.
+{
+	"id": "blue-tiles",
+	"name": "Glazed tiles",
+	"description": "Blue glazed tiles, like the ones in Djoser's chambers.",
+	"unlocked_by": {"stops_won": 3}
+}

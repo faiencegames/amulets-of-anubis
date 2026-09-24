@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "shrine",
+	"name": "The golden shrine",
+	"description": "Find thirty relics for the museum.",
+	"found_when": {"relics_found": 30},
+	"reward": {"gold": 800}
+}

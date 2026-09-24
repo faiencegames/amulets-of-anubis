@@ -1,0 +1,10 @@
+// A lasting upgrade sold in the treasury. One price per level.
+{
+	"id": "scribes",
+	"name": "Scribes of the house of life",
+	"description": "One more lapis for every stop you gild, for each level bought.",
+	"currency": "gold",
+	"prices": [800, 1600, 3200],
+	"effect": "win_lapis",
+	"amount_per_level": 1
+}

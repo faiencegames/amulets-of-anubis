@@ -1,0 +1,9 @@
+// A board frame: the carved edge round the floor.
+// "colours": null means each stop keeps its own frame colours.
+{
+	"id": "temple",
+	"name": "Temple",
+	"description": "Each stop keeps its own carved stone.",
+	"unlocked_by": null,
+	"colours": null
+}

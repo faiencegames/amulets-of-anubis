@@ -1,0 +1,13 @@
+# everything the build makes
+dist/
+# signing keys for the Android app (keep release.jks somewhere safe!)
+platforms/android/*.jks
+platforms/android/*.keystore
+node_modules
+__pycache__/
+.DS_Store
+
+# editor swap files
+*.kate-swp
+*.swp
+tools/screenshots/looks-check.png

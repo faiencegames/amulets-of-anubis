@@ -1,0 +1,8 @@
+// A floor set: the stone under the amulets. Changes the look only.
+// Its pictures are in images/floors/<id>/: bare, thick and gilded squares.
+{
+	"id": "granite",
+	"name": "Red granite of Aswan",
+	"description": "Rose granite from the quarries at the First Cataract, the stone of obelisks.",
+	"unlocked_by": {"stops_won": 60}
+}

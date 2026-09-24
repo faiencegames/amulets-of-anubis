@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "cataract",
+	"name": "The cataract",
+	"description": "Set off a cascade of twelve.",
+	"found_when": {"best_cascade": 12},
+	"reward": {"gold": 300}
+}

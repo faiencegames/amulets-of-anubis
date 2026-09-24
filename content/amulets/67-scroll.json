@@ -1,0 +1,8 @@
+// What the codex says about an amulet. The drawing itself is built in,
+// or comes from a picture in images/amulets/ with the same name as the id.
+{
+	"id": "scroll",
+	"name": "Papyrus roll",
+	"plural": "papyrus rolls",
+	"meaning": "Books were rolls of papyrus, written in black ink with red for the headings. The Library of Alexandria set out to gather every book in the world, and may have held hundreds of thousands."
+}

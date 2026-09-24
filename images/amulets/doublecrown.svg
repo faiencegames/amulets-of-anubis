@@ -1,0 +1,17 @@
+<!-- The double crown, pschent: the white crown of Upper Egypt set inside the red crown of Lower Egypt, worn by the king of both lands. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="carn" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#ffc0b0"/><stop offset=".35" stop-color="#e0604a"/><stop offset=".72" stop-color="#b83a22"/><stop offset="1" stop-color="#7a1f12"/></linearGradient>
+	<linearGradient id="white" gradientUnits="userSpaceOnUse" x1="36" y1="4" x2="84" y2="80"><stop offset="0" stop-color="#ffffff"/><stop offset="0.35" stop-color="#f6ecd6"/><stop offset="0.72" stop-color="#dccaa4"/><stop offset="1" stop-color="#9a8660"/></linearGradient>
+	<linearGradient id="gold" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#fffbd8"/><stop offset=".35" stop-color="#f5d04e"/><stop offset=".72" stop-color="#c08a1c"/><stop offset="1" stop-color="#6e4608"/></linearGradient>
+</defs>
+<path d="M36 80 C32 56 38 26 52 12 C60 4 72 6 76 16 C82 34 84 60 80 80 Z M22 118 V80 H82 V18 H104 V118 Z" fill="#2a1703" fill-rule="nonzero" stroke="#2a1703" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" filter="url(#sh)"/>
+<path d="M36 80 C32 56 38 26 52 12 C60 4 72 6 76 16 C82 34 84 60 80 80 Z" fill="url(#white)"/>
+<path d="M22 118 V80 H82 V18 H104 V118 Z" fill="url(#carn)"/>
+<path d="M30 84 C18 74 14 60 20 52 C24 48 30 52 26 58" fill="none" stroke="#2a1703" stroke-width="5.6" stroke-linecap="round"/><path d="M30 84 C18 74 14 60 20 52 C24 48 30 52 26 58" fill="none" stroke="url(#gold)" stroke-width="2.6" stroke-linecap="round"/>
+<path d="M22 80 H82 V18" fill="none" stroke="#2a1703" stroke-width="3"/>
+<path d="M24 108 H102" stroke="url(#gold)" stroke-width="5"/>
+<path d="M42 72 C40 50 44 30 52 18" fill="none" stroke="#fffbe0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+<path d="M90 28 V70" fill="none" stroke="#fffbe0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

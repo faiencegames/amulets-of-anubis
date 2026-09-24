@@ -1,0 +1,11 @@
+// An amulet set: the same amulets, recoloured. Changes the look only.
+{
+	"id": "electrum",
+	"name": "Electrum",
+	"description": "Gold alloyed with silver, pale and bright, as on the tips of obelisks.",
+	"unlocked_by": {"gold_earned": 6000},
+	"colour_changes": {"saturation": 0.85, "brightness": 1.12, "contrast": 1.12},
+	"tint": "#fff4d0",
+	"tint_strength": 0.1,
+	"glow": "rgba(255,248,215,.7)"
+}

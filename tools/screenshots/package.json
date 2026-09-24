@@ -1,0 +1,9 @@
+{
+	"name": "amulets-screenshots",
+	"private": true,
+	"description": "Takes the screenshots in docs/images/ (development only; see take.mjs)",
+	"type": "module",
+	"dependencies": {
+		"playwright": "^1.63.0"
+	}
+}

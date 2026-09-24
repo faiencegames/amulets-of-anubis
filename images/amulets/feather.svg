@@ -1,0 +1,15 @@
+<!-- The feather of Ma'at: an ostrich plume with its tip curling over, the sign of truth and balance. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="linen" gradientUnits="userSpaceOnUse" x1="30" y1="10" x2="100" y2="120"><stop offset="0" stop-color="#ffffff"/><stop offset=".35" stop-color="#fffdf6"/><stop offset=".72" stop-color="#ece3cc"/><stop offset="1" stop-color="#b8aa88"/></linearGradient>
+	<linearGradient id="gold" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#fffbd8"/><stop offset=".35" stop-color="#f5d04e"/><stop offset=".72" stop-color="#c08a1c"/><stop offset="1" stop-color="#6e4608"/></linearGradient>
+</defs>
+<path d="M60 120 C50 104 42 80 40 56 C38 36 42 20 54 12 C64 6 78 8 84 18 C86 24 84 30 80 32 C78 26 72 22 66 24 C60 28 62 44 68 64 C74 84 76 104 68 120 Z" fill="#2a1703" fill-rule="nonzero" stroke="#2a1703" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" filter="url(#sh)"/>
+<path d="M60 120 C50 104 42 80 40 56 C38 36 42 20 54 12 C64 6 78 8 84 18 C86 24 84 30 80 32 C78 26 72 22 66 24 C60 28 62 44 68 64 C74 84 76 104 68 120 Z" fill="url(#linen)"/>
+<path d="M58 34 C52 32 46 28 46 22 M60 36 C64 34 68 30 70 24 M58 42 C52 40 46 36 46 30 M61 44 C64 42 68 38 70 32 M59 50 C52 48 46 44 46 38 M61 52 C65 50 69 46 70 40 M60 58 C52 56 46 52 46 46 M62 60 C65 58 69 54 71 48 M60 66 C52 64 48 60 46 54 M62 68 C66 66 69 62 71 56 M60 74 C52 72 48 68 46 62 M63 76 C66 74 70 70 71 64 M61 82 C52 80 48 76 46 70 M64 84 C66 82 70 78 71 72 M62 90 C52 88 48 84 46 78 M64 92 C67 90 70 86 71 80 M62 98 C52 96 48 92 46 86 M65 100 C67 98 70 94 72 88 M62 106 C52 104 48 100 46 94 M65 108 C68 106 71 102 72 96 M63 114 C52 112 48 108 46 102 M66 116 C68 114 71 110 72 104" stroke="#8aa0c8" stroke-width="1.6" fill="none" opacity=".55" stroke-linecap="round"/>
+<path d="M50 96 C56 94 66 94 72 96 L71 104 C64 102 58 102 52 104 Z" fill="#2f6fc0" opacity=".8"/>
+<path d="M62 120 C60 96 56 64 56 40 C56 30 60 24 66 24" fill="none" stroke="#2a1703" stroke-width="6" stroke-linecap="round"/>
+<path d="M62 120 C60 96 56 64 56 40 C56 30 60 24 66 24" fill="none" stroke="url(#gold)" stroke-width="3" stroke-linecap="round"/>
+<path d="M46 60 C44 42 46 26 56 16" fill="none" stroke="#fffbe0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

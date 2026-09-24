@@ -1,0 +1,23 @@
+# Keeps editors in step with the project's style: tabs for indentation
+# (spaces only to line up a continued line), UTF-8, a newline at the end.
+root = true
+
+[*]
+indent_style = tab
+tab_width = 4
+charset = utf-8
+insert_final_newline = true
+
+# Markdown treats tabs differently; the docs keep spaces
+[*.md]
+indent_style = space
+indent_size = 2
+
+# written by npm, which uses spaces
+[package-lock.json]
+indent_style = space
+indent_size = 2
+
+# pictures are left as they are drawn
+[*.svg]
+indent_style = unset

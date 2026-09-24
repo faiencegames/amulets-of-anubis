@@ -1,0 +1,27 @@
+// A boon: a held power the player spends when they choose. Players keep
+// boons by id, so don't change the id once people play. Its icon is
+// images/icons/boons/<id>.svg; or name another icon there in "icon".
+{
+	"id": "sun",
+	"short": "Ra",        // on its button
+	"name": "Boon of Ra",
+	// {n} in the description is the amount
+	"description": "Turns any amulet you touch into the winged sun.",
+	// what it does, one of the effects the game knows (* = the player picks
+	// a square; "amount" changes the number, and has a default):
+	//   "extra_moves"        n more moves (6)
+	//   "gild_stones"        n stones, chosen at random, lose a layer (8)
+	//   "thin_thick_stones"  every thick or cracked stone loses a layer
+	//   "cord_row" *         every stone in the chosen row loses a layer
+	//   "shatter_one" *      shatters one amulet and gilds the stone under it
+	//   "shatter_square" *   shatters an n by n square (5; use an odd number)
+	//   "make_banded" *      the amulet becomes a banded amulet
+	//   "make_sun" *         the amulet becomes the winged sun
+	//   "make_ringed"        n amulets become ringed amulets (3)
+	//   "shuffle"            the amulets are shuffled, and n more moves (2)
+	"effect": "make_sun",
+	// shown on the board when it is used ({n} is the amount)
+	"popup": "Boon of Ra",
+	// true: it can be the boon a "random" reward gives
+	"random_reward": true
+}

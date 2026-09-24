@@ -1,0 +1,8 @@
+// A floor set: the stone under the amulets. Changes the look only.
+// Its pictures are in images/floors/<id>/: bare, thick and gilded squares.
+{
+	"id": "faience",
+	"name": "Faience tiles",
+	"description": "Glazed turquoise tiles like the chambers under the Step Pyramid.",
+	"unlocked_by": {"three_star_stops": 10}
+}

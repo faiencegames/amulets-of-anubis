@@ -1,0 +1,8 @@
+// What the codex says about an amulet. The drawing itself is built in,
+// or comes from a picture in images/amulets/ with the same name as the id.
+{
+	"id": "aten",
+	"name": "The Aten",
+	"plural": "sun disks",
+	"meaning": "The sun disk, its rays ending in hands, worshipped under Akhenaten."
+}

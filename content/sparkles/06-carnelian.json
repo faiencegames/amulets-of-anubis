@@ -1,0 +1,8 @@
+// Sparkle colours: the light that flies off a match. Two colours.
+{
+	"id": "carnelian",
+	"name": "Carnelian",
+	"description": "Red-orange sparks, like a bead held up to the sun.",
+	"unlocked_by": {"stars": 30},
+	"colours": ["#ff7a3c", "#ffe2b8"]
+}

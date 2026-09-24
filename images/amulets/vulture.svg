@@ -1,0 +1,21 @@
+<!-- A vulture as the hieroglyph paints it: white, with a yellow face and hooked beak, a ruff at the nape, black wing-tips and yellow feet. Vultures were sacred to Nekhbet and to Mut. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="white" gradientUnits="userSpaceOnUse" x1="30" y1="20" x2="110" y2="100"><stop offset="0" stop-color="#ffffff"/><stop offset="0.35" stop-color="#f6ecd6"/><stop offset="0.72" stop-color="#dccaa4"/><stop offset="1" stop-color="#9a8660"/></linearGradient>
+	<linearGradient id="yel" gradientUnits="userSpaceOnUse" x1="84" y1="16" x2="120" y2="34"><stop offset="0" stop-color="#fff0a0"/><stop offset="1" stop-color="#e0a020"/></linearGradient>
+</defs>
+<g filter="url(#sh)"><path d="M60 104 H76 M86 104 H102 M66 98 V104 M94 98 V104" stroke="#2a1703" stroke-width="8" stroke-linecap="round"/><path d="M84 24 C88 18 96 16 102 18 L118 24 C120 26 118 30 114 28 L104 28 C102 36 104 46 106 56 C108 70 104 80 96 86 L98 100 H90 L88 90 C82 92 76 92 72 90 L70 100 H62 L64 88 C56 90 40 98 24 108 L10 114 C16 100 30 84 44 72 C56 60 70 46 78 34 Z" fill="#2a1703" stroke="#2a1703" stroke-width="8" stroke-linejoin="round"/></g>
+<path d="M60 104 H76 M86 104 H102 M66 98 V104 M94 98 V104" stroke="#e0a020" stroke-width="4" stroke-linecap="round"/>
+<path d="M84 24 C88 18 96 16 102 18 L118 24 C120 26 118 30 114 28 L104 28 C102 36 104 46 106 56 C108 70 104 80 96 86 L98 100 H90 L88 90 C82 92 76 92 72 90 L70 100 H62 L64 88 C56 90 40 98 24 108 L10 114 C16 100 30 84 44 72 C56 60 70 46 78 34 Z" fill="url(#white)"/>
+<path d="M46 72 C60 64 76 62 88 66 C84 74 70 80 54 82 Z" fill="#8aa890" stroke="#2a1703" stroke-width="1.6"/>
+<path d="M54 72 L52 80 M62 69 L60 78 M70 67 L68 76 M78 66 L76 74" stroke="#4a6a52" stroke-width="2"/>
+<path d="M44 74 C34 84 22 96 12 112 C24 104 38 92 52 82 Z" fill="#1a1410"/>
+<path d="M84 64 C90 60 96 60 100 62 C96 68 90 70 84 70 Z" fill="#1a1410"/>
+<path d="M60 58 C66 56 70 58 72 62 C66 62 62 60 60 58 Z" fill="#1a1410"/>
+<path d="M84 24 C88 18 96 16 102 18 L118 24 C120 26 118 30 114 28 L104 28 C100 32 92 32 86 30 Z" fill="url(#yel)" stroke="#2a1703" stroke-width="2" stroke-linejoin="round"/>
+<path d="M114 24 C118 24 120 28 116 31" fill="none" stroke="#2a1703" stroke-width="2.4" stroke-linecap="round"/>
+<circle cx="96" cy="23" r="3.4" fill="#fffdf6" stroke="#2a1703" stroke-width="1.6"/><circle cx="96" cy="23" r="1.6" fill="#2a1703"/>
+<path d="M82 24 L76 22 M81 28 L74 28 M80 32 L74 34" stroke="#2a1703" stroke-width="1.8" stroke-linecap="round"/>
+<path d="M88 40 C90 50 92 60 92 70" fill="none" stroke="#fffbe0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

@@ -1,0 +1,22 @@
+<!-- The scarab beetle, Khepri, carved in lapis lazuli flecked with gold-coloured pyrite and inlaid with gold lines: head, the plate behind it, the wing cases and six legs. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<radialGradient id="lapis" gradientUnits="userSpaceOnUse" cx="64" cy="76" r="48" fx="50" fy="60"><stop offset="0" stop-color="#b9c9ff"/><stop offset=".35" stop-color="#4a6fd6"/><stop offset=".75" stop-color="#1d3280"/><stop offset="1" stop-color="#0b1542"/></radialGradient>
+	<radialGradient id="lapis2" gradientUnits="userSpaceOnUse" cx="64" cy="40" r="34" fx="54" fy="30"><stop offset="0" stop-color="#b9c9ff"/><stop offset=".4" stop-color="#4a6fd6"/><stop offset="1" stop-color="#1d3280"/></radialGradient>
+	<linearGradient id="gold" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#fffbd8"/><stop offset=".35" stop-color="#f5d04e"/><stop offset=".72" stop-color="#c08a1c"/><stop offset="1" stop-color="#6e4608"/></linearGradient>
+</defs>
+<g filter="url(#sh)"><path d="M42 44 L26 36 L20 22 M86 44 L102 36 L108 22 M34 76 L18 72 L10 84 M94 76 L110 72 L118 84 M40 102 L26 110 L22 122 M88 102 L102 110 L106 122" stroke="#2a1703" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M50 34 C50 22 56 16 64 16 C72 16 78 22 78 34 Z M36 50 C34 38 46 30 64 30 C82 30 94 38 92 50 C90 56 80 58 64 58 C48 58 38 56 36 50 Z M30 70 C30 60 44 58 64 58 C84 58 98 60 98 70 C100 96 86 116 64 118 C42 116 28 96 30 70 Z" fill="#2a1703" stroke="#2a1703" stroke-width="8" stroke-linejoin="round"/></g>
+<path d="M42 44 L26 36 L20 22 M86 44 L102 36 L108 22 M34 76 L18 72 L10 84 M94 76 L110 72 L118 84 M40 102 L26 110 L22 122 M88 102 L102 110 L106 122" stroke="#2a4aa8" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+<path d="M30 70 C30 60 44 58 64 58 C84 58 98 60 98 70 C100 96 86 116 64 118 C42 116 28 96 30 70 Z" fill="url(#lapis)"/>
+<path d="M36 50 C34 38 46 30 64 30 C82 30 94 38 92 50 C90 56 80 58 64 58 C48 58 38 56 36 50 Z" fill="url(#lapis2)" stroke="#2a1703" stroke-width="3" stroke-linejoin="round"/>
+<path d="M50 34 C50 22 56 16 64 16 C72 16 78 22 78 34 Z" fill="url(#lapis2)" stroke="#2a1703" stroke-width="3" stroke-linejoin="round"/>
+<path d="M55 28 C58 24 70 24 73 28" fill="none" stroke="url(#gold)" stroke-width="3.2" stroke-linecap="round"/>
+<path d="M40 60 C52 57 76 57 88 60" fill="none" stroke="#2a1703" stroke-width="6" stroke-linecap="round"/>
+<path d="M40 60 C52 57 76 57 88 60" fill="none" stroke="url(#gold)" stroke-width="3" stroke-linecap="round"/>
+<path d="M64 60 V116" stroke="#2a1703" stroke-width="6" stroke-linecap="round"/>
+<path d="M64 60 V116" stroke="url(#gold)" stroke-width="3" stroke-linecap="round"/>
+<g fill="#f5d04e"><circle cx="48" cy="78" r="1.6"/><circle cx="78" cy="86" r="1.6"/><circle cx="54" cy="100" r="1.6"/><circle cx="84" cy="72" r="1.6"/><circle cx="44" cy="92" r="1.6"/><circle cx="74" cy="104" r="1.6"/><circle cx="52" cy="42" r="1.6"/><circle cx="78" cy="46" r="1.6"/></g>
+<path d="M40 76 C40 68 46 64 54 64" fill="none" stroke="#fffbe0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+<path d="M44 44 C46 38 54 35 60 35" fill="none" stroke="#fffbe0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

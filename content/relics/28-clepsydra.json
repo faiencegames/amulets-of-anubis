@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "clepsydra",
+	"name": "The water clock",
+	"description": "Win a stop with twenty-five moves to spare.",
+	"found_when": {"win_moves_to_spare": 25},
+	"reward": {"gold": 200}
+}

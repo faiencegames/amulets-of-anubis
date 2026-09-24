@@ -1,0 +1,8 @@
+// A floor set: the stone under the amulets. Changes the look only.
+// Its pictures are in images/floors/<id>/: bare, thick and gilded squares.
+{
+	"id": "terracotta",
+	"name": "Terra sigillata",
+	"description": "Fired red clay, the fine ware of the Roman towns on the Nile.",
+	"unlocked_by": {"hard_wins": 12}
+}

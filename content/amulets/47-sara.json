@@ -1,0 +1,8 @@
+// What the codex says about an amulet. The drawing itself is built in,
+// or comes from a picture in images/amulets/ with the same name as the id.
+{
+	"id": "sara",
+	"name": "Son of Ra",
+	"plural": "titles “Son of Ra”",
+	"meaning": "“Son of Ra”, written with a pintail duck (sa, “son”) and the sun's disc. From the Fourth Dynasty on, kings wrote this title before their birth name."
+}

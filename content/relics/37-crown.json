@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "crown",
+	"name": "The blue crown",
+	"description": "Gild Alexandria on Pharaoh.",
+	"found_when": {"win_at_stop": "alexandria", "win_on_difficulty": "Pharaoh"},
+	"reward": {"lapis": 50}
+}

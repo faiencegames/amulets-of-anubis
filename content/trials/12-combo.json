@@ -1,0 +1,9 @@
+// A trial a priest can set at a stop. Finish it and the boon is the player’s.
+{
+	"id": "combo",
+	"goal": "combine_specials",
+	"target": 1,
+	"text": "Swap two special amulets together",
+	"progress_label": "Specials combined",
+	"boon": "sekhmet"
+}

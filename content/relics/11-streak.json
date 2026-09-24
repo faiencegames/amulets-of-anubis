@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "streak",
+	"name": "Sandals of Bes",
+	"description": "Win five stops in a row, without failing one in between.",
+	"found_when": {"win_streak": 5},
+	"reward": {"boon": "wisdom"}
+}

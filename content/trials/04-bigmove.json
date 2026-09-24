@@ -1,0 +1,9 @@
+// A trial a priest can set at a stop. Finish it and the boon is the player’s.
+{
+	"id": "bigmove",
+	"goal": "gild_in_one_move",
+	"target": 9,
+	"text": "Gild nine stones in one move",
+	"progress_label": "Best single move",
+	"boon": "flood"
+}

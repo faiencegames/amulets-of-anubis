@@ -1,0 +1,11 @@
+<!-- A missing star on the victory screen. 44 by 44. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44">
+<path d="M22 3 L26.5 16.5 L40.5 16.8 L29.3 25.3 L33.4 39 L22 30.8 L10.6 39 L14.7 25.3 L3.5 16.8 L17.5 16.5 Z" fill="#b89a66" stroke="#8a6a3a" stroke-width="2" stroke-linejoin="round"/>
+<defs>
+<linearGradient id="sg" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#fff4b8"/>
+<stop offset=".5" stop-color="#e3b440"/>
+<stop offset="1" stop-color="#9a6a12"/>
+</linearGradient>
+</defs>
+</svg>

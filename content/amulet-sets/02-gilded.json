@@ -1,0 +1,14 @@
+// An amulet set: the same amulets, recoloured. Changes the look only.
+{
+	"id": "gilded",
+	"name": "Gilded workshop",
+	"description": "Warm gold leaf worked over every piece, catching the lamplight.",
+	"unlocked_by": {"stars": 15},
+	"colour_changes": {
+		"sepia": 0.4,
+		"saturation": 1.7,
+		"brightness": 1.1,
+		"contrast": 1.05
+	},
+	"glow": "rgba(255,205,90,.6)"
+}

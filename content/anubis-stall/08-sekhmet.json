@@ -1,0 +1,9 @@
+// Something Anubis sells: bought for one stop, used once.
+{
+	"id": "sekhmet",
+	"name": "Fury of Sekhmet",
+	"description": "A boon: three amulets on the board become ringed amulets.",
+	"currency": "lapis",
+	"price": 70,
+	"gives": {"boon": "sekhmet"}
+}

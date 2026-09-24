@@ -1,0 +1,8 @@
+// What the codex says about an amulet. The drawing itself is built in,
+// or comes from a picture in images/amulets/ with the same name as the id.
+{
+	"id": "pomegranate",
+	"name": "Pomegranate",
+	"plural": "pomegranates",
+	"meaning": "Brought to Egypt in the New Kingdom, the pomegranate grew in gardens, and its shape was copied in vessels of faience, glass and silver."
+}

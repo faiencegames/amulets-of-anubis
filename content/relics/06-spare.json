@@ -1,0 +1,7 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "spare",
+	"name": "Swift sandals",
+	"description": "Win a stop with twenty moves to spare.",
+	"found_when": {"win_moves_to_spare": 20}
+}

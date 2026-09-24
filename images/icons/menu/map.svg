@@ -1,0 +1,6 @@
+<!-- Menu and title-screen icon (map). 32 by 32. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<path d="M4 7l8-3 8 3 8-3v21l-8 3-8-3-8 3z" fill="#e8d49e" stroke="#4a2c10" stroke-width="2" stroke-linejoin="round"/>
+<path d="M12 4v21M20 7v21" stroke="#4a2c10" stroke-width="2"/>
+<circle cx="17" cy="15" r="3" fill="#8e2415"/>
+</svg>

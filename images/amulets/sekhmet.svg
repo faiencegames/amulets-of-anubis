@@ -1,0 +1,21 @@
+<!-- Sekhmet, the lioness Goddess, daughter of Ra: Her head in profile, the sun's disc and a cobra above it. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="lion" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#fff0c0"/><stop offset="0.35" stop-color="#f0b860"/><stop offset="0.72" stop-color="#c07a2a"/><stop offset="1" stop-color="#6a3e10"/></linearGradient>
+	<linearGradient id="carn" gradientUnits="userSpaceOnUse" x1="42" y1="8" x2="70" y2="36"><stop offset="0" stop-color="#ffc0b0"/><stop offset=".35" stop-color="#e0604a"/><stop offset=".72" stop-color="#b83a22"/><stop offset="1" stop-color="#7a1f12"/></linearGradient>
+	<linearGradient id="gold" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#fffbd8"/><stop offset=".35" stop-color="#f5d04e"/><stop offset=".72" stop-color="#c08a1c"/><stop offset="1" stop-color="#6e4608"/></linearGradient>
+</defs>
+<path d="M40 118 C36 104 34 92 36 82 C30 74 28 62 32 52 C36 40 48 34 60 34 C70 34 78 38 84 44 C92 48 100 52 104 58 C108 64 106 72 100 74 L96 82 C90 84 84 84 80 82 C76 92 74 104 76 118 Z M42 22 C42 8 70 8 70 22 C70 36 42 36 42 22 Z" fill="#2a1703" fill-rule="nonzero" stroke="#2a1703" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" filter="url(#sh)"/>
+<path d="M42 22 C42 8 70 8 70 22 C70 36 42 36 42 22 Z" fill="url(#carn)"/>
+<path d="M54 36 C52 28 56 24 60 26 C62 30 60 34 58 36 Z" fill="url(#gold)" stroke="#2a1703" stroke-width="2" stroke-linejoin="round"/>
+<path d="M40 118 C36 104 34 92 36 82 C30 74 28 62 32 52 C36 40 48 34 60 34 C70 34 78 38 84 44 C92 48 100 52 104 58 C108 64 106 72 100 74 L96 82 C90 84 84 84 80 82 C76 92 74 104 76 118 Z" fill="url(#lion)"/>
+<path d="M36 82 C30 74 28 62 32 52 C36 40 48 34 60 34 C62 44 60 56 62 66 C62 76 66 84 72 90 C62 90 48 88 36 82 Z" fill="#c07a2a" stroke="#2a1703" stroke-width="2.4" stroke-linejoin="round"/>
+<path d="M40 50 C44 56 46 62 46 70 M50 42 C54 50 54 60 54 70 M40 76 C46 80 54 82 60 82" fill="none" stroke="#8a4e18" stroke-width="2" stroke-linecap="round"/>
+<path d="M72 50 C76 46 82 46 86 50 C82 53 76 54 72 50 Z" fill="#f5d04e" stroke="#2a1703" stroke-width="2"/>
+<circle cx="80" cy="50" r="1.8" fill="#2a1703"/>
+<path d="M100 60 C104 62 104 66 100 68 Z" fill="#2a1703"/>
+<path d="M100 74 C94 72 88 72 84 76" fill="none" stroke="#2a1703" stroke-width="2" stroke-linecap="round"/>
+<g fill="#6a3e10"><circle cx="88" cy="64" r="1"/><circle cx="92" cy="66" r="1"/><circle cx="88" cy="68" r="1"/></g>
+<path d="M66 38 C74 38 82 42 86 46" fill="none" stroke="#fffbe0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

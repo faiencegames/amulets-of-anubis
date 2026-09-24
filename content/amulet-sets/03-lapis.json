@@ -1,0 +1,8 @@
+// An amulet set: the same amulets, recoloured. Changes the look only.
+{
+	"id": "lapis",
+	"name": "Lapis and silver",
+	"description": "Blue stone from the eastern trade. Cool where the faience is warm.",
+	"unlocked_by": {"stops_gilded": 9},
+	"colour_changes": {"hue_shift": 155, "saturation": 1.2, "brightness": 1.02}
+}

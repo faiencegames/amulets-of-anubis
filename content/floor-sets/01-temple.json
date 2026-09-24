@@ -1,0 +1,8 @@
+// The default floor: every stop keeps its own stone colour and carved gold.
+{
+	"id": "temple",
+	"name": "Temple sandstone",
+	"description": "Each stop’s own stone, gilded with carved signs.",
+	"unlocked_by": null,
+	"uses_each_stops_own_stone": true
+}

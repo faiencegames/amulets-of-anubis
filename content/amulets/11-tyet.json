@@ -1,0 +1,8 @@
+// What the codex says about an amulet. The drawing itself is built in,
+// or comes from a picture in images/amulets/ with the same name as the id.
+{
+	"id": "tyet",
+	"name": "Knot of Isis",
+	"plural": "knots of Isis",
+	"meaning": "The tyet, an amulet of the Goddess Isis, usually cut from red stone."
+}

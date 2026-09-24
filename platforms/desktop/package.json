@@ -1,0 +1,10 @@
+{
+	"name": "amulets-of-the-nile",
+	"productName": "Amulets of Anubis",
+	"version": "2.13.0",
+	"description": "A match-3 journey down the Nile.",
+	"main": "main.js",
+	"author": "Amulets of Anubis",
+	"license": "UNLICENSED",
+	"private": true
+}

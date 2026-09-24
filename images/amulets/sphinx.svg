@@ -1,0 +1,19 @@
+<!-- The Great Sphinx of Giza in profile: a lion's body lying with the front legs stretched out, a king's head in the striped nemes headcloth. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="stone" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#fff0c8"/><stop offset="0.35" stop-color="#e8c080"/><stop offset="0.72" stop-color="#b88848"/><stop offset="1" stop-color="#6a4a20"/></linearGradient>
+	<linearGradient id="lapis" gradientUnits="userSpaceOnUse" x1="34" y1="22" x2="68" y2="60"><stop offset="0" stop-color="#c8d8ff"/><stop offset=".35" stop-color="#4f86d8"/><stop offset=".72" stop-color="#2f6fc0"/><stop offset="1" stop-color="#1d3f78"/></linearGradient>
+</defs>
+<path d="M6 100 V90 C6 86 10 84 16 84 H40 C38 76 38 68 40 62 L36 58 L35 50 L31 47 L34 43 L34 32 C34 26 40 22 48 22 C56 22 62 26 62 32 L66 58 C80 57 96 58 106 64 C116 70 120 84 118 100 Z M2 100 H124 V112 H2 Z" fill="#2a1703" fill-rule="nonzero" stroke="#2a1703" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" filter="url(#sh)"/>
+<path d="M2 100 H124 V112 H2 Z" fill="#8a6a3a"/><path d="M8 106 H118" stroke="#5a4020" stroke-width="2"/>
+<path d="M6 100 V90 C6 86 10 84 16 84 H40 C38 76 38 68 40 62 L36 58 L35 50 L31 47 L34 43 L34 32 C34 26 40 22 48 22 C56 22 62 26 62 32 L66 58 C80 57 96 58 106 64 C116 70 120 84 118 100 Z" fill="url(#stone)"/>
+<path d="M34 32 C34 26 40 22 48 22 C56 22 62 26 62 32 L68 60 H52 L50 42 C48 37 40 36 36 40 Z" fill="url(#lapis)" stroke="#2a1703" stroke-width="2.4" stroke-linejoin="round"/>
+<clipPath id="nm"><path d="M34 32 C34 26 40 22 48 22 C56 22 62 26 62 32 L68 60 H52 L50 42 C48 37 40 36 36 40 Z"/></clipPath>
+<path d="M38 28 H62 M52 34 H64 M52 42 H66 M53 50 H67" stroke="#f0c850" stroke-width="2.4" clip-path="url(#nm)"/>
+<path d="M34 40 C37 36 44 36 48 40 L50 58 C46 60 40 60 38 58 L36 52 L32 48 Z" fill="url(#stone)" stroke="#2a1703" stroke-width="2.2" stroke-linejoin="round"/>
+<path d="M37 44 C39 42 42 42 44 44" fill="none" stroke="#2a1703" stroke-width="2" stroke-linecap="round"/><circle cx="41" cy="45.5" r="1.4" fill="#2a1703"/>
+<path d="M40 84 C44 80 50 80 56 84 M16 90 H40 M88 100 C88 86 96 76 108 76 M110 98 C100 94 90 94 82 97" fill="none" stroke="#2a1703" stroke-width="2.4" stroke-linecap="round"/>
+<path d="M10 94 V100 M16 94 V100 M22 94 V100" stroke="#2a1703" stroke-width="1.8" stroke-linecap="round"/>
+<path d="M70 62 C84 61 98 62 106 68" fill="none" stroke="#fffbe0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

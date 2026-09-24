@@ -1,0 +1,17 @@
+<!-- A silver coin of the Ptolemies, the Greek kings who ruled Egypt from Alexandria: an eagle standing on a thunderbolt, their emblem. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="silver" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#ffffff"/><stop offset="0.35" stop-color="#dce2ea"/><stop offset="0.72" stop-color="#9aa4b4"/><stop offset="1" stop-color="#5a6474"/></linearGradient>
+	<linearGradient id="silver2" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#9aa4b4"/><stop offset="1" stop-color="#e8ecf2"/></linearGradient>
+</defs>
+<path d="M64 10 C94 10 118 34 118 64 C118 94 94 118 64 118 C34 118 10 94 10 64 C10 34 34 10 64 10 Z" fill="#2a1703" fill-rule="nonzero" stroke="#2a1703" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" filter="url(#sh)"/>
+<path d="M64 10 C94 10 118 34 118 64 C118 94 94 118 64 118 C34 118 10 94 10 64 C10 34 34 10 64 10 Z" fill="url(#silver)"/>
+<circle cx="64" cy="64" r="44" fill="url(#silver2)" stroke="#5a6474" stroke-width="2"/>
+<circle cx="64" cy="64" r="49" fill="none" stroke="#5a6474" stroke-width="2" stroke-dasharray="2 3"/>
+<path d="M40 52 C40 44 46 40 52 42 L58 44 C66 40 78 42 84 50 C90 58 90 70 86 80 L96 94 H84 L76 84 C70 86 62 86 58 82 L56 90 H50 L52 80 C46 74 44 64 48 56 Z" fill="#6a7484" stroke="#3a4050" stroke-width="2" stroke-linejoin="round"/>
+<path d="M40 50 L34 54 L40 56 Z" fill="#3a4050"/><circle cx="46" cy="48" r="1.6" fill="#1a1e28"/>
+<path d="M58 56 C66 54 76 58 82 66 M60 66 C66 64 74 68 78 74" fill="none" stroke="#3a4050" stroke-width="1.6"/>
+<path d="M36 98 H92 M44 94 L40 102 M84 94 L88 102 M64 94 V102" stroke="#3a4050" stroke-width="2.6" stroke-linecap="round"/>
+<path d="M24 50 C28 34 40 22 56 18" fill="none" stroke="#fffbe0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

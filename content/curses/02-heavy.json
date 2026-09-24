@@ -1,0 +1,22 @@
+// A curse: what failing a trial costs, or an unkind river, at the next stop
+// only. The player sees it before accepting a trial, so the choice is informed.
+{
+	"id": "heavy",
+	"name": "Weight of stone",
+	// what it does; {n} is the strength below. The game adds "at the next stop"
+	// where it is needed, so leave that out.
+	"text": "{n} bare stones turn thick",
+	// what it does, one of the hardships the game knows (the same list the
+	// omens use); n is its strength below:
+	//   "fewer_moves"          n fewer moves
+	//   "fewer_moves_percent"  n percent fewer moves
+	//   "thick_stones"         n bare stones start thick
+	//   "thick_stones_share"   one bare stone in n starts thick
+	//   "fewer_badges"         badged amulets fall n percent less often (100: none)
+	//   "more_cursed_badges"   cursed badges fall, n times as often
+	//   "no_boons"             no boons can be used
+	"effect": "thick_stones",
+	// how strong it is on each difficulty; 0 means it never falls there.
+	// Keep Relaxed at 0: failing a trial on Relaxed costs nothing.
+	"strength": {"Relaxed": 0, "Normal": 4, "Hard": 7, "Pharaoh": 10}
+}

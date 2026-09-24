@@ -1,0 +1,14 @@
+<!-- Boon icon (seshat): the goddess of writing's emblem, a seven-pointed star on a staff under a bow. 24 by 24. Gradient ids must be unique across all icons. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+<defs>
+<linearGradient id="bnses" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3ae"/><stop offset="1" stop-color="#c8962e"/></linearGradient>
+</defs>
+<!-- staff -->
+<rect x="11" y="13" width="2" height="10" rx=".8" fill="#7a4a1e" stroke="#3b2406" stroke-width=".6"/>
+<!-- the bow over the star -->
+<path d="M4.2 6.2 C6 1.6 18 1.6 19.8 6.2" fill="none" stroke="#3b2406" stroke-width="2.8" stroke-linecap="round"/>
+<path d="M4.2 6.2 C6 1.6 18 1.6 19.8 6.2" fill="none" stroke="#c8962e" stroke-width="1.2" stroke-linecap="round"/>
+<!-- seven-pointed star -->
+<path d="M12 5.2 L13.1 8.4 L16.4 7.9 L14.4 10.5 L16.6 13 L13.4 12.7 L12.9 16 L12 12.9 L11.1 16 L10.6 12.7 L7.4 13 L9.6 10.5 L7.6 7.9 L10.9 8.4 Z" fill="url(#bnses)" stroke="#5a3a08" stroke-width=".9" stroke-linejoin="round"/>
+<circle cx="12" cy="10.8" r="1.3" fill="#c0402a"/>
+</svg>

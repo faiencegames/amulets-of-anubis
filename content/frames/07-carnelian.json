@@ -1,0 +1,8 @@
+// A board frame: the carved edge round the floor. Changes the look only.
+{
+	"id": "carnelian",
+	"name": "Carnelian and gold",
+	"description": "Polished red stone with a thin line of gold.",
+	"unlocked_by": {"stops_won": 30},
+	"colours": {"face": "#9a3418", "shade": "#48140a", "edge": "#f2c860"}
+}

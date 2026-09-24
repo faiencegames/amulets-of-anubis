@@ -1,0 +1,14 @@
+<!-- The was sceptre, sign of power and dominion, carried by Gods: a straight staff with an animal's head at the top and a fork at the foot. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="lapis" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#c8d8ff"/><stop offset=".35" stop-color="#4f86d8"/><stop offset=".72" stop-color="#2f6fc0"/><stop offset="1" stop-color="#1d3f78"/></linearGradient>
+	<linearGradient id="gold" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#fffbd8"/><stop offset=".35" stop-color="#f5d04e"/><stop offset=".72" stop-color="#c08a1c"/><stop offset="1" stop-color="#6e4608"/></linearGradient>
+</defs>
+<path d="M58 34 V110 L50 122 H56 L62 114 H66 L72 122 H78 L70 110 V34 L76 30 L92 26 C96 25 98 20 94 18 L86 14 L80 6 L76 12 L68 10 C62 10 58 14 56 20 L50 24 Z" fill="#2a1703" fill-rule="nonzero" stroke="#2a1703" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" filter="url(#sh)"/>
+<path d="M58 34 V110 L50 122 H56 L62 114 H66 L72 122 H78 L70 110 V34 L76 30 L92 26 C96 25 98 20 94 18 L86 14 L80 6 L76 12 L68 10 C62 10 58 14 56 20 L50 24 Z" fill="url(#lapis)"/>
+<path d="M58 44 H70 M58 60 H70 M58 76 H70 M58 92 H70" stroke="url(#gold)" stroke-width="4"/>
+<path d="M50 24 L56 20 C58 14 62 10 68 10 L76 12 L80 6 L86 14 L94 18 C98 20 96 25 92 26 L76 30 L70 34 H58 Z" fill="url(#gold)" stroke="#2a1703" stroke-width="2.4" stroke-linejoin="round"/>
+<circle cx="74" cy="18" r="2" fill="#2a1703"/>
+<path d="M61 40 V104" fill="none" stroke="#fffbe0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

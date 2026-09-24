@@ -1,0 +1,8 @@
+// A floor set: the stone under the amulets. Changes the look only.
+// Its pictures are in images/floors/<id>/: bare, thick and gilded squares.
+{
+	"id": "marble",
+	"name": "Marble of Alexandria",
+	"description": "White stone veined in grey, gilded in pale gold.",
+	"unlocked_by": {"stops_won": 20}
+}

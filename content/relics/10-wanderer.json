@@ -1,0 +1,7 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "wanderer",
+	"name": "Boatman’s oar",
+	"description": "Complete five river events.",
+	"found_when": {"river_events": 5}
+}

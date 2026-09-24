@@ -1,0 +1,3 @@
+<!-- A stop on the Nile map. Centred on 0,0; the stop's number is written on top by the game. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-13 -13 26 26"><defs><radialGradient id="mapStopGold" cx=".35" cy=".3"><stop offset="0" stop-color="#fff4b8"/><stop offset=".6" stop-color="#e0ac3a"/><stop offset="1" stop-color="#8a5a10"/></radialGradient></defs>
+<circle r="11" fill="url(#mapStopGold)" stroke="#3b2406" stroke-width="2"/></svg>

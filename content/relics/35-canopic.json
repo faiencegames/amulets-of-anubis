@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "canopic",
+	"name": "The canopic jar",
+	"description": "Set out on a third journey down the Nile.",
+	"found_when": {"journeys": 3},
+	"reward": {"boon": "flood"}
+}

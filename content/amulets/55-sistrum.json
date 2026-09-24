@@ -1,0 +1,8 @@
+// What the codex says about an amulet. The drawing itself is built in,
+// or comes from a picture in images/amulets/ with the same name as the id.
+{
+	"id": "sistrum",
+	"name": "Sistrum",
+	"plural": "sistra",
+	"meaning": "The sistrum was a rattle shaken in the worship of Hathor, often with Her face on the handle. Its sound was thought to please the Gods."
+}

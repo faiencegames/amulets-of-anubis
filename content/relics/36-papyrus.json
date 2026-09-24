@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "papyrus",
+	"name": "The mathematical papyrus",
+	"description": "Finish fifty trials.",
+	"found_when": {"trials_finished": 50},
+	"reward": {"lapis": 30}
+}

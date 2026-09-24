@@ -1,0 +1,9 @@
+// An example thing to buy at Anubis's stall.
+{
+  "id": "feather",
+  "name": "Feather of Maat",
+  "description": "Five extra moves, right now.",
+  "currency": "lapis",
+  "price": 40,
+  "gives": {"moves": 5}
+}

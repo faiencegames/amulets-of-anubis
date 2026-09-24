@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "djed",
+	"name": "The djed pillar",
+	"description": "Win a stop after failing it five times.",
+	"found_when": {"win_after_failures": 5},
+	"reward": {"boon": "hammer"}
+}

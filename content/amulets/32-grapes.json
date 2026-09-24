@@ -1,0 +1,8 @@
+// What the codex says about an amulet. The drawing itself is built in,
+// or comes from a picture in images/amulets/ with the same name as the id.
+{
+	"id": "grapes",
+	"name": "Grapes",
+	"plural": "bunches of grapes",
+	"meaning": "Grapes were grown to eat and to make wine, in the gardens of the Nile valley and in the oases of the Western Desert."
+}

@@ -1,0 +1,11 @@
+// An amulet set: the same amulets, recoloured. Changes the look only.
+{
+	"id": "amethyst",
+	"name": "Amethyst and silver",
+	"description": "Violet stone from the mines of the Eastern Desert, set in pale silver.",
+	"unlocked_by": {"three_star_stops": 8},
+	"colour_changes": {"saturation": 0.78, "brightness": 1.08, "contrast": 1.08},
+	"tint": "#8a5ad0",
+	"tint_strength": 0.12,
+	"glow": "rgba(200,160,255,.6)"
+}

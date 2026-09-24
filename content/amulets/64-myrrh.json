@@ -1,0 +1,8 @@
+// What the codex says about an amulet. The drawing itself is built in,
+// or comes from a picture in images/amulets/ with the same name as the id.
+{
+	"id": "myrrh",
+	"name": "Myrrh tree",
+	"plural": "myrrh trees",
+	"meaning": "Hatshepsut sent ships to the land of Punt for incense. The walls of her temple at Deir el-Bahari show myrrh trees carried home in baskets to be planted."
+}

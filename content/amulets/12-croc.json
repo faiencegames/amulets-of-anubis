@@ -1,0 +1,8 @@
+// What the codex says about an amulet. The drawing itself is built in,
+// or comes from a picture in images/amulets/ with the same name as the id.
+{
+	"id": "croc",
+	"name": "Crocodile of Sobek",
+	"plural": "crocodiles",
+	"meaning": "Sobek, God of the Nile’s waters and of raw, fearsome strength."
+}

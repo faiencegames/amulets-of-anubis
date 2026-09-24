@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "pyramidion",
+	"name": "The pyramidion",
+	"description": "Forge three winged suns at one stop.",
+	"found_when": {"win_suns_forged": 3},
+	"reward": {"gold": 150}
+}

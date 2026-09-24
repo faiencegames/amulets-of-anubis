@@ -1,0 +1,20 @@
+<!-- A canopic jar with the baboon head of Hapy, one of the four sons of Horus, who guarded the lungs. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="calcite" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#ffffff"/><stop offset=".35" stop-color="#f6f0e0"/><stop offset=".72" stop-color="#e2d6b8"/><stop offset="1" stop-color="#a8987a"/></linearGradient>
+	<linearGradient id="lapis" gradientUnits="userSpaceOnUse" x1="36" y1="20" x2="92" y2="64"><stop offset="0" stop-color="#c8d8ff"/><stop offset=".35" stop-color="#4f86d8"/><stop offset=".72" stop-color="#2f6fc0"/><stop offset="1" stop-color="#1d3f78"/></linearGradient>
+	<linearGradient id="gold" gradientUnits="userSpaceOnUse" x1="26" y1="58" x2="102" y2="72"><stop offset="0" stop-color="#fffbd8"/><stop offset=".35" stop-color="#f5d04e"/><stop offset=".72" stop-color="#c08a1c"/><stop offset="1" stop-color="#6e4608"/></linearGradient>
+	<linearGradient id="fur" gradientUnits="userSpaceOnUse" x1="44" y1="14" x2="84" y2="62"><stop offset="0" stop-color="#c8d4b0"/><stop offset="0.5" stop-color="#8a9a70"/><stop offset="1" stop-color="#4a5a3a"/></linearGradient>
+	<linearGradient id="face" gradientUnits="userSpaceOnUse" x1="54" y1="34" x2="74" y2="66"><stop offset="0" stop-color="#f0c8a0"/><stop offset="1" stop-color="#b88058"/></linearGradient>
+</defs>
+<path d="M28 66 C20 84 24 106 40 116 C48 121 80 121 88 116 C104 106 108 84 100 66 Z M36 64 C34 40 44 16 64 14 C84 16 94 40 92 64 Z" fill="#2a1703" fill-rule="nonzero" stroke="#2a1703" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" filter="url(#sh)"/>
+<path d="M28 66 C20 84 24 106 40 116 C48 121 80 121 88 116 C104 106 108 84 100 66 Z" fill="url(#calcite)"/>
+<path d="M58 76 H70 V110 H58 Z" fill="#2f6fc0" stroke="#1d3f78" stroke-width="1.6"/>
+<path d="M61 82 H67 M61 89 H67 M60 96 H68 M61 103 H67" stroke="#e8f0ff" stroke-width="2" stroke-linecap="round"/>
+<path d="M26 62 H102 V70 H26 Z" fill="url(#gold)" stroke="#2a1703" stroke-width="3.4" stroke-linejoin="round"/>
+<path d="M36 64 C34 48 38 36 46 30 H82 C90 36 94 48 92 64 Z" fill="url(#lapis)" stroke="#2a1703" stroke-width="3.4" stroke-linejoin="round"/>
+<path d="M38 56 H48 M39 48 H48 M41 40 H49 M80 40 H87 M80 48 H89 M80 56 H90" stroke="#f0c850" stroke-width="3"/>
+<path d="M44 44 C42 26 52 14 64 14 C76 14 86 26 84 44 C84 54 80 60 76 62 H52 C48 60 44 54 44 44 Z" fill="url(#fur)" stroke="#2a1703" stroke-width="3.2" stroke-linejoin="round"/><path d="M54 40 C54 34 74 34 74 40 V56 C74 62 70 66 64 66 C58 66 54 62 54 56 Z" fill="url(#face)" stroke="#2a1703" stroke-width="2.6"/><path d="M52 36 C56 32 60 32 62 35 M66 35 C68 32 72 32 76 36" fill="none" stroke="#1a1410" stroke-width="2.6" stroke-linecap="round"/><circle cx="58" cy="40" r="2" fill="#1a0f05"/><circle cx="70" cy="40" r="2" fill="#1a0f05"/><ellipse cx="61" cy="60" rx="1.6" ry="1.2" fill="#1a0f05"/><ellipse cx="67" cy="60" rx="1.6" ry="1.2" fill="#1a0f05"/>
+<path d="M34 80 C32 92 36 104 44 110" fill="none" stroke="#fffbe0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

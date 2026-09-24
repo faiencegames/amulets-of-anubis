@@ -1,0 +1,8 @@
+// A board frame: the carved edge round the floor.
+{
+	"id": "jade",
+	"name": "Jade and bronze",
+	"description": "Green jade set in aged bronze.",
+	"unlocked_by": {"trials_finished": 20},
+	"colours": {"face": "#2f6a4a", "shade": "#143022", "edge": "#9fd8a8"}
+}

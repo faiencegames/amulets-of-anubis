@@ -1,0 +1,18 @@
+<!-- A papyrus roll, opened between its two rolled ends, written in black ink with red for the headings, as Egyptian scribes did. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="pap" gradientUnits="userSpaceOnUse" x1="30" y1="30" x2="98" y2="100"><stop offset="0" stop-color="#fff6d8"/><stop offset="0.5" stop-color="#f0d8a0"/><stop offset="1" stop-color="#c8a060"/></linearGradient>
+	<linearGradient id="roll" gradientUnits="userSpaceOnUse" x1="14" y1="0" x2="30" y2="0"><stop offset="0" stop-color="#c8a060"/><stop offset="0.35" stop-color="#fff0c8"/><stop offset="0.7" stop-color="#e0c080"/><stop offset="1" stop-color="#9a7a40"/></linearGradient>
+	<linearGradient id="roll2" gradientUnits="userSpaceOnUse" x1="98" y1="0" x2="114" y2="0"><stop offset="0" stop-color="#c8a060"/><stop offset="0.35" stop-color="#fff0c8"/><stop offset="0.7" stop-color="#e0c080"/><stop offset="1" stop-color="#9a7a40"/></linearGradient>
+</defs>
+<path d="M30 30 H98 V100 H30 Z M14 28 C14 22 30 22 30 28 V102 C30 108 14 108 14 102 Z M98 28 C98 22 114 22 114 28 V102 C114 108 98 108 98 102 Z" fill="#2a1703" fill-rule="nonzero" stroke="#2a1703" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" filter="url(#sh)"/>
+<path d="M30 30 H98 V100 H30 Z" fill="url(#pap)"/>
+<path d="M36 46 h24 M36 54 h24 M36 62 h18 M36 70 h24 M36 86 h18 M36 94 h24 M67 46 h24 M67 54 h24 M67 62 h18 M67 70 h24 M67 86 h18 M67 94 h24" stroke="#2a1a10" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="3 2 5 2 2 2"/>
+<path d="M36 38 h18 M36 78 h24 M67 38 h18 M67 78 h24" stroke="#b83a22" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="4 2 2 2"/>
+<path d="M14 28 C14 22 30 22 30 28 V102 C30 108 14 108 14 102 Z" fill="url(#roll)" stroke="#2a1703" stroke-width="2.6"/>
+<path d="M98 28 C98 22 114 22 114 28 V102 C114 108 98 108 98 102 Z" fill="url(#roll2)" stroke="#2a1703" stroke-width="2.6"/>
+<ellipse cx="22" cy="28" rx="8" ry="3" fill="#e8d0a0" stroke="#2a1703" stroke-width="2"/><ellipse cx="106" cy="28" rx="8" ry="3" fill="#e8d0a0" stroke="#2a1703" stroke-width="2"/>
+<path d="M22 28 C20 27 20 29 22 29 M106 28 C104 27 104 29 106 29" fill="none" stroke="#8a6a30" stroke-width="1.2"/>
+<path d="M18 36 V96" fill="none" stroke="#fffbe0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

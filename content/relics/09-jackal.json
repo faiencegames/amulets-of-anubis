@@ -1,0 +1,7 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "jackal",
+	"name": "Collar of Anubis",
+	"description": "Gild a whole floor on Hard or Pharaoh without spending a single boon.",
+	"found_when": {"win_without_boons": true, "win_on_difficulty": "Hard"}
+}

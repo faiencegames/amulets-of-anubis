@@ -1,0 +1,21 @@
+<!-- The uraeus, the rearing cobra worn at the brow of kings: the hood spread and inlaid with bands of lapis, carnelian and turquoise, the head raised and the body coiled beneath. 128 by 128. Drawn by tools/amulets/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<defs>
+	<filter id="sh" filterUnits="userSpaceOnUse" x="-50" y="-50" width="228" height="228"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#190c00" flood-opacity=".55"/></filter>
+	<linearGradient id="gold" gradientUnits="userSpaceOnUse" x1="24" y1="6" x2="104" y2="120"><stop offset="0" stop-color="#fffbd8"/><stop offset=".35" stop-color="#f5d04e"/><stop offset=".72" stop-color="#c08a1c"/><stop offset="1" stop-color="#6e4608"/></linearGradient>
+	<linearGradient id="gold2" gradientUnits="userSpaceOnUse" x1="20" y1="90" x2="104" y2="124"><stop offset="0" stop-color="#fffbd8"/><stop offset=".35" stop-color="#f5d04e"/><stop offset=".72" stop-color="#c08a1c"/><stop offset="1" stop-color="#6e4608"/></linearGradient>
+</defs>
+<path d="M22 114 C18 102 38 96 64 98 C90 100 108 106 104 115 C100 123 32 124 22 114 Z M42 94 C28 76 28 44 40 28 C46 20 56 16 64 18 C74 20 84 34 84 54 C84 72 76 86 64 96 Z M58 24 C64 14 78 10 90 14 C98 17 100 23 94 27 C86 30 76 30 66 32 Z" fill="#2a1703" fill-rule="nonzero" stroke="#2a1703" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" filter="url(#sh)"/>
+<path d="M22 114 C18 102 38 96 64 98 C90 100 108 106 104 115 C100 123 32 124 22 114 Z" fill="url(#gold2)"/>
+<path d="M34 110 C46 104 82 104 94 110" fill="none" stroke="#8a5a10" stroke-width="2.4" stroke-linecap="round"/>
+<path d="M42 94 C28 76 28 44 40 28 C46 20 56 16 64 18 C74 20 84 34 84 54 C84 72 76 86 64 96 Z" fill="url(#gold)" stroke="#2a1703" stroke-width="3" stroke-linejoin="round"/>
+<clipPath id="inl"><path d="M50 88 C40 74 40 50 48 38 C52 32 58 30 62 32 C68 36 72 46 72 58 C72 72 66 84 58 90 Z"/></clipPath>
+<g clip-path="url(#inl)"><rect x="36" y="30" width="40" height="8" fill="#2f6fc0"/><rect x="36" y="38" width="40" height="8" fill="#b83a22"/><rect x="36" y="46" width="40" height="8" fill="#38a8a0"/><rect x="36" y="54" width="40" height="8" fill="#2f6fc0"/><rect x="36" y="62" width="40" height="8" fill="#b83a22"/><rect x="36" y="70" width="40" height="8" fill="#38a8a0"/><rect x="36" y="78" width="40" height="8" fill="#2f6fc0"/><rect x="36" y="86" width="40" height="8" fill="#b83a22"/></g>
+<path d="M36 38 H76 M36 46 H76 M36 54 H76 M36 62 H76 M36 70 H76 M36 78 H76 M36 86 H76" stroke="#f5d04e" stroke-width="1.6" clip-path="url(#inl)"/>
+<path d="M50 88 C40 74 40 50 48 38 C52 32 58 30 62 32 C68 36 72 46 72 58 C72 72 66 84 58 90 Z" fill="none" stroke="#2a1703" stroke-width="2.6" stroke-linejoin="round"/>
+<path d="M58 24 C64 14 78 10 90 14 C98 17 100 23 94 27 C86 30 76 30 66 32 Z" fill="url(#gold)"/>
+<path d="M56 22 C60 22 62 26 64 30" fill="none" stroke="url(#gold)" stroke-width="6"/>
+<path d="M92 26 C84 29 76 30 68 32" fill="none" stroke="#2a1703" stroke-width="2.4" stroke-linecap="round"/>
+<circle cx="82" cy="19" r="2.4" fill="#2a1703"/>
+<path d="M36 70 C32 56 34 40 42 30" fill="none" stroke="#fffbe0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+</svg>

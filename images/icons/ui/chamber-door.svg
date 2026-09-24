@@ -1,0 +1,60 @@
+<!-- The entrance to a tomb or temple chamber, at the top of its scroll. 360 by 170.
+     A doorway cut into the rock, a winged sun on the lintel, steps going down into
+     the dark, sand at the threshold and a torch either side. The flames and their
+     glow have the classes torch-flame and torch-glow, which the stylesheet makes
+     flicker (not with reduced motion). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 170">
+<defs>
+<linearGradient id="chRock" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#d8b67a"/>
+<stop offset="1" stop-color="#a88250"/>
+</linearGradient>
+<linearGradient id="chDark" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#050201"/>
+<stop offset=".7" stop-color="#1c0f05"/>
+<stop offset="1" stop-color="#3a2410"/>
+</linearGradient>
+<radialGradient id="chGlow">
+<stop offset="0" stop-color="#ffc864" stop-opacity=".75"/>
+<stop offset="1" stop-color="#ff9a30" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<!-- the rock face -->
+<path d="M0 170 V34 L22 26 L48 32 L80 18 L114 24 L150 12 L196 16 L232 8 L270 20 L304 14 L338 26 L360 22 V170 Z" fill="url(#chRock)"/>
+<path d="M0 62 C60 56 90 66 140 60 M220 58 C270 64 310 54 360 60 M0 108 C40 104 80 112 118 106 M244 108 C290 102 330 112 360 106" fill="none" stroke="#8a6436" stroke-width="1.6" opacity=".55"/>
+<!-- the jambs and the lintel, with its cornice -->
+<path d="M116 170 L124 50 H236 L244 170 Z" fill="#e6caa0" stroke="#5a3a18" stroke-width="2.4" stroke-linejoin="round"/>
+<path d="M106 50 H254 L248 34 H112 Z" fill="#efd8b0" stroke="#5a3a18" stroke-width="2.4" stroke-linejoin="round"/>
+<path d="M108 44 H252" stroke="#5a3a18" stroke-width="1.2" opacity=".6"/>
+<!-- the winged sun on the lintel -->
+<path d="M180 42 C166 36 150 36 136 40 C150 42 162 44 174 46 Z M180 42 C194 36 210 36 224 40 C210 42 198 44 186 46 Z" fill="#c9962e" stroke="#5a3a18" stroke-width="1"/>
+<circle cx="180" cy="42" r="5.2" fill="#b83a22" stroke="#5a3a18" stroke-width="1.2"/>
+<!-- the doorway and the steps going down into the dark -->
+<path d="M140 170 L145 62 H215 L220 170 Z" fill="url(#chDark)"/>
+<g fill="none" stroke="#6a4420" stroke-linecap="round">
+<path d="M150 164 H210" stroke-width="3" opacity=".8"/>
+<path d="M153 150 H207" stroke-width="2.6" opacity=".6"/>
+<path d="M156 138 H204" stroke-width="2.2" opacity=".42"/>
+<path d="M159 128 H201" stroke-width="1.8" opacity=".28"/>
+<path d="M162 120 H198" stroke-width="1.4" opacity=".16"/>
+</g>
+<!-- sand drifted across the threshold -->
+<path d="M84 170 C104 158 124 156 150 162 C170 166 188 158 210 160 C236 162 256 156 286 170 Z" fill="#e2c388" stroke="#9a7440" stroke-width="1.4"/>
+<!-- the torches: bracket, handle, glow, flame -->
+<g>
+<circle class="torch-glow" cx="80" cy="66" r="34" fill="url(#chGlow)"/>
+<path d="M74 110 H86 M80 110 V122" stroke="#3b2406" stroke-width="3" stroke-linecap="round"/>
+<path d="M76 108 L78 76 H82 L84 108 Z" fill="#7a4a1c" stroke="#3b2406" stroke-width="1.6"/>
+<path d="M74 78 H86 L84 72 H76 Z" fill="#5a3412" stroke="#3b2406" stroke-width="1.4"/>
+<g class="torch-flame"><path d="M80 44 C72 56 72 64 74 70 C76 74 84 74 86 70 C88 62 86 54 80 44 Z" fill="#ffb13b" stroke="#c0561a" stroke-width="1.2"/>
+<path d="M80 56 C77 62 77 66 78 69 C79 71 81 71 82 69 C83 65 82 61 80 56 Z" fill="#fff3ae"/></g>
+</g>
+<g>
+<circle class="torch-glow" cx="280" cy="66" r="34" fill="url(#chGlow)"/>
+<path d="M274 110 H286 M280 110 V122" stroke="#3b2406" stroke-width="3" stroke-linecap="round"/>
+<path d="M276 108 L278 76 H282 L284 108 Z" fill="#7a4a1c" stroke="#3b2406" stroke-width="1.6"/>
+<path d="M274 78 H286 L284 72 H276 Z" fill="#5a3412" stroke="#3b2406" stroke-width="1.4"/>
+<g class="torch-flame"><path d="M280 44 C272 56 272 64 274 70 C276 74 284 74 286 70 C288 62 286 54 280 44 Z" fill="#ffb13b" stroke="#c0561a" stroke-width="1.2"/>
+<path d="M280 56 C277 62 277 66 278 69 C279 71 281 71 282 69 C283 65 282 61 280 56 Z" fill="#fff3ae"/></g>
+</g>
+</svg>

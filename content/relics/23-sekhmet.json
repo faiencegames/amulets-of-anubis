@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "sekhmet",
+	"name": "The sun disk of Sekhmet",
+	"description": "Forge thirty winged suns.",
+	"found_when": {"suns_forged": 30},
+	"reward": {"boon": "sekhmet"}
+}
