@@ -3,9 +3,9 @@
 // "store" takes the phone pictures app stores show, into fastlane/.
 //
 //	python3 build.py                      # the game must be built first
-//	cd tools/screenshots && npm install && npx playwright install chromium
-//	node take.mjs                         # all of them
-//	node take.mjs map tomb                # just these
+//	cd engine/tools/screenshots && npm install && npx playwright install chromium
+//	node tools/screenshots/take.mjs            # all of them
+//	node tools/screenshots/take.mjs map tomb   # just these
 //
 // It plays the built game in a headless browser with a prepared save (a
 // journey part-way down the Nile), opens each screen and saves a JPEG. A
@@ -18,13 +18,15 @@
 // motion is reduced, and a picture is only replaced when it looks different
 // (so a build doesn't mark every screenshot as changed in git).
 
-import { chromium } from 'playwright';
+import { createRequire } from 'node:module';
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+// Playwright is installed with the engine's test tools
+const { chromium } = createRequire(path.join(ROOT, 'engine', 'tools', 'screenshots', 'package.json'))('playwright');
 const GAME = 'file://' + path.join(ROOT, 'dist', 'amulets-of-anubis.html');
 const OUT = path.join(ROOT, 'docs', 'images');
 const SAVE_KEY = 'amulets-nile-v1';

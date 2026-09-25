@@ -1,0 +1,75 @@
+/* 05-dock.css: The buttons along the bottom (map, hint, restart, shops, help, menu). */
+
+/* ---------- button dock ----------
+   One row that fills the width: each button takes an equal share, so they
+   grow on a wide screen and on a phone are as large as the row allows.
+   Rounded rectangles, like the tablets and scrolls around them. */
+.dock {
+	min-width: 0;
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: stretch;
+	gap: 8px;
+	padding: 6px 8px;
+	border-radius: 6px;
+}
+.rbtn {
+	position: relative;
+	flex: 1 1 0;
+	min-width: 0;
+	height: 62px;
+	padding: 4px 2px 3px;
+	cursor: pointer;
+	border-radius: 10px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 2px;
+	background: linear-gradient(180deg, var(--stone-hover-hi), var(--stone-hover-lo) 55%, var(--stone-deep));
+	border: 2px solid;
+	border-color: var(--bevel-hi) var(--bevel-lo) var(--bevel-lo) var(--bevel-hi);
+	box-shadow:
+		0 3px 0 #00000055,
+		inset 0 -3px 6px #00000026;
+}
+.rbtn svg,
+.rbtn .dock-amulet {
+	width: 28px;
+	height: 28px;
+	flex: none;
+}
+/* a real amulet is drawn to the edge of its square; the icons leave a margin */
+.rbtn .dock-amulet {
+	transform: scale(1.15);
+}
+.rbtn em {
+	font-family: var(--display);
+	font-style: normal;
+	font-size: 13px;
+	color: var(--accent);
+	line-height: 1;
+	max-width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.rbtn:hover {
+	background: linear-gradient(180deg, var(--stone-bright), var(--stone-chosen-lo) 55%, var(--stone-deep));
+}
+.rbtn:active {
+	transform: translateY(2px);
+	box-shadow:
+		0 1px 0 #00000055,
+		inset 0 3px 6px #00000044;
+}
+.rbtn:focus-visible {
+	outline: 3px solid var(--focus);
+	outline-offset: 3px;
+}
+.rbtn[aria-pressed='false'] .wave {
+	display: none;
+}
+.rbtn[aria-pressed='false'] .mute {
+	display: block !important;
+}

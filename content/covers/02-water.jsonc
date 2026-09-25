@@ -1,0 +1,17 @@
+// A cover: something an amulet can be held under. Water behaves just as sand
+// does; only its picture, sound and colours differ (see 01-sand.jsonc).
+{
+	"id": "water",
+	"name": "Under water",
+	"text": "The same in an oasis: the amulet can’t be moved until a match beside it lifts it out of the water.",
+	"popup": "Under water: match beside it",
+	"chamber_note": "Some amulets lie under water. They can’t be moved: make a match beside one to lift it out.",
+	"letters": ["w", "W"],
+	"layers": 1,
+	"broken_by": "beside",
+	"matches": false,
+	"spreads": false,
+	"sound": "splash",
+	"burst": ["#bfe4ff", "#4a9ad8"],
+	"amulet_on_show": "palm"
+}

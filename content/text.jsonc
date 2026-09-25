@@ -213,7 +213,6 @@
 		"kicker": "An oasis near {stop}",
 		"sub": "An oasis near {stop}",
 		"enter": "Walk down to the water",
-		"cover": "Some amulets lie under water. They can’t be moved: make a match beside one to lift it out.",
 		"again": "You have rested here {n} {n|time|times} before. The oasis still has a little to give.",
 		"go_back": "Walk back to {name}",
 		"won": "The water shone like gold. We rested in the shade of the palms, then turned back to the river.",
@@ -239,7 +238,6 @@
 		"enter": "Enter by torchlight",
 		"back": "Back to {stop}",
 		"leave": "Leave", // the way out on a phone, where "Back to …" beside the big button won't fit
-		"sand": "Some amulets are buried in sand. They can't be moved: make a match beside one to brush it clean.",
 		"again": "You have explored this chamber {n} {n|time|times} before.",
 		"stirs": "Each time you return it stirs a little more: cursed badges turn up, and more of them. The reward grows with the danger.",
 		"won": "Every stone gleamed in the torchlight, and we found our way back out into the day.",
@@ -264,6 +262,13 @@
 		"normal": "The journey as intended. Most stops can be won with a little thought.",
 		"hard": "Fewer moves and rarer power-ups. Plan your cascades and aim for the corners early.",
 		"pharaoh": "Tight move counts, very rare power-ups and no automatic hints. Only for the bold."
+	},
+	// the difficulties' names on screen (in content/settings.jsonc and in conditions they keep these ids)
+	"difficulty_names": {
+		"relaxed": "Relaxed",
+		"normal": "Normal",
+		"hard": "Hard",
+		"pharaoh": "Pharaoh"
 	},
 
 	// ---- How to play (the codex) ----
@@ -326,7 +331,8 @@
 			"bare": "Bare stone", "bare_text": "Needs one match on top of it to be gilded.",
 			"thick": "Thick stone", "thick_text": "Cracked and dark. Needs two matches: the first cracks it to bare stone, the second gilds it. The Scales of Anubis strip a layer from all of them at once.",
 			"gilded": "Gilded", "gilded_text": "Done. Matches here still score, but do not count towards the floor.",
-			"shapes": "The shapes a stop can take: its own temple floor, {shapes}."
+			"shapes": "The shapes a stop can take: its own temple floor, {shapes}.",
+			"kinds": "Empty gaps in a floor are not part of the board; amulets fall straight past them. Boards come in four kinds, set in Difficulty and board: Classic, Grand, Ruins, and Omega, which fills the whole window and is often split into two banks with the Nile flowing between them (matches can’t cross the water). On a tall phone screen the other floors grow extra rows to fill it."
 		},
 		"trials": {
 			"intro": "When you arrive at a stop, a priest often offers two trials. Finish one during the stop and you keep its boon. Fail it, or leave the stop without finishing it, and you carry a curse to the *next* stop.",
@@ -347,10 +353,6 @@
 		// "Tombs & oases" (also on the website)
 		"places": {
 			"intro": "Beside nine of the stops lies a place you can visit: a tomb, a temple or an oasis. Its way opens once you gild that stop. Look for a doorway or a palm beside the stop on the map, on the stop’s card, or on the scroll when you win it.",
-			"sand": "Buried in sand",
-			"sand_text": "This amulet can’t be moved, and it is in no match. Make a match right beside it, or blast it with a special, and the sand is brushed off. From then on it is an ordinary amulet, and the stone under it is gilded when you match it.",
-			"water": "Under water",
-			"water_text": "The same in an oasis: the amulet can’t be moved until a match beside it lifts it out of the water.",
 			"tombs": "Tombs and temples",
 			"tombs_text": "Dim and lit by torches, with amulets of their own: mummies, canopic jars, broad collars, cracked jars and torches. Some amulets lie buried in sand.",
 			"oases": "Oases",
@@ -668,8 +670,6 @@
 		"star_of_sopdet": "Star of Sopdet",
 		"cascade_n": "Cascade ×{n}",
 		"the_amulets_shift": "The amulets shift…",
-		"buried": "Buried in sand: match beside it",
-		"under_water": "Under water: match beside it",
 		"second_wind_moves": "Second wind: +3 moves"
 	},
 
@@ -726,5 +726,11 @@
 
 	// ---- rewards, and the names of the built-in floor shapes ----
 	"reward": {"gold": "{n} gold", "lapis": "{n} lapis", "and": " and "},
-	"shapes": {"temple": "Temple floor", "ruins": "Ruined floor", "two_banks": "The two banks", "great_ruin": "The great ruin"}
+	"shapes": {"own": "Temple floor", "ruins": "Ruined floor", "two_banks": "The two banks", "great_ruin": "The great ruin"},
+
+	// ---- names inside a sentence ----
+	// A name that starts with the article ("The Serapeum") takes its form
+	// inside a sentence ("Explore the Serapeum"); a relic's name always gets
+	// it ("Find the Golden barque").
+	"names": {"article": "The ", "article_mid_sentence": "the "}
 }

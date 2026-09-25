@@ -296,7 +296,7 @@ kind('omen', 'omens', 'an omen: a hardship braved at a gilded stop, for more rew
 }
 """)
 
-kind('stall', 'anubis-stall', "something to buy at Anubis's stall")("""\
+kind('stall', 'stall', "something to buy at Anubis's stall")("""\
 // Something Anubis sells: bought for one stop, used once.
 // "gives" is one of: {"moves": n}, {"reshuffle": true}, {"second_wind": n},
 // or {"boon": ["flood"]} (a boon name, or "random").

@@ -1,0 +1,176 @@
+/* 03-hud.css: The top bar: title, gauges (moves, gold, lapis, relics, score, stop). */
+
+/* ---------- top HUD ---------- */
+.hud {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 5px 10px;
+	border-radius: 4px;
+	min-height: 0;
+	min-width: 0;
+	overflow: hidden;
+}
+.hud-title {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex: 0 1 auto;
+	min-width: 0;
+	overflow: hidden;
+}
+.hud h1 {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.hud-title .orn {
+	width: 22px;
+	height: 29px;
+	flex: none;
+}
+.hud h1 {
+	margin: 0;
+	font-family: var(--display);
+	font-weight: 700;
+	font-size: clamp(17px, 2.1vw, 27px);
+	line-height: 1.1;
+	white-space: nowrap;
+	color: var(--ink-2);
+	text-shadow:
+		0 1px 0 var(--emboss-hi),
+		0 -1px 0 var(--emboss-lo);
+}
+.gauges {
+	margin-left: auto;
+	display: flex;
+	gap: 6px;
+	flex-wrap: nowrap;
+	min-width: 0;
+}
+.gauge {
+	display: flex;
+	/* the number and its word share a baseline, and together they sit in the
+	   middle of the gauge (align-content centres a line only when it may wrap) */
+	flex-wrap: wrap;
+	align-items: baseline;
+	align-content: center;
+	column-gap: 5px;
+	padding: 3px 9px;
+	border-radius: 3px;
+	min-width: 66px;
+	justify-content: center;
+	background: linear-gradient(180deg, var(--well-hi), var(--well-lo));
+	border: 2px solid;
+	border-color: var(--well-edge-lo) var(--well-edge-hi) var(--well-edge-hi) var(--well-edge-lo);
+	box-shadow: inset 0 2px 5px #0007;
+}
+.gauge b {
+	font-family: var(--display);
+	font-size: 19px;
+	color: var(--on-well);
+	text-shadow: 0 1px 2px #000a;
+}
+.gauge small {
+	font-size: 11px;
+	color: var(--on-well-2);
+	opacity: 0.85;
+	text-transform: lowercase;
+}
+.gauge.wide {
+	min-width: 92px;
+}
+.g-ico {
+	width: 14px;
+	height: 14px;
+	border-radius: 50%;
+	flex: none;
+	align-self: center;
+}
+/* gold, lapis and relics: pictures from images/icons/ui/, set as variables by
+   06-icons.js; a little larger in the top bar than in running text */
+.g-ico.gold,
+.g-ico.lapis,
+.g-ico.jar {
+	width: 17px;
+	height: 17px;
+	border-radius: 0;
+	background: var(--ico-gold) center / contain no-repeat;
+}
+.g-ico.lapis {
+	background-image: var(--ico-lapis);
+}
+.g-ico.jar {
+	background-image: var(--ico-relic);
+}
+.gauge .g-ico.gold,
+.gauge .g-ico.lapis,
+.gauge .g-ico.jar {
+	width: 23px;
+	height: 23px;
+}
+/* a coin in running text on any scroll; boxes with their own spacing set it later */
+.overlay .g-ico {
+	display: inline-block;
+	vertical-align: -2px;
+	margin: 0 5px 0 3px;
+}
+.gauge span.g-ico:not(.gold):not(.lapis):not(.jar) {
+	font-size: 13px;
+	color: var(--on-well-2);
+	width: auto;
+}
+
+/* the moves gauge matters most: it stands out as paper with an accent-coloured
+   number (like the cards' feet), and warns in red when moves run low */
+.gauge.g-moves {
+	background: linear-gradient(180deg, var(--paper-hi), var(--paper-lo));
+	border-color: var(--bevel-lo) var(--bevel-hi) var(--bevel-hi) var(--bevel-lo);
+	box-shadow: inset 0 2px 4px #6b482240;
+}
+.gauge.g-moves b,
+.gauge.g-moves span.g-ico:not(.gold):not(.lapis):not(.jar) {
+	color: var(--accent);
+	text-shadow: none;
+}
+.gauge.g-moves small {
+	color: var(--ink-3);
+	opacity: 1;
+}
+.gauge.g-moves.low {
+	background: linear-gradient(180deg, #6a1a0c, #a8321c);
+	border-color: #3a0e06 #f0b090 #f0b090 #3a0e06;
+	/* the gauge glows, not the words in it (each once had a dark box) */
+	animation: lowpulse 1s ease-in-out infinite;
+}
+.gauge.g-moves.low b,
+.gauge.g-moves.low span.g-ico:not(.gold):not(.lapis):not(.jar),
+.gauge.g-moves.low small {
+	color: #fff6d0;
+}
+@keyframes lowpulse {
+	50% {
+		box-shadow:
+			inset 0 2px 5px #0007,
+			0 0 12px 2px #ff5a3a99;
+	}
+}
+:root.calm .gauge.g-moves.low {
+	animation: none;
+}
+
+/* the relics counter opens the museum */
+.gauge.clickable {
+	cursor: pointer;
+}
+.gauge.clickable:hover {
+	filter: brightness(1.06);
+}
+.gauge.clickable:focus-visible {
+	outline: 3px solid var(--focus);
+	outline-offset: 2px;
+}
+
+/* the river of stops on the phone's plaque (20-small-screens.css) */
+.strip-river {
+	display: none;
+}

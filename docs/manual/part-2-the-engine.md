@@ -47,36 +47,51 @@ keep them:
 The organising idea is that **content and code are separate**. Everything
 a player sees or reads that isn't a rule is content, one file per thing in
 `content/`. The rules, the drawing, the sound and the screens are code, in
-`src/`. `build.py` is the seam: it checks the content and pours it into
+`engine/src/`. `engine/build.py` is the seam: it checks the content and pours it into
 the code.
 
 ```
-build.py            checks content/ and images/, joins src/ and web/, writes dist/
-content/            the content, one file per thing, and text.jsonc, settings.jsonc
-images/             every picture; icons in images/icons/<group>/
-src/01-core.js      the rules, with no browser code (the simulators run it)
-src/00-open.js      loads and migrates the save
-src/02-pictures.js  loads the pictures before the game starts
-src/03-themes.js    per-stop themes, built from the stops
-src/04-boards.js    frame colours, amulet sets, floor squares
-src/game/           the running game, one file per part (listed in its README)
-web/shell.html      the page, with holes the build fills
-web/css/            the stylesheet, one file per part of the screen
-web/fonts.css       the two typefaces, embedded
-tools/              simulators, performance checks, screenshots, drawing scripts
-platforms/          the Android and desktop wrappers
+build.py                   runs engine/build.py for this game
+edition.jsonc              the game's name, file, save keys and code prefix
+content/                   the content, one file per thing, and text.jsonc, settings.jsonc
+images/                    every picture; icons in images/icons/<group>/
+engine/build.py            checks content/ and images/, joins engine/src/ and engine/web/, writes dist/
+engine/src/01-core.js      the rules, with no browser code (the simulators run it)
+engine/src/00-open.js      loads and migrates the save
+engine/src/02-pictures.js  loads the pictures before the game starts
+engine/src/03-themes.js    per-stop themes, built from the stops
+engine/src/04-boards.js    frame colours, amulet sets, floor squares
+engine/src/game/           the running game, one file per part (listed in its README)
+engine/web/shell.html      the page, with holes the build fills
+engine/web/css/            the stylesheet, one file per part of the screen, in a plain look
+engine/web/fonts.css       the two typefaces, embedded
+engine/tools/              simulators, the smoke and edge tests, the formatter
+tools/                     this game's drawing scripts, screenshots and performance checks
+web/css/00-colours.css     this game's look: papyrus, sandstone, the painted band (see chapter 13)
+web/                       the web app's files (manifest, icons, service worker)
+platforms/                 the Android and desktop wrappers
 ```
+
+**The engine and the game.** Everything in `engine/` is the engine, and
+could make another game from another folder of content. Nothing in it
+names a place, a God or an amulet: it reads them from the game's folder,
+the one that holds `edition.jsonc`. That goes for the look too. The
+engine's own stylesheet is plain; this game's papyrus, sandstone, painted
+band and page are its own `web/css/00-colours.css`, and the ankh in the
+browser's tab is its `images/favicon.svg`. So a change to the engine goes in a
+commit of its own that touches only `engine/`, and a change to the game's
+content in the next one.
 
 ## 2. The build
 
-`build.py` runs in this order, and **writes nothing if any step fails**,
+`engine/build.py` runs in this order, and **writes nothing if any step fails**,
 so a broken content file never ships a broken game.
 
 1. **Name lists from the code.** Some names a content file may use are
    defined in the code, and the build reads them from it by pattern:
-   boon effects (`BOON_EFFECTS` in `src/game/07-trials-boons.js`), badge
+   boon effects (`BOON_EFFECTS` in `engine/src/game/07-trials-boons.js`), badge
    powers (`BADGE_POWERS`) and hardships (`HARDSHIPS`, both in
-   `src/01-core.js`). Others are listed at the top of `build.py`:
+   `engine/src/01-core.js`). Others are listed at the top of `engine/build.py`:
    instruments, scales, board modes, trial goals, upgrade effects,
    condition names, special pictures, colour changes. Add to those by
    hand when you add one in the code.
@@ -96,31 +111,31 @@ so a broken content file never ships a broken game.
    is checked against the code: every `T('…')` and `{{…}}` must have a key.
    Keys the code builds from an id (`T('codex.tabs.' + id)`) can't be found
    by searching, so they are listed in `TEXT_FAMILIES`.
-6. **Joining.** `src/00-open.js`, `02-pictures.js`, `03-themes.js`,
-   `04-boards.js` and then every file in `src/game/` in name order are
-   joined, and `web/shell.html` wraps them in one function
-   (`(() => { … })();`), so the game's names stay its own. `web/css/` is
+6. **Joining.** `engine/src/00-open.js`, `02-pictures.js`, `03-themes.js`,
+   `04-boards.js` and then every file in `engine/src/game/` in name order are
+   joined, and `engine/web/shell.html` wraps them in one function
+   (`(() => { … })();`), so the game's names stay its own. `engine/web/css/` is
    joined in name order.
 7. **Filling the holes.** The build puts the checked content, pictures,
    icons, styles, fonts and code into its placeholders:
    `/*CONTENT*/null`, `/*IMAGES*/null` and `/*ICONS*/null` in the code
    (a space before the `null` is fine), `/*STYLES*/`, `/*FONTS*/`,
-   `/*CORE*/` and `/*UI*/` in `web/shell.html`. **These placeholders are
+   `/*CORE*/` and `/*UI*/` in `engine/web/shell.html`. **These placeholders are
    load-bearing**: if one of the code's three is missing, the build stops
    and says so.
 
 `--check` validates without writing. `--watch` rebuilds on save.
 `--content-json` prints the checked content and nothing else, which is how
-the simulators get it (`tools/load-core.js`). The build also writes
+the simulators get it (`engine/tools/load-core.js`). The build also writes
 `dist/try-it.html`, which opens try-out mode at the file changed last, and,
 when `rsvg-convert` (librsvg) is installed, `dist/art-references/`: every
 picture in `images/` as a PNG, in the same folders, for showing the art
-outside the game (`tools/art-references.py`; only changed pictures are drawn
+outside the game (`engine/tools/art-references.py`; only changed pictures are drawn
 again).
 
 ## 3. The source
 
-Everything in `src/` (apart from `01-core.js`, which is loaded on its
+Everything in `engine/src/` (apart from `01-core.js`, which is loaded on its
 own) runs inside **one function**, top to bottom, in file order. Each file
 is complete JavaScript on its own, so an editor can read it. So:
 
@@ -134,7 +149,7 @@ is complete JavaScript on its own, so an editor can read it. So:
   save. Read the note first; keep it up to date when you change the file.
   An editor that reads `jsconfig.json` (VS Code, Zed, Gram) can also follow
   any name to where it is defined.
-- **To find something**, search `src/game/` for its name. Headings like
+- **To find something**, search `engine/src/game/` for its name. Headings like
   `// ---------- sound ----------` mark the parts inside a file.
 - **HTML in the code** is written in `` html`...` `` strings, laid out one
   element per line and indented like the page it makes. The `html` helper
@@ -143,13 +158,13 @@ is complete JavaScript on its own, so an editor can read it. So:
   space that should show goes before the line break.
 - **One style.** The code and the stylesheet are kept in one style by
   Prettier, with the settings in `.prettierrc`: tabs, lines up to 110
-  characters, one CSS property per line. `tools/format.sh` lists the files
-  out of style, and `tools/format.sh --write` fixes them (it fetches
+  characters, one CSS property per line. `engine/tools/format.sh` lists the files
+  out of style, and `engine/tools/format.sh --write` fixes them (it fetches
   Prettier the first time; the game never needs it). An editor with a
   Prettier plugin reads the same settings, so format on save agrees.
-  `src/game/README.md` lists what each file holds.
+  `engine/src/game/README.md` lists what each file holds.
 
-`src/01-core.js` holds the rules and has **no browser code** at all: no
+`engine/src/01-core.js` holds the rules and has **no browser code** at all: no
 `document`, `window`, canvas or audio. That is what lets the simulators run
 the real rules in Node. Keep it that way.
 
@@ -165,8 +180,26 @@ quotes, lines up to about 110 characters, a blank line between functions.
 
 - `mask[sq]`: is this square part of the floor;
 - `floor[sq]`: layers of stone left (`0` gilded, `1` bare, `2` thick);
-- `cells[sq]`: the amulet there, `{type, special, id}` and flags such as
-  `badge`, `sand` or `wet`, or `null`.
+- `cells[sq]`: the amulet there, `{type, special, id}`, with `cover` (a
+  cover's id, `sand` or `water`, or none) and `layers` (of it left), or
+  `null`.
+
+The rules are written in a small set of **helpers** at the top of
+`01-core.js` (part 1, chapter 9, lists them): where squares are
+(`rowOf`, `neighbours`, `around`, `rowSquares` ...), which hold what
+(`bareStones`, `plainAmulets`, `edgeOfFloor`, `squaresWhere` ...), choosing
+(`pickSome`, `pickOne`, both drawing from `shuffled()`, one shuffle for
+every rule) and changing (`thicken`, `coverAmulet`, `breakCover`,
+`makeSpecial`). Every list of squares they return is in board order, so the
+same random numbers choose the same squares in the web game and in the
+Godot version. Use them in a new rule; a new helper goes beside its kind.
+`node engine/tools/rules-test.js` checks every helper, cover, special,
+badge power and hardship on small boards of their own.
+
+`Core.play(a, b, each)` is one whole move with nothing shown (swap, clear
+and fall until still, spread covers, shuffle a stuck board, use a move):
+the simulators all play through it, and the game's `attemptSwap()` and
+`cascade()` do the same with pictures.
 
 `COLS` is the number of **columns** and `ROWS` the number of rows; boards
 are often taller than wide, so index by `sq = row * COLS + col` and never
@@ -254,7 +287,7 @@ Almost every screen is a papyrus scroll (`#ovMsg`), opened with
 
 ```js
 showMsg(html, [
-	[Tplain('win.sail', { stop: next.name }), () => goNext(i + 1), { kind: 'go', sub: next.sub, icon: iconSvg('ui', 'barque') }],
+	[Tplain('win.sail', { stop: next.name }), () => goNext(i + 1), { kind: 'go', sub: next.sub, icon: iconSvg('ui', 'boat') }],
 	[Tplain(placeKey(door, 'explore'), { name }), () => startChamber(door), { kind: 'card', dark: true, icon: iconSvg('map', placeIcon(door)) }],
 	[Tplain('win.map'), openMap, { kind: 'quiet', icon: iconSvg('dock', 'map') }],
 ], { noClose: true });
@@ -375,7 +408,7 @@ from it:
 Every player-facing word is in `content/text.jsonc`. `T('win.title',
 {stop})` returns the text with `**bold**`, `*italic*` and new lines made
 HTML, `{stop}` filled in, and `{n|stone|stones}` chosen by number;
-`Tplain()` gives plain text for titles and labels. In `web/shell.html`,
+`Tplain()` gives plain text for titles and labels. In `engine/web/shell.html`,
 `{{hud.moves}}` is filled at build time. `plainText()` strips HTML for
 attributes such as `title`.
 
@@ -386,7 +419,7 @@ Icons are SVG files in `images/icons/<group>/`, never strings in the code.
 its inside, with its `<defs>` moved once into the shared defs, because
 Firefox loses a gradient whose first copy is hidden. So gradient ids must
 be unique across icon files (only `relicGold` is shared on purpose). In
-`web/shell.html`, `{{svg:dock/map}}` puts an icon in at build time.
+`engine/web/shell.html`, `{{svg:dock/map}}` puts an icon in at build time.
 
 ### Staging and "new"
 
@@ -413,7 +446,8 @@ choice in Settings, or the phone's own "reduce motion" (`applyMotion()` in
 Settings (`openSettings()`, `14-menu.js`) has five parts as tiles, each
 opening one: sound and music, vibration, colours, motion and effects, and
 this device. Sound, vibration, colours and motion are in the save (`colours`,
-`motion`); how the board is drawn (`amulets-renderer`) and fewer effects
+`motion`); how the board is drawn (`amulets-renderer`: `deviceSetting('renderer')`
+under the edition's `device_prefix`) and fewer effects
 (`amulets-effects`) belong to the device and are kept in the browser
 (`deviceSetting()`), so a save code taken to another phone doesn't bring
 them. Effects on "Automatic" turn down only on a phone that reports 4 GB of
@@ -427,10 +461,18 @@ or following the phone (`applyColours()` sets `data-colours` on `<html>`).
 Every colour of the interface is a named variable in `00-colours.css`, and
 each mode is one list there; the rest of the stylesheet writes
 `var(--ink)`, `var(--bevel-hi)` and so on, never a colour of its own.
+The names say what a colour is for, not what it is made of: `--paper` for
+scrolls and notes, `--ink`, `--accent` (headings, warnings, the moves),
+`--focus` (the keyboard's ring), `--ink-cool`, `--good`, the `--stone-*`
+buttons, the `--slab` bars, `--band` and `--band-edge`, `--page` behind
+everything, the map's `--map-*` labels. There are two files of that name:
+the engine's (`engine/web/css/00-colours.css`, a plain look) and this
+game's (`web/css/00-colours.css`, papyrus and sandstone), which takes its
+place (chapter 13). Both set every name, so a new name goes in both.
 What looks the same in every mode keeps its colour where it is used: gold
-and sand, shadows, the painted band, water, the title screen, and anything on
-the board. So a new rule that colours part of the interface uses the names;
-if none fits, add one to all four lists.
+and sand, shadows, water, the title screen, and anything on the board. So
+a new rule that colours part of the interface uses the names; if none
+fits, add one to all four lists, in both files.
 
 ## 7. The systems
 
@@ -442,8 +484,9 @@ if none fits, add one to all four lists.
 | Seals | `"seals"` in each stop; `stampSeals()` in `game/27-seals.js` |
 | Relics | `content/relics/`; `checkRelics()` in `game/09-unlocks.js` |
 | River events | `content/river-events/`; `game/10-river-events.js`, on a small board (`setupSmallBoard()`) |
-| Tombs, temples, oases | `content/chambers/`; `game/11-chambers.js`. Covered amulets (`sand`, `wet`) can't move and are in no run; a clear beside one uncovers it. `placeKey()` picks an oasis's words, `placeIcon()` its picture |
-| Anubis's stall, the Treasury | `content/anubis-stall/`, `content/treasury/`; `game/12-stall.js`, `game/16-treasury.js`. Every purchase is logged with `logBuy()` and can be undone until the screen closes |
+| Tombs, temples, oases | `content/chambers/`; `game/11-chambers.js`. `placeKey()` picks an oasis's words, `placeIcon()` its picture, `coversNote()` the card's line about its sand or water |
+| Covers (sand, water) | `content/covers/`; `COVERS` in `01-core.js`, broken in `clearStep()`, grown by `Core.spread()` if a cover spreads; drawn with `coverPicture()` (`02-pictures.js`), burst and heard in `showCovers()` (`game/21-moves.js`) |
+| Anubis's stall, the Treasury | `content/stall/`, `content/treasury/`; `game/12-stall.js`, `game/16-treasury.js`. Every purchase is logged with `logBuy()` and can be undone until the screen closes |
 | Looks | `content/amulet-sets/` and the rest; changing one goes through `applyLook()`, which also empties the pre-scaled amulet cache |
 
 ## 8. Sound and music
@@ -489,45 +532,51 @@ free of browser code: the simulators run it.
 ### A new hardship, for curses and omens
 
 `HARDSHIPS` in `01-core.js`. `options(o, n)` changes the stop's options
-before it is built (moves, badge chance); `board(core, n)` changes the
-board once filled. Either or both. For example:
+before it is built (moves, badge chance); `board(core, n, h)` changes the
+board once filled (`h` is the curse or omen; `h.cover` the cover it names).
+Either or both. Written with the helpers, most are a line:
 
 ```js
-	// n amulets, chosen at random, start buried in sand
+	// n amulets, chosen at random, start under a cover (sand)
 	buried_amulets: {
-		board: (core, n) => {
-			const free = [];
-			for (let sq = 0; sq < core.cells.length; sq++) if (core.mask[sq] && core.cells[sq] && !core.cells[sq].special) free.push(sq);
-			for (let j = free.length - 1; j > 0; j--) {
-				const r = Math.floor(Math.random() * (j + 1));
-				[free[j], free[r]] = [free[r], free[j]];
-			}
-			free.slice(0, n).forEach(sq => (core.cells[sq].sand = 1));
-		},
+		stage: 'chambers',
+		board: (core, n, h) => coverAmulets(core, n, h.cover),
 	},
 ```
 
+### A new cover
+
+No code: a file in `content/covers/` and a picture in `images/covers/`
+(part 1, "Sand, water and other covers"). What a cover can do is its
+fields: `layers`, `broken_by`, `matches`, `spreads`. A new *kind* of
+behaviour is a new field: read it in `cover()` in `engine/build.py`, act on
+it where covers are handled in `Core` (`typeAt()`, `isValid()`,
+`clearStep()`, `spread()`, `shuffle()`), and add it to
+`engine/tools/rules-test.js`.
+
 ### A new trial goal
 
-Add the name to `TRIAL_GOALS` in `build.py`, and measure it in
+Add the name to `TRIAL_GOALS` in `engine/build.py`, and measure it in
 `trialProgress()` (during play) and `levelWon()` (goals judged at the end).
 
 ### A new condition
 
 Counted conditions go in `CONDITION_COUNTERS` (`01-core.js`) and
-`COUNT_CONDITIONS` (`build.py`); win conditions in `conditionMet()` and
+`COUNT_CONDITIONS` (`engine/build.py`); win conditions in `conditionMet()` and
 `WIN_CONDITIONS`. Its words go in `text.jsonc` under `conditions`.
 
 ### A new board mode
 
 An entry in `BOARD_MODES` with `layout()`, `moves` and `tall`, its name in
-`BOARD_MODES` in `build.py` and in `text.jsonc` (`boards`). A generated
+`BOARD_MODES` in `engine/build.py` and in `text.jsonc` (`boards`). A generated
 layout must pass `allMatchable()`. Run the simulators on it.
 
 ### A new special
 
 Its pictures in `images/specials/`, their names in `SPECIAL_PICTURES` in
-`build.py`, its rule in `clearStep`, its drawing in `drawTile()`.
+`engine/build.py`, its power in `SPECIAL_POWERS` (`fire(core, at)`, as a
+badge power's), what match makes it in `clearStep`, its drawing in
+`drawTile()`.
 
 ### A new stage
 
@@ -538,7 +587,7 @@ An entry in `STAGE_MARKS` (`game/26-stages.js`), its stop in
 ### A new setting
 
 A field in `settings.jsonc`, parsed with a default in `settings()` in
-`build.py`, read as `CONTENT.settings`. Tuning numbers never go in the
+`engine/build.py`, read as `CONTENT.settings`. Tuning numbers never go in the
 code.
 
 ### A new saved field
@@ -548,10 +597,15 @@ See chapter 10: it needs a default in `applySaveDefaults()`.
 ## 10. Saving
 
 Progress lives in `localStorage` under `amulets-nile-v1`, and players move
-it between copies with export codes (Save and restore). So:
+it between copies with export codes that start `AMULETS1:` (Save and
+restore). Both are the game's, in `edition.jsonc` at the top, with the
+looks every player starts with and the stops of the first version; the
+engine reads them as `CONTENT.edition`. They never change, and
+`node tools/old-saves.mjs` checks that a save kept in the browser and a
+code made by version 0.9.3 still load. So:
 
 - **Never rename or repurpose a saved field.** New fields get a default in
-  `applySaveDefaults()` (`src/00-open.js`). If a field's meaning changes,
+  `applySaveDefaults()` (`engine/src/00-open.js`). If a field's meaning changes,
   write a migration there.
 - Progress is keyed by **stop id**, and the save records the order of ids
   it was made with, so adding or reordering stops moves progress with its
@@ -563,15 +617,15 @@ it between copies with export codes (Save and restore). So:
 ## 11. Balance and the simulators
 
 The simulators run `01-core.js` in Node with the checked content
-(`tools/load-core.js`, through `build.py --content-json`), and build boards
+(`engine/tools/load-core.js`, through `build.py --content-json`), and build boards
 through `stopOptions()`.
 
 ```sh
-node tools/journey-sim.js 1 60          # first journeys, as a new player meets them
-node tools/journey-sim.js 1 60 later    # later journeys, everything on
-node tools/sim.js 1 classic 8 13 24     # difficulty, board, columns, rows, games
-node tools/events-sim.js                # river event puzzles
-node tools/econ-sim.js 8 13 4 1         # earnings and unlocks over whole journeys
+node engine/tools/journey-sim.js 1 60          # first journeys, as a new player meets them
+node engine/tools/journey-sim.js 1 60 later    # later journeys, everything on
+node engine/tools/sim.js 1 classic 8 13 24     # difficulty, board, columns, rows, games
+node engine/tools/events-sim.js                # river event puzzles
+node engine/tools/econ-sim.js 8 13 4 1         # earnings and unlocks over whole journeys
 ```
 
 The bot is greedy and never plans, so people do a little better. Targets on
@@ -614,17 +668,29 @@ The target is a mid-range Android phone.
 
 ## 13. The stylesheet
 
-`web/css/` is joined in file-name order, so the numbers are the order.
+`engine/web/css/` is joined in file-name order, so the numbers are the order.
+
+**A game's own look.** A game can bring stylesheet files of its own, in
+its `web/css/`. One with the same name as an engine file takes that file's
+place; one with another name is added, in the same file-name order (so
+`05-extra.css` comes after the engine's `05-dock.css`). This game brings
+one, `web/css/00-colours.css`: every colour and texture of papyrus,
+sandstone, the painted band and the page, in the four modes. A game with
+none gets the engine's plain look (light paper, grey stone, a little gold).
+A game's `web/fonts.css` likewise replaces the engine's typefaces (then set
+`--display` and `--body` in a file of its own after `01-base.css`, such as
+`01-typefaces.css`), and its `images/favicon.svg` (or `.png`) is the
+picture in the browser's tab.
 
 | File | Styles |
 |---|---|
-| `00-colours.css` | every colour by name, and the four colour modes |
-| `01-base.css` | fonts, the page, the scenery, less motion (`.calm`) |
+| `00-colours.css` | every colour and texture by name, and the four colour modes (a game's own replaces it) |
+| `01-base.css` | fonts, the page, the scenery, less motion (`.calm`), what a mode changes beyond colours |
 | `02-layout.css` | the app grid |
 | `03-hud.css` | the top bar, and coins (`.g-ico`) anywhere |
 | `04-board.css` | the stage, the board frame and canvas, the sand tube |
 | `05-dock.css` | the buttons along the bottom |
-| `06-scroll-and-buttons.css` | scrolls and their rods, sandstone buttons, the drop cap |
+| `06-scroll-and-buttons.css` | scrolls and their rods (`.paper`), stone buttons, the drop cap |
 | `07-side-panel.css` | the column beside the board: note, boons, relics |
 | `08-shops-and-looks.css` | Treasury, stall, Customise |
 | `09-codex-and-sound.css` | How to play, Customise tabs, Settings |
@@ -640,23 +706,23 @@ block beside the rule.
 
 ## 14. Testing
 
-After any change to `src/`:
+After any change to `engine/src/`:
 
 ```sh
 python3 build.py
 grep -c "https://" dist/amulets-of-anubis.html    # must print 0
-node tools/screenshots/smoke.mjs
+node engine/tools/screenshots/smoke.mjs
 ```
 
 The smoke test plays the built game for a moment as a new player and as
 one part-way down the river, on a desktop and a phone: moves, every screen,
 every tab and chapter. It fails on any page error. The simulators only run
-`01-core.js`, so they can't catch a mistake in `src/game/`.
+`01-core.js`, so they can't catch a mistake in `engine/src/game/`.
 
 Also: `node tools/screenshots/take.mjs` retakes the pictures in
 `docs/images/` (and keeps any that look the same);
-`node tools/screenshots/check-looks.mjs` checks every amulet set for
-amulets too close in colour; `node tools/screenshots/pdf.mjs` prints an HTML
+`node engine/tools/screenshots/check-looks.mjs` checks every amulet set for
+amulets too close in colour; `node engine/tools/screenshots/pdf.mjs` prints an HTML
 page to a PDF (the manual's PDF is made with it); `tools/perf/` has the performance checks.
 Check layout at 390 × 844 and 360 × 780 as well as on a desktop: the page
 must never scroll.

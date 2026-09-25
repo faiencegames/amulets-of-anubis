@@ -26,7 +26,7 @@
 		// The stops are balanced with badges in play (their extra moves and
 		// gilding help a lot). Until badges arrive, a stop gives this much
 		// more (in percent) of its moves, so the first stops are not harder
-		// than later ones. Check with: node tools/journey-sim.js
+		// than later ones. Check with: node engine/tools/journey-sim.js
 		"extra_moves_before_badges_percent": 50
 	},
 
@@ -36,7 +36,19 @@
 		"two_stars_moves_left_percent": 15
 	},
 
-	// The four difficulty steps. moves_percent scales every stop's moves;
+	// The amulets the interface shows as examples: "button" on the Amulets
+	// button and in the floor previews, "how_to_play" in How to play, and four
+	// "previews" to show a look where a stop has fewer of its own. (The one
+	// shown under each cover is in its file, content/covers/.)
+	"amulets_on_show": {
+		"button": "scarab",
+		"how_to_play": "ankh",
+		"previews": ["scarab", "ankh", "eye", "lotus"]
+	},
+
+	// The four difficulty steps, easiest first. Their names are this game's
+	// own: saves keep a difficulty by its place, and curses and relics name
+	// it, so never rename one. moves_percent scales every stop's moves;
 	// badge_chance_percent is how often a new amulet falls wearing a badge;
 	// hint_after_seconds is how long before a hint (0 = never).
 	// (Their descriptions are in content/text.json, "difficulty".)
@@ -91,6 +103,15 @@
 
 	// Seals: lapis paid for each seal stamped.
 	"seals": {"lapis_each": 4},
+
+	// The Nile down the middle of an Omega board: the water at its banks and
+	// in the middle, the ripples on it, and the reeds along both banks.
+	"river_channel": {
+		"water_edge": "#1d4f73",
+		"water_middle": "#2f78a6",
+		"ripples": "rgba(220,240,255,.35)",
+		"reeds": "rgba(60,110,50,.55)"
+	},
 
 	// ---- money ----
 

@@ -12,7 +12,9 @@
 	//   "fewer_moves_percent"  n percent fewer moves
 	//   "thick_stones"         n bare stones start thick
 	//   "thick_stones_share"   one bare stone in n starts thick
-	//   "buried_amulets"       n amulets start buried in sand
+	//   "thick_edges"          n bare stones along the edge of the floor start thick
+//   "buried_amulets"       n amulets start under a cover (its "cover", else the first in content/covers/)
+//   "covered_edges"        n amulets along the edge of the floor start under a cover
 	//   "fewer_badges"         badged amulets fall n percent less often (100: none)
 	//   "more_cursed_badges"   cursed badges fall, n times as often
 	//   "no_boons"             no boons can be used

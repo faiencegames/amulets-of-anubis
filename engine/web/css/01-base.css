@@ -1,0 +1,117 @@
+/* 01-base.css: Fonts and the page itself: the fonts' names, the reset,
+	 the body background and the scenery layer behind everything. (The
+	 page's colours, --page and the rest, are in 00-colours.css.) */
+
+:root {
+	--display: 'IM Fell Double Pica', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+	--body: 'IM Fell English', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+}
+/* The edges a notch, a camera hole or a rounded corner covers: the browser's
+   safe area, or in the Android app the notch it reports (--cut-top and the
+   rest, set by platforms/android/MainActivity.java), whichever is larger. */
+:root {
+	--safe-top: max(env(safe-area-inset-top, 0px), var(--cut-top, 0px));
+	--safe-right: max(env(safe-area-inset-right, 0px), var(--cut-right, 0px));
+	--safe-bottom: max(env(safe-area-inset-bottom, 0px), var(--cut-bottom, 0px));
+	--safe-left: max(env(safe-area-inset-left, 0px), var(--cut-left, 0px));
+	/* a screen's rounded corners (their radius from the Android app, --round-top
+	   and --round-bottom): keeping 0.3 of the radius clear on both edges keeps a
+	   button's corner inside the curve */
+	--corner-top: calc(var(--round-top, 0px) * 0.3);
+	--corner-bottom: calc(var(--round-bottom, 0px) * 0.3);
+	box-sizing: border-box;
+}
+/* html and body are fixed to the screen (02-layout.css), so the body keeps
+   clear of those edges; its background still fills them */
+body {
+	padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+}
+html {
+	scroll-padding-top: var(--safe-top);
+}
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
+}
+html,
+body {
+	margin: 0;
+	min-height: 100%;
+}
+body {
+	background-color: var(--page);
+	background-image:
+		var(--page-grain),
+		radial-gradient(ellipse 90% 70% at 50% 35%, var(--page-deep-2) 0%, var(--page-deep) 75%);
+	color: var(--ink);
+	font-family: var(--body);
+	font-size: 17px;
+	line-height: 1.5;
+	-webkit-tap-highlight-color: transparent;
+}
+
+#backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 0;
+	background: var(--page);
+	overflow: hidden;
+}
+#backdrop .bd {
+	position: absolute;
+	inset: 0;
+	opacity: 0;
+	transition: opacity 1.1s ease;
+}
+#backdrop .bd.on {
+	opacity: 1;
+}
+#backdrop svg {
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+/* grain and a vignette over the scenery, painted inside each scene's own
+   layer: as a layer of its own over everything it cost a phone a whole
+   screen of pixels every frame */
+#backdrop .bd::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	background:
+		url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .2 0 0 0 0 .1 0 0 0 .28 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+		radial-gradient(ellipse 75% 70% at 50% 45%, transparent 45%, rgba(25, 12, 2, 0.5) 100%);
+}
+:root.calm #backdrop .bd {
+	transition: none;
+}
+/* Less motion (the Settings screen, or the phone's own "reduce motion"; the
+   calm class on <html>, applyMotion() in src/00-open.js): whatever still
+   moves or fades does so at once. The rules above and in the other files
+   that say ":root.calm" stop the endless ones outright. */
+:root.calm *,
+:root.calm *::before,
+:root.calm *::after {
+	animation-duration: 0.01ms !important;
+	animation-iteration-count: 1 !important;
+	transition-duration: 0.01ms !important;
+	scroll-behavior: auto !important;
+}
+
+/* how the colour modes change a few things beyond their colours */
+/* a seal still to earn is a faint grey picture: fainter still on a dark
+   scroll, so a little stronger there */
+:root[data-colours='dark'] .mark.no,
+:root[data-colours='hcd'] .mark.no {
+	opacity: 0.6;
+}
+/* in high contrast the one way forward is yellow, with black words */
+:root[data-colours^='hc'] .act-go:not(.dark) {
+	color: #000;
+	background: #ffd83a;
+}
+:root[data-colours^='hc'] .act-go:not(.dark) .act-words small {
+	color: #000;
+}

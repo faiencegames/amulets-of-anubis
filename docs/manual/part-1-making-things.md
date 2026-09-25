@@ -112,10 +112,10 @@ with them.
   where you will do almost all your work.
 - **`images/`** holds every picture: amulets, scenery, floors, badges and
   icons. `images/README.md` lists every folder and how its files are named.
-- **`src/`** is the code: the rules of the game, and the drawing, sound and
+- **`engine/src/`** is the code: the rules of the game, and the drawing, sound and
   screens. You only need it for chapter 9.
 
-The **build** (`build.py`) reads every content file, checks it, checks that
+The **build** (`engine/build.py`) reads every content file, checks it, checks that
 everything it mentions exists (a stop's amulets, a relic's condition, a
 shop item's boon), and then pours it all into the code, together with the
 pictures, to make the one game file. If anything is wrong, it writes
@@ -161,6 +161,7 @@ The files, and this manual, use the game's own names for things.
 | **Trial** | A task a priest sets at the start of a stop. Finish it for a boon; fail it, and the next stop is *cursed*. |
 | **River event** | Something between two stops: a short puzzle on a small board, or a choice. |
 | **Chamber** | A tomb, temple or oasis beside a stop, opened once the stop is gilded. Tombs have amulets buried in sand, oases amulets under water. |
+| **Cover** | The sand or water an amulet can lie under. It can't be moved until a match beside it brushes the cover off. Each cover is a file in `content/covers/`. |
 | **Seal**, **omen** | Seals are three small challenges at every stop. Omens are hardships a player may brave at a gilded stop, for a richer reward. |
 | **Relic** | A lasting reward for a deed, kept in the Museum. |
 | **Gold**, **lapis** | The two currencies. They buy one-time help at Anubis's stall and lasting upgrades in the Treasury. |
@@ -222,8 +223,8 @@ folders:
 | `menu/` | the tiles of the Menu and the title screen |
 | `codex/` | one per chapter of How to play, named after the chapter |
 | `stall/` | the things Anubis sells that aren't boons (a stall file names one with `"icon"`) |
-| `ui/` | the ankh, stars, the seal, the barque, the doorways |
-| `map/` | the Nile map and its markers |
+| `ui/` | the ankh (`title-mark`), stars, the seal, the barque (`boat`), Anubis (`keeper`), Apep (`omen`), the doorways |
+| `map/` | the Nile map (`background`) and its markers |
 
 Icons must stay SVG. Keep the `viewBox` at the top of the file as it is, and
 give any gradient inside a name no other icon uses.
@@ -231,7 +232,7 @@ give any gradient inside a name no other icon uses.
 ### In another drawing program
 
 The SVGs open in Inkscape, Affinity, Illustrator and Figma as shapes you can
-change. For other programs, `python3 tools/art-export.py` makes
+change. For other programs, `python3 engine/tools/art-export.py` makes
 `dist/art-export/` with every picture as a vector PDF, the small ones as
 pixel art at 32 and 64 pixels, as Aseprite files, and as sprite sheets for
 game engines. (The build also makes a large PNG of every picture, in
@@ -334,7 +335,11 @@ One file holds the whole-game numbers, each with a comment. Among them:
   journey, and whether new players get them one at a time.
 - `stars`: how many moves must be left for two and three stars.
 - `difficulty`: for Relaxed, Normal, Hard and Pharaoh, the moves, how often
-  badges fall and how soon hints appear.
+  badges fall and how soon hints appear. These four blocks also give the
+  difficulties their names, so never rename one: saves and curses rely on
+  them.
+- `river_channel`: the colours of the Nile down an Omega board, and its
+  reeds.
 - `river_event_percent`, `trial_offer_percent`: how often river events and
   trials come up.
 - `earnings`, `omens`, `seals`, `persistence`: rewards, and how kind the
@@ -352,13 +357,13 @@ every stop at once and bring in the game's parts all together:
 and in the `difficulty` block, give Normal a few more moves. Build, and a
 new player can go anywhere from the start. Nothing else changes.
 
-> **In the engine:** the numbers are read by `settings()` in `build.py`
+> **In the engine:** the numbers are read by `settings()` in `engine/build.py`
 > and reach the code as `CONTENT.settings`; [Part 2, chapter 11](part-2-the-engine.md#11-balance-and-the-simulators)
 > says which numbers tune what.
 
 ### Prices
 
-- **Anubis's stall** (help for one stop): `content/anubis-stall/`, the
+- **Anubis's stall** (help for one stop): `content/stall/`, the
   `"price"`.
 - **The Treasury** (lasting upgrades): `content/treasury/`, the `"prices"`
   list, one price per level, like `[300, 600, 1200]`.
@@ -443,6 +448,21 @@ floor plan, `s` is a stone with an amulet buried in sand. For an oasis,
 write `"setting": "oasis"` and use `w` for an amulet under water. A stop
 can have one chamber.
 
+### Sand, water and other covers
+
+Sand and water are **covers**, each a file in `content/covers/` with its
+picture in `images/covers/`: `01-sand.jsonc` and `02-water.jsonc`. The
+file gives the cover's name and its words in How to play, the line shown
+when a player tries to move a covered amulet, the line on a chamber's
+card, its two letters in floor plans (`s` and `S` for sand), its sound and
+the colours it bursts into. A cover can also be made harder: `"layers": 2`
+takes two matches to break (with a second picture, `<id>-1.svg`, for the
+cracked cover), `"broken_by": "on"` breaks only when its own square is
+cleared, `"matches": true` lets the amulet under it still match where it
+lies, and `"spreads": true` makes it grow over one more amulet after every
+move that leaves it alone. The content reference lists every field.
+Tessera's example game shows all of them: amber, a net and ivy.
+
 ![The doorway to the Grand Gallery at Giza: its note, the task, and "Enter by torchlight"](../images/screenshot-chamber.jpg)
 
 *A tomb's doorway. The picture, the note and the task all come from the
@@ -491,7 +511,8 @@ already knows. The list is written in the comments of every such file.
   against the others) and a glow `colour`. Draw it in `images/badges/`.
 - **A curse** (`content/curses/`) is what a failed trial costs at the next
   stop: an `effect` such as `"thick_stones"` and its `strength` on each
-  difficulty. Keep Relaxed at 0.
+  difficulty. Keep Relaxed at 0. One that buries amulets names its
+  `"cover"`, `"sand"` or `"water"`.
 - **An omen** (`content/omens/`) is a hardship a player may brave for a
   richer reward. It picks from the same list as the curses, with one
   `amount`.
@@ -543,7 +564,7 @@ The game comes with a small robot player that plays a stop many times and
 counts its wins. It needs [Node.js](https://nodejs.org) (free).
 
 ```sh
-node tools/journey-sim.js 1 60
+node engine/tools/journey-sim.js 1 60
 ```
 
 This plays sixty first journeys on Normal, the way a new player meets them,
@@ -552,7 +573,7 @@ Normal, with early stops a little higher than late ones. The robot never
 plans ahead, so people do a little better. If your stop is far off, change
 its `moves` by one or two and run it again.
 
-For a river event puzzle, `node tools/events-sim.js` does the same: aim for
+For a river event puzzle, `node engine/tools/events-sim.js` does the same: aim for
 between half and nine in ten.
 
 ## 9. When the list isn't enough: a little code
@@ -600,15 +621,68 @@ For each square, three lists say what is there:
 |---|---|---|
 | `core.mask[sq]` | is this square part of the floor at all | `false` for a gap in a shaped floor |
 | `core.floor[sq]` | how many layers of stone are left | `0` gilded, `1` bare stone, `2` thick stone |
-| `core.cells[sq]` | the amulet on it | its kind, whether it's a special, a badge, sand; or nothing |
+| `core.cells[sq]` | the amulet on it | its kind, whether it's a special, a badge, a cover (sand or water); or nothing |
 
 `COLS` is the number of columns and `ROWS` the number of rows. Boards are often
-taller than wide, so never assume they are the same.
+taller than wide, so never assume they are the same. You will rarely need the
+sums yourself: `rowOf(sq)`, `colOf(sq)` and the other helpers below do them.
+
+### Helpers: the words the rules are written in
+
+The engine has a set of small, named helpers for what every rule needs:
+finding squares, choosing among them, and changing them. A new rule is
+usually two or three of them in a row, so it reads almost as it would in
+words. They are at the top of `engine/src/01-core.js`, under "helpers",
+and they work anywhere in the game's code.
+
+| Where squares are | |
+|---|---|
+| `rowOf(sq)`, `colOf(sq)` | the row and column of a square |
+| `squareAt(row, col)` | the square at a row and column (`-1` off the board) |
+| `neighbours(sq)` | the four squares beside it |
+| `around(sq, reach)` | every square within reach, itself included: 1 is the nine around it, 2 the twenty-five |
+| `rowSquares(row)`, `colSquares(col)` | a whole row or column |
+| `diagonalSquares(sq)` | both diagonals through it |
+
+| Which squares hold what | |
+|---|---|
+| `bareStones(core)`, `thickStones(core)` | the bare stones; the thick ones |
+| `stonesLeft(core)`, `gildedSquares(core)` | the stones still to gild; the gilded squares |
+| `edgeOfFloor(core)` | the squares along the edge of the floor |
+| `plainAmulets(core)` | amulets with no special, badge or cover |
+| `coveredAmulets(core)`, `coveredAmulets(core, 'water')` | amulets under any cover; under that one |
+| `amuletsOfType(core, type)` | every amulet of one kind |
+| `squaresWhere(core, (sq, tile) => ...)` | any other kind: the floor squares for which your test is true |
+
+| Choosing and changing | |
+|---|---|
+| `pickSome(list, n)`, `pickOne(list)` | n of them at random; one of them |
+| `thicken(core, sq)` | a bare stone becomes thick |
+| `coverAmulet(core, sq, 'sand')`, `uncover(tile)` | bury an amulet in sand (or under water); free it |
+| `coverAmulets(core, n, 'sand')` | bury n plain amulets at random, never leaving the board without a move |
+| `makeSpecial(core, sq, 'bomb')` | turn an amulet into a special (`h`, `v`, `bomb`, `star`, `sun`) or give it a badge |
+
+A whole curse, written with them: "n bare stones along the edge of the
+floor start thick" is the engine's `thick_edges`:
+
+```js
+	thick_edges: {
+		board: (core, n) =>
+			pickSome(
+				edgeOfFloor(core).filter(sq => core.floor[sq] === 1),
+				n,
+			).forEach(sq => thicken(core, sq)),
+	},
+```
+
+Read it from the inside out: the edge of the floor, only its bare stones,
+pick n of them, thicken each. No curse of this game uses it yet; a curse
+file with `"effect": "thick_edges"` would.
 
 ### Reading a boon that already exists
 
 A boon file says *which* effect it uses. The effect itself is an entry in
-`BOON_EFFECTS`, in `src/game/07-trials-boons.js`. Here is the one behind the
+`BOON_EFFECTS`, in `engine/src/game/07-trials-boons.js`. Here is the one behind the
 Wisdom of Thoth:
 
 ```js
@@ -756,7 +830,7 @@ exists. Then run the smoke test, which plays the game for a moment and says
 if anything went wrong:
 
 ```sh
-node tools/screenshots/smoke.mjs
+node engine/tools/screenshots/smoke.mjs
 ```
 
 ### Useful things to call
@@ -796,15 +870,20 @@ start.
 
 | To make a new… | Add an entry to | In | Further reading |
 |---|---|---|---|
-| boon effect | `BOON_EFFECTS` | `src/game/07-trials-boons.js` | [Part 2: a new boon effect](part-2-the-engine.md#a-new-boon-effect) |
-| badge power | `BADGE_POWERS` (the rule) and `BADGE_SHOWS` (how it looks) | `src/01-core.js`, `src/game/21-moves.js` | [Part 2: a new badge power](part-2-the-engine.md#a-new-badge-power) |
-| curse or omen effect | `HARDSHIPS` | `src/01-core.js` | [Part 2: a new hardship](part-2-the-engine.md#a-new-hardship-for-curses-and-omens) |
-| trial goal | `TRIAL_GOALS` in `build.py`, and measure it in `trialProgress()` | `build.py`, `src/game/07-trials-boons.js` | [Part 2: a new trial goal](part-2-the-engine.md#a-new-trial-goal) |
+| boon effect | `BOON_EFFECTS` | `engine/src/game/07-trials-boons.js` | [Part 2: a new boon effect](part-2-the-engine.md#a-new-boon-effect) |
+| badge power | `BADGE_POWERS` (the rule) and `BADGE_SHOWS` (how it looks) | `engine/src/01-core.js`, `engine/src/game/21-moves.js` | [Part 2: a new badge power](part-2-the-engine.md#a-new-badge-power) |
+| curse or omen effect | `HARDSHIPS` | `engine/src/01-core.js` | [Part 2: a new hardship](part-2-the-engine.md#a-new-hardship-for-curses-and-omens) |
+| special's power | `SPECIAL_POWERS`, and a rule in `clearStep` for what makes it | `engine/src/01-core.js` | [Part 2: a new special](part-2-the-engine.md#a-new-special) |
+| helper | the "helpers" section, beside its kind | `engine/src/01-core.js` | [Part 2: the board](part-2-the-engine.md#the-board) |
+| cover | nothing: a file in `content/covers/` | | [Sand, water and other covers](#sand-water-and-other-covers) |
+| trial goal | `TRIAL_GOALS` in `engine/build.py`, and measure it in `trialProgress()` | `engine/build.py`, `engine/src/game/07-trials-boons.js` | [Part 2: a new trial goal](part-2-the-engine.md#a-new-trial-goal) |
 
 **Rules and show are kept apart** for badges: the rule goes in
-`src/01-core.js`, which has no drawing or sound in it, because the robot
+`engine/src/01-core.js`, which has no drawing or sound in it, because the robot
 player of chapter 8 plays that file to test the balance. How a badge looks
-and sounds goes in `src/game/21-moves.js`.
+and sounds goes in `engine/src/game/21-moves.js`. After changing a rule,
+`node engine/tools/rules-test.js` tries every helper, cover, badge power
+and curse on a small board of its own.
 
 ## 10. If something goes wrong
 

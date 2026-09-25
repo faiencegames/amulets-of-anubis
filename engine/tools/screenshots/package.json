@@ -1,0 +1,10 @@
+{
+	"name": "engine-screenshots",
+	"private": true,
+	"description": "Takes the screenshots in docs/images/, the smoke test, and Prettier for tools/format.sh (development only)",
+	"type": "module",
+	"dependencies": {
+		"playwright": "^1.63.0",
+		"prettier": "3.9.9"
+	}
+}

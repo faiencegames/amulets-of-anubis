@@ -1,4 +1,4 @@
-<!-- Menu and dock icon: Anubis's stall, the jackal lying on his gilded chest, as at the head of the stall (images/icons/ui/anubis.svg), drawn bolder for its size. 32 by 32. -->
+<!-- Menu and dock icon: Anubis's stall, the jackal lying on his gilded chest, as at the head of the stall (images/icons/ui/keeper.svg), drawn bolder for its size. 32 by 32. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 <g transform="translate(-1.6 3.4) scale(0.53)">
 <path d="M5 31 H61 L58.5 36 H7.5 Z" fill="#e8b93e" stroke="#4a2c10" stroke-width="2.6" stroke-linejoin="round"/>

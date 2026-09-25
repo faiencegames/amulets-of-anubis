@@ -134,7 +134,7 @@ each kind of thing:
   the app icons in `web/` and `platforms/`, and the store pictures in
   `fastlane/`. What little comes from elsewhere is listed, with its source,
   in [images/CREDITS.md](images/CREDITS.md).
-* **The two typefaces** in `web/fonts.css`, IM Fell Double Pica and IM Fell
+* **The two typefaces** in `engine/web/fonts.css`, IM Fell Double Pica and IM Fell
   English, were digitised by Igino Marini from the Fell Types and are under
   the SIL Open Font License 1.1 (`OFL-1.1`)
   ([Double Pica](LICENSES/OFL-1.1-IM-Fell-Double-Pica.txt),
@@ -145,12 +145,14 @@ each kind of thing:
 ```
 build.py        builds the game into dist/ (build.bat on Windows)
 build.sh        builds everything: game, apps, docs and website, all into dist/
+edition.jsonc   the game's name, its file, and where its save is kept
 content/        stops, relics, events, shop items, looks, text.jsonc, settings.jsonc, icons/
 images/         every picture: amulets, scenery, floors, specials, badges, icons
-src/            the code: the rules (01-core.js) and the game (game/, one file per part)
-web/            the page shell, stylesheet (css/), fonts, web-app files
+engine/         the engine: the build, the code (src/), the page shell, stylesheet
+                and fonts (web/), simulators, the smoke and edge tests (tools/)
+web/            the web app's files: manifest, icons, service worker
 scripts/        new.py (start new content), watch (rebuild on save)
-tools/          simulators for balance and economy, performance tests, screenshots
+tools/          drawing scripts, screenshots, performance tests, the old-saves test
 docs/           the guides, screenshots and examples
 platforms/      the Android and desktop app wrappers (sources only)
 dist/           everything built: the game, apps, docs/ and website/ (not kept in git)

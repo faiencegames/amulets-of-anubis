@@ -1,0 +1,56 @@
+// What makes this game this game, rather than another made with the same
+// engine: its name, the file the build writes, and where a player's progress
+// is kept. The build checks this file and passes it to the code.
+//
+// Once people play, never change save_key, try_key, device_prefix or
+// export_prefix: their saves and save codes are found by them.
+{
+	// the game's name, as the build names it (on screen it is title.name in content/text.jsonc)
+	"name": "Amulets of Anubis",
+
+	// the game file the build writes: dist/<file>.html
+	"file": "amulets-of-anubis",
+
+	// where the browser keeps a player's progress, and try-out mode's own
+	// save (dist/try-it.html), so trying things never touches the real one
+	"save_key": "amulets-nile-v1",
+	"try_key": "amulets-nile-try",
+
+	// the start of the keys for settings that belong to this device rather
+	// than the player (how the board is drawn, fewer effects)
+	"device_prefix": "amulets-",
+
+	// a save code starts with this (Menu, Save and restore), and a saved
+	// code file is called <save_file_name><date>.txt
+	"export_prefix": "AMULETS1:",
+	"save_file_name": "amulets-of-anubis-save-",
+
+	// the looks every player starts with, one of each kind, by id. Keep
+	// these files: saves rely on them. Left out, a kind starts with the
+	// first file in its folder.
+	"starting_looks": {
+		"amulet_set": "faience",
+		"floor_set": "temple",
+		"frame": "temple",
+		"sparkle": "gold"
+	},
+
+	// The stops of the first version, in their order. Saves made before
+	// stops had ids kept progress by position on these; the game moves it to
+	// follow each stop (remapStops in engine/src/00-open.js). Leave it out in a new
+	// game. Never change it.
+	"stops_before_ids": [
+		"memphis",
+		"saqqara",
+		"giza",
+		"faiyum",
+		"amarna",
+		"abydos",
+		"karnak",
+		"deir-el-bahari",
+		"valley-of-the-kings",
+		"philae",
+		"abu-simbel",
+		"alexandria"
+	]
+}

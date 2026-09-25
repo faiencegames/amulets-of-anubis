@@ -1,25 +1,30 @@
-/* 00-colours.css: Every colour of the interface, by name, and the four colour modes.
+/* 00-colours.css: Amulets of Anubis's look. Every colour and texture of the
+   interface, by name, in the four colour modes: papyrus scrolls, sandstone
+   buttons and slabs, words in the colours of the amulets, the painted band.
 
-   The rest of the stylesheet names these colours (var(--ink), var(--bevel-hi))
-   and never writes one out, except for what looks the same in every mode:
-   gold and sand (metal is metal), shadows, the painted band, water, the
-   title screen (always by night) and anything drawn on the board. So a mode
-   is one short list here. The Settings screen chooses the mode
-   (applyColours(), src/game/14-menu.js), as data-colours on <html>:
-   none for the game's own look, 'dark', 'hcl' (high contrast, light) or
-   'hcd' (high contrast, dark). */
+   It takes the place of the engine's plain engine/web/css/00-colours.css (a
+   file in the game's web/css/ with the same name as one of the engine's
+   replaces it; the manual, part 2, "The stylesheet"), so it sets every name
+   that file sets. The rest of the stylesheet names these colours
+   (var(--ink), var(--bevel-hi)) and never writes one out, except for what
+   looks the same in every mode: gold and sand (metal is metal), shadows,
+   water, the title screen (always by night) and anything drawn on the
+   board. The Settings screen chooses the mode (applyColours(),
+   engine/src/00-open.js), as data-colours on <html>: none for the game's own
+   look, 'dark', 'hcl' (high contrast, light) or 'hcd' (high contrast,
+   dark). */
 
 :root {
 	/* papyrus: the scrolls, notes and plaques */
-	--papyrus: #e8d49e;
-	--papyrus-hi: #f3e6c4;
-	--papyrus-bright: #fbf3de;
-	--papyrus-lo: #e2cb9c;
-	--papyrus-edge: #a8844e;
-	--papyrus-shade: #8a5f2a88;
-	--papyrus-rim: #6b4a1f;
-	--papyrus-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .32 0 0 0 0 .12 0 0 0 .32 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-	--papyrus-fibres:
+	--paper: #e8d49e;
+	--paper-hi: #f3e6c4;
+	--paper-bright: #fbf3de;
+	--paper-lo: #e2cb9c;
+	--paper-edge: #a8844e;
+	--paper-shade: #8a5f2a88;
+	--paper-rim: #6b4a1f;
+	--paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .32 0 0 0 0 .12 0 0 0 .32 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+	--paper-fibres:
 		repeating-linear-gradient(0deg, #8a622a14 0 1px, transparent 1px 5px),
 		repeating-linear-gradient(90deg, #8a622a10 0 2px, transparent 2px 11px);
 	/* the words on it, darkest first, and the thin lines between rows */
@@ -28,13 +33,13 @@
 	--ink-3: #6b4a22;
 	--rule: #8a622a55;
 	/* the colours of the amulets, for words and marks */
-	--carnelian: #8e2415;
-	--carnelian-hi: #b1301c;
-	--carnelian-lo: #7a1f12;
-	--on-carnelian: #fff3d0;
-	--lapis: #1f3a7a;
-	--lapis-ink: #1f4a7a;
-	--malachite: #2e7d5b;
+	--accent: #8e2415;
+	--accent-hi: #b1301c;
+	--accent-lo: #7a1f12;
+	--on-accent: #fff3d0;
+	--focus: #1f3a7a;
+	--ink-cool: #1f4a7a;
+	--good: #2e7d5b;
 	--gold: #c8962e;
 	--gold-hi: #f6d676;
 	--gold-ink: #9a6a12;
@@ -54,9 +59,9 @@
 	--tint: #f3e3c066;
 	--tint-strong: #f3e3c0aa;
 	/* the carved slabs: the top bar, the dock, the tablets beside the board */
-	--sandstone: #cdb183;
-	--sandstone-hi: #efdcb4;
-	--sandstone-lo: #7d6038;
+	--slab: #cdb183;
+	--slab-rim-hi: #efdcb4;
+	--slab-rim-lo: #7d6038;
 	--slab-hi: #d9c093;
 	--slab-mid: #c9aa7b;
 	--slab-lo: #b99b6a;
@@ -103,8 +108,22 @@
 	--undo-lo: #b9c7d6;
 	--undo-edge-hi: #f4f7fa;
 	--undo-edge-lo: #6a7c90;
+	/* the page behind everything, seen before a stop's scenery arrives and
+	   round the edges: the same in every mode */
+	--page: #6b5236;
+	--page-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .8 0 0 0 0 .65 0 0 0 0 .4 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+	--page-deep: #140e08;
+	--page-deep-2: #2a1d10;
+	/* the stops' marks and names on the map, over the map picture: the same
+	   in every mode */
+	--map-here: #8e2415;
+	--map-number: #2b1606;
+	--map-name: #3a1e08;
+	--map-name-locked: #6b5a3a;
+	--map-stars: #9a6a12;
+	--map-halo: #ead7a4;
 	/* the painted band of the board's frame: the same in every mode */
-	--painted-band: repeating-linear-gradient(
+	--band: repeating-linear-gradient(
 		90deg,
 		#1f3a7a 0 16px,
 		#e8d49e 16px 18px,
@@ -115,33 +134,34 @@
 		#c8962e 54px 70px,
 		#e8d49e 70px 72px
 	);
+	--band-edge: #120a03;
 	color-scheme: dark;
 }
 
 /* Dark: papyrus and sandstone by lamplight, the words light */
 :root[data-colours='dark'] {
-	--papyrus: #2a2017;
-	--papyrus-hi: #33281c;
-	--papyrus-bright: #3e3122;
-	--papyrus-lo: #281e15;
-	--papyrus-edge: #6a5438;
-	--papyrus-shade: #0009;
-	--papyrus-rim: #0c0804;
-	--papyrus-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .95 0 0 0 0 .85 0 0 0 0 .65 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-	--papyrus-fibres:
+	--paper: #2a2017;
+	--paper-hi: #33281c;
+	--paper-bright: #3e3122;
+	--paper-lo: #281e15;
+	--paper-edge: #6a5438;
+	--paper-shade: #0009;
+	--paper-rim: #0c0804;
+	--paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .95 0 0 0 0 .85 0 0 0 0 .65 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+	--paper-fibres:
 		repeating-linear-gradient(0deg, #f3e3c00a 0 1px, transparent 1px 5px),
 		repeating-linear-gradient(90deg, #f3e3c008 0 2px, transparent 2px 11px);
 	--ink: #efe2c0;
 	--ink-2: #dccba4;
 	--ink-3: #bca782;
 	--rule: #d8c49a40;
-	--carnelian: #f2a086;
-	--carnelian-hi: #ffbfa8;
-	--carnelian-lo: #f7b49c;
-	--on-carnelian: #2b1a0b;
-	--lapis: #8cb8ea;
-	--lapis-ink: #9cc4f0;
-	--malachite: #72c8a0;
+	--accent: #f2a086;
+	--accent-hi: #ffbfa8;
+	--accent-lo: #f7b49c;
+	--on-accent: #2b1a0b;
+	--focus: #8cb8ea;
+	--ink-cool: #9cc4f0;
+	--good: #72c8a0;
 	--gold: #e0ac3a;
 	--gold-ink: #e8b860;
 	--stone-face-hi: #4c3c2a;
@@ -156,9 +176,9 @@
 	--bevel-lo: #120b05;
 	--tint: #ffffff12;
 	--tint-strong: #ffffff22;
-	--sandstone: #3a2e20;
-	--sandstone-hi: #5e4b33;
-	--sandstone-lo: #120b05;
+	--slab: #3a2e20;
+	--slab-rim-hi: #5e4b33;
+	--slab-rim-lo: #120b05;
 	--slab-hi: #3f3223;
 	--slab-mid: #362a1d;
 	--slab-lo: #2e2419;
@@ -201,26 +221,26 @@
    black, a thick edge on everything that can be pressed, and a yellow face
    on what is chosen */
 :root[data-colours='hcl'] {
-	--papyrus: #fff;
-	--papyrus-hi: #fff;
-	--papyrus-bright: #fff;
-	--papyrus-lo: #fff;
-	--papyrus-edge: #000;
-	--papyrus-shade: transparent;
-	--papyrus-rim: #000;
-	--papyrus-grain: none;
-	--papyrus-fibres: none;
+	--paper: #fff;
+	--paper-hi: #fff;
+	--paper-bright: #fff;
+	--paper-lo: #fff;
+	--paper-edge: #000;
+	--paper-shade: transparent;
+	--paper-rim: #000;
+	--paper-grain: none;
+	--paper-fibres: none;
 	--ink: #000;
 	--ink-2: #000;
 	--ink-3: #1f1f1f;
 	--rule: #000;
-	--carnelian: #9a1000;
-	--carnelian-hi: #c41200;
-	--carnelian-lo: #7a0c00;
-	--on-carnelian: #fff;
-	--lapis: #0033aa;
-	--lapis-ink: #0033aa;
-	--malachite: #00603a;
+	--accent: #9a1000;
+	--accent-hi: #c41200;
+	--accent-lo: #7a0c00;
+	--on-accent: #fff;
+	--focus: #0033aa;
+	--ink-cool: #0033aa;
+	--good: #00603a;
 	--gold: #000;
 	--gold-ink: #6b4800;
 	--stone-face-hi: #fff;
@@ -235,9 +255,9 @@
 	--bevel-lo: #000;
 	--tint: #0000000d;
 	--tint-strong: #ffe14d;
-	--sandstone: #fff;
-	--sandstone-hi: #000;
-	--sandstone-lo: #000;
+	--slab: #fff;
+	--slab-rim-hi: #000;
+	--slab-rim-lo: #000;
 	--slab-hi: #fff;
 	--slab-mid: #fff;
 	--slab-lo: #fff;
@@ -283,26 +303,26 @@
 	color-scheme: light;
 }
 :root[data-colours='hcd'] {
-	--papyrus: #000;
-	--papyrus-hi: #000;
-	--papyrus-bright: #000;
-	--papyrus-lo: #000;
-	--papyrus-edge: #fff;
-	--papyrus-shade: transparent;
-	--papyrus-rim: #fff;
-	--papyrus-grain: none;
-	--papyrus-fibres: none;
+	--paper: #000;
+	--paper-hi: #000;
+	--paper-bright: #000;
+	--paper-lo: #000;
+	--paper-edge: #fff;
+	--paper-shade: transparent;
+	--paper-rim: #fff;
+	--paper-grain: none;
+	--paper-fibres: none;
 	--ink: #fff;
 	--ink-2: #fff;
 	--ink-3: #e0e0e0;
 	--rule: #fff;
-	--carnelian: #ffd83a;
-	--carnelian-hi: #ffe98a;
-	--carnelian-lo: #ffd83a;
-	--on-carnelian: #000;
-	--lapis: #7fc4ff;
-	--lapis-ink: #9fd4ff;
-	--malachite: #6be3a8;
+	--accent: #ffd83a;
+	--accent-hi: #ffe98a;
+	--accent-lo: #ffd83a;
+	--on-accent: #000;
+	--focus: #7fc4ff;
+	--ink-cool: #9fd4ff;
+	--good: #6be3a8;
 	--gold: #ffd83a;
 	--gold-ink: #ffd83a;
 	--stone-face-hi: #000;
@@ -317,9 +337,9 @@
 	--bevel-lo: #fff;
 	--tint: #ffffff1f;
 	--tint-strong: #3d3300;
-	--sandstone: #000;
-	--sandstone-hi: #fff;
-	--sandstone-lo: #fff;
+	--slab: #000;
+	--slab-rim-hi: #fff;
+	--slab-rim-lo: #fff;
 	--slab-hi: #000;
 	--slab-mid: #000;
 	--slab-lo: #000;
@@ -362,18 +382,4 @@
 	--undo-lo: #000;
 	--undo-edge-hi: #9fd4ff;
 	--undo-edge-lo: #9fd4ff;
-}
-/* a seal still to earn is a faint grey picture: fainter still on a dark
-   scroll, so a little stronger there */
-:root[data-colours='dark'] .mark.no,
-:root[data-colours='hcd'] .mark.no {
-	opacity: 0.6;
-}
-/* in high contrast the one way forward is yellow, with black words */
-:root[data-colours^='hc'] .act-go:not(.dark) {
-	color: #000;
-	background: #ffd83a;
-}
-:root[data-colours^='hc'] .act-go:not(.dark) .act-words small {
-	color: #000;
 }

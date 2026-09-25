@@ -1,0 +1,3 @@
+Fixed: beginning a new journey from the Menu left the first stop empty until the game was opened again. It now starts at once.
+
+Behind the scenes, the game's rules and code live in a folder of their own, apart from its words, pictures and colours. Nothing plays or looks different.

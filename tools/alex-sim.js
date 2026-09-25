@@ -2,7 +2,7 @@
 // Tests: no bonus, all upgrades (Mason's favour ×5 = +5 moves),
 //        all upgrades + Wisdom boon (+6), all upgrades + Flood-equivalent.
 const fs = require('fs');
-const K = require('./load-core')(['LEVELS','Core','DIFFICULTY','setBoardSize','boardMode','pickShape','stopOptions']);
+const K = require('../engine/tools/load-core')(['LEVELS','Core','DIFFICULTY','setBoardSize','boardMode','pickShape','stopOptions']);
 
 const diff = 1, modeId = 'classic', cols = 8, rows = 8, games = 200;
 const D = K.DIFFICULTY[diff], mode = K.boardMode(modeId);

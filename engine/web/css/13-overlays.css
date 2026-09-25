@@ -1,0 +1,491 @@
+/* 13-overlays.css: Overlays (every scroll screen), help lists, the Basics legend, and the map. */
+
+/* overlays */
+.overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 10;
+	display: none;
+	align-items: center;
+	justify-content: center;
+	padding: max(14px, var(--safe-top)) 14px max(14px, var(--safe-bottom));
+	background: #0b0703cc;
+}
+.overlay.open {
+	display: flex;
+}
+.overlay .scroll {
+	width: min(520px, 100%);
+	max-height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+.overlay .sheet {
+	overflow: auto;
+	padding: 20px 24px 22px;
+}
+:root.calm .groove div {
+	transition: none;
+}
+.overlay h2 {
+	margin: 0 0 4px;
+	font-family: var(--display);
+	font-size: 30px;
+	line-height: 1.15;
+	color: var(--accent);
+	text-align: center;
+}
+.overlay .lede {
+	margin: 0 0 12px;
+	text-align: center;
+	font-style: italic;
+	color: var(--ink-2);
+}
+/* the map's lede sits close above the map */
+.overlay .map-lede {
+	margin-bottom: 6px;
+}
+.overlay p {
+	margin: 0 0 10px;
+}
+.actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	justify-content: center;
+	margin-top: 16px;
+}
+.actions .btn {
+	flex: 0 1 auto;
+}
+
+/* a scroll with one way forward (showMsg, actions with a "kind"): the big
+   button and any cards stack at full width, the quiet ones sit below. All are
+   the game's stone buttons (.btn), in three sizes; a way into a tomb is
+   torchlit and one into an oasis blue, as their own buttons are. */
+.actions.stacked {
+	flex-direction: column;
+	align-items: stretch;
+}
+.act-go,
+.act-card,
+.act-quiet,
+.act-exit {
+	cursor: pointer;
+	font-family: var(--display);
+	color: var(--accent);
+	text-shadow: 0 1px 0 var(--bevel-hi);
+	background: linear-gradient(180deg, var(--stone-face-hi), var(--stone-face-lo));
+	border: 3px solid;
+	border-color: var(--bevel-hi) var(--bevel-lo) var(--bevel-lo) var(--bevel-hi);
+	border-radius: 2px;
+	box-shadow: 0 2px 0 #00000044;
+}
+.act-go:hover,
+.act-card:hover,
+.act-quiet:hover,
+.act-exit:hover {
+	color: var(--accent-hi);
+	background: linear-gradient(180deg, var(--stone-hover-hi), var(--stone-hover-lo));
+}
+.act-go:active,
+.act-card:active,
+.act-quiet:active,
+.act-exit:active {
+	border-color: var(--bevel-lo) var(--bevel-hi) var(--bevel-hi) var(--bevel-lo);
+	transform: translateY(2px);
+	box-shadow: none;
+}
+.act-go:focus-visible,
+.act-card:focus-visible,
+.act-quiet:focus-visible,
+.act-exit:focus-visible {
+	outline: 3px solid var(--focus);
+	outline-offset: 2px;
+}
+.act-go,
+.act-card {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	width: 100%;
+	text-align: left;
+	line-height: 1.15;
+}
+.act-go {
+	padding: 9px 14px;
+	min-height: 56px;
+	font-size: 21px;
+}
+.act-card {
+	padding: 7px 12px;
+	font-size: 17px;
+}
+/* the way into a tomb glows amber, like torchlight; into an oasis, soft blue.
+   Light faces with dark words, so the words read (7.9 to 5.2 : 1 on amber,
+   7.0 to 4.2 on blue) */
+.act-go.dark,
+.act-card.dark {
+	color: var(--torch-ink);
+	text-shadow: 0 1px 0 var(--torch-glint);
+	background: linear-gradient(180deg, var(--torch-hi), var(--torch-lo));
+	border-color: var(--torch-edge-hi) var(--torch-edge-lo) var(--torch-edge-lo) var(--torch-edge-hi);
+}
+.act-go.dark:hover,
+.act-card.dark:hover {
+	color: var(--torch-ink);
+	background: linear-gradient(180deg, var(--torch-hover-hi), var(--torch-hover-lo));
+}
+.act-go.dark.oasis,
+.act-card.dark.oasis {
+	color: var(--oasis-ink);
+	text-shadow: 0 1px 0 var(--oasis-glint);
+	background: linear-gradient(180deg, var(--oasis-hi), var(--oasis-lo));
+	border-color: var(--oasis-edge-hi) var(--oasis-edge-lo) var(--oasis-edge-lo) var(--oasis-edge-hi);
+}
+.act-go.dark.oasis:hover,
+.act-card.dark.oasis:hover {
+	color: var(--oasis-ink);
+	background: linear-gradient(180deg, var(--oasis-hover-hi), var(--oasis-hover-lo));
+}
+.act-go[hidden],
+.act-card[hidden] {
+	display: none;
+}
+.act-words {
+	flex: 1;
+	min-width: 0;
+}
+.act-words small {
+	display: block;
+	margin-top: 2px;
+	font-family: var(--body);
+	font-size: 14px;
+	font-style: italic;
+	line-height: 1.3;
+	color: var(--ink-3);
+	text-shadow: none;
+}
+.dark .act-words small {
+	color: var(--torch-ink-2);
+}
+.dark.oasis .act-words small {
+	color: var(--oasis-ink-2);
+}
+.act-arrow {
+	font-size: 24px;
+	line-height: 1;
+}
+.act-ico {
+	display: inline-flex;
+	flex: none;
+}
+.act-go .act-ico svg {
+	width: 38px;
+	height: 28px;
+}
+.act-card .act-ico svg {
+	width: 28px;
+	height: 30px;
+}
+.actions-quiet {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	justify-content: center;
+	margin-top: 10px;
+}
+.act-quiet {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	min-height: 38px;
+	padding: 4px 12px;
+	font-size: 15.5px;
+}
+/* one big button and a single quiet one (a way back) share a line: the
+   quiet one as tall as the big one, narrower, its words on two lines if need be */
+.actions.paired {
+	flex-wrap: nowrap;
+	align-items: stretch;
+	gap: 10px;
+}
+/* sharing a line, the big button is as tall as its neighbour, not a banner */
+.actions.paired .act-go {
+	flex: 1;
+	width: auto;
+	min-width: 0;
+	min-height: 46px;
+	padding: 6px 12px;
+	font-size: 18px;
+}
+.actions.paired .act-go .act-ico svg {
+	width: 28px;
+	height: 24px;
+}
+.actions.paired .act-quiet {
+	flex: 0 1 auto;
+	max-width: 36%;
+	justify-content: center;
+	text-align: center;
+	line-height: 1.15;
+}
+/* the way out that changes nothing: full width at the foot of the scroll,
+   after a multiplication sign like the × in its corner */
+.act-exit {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	width: 100%;
+	min-height: 44px;
+	margin-top: 14px;
+	padding: 4px 12px;
+	font-size: 17px;
+}
+.act-x {
+	font-size: 22px;
+	line-height: 1;
+}
+.act-short {
+	display: none;
+}
+@media (max-width: 640px) {
+	.actions.paired .act-long,
+	.act-go .act-long,
+	.act-card .act-long {
+		display: none;
+	}
+	.actions.paired .act-short,
+	.act-go .act-short,
+	.act-card .act-short {
+		display: inline;
+	}
+	.actions.paired .act-go {
+		font-size: 17px;
+		gap: 8px;
+	}
+}
+.act-quiet .act-ico svg {
+	width: 20px;
+	height: 20px;
+}
+.stars {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+	margin: 6px 0 10px;
+}
+.stars svg {
+	width: 44px;
+	height: 44px;
+}
+.help-list {
+	list-style: none;
+	margin: 8px 0 0;
+	padding: 0;
+}
+.help-list li {
+	display: grid;
+	grid-template-columns: 52px 1fr;
+	gap: 12px;
+	align-items: center;
+	padding: 7px 0;
+	border-top: 1px solid var(--rule);
+}
+.help-list li.no-ico {
+	grid-template-columns: 1fr;
+} /* a row with no picture: text takes the full width */
+.help-list img {
+	width: 52px;
+	height: 52px;
+}
+/* the little picture legend on the Basics tab, and currency icons in help text */
+.basics-legend {
+	margin: 6px 0 2px;
+}
+.legend-row {
+	display: grid;
+	grid-template-columns: 44px 1fr;
+	gap: 12px;
+	align-items: center;
+	padding: 7px 0;
+	border-top: 1px solid var(--rule);
+}
+.legend-row:first-child {
+	border-top: none;
+}
+.legend-row img {
+	width: 44px;
+	height: 44px;
+}
+.legend-row > div {
+	font-size: 15px;
+	line-height: 1.4;
+}
+.codex-body .g-ico {
+	display: inline-block;
+	vertical-align: -2px;
+	margin: 0 3px;
+}
+#mapSvg {
+	width: 100%;
+	height: auto;
+	display: block;
+}
+.map-scroll {
+	overflow: auto;
+	border-radius: 4px;
+	-webkit-overflow-scrolling: touch;
+}
+#mapSvg .hit {
+	cursor: pointer;
+}
+.stop-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	gap: 6px;
+}
+.stop-btn {
+	display: grid;
+	grid-template-columns: 26px 1fr auto;
+	gap: 6px;
+	align-items: center;
+	min-height: 40px;
+	padding: 5px 9px;
+	cursor: pointer;
+	font: inherit;
+	text-align: left;
+	color: var(--ink);
+	background: var(--paper-hi);
+	border: 1px solid var(--paper-edge);
+	border-radius: 4px;
+	box-shadow: 0 2px 0 #7a5a3055;
+}
+.stop-btn b {
+	font-family: var(--display);
+	color: var(--accent-lo);
+	text-align: center;
+}
+/* number | name, stars | and below the name, what else is there, in words */
+.stop-btn {
+	grid-template-areas: 'num name stars' 'num meta meta';
+	row-gap: 2px;
+	align-content: center;
+	text-align: left;
+}
+.stop-btn b {
+	grid-area: num;
+}
+.stop-name {
+	grid-area: name;
+	font-family: var(--display);
+	font-size: 15.5px;
+	line-height: 1.1;
+}
+.stop-stars {
+	grid-area: stars;
+}
+.stop-meta {
+	grid-area: meta;
+	font-size: 12.5px;
+	line-height: 1.3;
+	color: var(--ink-3);
+}
+/* seals, omens braved and the doorway, as small pictures (27-seals.js) */
+.stop-meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 2px 10px;
+	align-items: center;
+}
+.stop-meta .mark {
+	width: 15px;
+	height: 15px;
+}
+.stop-meta .door-mark {
+	width: 16px;
+	height: 16px;
+}
+.stop-meta .door-mark .mark {
+	width: 11px;
+	height: 11px;
+	right: -5px;
+	bottom: -3px;
+}
+.stop-stars {
+	font-style: normal;
+	font-size: 16px;
+	letter-spacing: 1px;
+	color: var(--gold-ink);
+	white-space: nowrap;
+}
+.stop-btn.cur {
+	background: linear-gradient(180deg, #f7dd8c, #e2b654);
+	border-color: #8a5a10;
+}
+.stop-btn[disabled] {
+	opacity: 0.5;
+	cursor: not-allowed;
+	box-shadow: none;
+}
+.stop-btn:focus-visible {
+	outline: 3px solid var(--focus);
+	outline-offset: 2px;
+}
+@media (max-width: 860px) {
+	.map-scroll {
+		max-height: 52vh;
+		border: 1px solid var(--paper-edge);
+		background: var(--paper-lo);
+	}
+	.map-scroll #mapSvg {
+		width: 150%;
+		max-width: none;
+	}
+	.stop-list {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+@media (max-width: 560px) {
+	.stop-list {
+		grid-template-columns: 1fr;
+	}
+} /* phones: one stop per row */
+#mapSvg .site {
+	cursor: pointer;
+	outline: none;
+}
+/* the stops' marks and names on the map, in the map's own colours
+   (00-colours.css): the same in every mode, as the map picture is */
+#mapSvg circle.site-here {
+	stroke: var(--map-here);
+}
+#mapSvg .site-num {
+	fill: var(--map-number);
+}
+#mapSvg .site-name {
+	fill: var(--map-name);
+	stroke: var(--map-halo);
+}
+#mapSvg .site-name.site-locked {
+	fill: var(--map-name-locked);
+}
+#mapSvg .site-stars {
+	fill: var(--map-stars);
+	stroke: var(--map-halo);
+}
+#mapSvg .site:focus-visible circle.mark {
+	stroke: var(--focus);
+	stroke-width: 4;
+}
+#mapSvg text {
+	font-family: var(--display);
+}
+
+/* How to play, "Tombs & oases": the doorway or view beside each place */
+.help-list .place-ico {
+	width: 34px;
+	height: 36px;
+	flex: none;
+}

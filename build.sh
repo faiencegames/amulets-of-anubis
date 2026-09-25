@@ -25,7 +25,7 @@
 # a browser's path). The Android app needs the Android SDK (set ANDROID_SDK or
 # ANDROID_HOME) and a JDK. Missing tools are skipped.
 #
-# GAME_VERSION (default 0.9.3) is the version the apps show. Android also
+# GAME_VERSION (default 0.9.4) is the version the apps show. Android also
 # needs a version code that rises with every release; it is made from the
 # version (1.2.3 becomes 10203) unless ANDROID_VERSION_CODE says otherwise.
 # (The same two numbers are written in platforms/android/AndroidManifest.xml,
@@ -46,7 +46,7 @@ cd "$(dirname "$0")"
 
 ELECTRON_VERSION="44.4.3"
 APP_NAME="Amulets of Anubis"
-GAME_VERSION="${GAME_VERSION:-0.9.3}"
+GAME_VERSION="${GAME_VERSION:-0.9.4}"
 GAME="dist/amulets-of-anubis.html"
 
 info() { printf '\033[1m==> %s\033[0m\n' "$*"; }
@@ -127,7 +127,7 @@ if want android || [ "$TARGET" = aab ]; then
 				# a debug build carries the edge tests' hook (window.__edge), so a
 				# computer can play it on a phone and measure (tools/perf/phone.mjs)
 				if [ -n "$ANDROID_DEBUG" ] && [ "$TARGET" != aab ] && have node \
-						&& node tools/screenshots/edge.mjs --copy; then
+						&& node engine/tools/screenshots/edge.mjs --copy; then
 						cp dist/edge/game.html "$WORK/assets/index.html"
 				fi
 				"$B/aapt2" compile --dir "$SRC/res" -o "$WORK/res.zip"
@@ -210,14 +210,16 @@ if want screenshots; then
 				skip "Node.js not found: the screenshots in docs/images/ were not retaken."
 		else
 				info "Taking the screenshots (docs/images/)..."
-				SHOTS="tools/screenshots"
+				# Playwright is installed with the engine's test tools; take.mjs,
+				# with this game's list of scenes, is in tools/screenshots/
+				SHOTS="engine/tools/screenshots"
 				if [ ! -d "$SHOTS/node_modules/playwright" ]; then
 						ok "First time: fetching Playwright"
 						(cd "$SHOTS" && npm install --no-audit --no-fund >/dev/null 2>&1) || true
 				fi
 				# its browser (quick when it is already there); CHROME=<path> uses your own
 				[ -n "$CHROME" ] || (cd "$SHOTS" && npx playwright install chromium >/dev/null 2>&1) || true
-				if ! (cd "$SHOTS" && node take.mjs); then
+				if ! node tools/screenshots/take.mjs; then
 						skip "The screenshots could not be taken (see above); the old ones are kept."
 				fi
 		fi

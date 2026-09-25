@@ -1,7 +1,7 @@
 # Content reference
 
 This is the field-by-field reference for the files in this folder. Each file is
-one `{ ... }` block describing one thing. The build (`build.py`) reads every
+one `{ ... }` block describing one thing. The build (`engine/build.py`) reads every
 file, checks each field, and pours the result into the game; if a field is
 wrong it stops and tells you which file, which line and what to do, and writes
 nothing.
@@ -42,17 +42,20 @@ Eight strings of eight characters.
 | `0`  | already gilded (counts as a gilded floor square, nothing to do) |
 | `1`  | bare stone: one match gilds it |
 | `2`  | thick stone: two matches gild it |
-| `s`  | *chambers only:* bare stone with an amulet buried in sand on it |
-| `S`  | *chambers only:* thick stone with an amulet buried in sand on it |
-| `w`  | *chambers only:* bare stone with an amulet under water on it (oases) |
-| `W`  | *chambers only:* thick stone with an amulet under water on it |
+| `s`  | bare stone with an amulet buried in sand on it |
+| `S`  | thick stone with an amulet buried in sand on it |
+| `w`  | bare stone with an amulet under water on it (oases) |
+| `W`  | thick stone with an amulet under water on it |
 
-Sand and water follow the same rule; only the picture differs. A covered
-amulet can't be moved and is in no match. A match (or a blast) next
-to it, or on it, brushes the sand off; from then on it is an ordinary amulet,
-and its stone is gilded when it is matched. In a chamber the build also checks
-that every patch of sand or water touches a square that starts clear, and that
-at least 16 squares start clear.
+These four letters are the covers' (`content/covers/`, below): each cover
+names its own two. Sand and water follow the same rule; only the picture,
+sound and colours differ. A covered amulet can't be moved and is in no
+match. A match (or a blast) next to it, or on it, brushes the sand off; from
+then on it is an ordinary amulet, and its stone is gilded when it is
+matched. Any floor plan may use covers, though only the chambers do so
+now. Where a plan has covers, the build also checks that every patch of
+them touches a square that starts clear, and that at least 16 squares
+start clear.
 
 The build checks that every non-gap square sits on a run of three across or
 down (or it could never be matched) and that there is at least some stone to
@@ -255,11 +258,50 @@ of radius 24 in the middle); the build won't take a badge without one.
 | `weight` | yes | how often it turns up when a badge falls, against the others; 0 switches it off |
 | `colour` | yes | the glow round an amulet wearing it, like `"#ffd65a"` |
 
-Powers: `gild_stones` (golden light gilds n bare stones anywhere, 4),
-`gild_around` (gilds the stones in the nine squares around it),
-`row_and_column` (clears its row and column), `extra_moves` (n more moves,
-3), `give_lapis` (n lapis, 3), `lose_moves` (n moves lost, never the last,
-2), `ungild_stones` (n gilded stones turn bare, 3).
+Powers (the default amount in brackets): `gild_stones` (golden light gilds
+n bare stones anywhere, 4), `gild_around` (gilds the stones in the nine
+squares around it), `gild_wide` (gilds the stones within n squares of it
+on every side, 2), `gild_row_and_column` (gilds the stones in its row and
+column, clearing nothing), `row_and_column` (clears its row and column),
+`clear_around` (clears everything within n squares of it, 1),
+`clear_its_kind` (clears every amulet of its own kind), `break_covers`
+(brushes the sand or water off every covered amulet), `extra_moves` (n
+more moves, 3), `give_lapis` (n lapis, 3), `lose_moves` (n moves lost,
+never the last, 2), `ungild_stones` (n gilded stones turn bare, 3),
+`thicken_stones` (n bare stones turn thick, 3), `cover_amulets` (n amulets
+are buried in sand, 2). The last five are meant for cursed badges. No
+badge of this game uses `gild_wide`, `gild_row_and_column`,
+`clear_around`, `clear_its_kind`, `break_covers`, `thicken_stones` or
+`cover_amulets` yet: they are there for later.
+
+## Covers (`content/covers/`)
+
+What an amulet can be held under: in this game, sand (`01-sand.jsonc`) and
+water (`02-water.jsonc`). A held amulet can't be swapped, fires no special
+or badge, and stays where it is when the board shuffles. Its picture is
+`images/covers/<id>.svg`, drawn over the amulet on a 192 by 192 canvas
+(the square is 32 to 160), and `<id>-1.svg`, `<id>-2.svg` … where it looks
+different with that many layers left. The first cover is the one curses,
+omens and the `cover_amulets` badge power use unless told otherwise. The
+engine can do more than sand and water do: a cover can take several hits,
+break only when its own square is cleared, let its amulet match where it
+lies, or spread. Tessera's example game has amber, a net and ivy.
+
+| field | required | what it is |
+|-------|:--------:|------------|
+| `id` | yes | short id, and the picture's name |
+| `name` | yes | its name, in How to play: "Buried in sand" |
+| `text` | yes | what it means, in How to play |
+| `popup` | yes | shown when the player tries to move a covered amulet |
+| `chamber_note` | no | the line on a chamber's card whose floor has it (else the `popup`) |
+| `letters` | yes | two letters for floor plans: on bare stone and on thick stone, like `["s", "S"]`; no other cover may use them, nor `.` or a digit |
+| `layers` | no | how many hits break it, 1 (the default) to 9 |
+| `broken_by` | no | `"beside"` (the default): a clear on it or beside it is a hit; `"on"`: only a clear of its own square |
+| `matches` | no | `true`: the amulet still counts in a run where it lies; the run breaks a layer and the amulet stays. Default `false` |
+| `spreads` | no | `true`: after a move that broke none of it, it grows over one plain amulet beside it. Default `false` |
+| `sound` | no | the sound of it breaking, one of the cover sounds in the appendix (default `sand`) |
+| `burst` | no | two colours it bursts into, like `["#e8c98a", "#b88a48"]` |
+| `amulet_on_show` | no | the amulet How to play shows under it |
 
 ## Curses (`content/curses/`)
 
@@ -278,10 +320,15 @@ trial card names its curse before the player accepts.
 Effects, shared with the omens (the hardships): `fewer_moves` (n fewer
 moves), `fewer_moves_percent` (n percent fewer moves), `thick_stones` (n bare
 stones start thick), `thick_stones_share` (one bare stone in n starts thick),
+`thick_edges` (n bare stones along the edge of the floor start thick),
 `buried_amulets` (n amulets start buried in sand, as in a tomb),
+`covered_edges` (n amulets along the edge of the floor start buried),
 `fewer_badges` (badged amulets fall n percent less often; 100 means none),
 `more_cursed_badges` (cursed badges fall, n times as often), `no_boons` (no
-boons can be used). A strength is at most 100.
+boons can be used). A strength is at most 100. A curse that buries
+amulets may name its `"cover"` (`"sand"` or `"water"`, from
+`content/covers/`); without one, it uses the first, sand. `thick_edges` and
+`covered_edges` are for later: no curse or omen uses them yet.
 
 ## Omens (`content/omens/`)
 
@@ -354,7 +401,8 @@ dimmed, with the reason.
 A place beside a stop, with a small board of its own. It is either a **tomb or
 temple** (`"setting": "tomb"`, the default): dim, lit by torches, some amulets
 buried in sand; or an **oasis** (`"setting": "oasis"`): in daylight, some
-amulets under water. The two differ only in their look and words. Its doorway opens once that stop is gilded (and the
+amulets under water. (The sand and water are the plan's letters; the line
+about them on the chamber's card is each cover's `chamber_note`.) The two differ only in their look and words. Its doorway opens once that stop is gilded (and the
 "chambers" stage has arrived, see `settings.jsonc`). The player finds it on the
 win screen, on the stop's card and as a doorway beside the stop on the map.
 The goal is always to gild the floor. The reward is paid the first time; every
@@ -380,11 +428,11 @@ arrived on a first journey). Oases stay calm.
 | `amulets` | no | its own amulet list (default: the stop's), or a list of such lists: then each time it opens, one is picked at random, as for a stop |
 
 It uses the stop's amulets and music unless it has its own `amulets`; a tomb
-darkens its scenery and muffles the music, as if through the walls. Check a new chamber with `node tools/events-sim.js`; the bot
+darkens its scenery and muffles the music, as if through the walls. Check a new chamber with `node engine/tools/events-sim.js`; the bot
 should win it about 60–80% of the time on a first visit; the sim also plays
 each tomb and temple as a first and a fourth return, which should be harder.
 
-## Anubis's stall (`content/anubis-stall/`)
+## Anubis's stall (`content/stall/`)
 
 Something Anubis sells: bought for one stop, used once (or held).
 
@@ -479,7 +527,8 @@ the default shown. The file itself has a comment beside each.
 | `staging.extra_moves_before_badges_percent` | 50 | until badges arrive on a first journey, each stop gives this much more of its moves (the stops are balanced with badges in play) |
 | `stars.three_stars_moves_left_percent` | 30 | share of moves left for three stars |
 | `stars.two_stars_moves_left_percent` | 15 | … for two |
-| `difficulty.<Relaxed/Normal/Hard/Pharaoh>` | 140/100/85/72, 4/2.2/1.5/0.8, 6/9/15/0 | `moves_percent`, `badge_chance_percent`, `hint_after_seconds` (0 = no hints) |
+| `difficulty.<Relaxed/Normal/Hard/Pharaoh>` | 140/100/85/72, 4/2.2/1.5/0.8, 6/9/15/0 | `moves_percent`, `badge_chance_percent`, `hint_after_seconds` (0 = no hints). The four blocks, easiest first, also name the difficulties: this game's are Relaxed, Normal, Hard and Pharaoh (a game that names none gets Relaxed, Normal, Hard and Hardest). Curses, conditions and `text.jsonc` (`difficulty.pharaoh`, `difficulty_names.pharaoh`) use these names, and saves keep a difficulty by its place, so never rename one |
+| `river_channel.water_edge`, `.water_middle`, `.ripples`, `.reeds` | "#1d4f73", "#2f78a6", "rgba(220,240,255,.35)", "none" | the colours of the Nile down an Omega board: the water at its banks and in the middle, the ripples, and the reeds along the banks ("none" for no reeds; this game has them) |
 | `river_event_percent` | 30 | how often sailing on is interrupted by a river event |
 | `trial_offer_percent` | 35 | how often a trial is offered when a stop begins |
 | `badges.most_good_badges_at_once` | 2 | good badges on the board at once |
@@ -499,7 +548,10 @@ the default shown. The file itself has a comment beside each.
 ## Pictures and icons (`images/`)
 
 Every picture, one file each; `images/README.md` lists the folders, names and
-sizes. Icons (`images/icons/`: `dock`, `boons`, `relics`, `menu`, `ui`, `map`)
+sizes. `images/favicon.svg` is the picture in the browser's tab. The map
+is the size of `images/icons/map/background.svg` (its `viewBox`), and each
+stop's `map_position` is a place on it. Icons (`images/icons/`: `dock`,
+`boons`, `relics`, `menu`, `ui`, `map`)
 must be SVG: keep each `viewBox`, and give gradients ids no other icon uses
 (the game shares them across the page). A relic uses
 `images/icons/relics/<its id>.svg` if there is one, else the icon named by its
@@ -515,7 +567,11 @@ The words on screen, grouped by screen (`hud`, `dock`, `title`, `menu`,
 left stay; text on the right is yours. In the text: `**bold**`, `*italic*`,
 `\n` for a new line, `{name}` for something the game fills in, and
 `{n|one|many}` for a word that depends on a number. The build fails, naming
-the key, if the game asks for one the file does not have.
+the key, if the game asks for one the file does not have. The group
+`names` gives the article a name may start with (`"article": "The "`) and
+its form inside a sentence (`"article_mid_sentence": "the "`), so "The
+Serapeum" reads "Explore the Serapeum", and a relic "Find the Golden
+barque"; left out, names stay as they are written.
 
 ---
 
@@ -551,13 +607,20 @@ Special: `relic` (one relic id unlocks the next).
 
 ### Badge powers (`effect` in badges)
 
-`gild_stones`, `gild_around`, `row_and_column`, `extra_moves`, `give_lapis`,
-`lose_moves`, `ungild_stones`.
+`gild_stones`, `gild_around`, `gild_wide`, `gild_row_and_column`,
+`row_and_column`, `clear_around`, `clear_its_kind`, `break_covers`,
+`extra_moves`, `give_lapis`, `lose_moves`, `ungild_stones`,
+`thicken_stones`, `cover_amulets`.
 
 ### Hardships (`effect` in curses and omens)
 
 `fewer_moves`, `fewer_moves_percent`, `thick_stones`, `thick_stones_share`,
-`buried_amulets`, `fewer_badges`, `more_cursed_badges`, `no_boons`.
+`thick_edges`, `buried_amulets`, `covered_edges`, `fewer_badges`,
+`more_cursed_badges`, `no_boons`.
+
+### Cover sounds (`sound` in covers)
+
+`sand`, `splash`, `crack`, `stone`, `gild`, `blessing`, `create`, `land`.
 
 ### Boons (rewards, stall items, events)
 
@@ -619,7 +682,8 @@ of semitone steps, like `[0, 2, 3, 5, 7, 9, 10]`.
 
 ### Difficulties (for `win_on_difficulty`)
 
-`Relaxed`, `Normal`, `Hard`, `Pharaoh`.
+`Relaxed`, `Normal`, `Hard`, `Pharaoh`: this game's names, from
+`settings.jsonc` (`difficulty`).
 
 ### River-event goal types (`goal.type`)
 
@@ -627,9 +691,9 @@ of semitone steps, like `[0, 2, 3, 5, 7, 9, 10]`.
 
 ### Floor-plan characters
 
-`.` gap, `0` already gilded, `1` bare stone, `2` thick stone; in chambers
-also `s` and `S`, stone and thick stone with an amulet buried in sand, and `w`
-and `W`, the same under water.
+`.` gap, `0` already gilded, `1` bare stone, `2` thick stone, and each
+cover's two letters: `s` and `S`, stone and thick stone with an amulet
+buried in sand, and `w` and `W`, the same under water.
 
 ### The free starting looks (keep these ids)
 
