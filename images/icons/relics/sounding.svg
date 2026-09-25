@@ -1,0 +1,11 @@
+<!-- Relic icon (sounding): The sounding pole: a long pole marked in bands, as the man at the bow held it to find the depth of the river. 32 by 32. "relicGold" is the shared gold gradient. Drawn by tools/icons/relics.py. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<defs>
+<linearGradient id="relicGold" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#fff3ae"/>
+<stop offset=".55" stop-color="#e0ac3a"/>
+<stop offset="1" stop-color="#8a5a10"/>
+</linearGradient>
+</defs>
+<path d="M8 3 L22 25" fill="none" stroke="#3b2406" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 3 L22 25" fill="none" stroke="url(#relicGold)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.0 5.0 L10.4 6.0" fill="none" stroke="#b83a22" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M14.2 12.2 L15.600000000000001 13.2" fill="none" stroke="#b83a22" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.4 19.4 L20.8 20.4" fill="none" stroke="#b83a22" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 23.5 C6 21.5 9 21.5 12 23.5 C15 25.5 18 25.5 21 23.5 C24 21.5 27 21.5 30 23.5 V29 H3 Z" fill="#4a9ad8" stroke="#3b2406" stroke-width="1.1" stroke-linejoin="round" stroke-linecap="round"/><path d="M6 26.5 C8 25.5 10 25.5 12 26.5 M17 27 C19 26 21 26 23 27" fill="none" stroke="#fffdf6" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

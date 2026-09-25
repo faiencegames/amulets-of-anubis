@@ -1,5 +1,6 @@
 // Takes the screenshots used by the README and the guides (docs/images/), so
-// they can be brought up to date in one go after the game changes.
+// they can be brought up to date in one go after the game changes. The scene
+// "store" takes the phone pictures app stores show, into fastlane/.
 //
 //	python3 build.py                      # the game must be built first
 //	cd tools/screenshots && npm install && npx playwright install chromium
@@ -80,13 +81,14 @@ async function toBoard(page) {
 	}
 	await page.waitForTimeout(900);
 }
-// Keep the old picture unless the new one looks different: same size, and on
-// average less than 0.2% apart per pixel, counts as the same. (Seeded runs
-// come out almost identical; 1% was too loose, and missed a change of scenery
-// behind a darkened tomb.)
+// Keep the old picture unless the new one looks different: same size, on
+// average less than 0.2% apart per pixel, and fewer than 400 pixels clearly
+// different, counts as the same. (Seeded runs come out almost identical; 1%
+// was too loose, and missed a change of scenery behind a darkened tomb. The
+// average alone missed a changed line of small text, hence the pixel count.)
 let changed = 0, kept = 0;
-async function save(name, buffer) {
-	const file = path.join(OUT, name);
+async function save(name, buffer, dir = OUT) {
+	const file = path.join(dir, name);
 	if (fs.existsSync(file) && await looksSame(fs.readFileSync(file), buffer, name)) { kept++; return; }
 	fs.writeFileSync(file, buffer); changed++;
 	console.log('  wrote', name);
@@ -102,8 +104,13 @@ async function looksSame(a, b, name) {
 		const g = c.getContext('2d', { willReadFrequently: true });
 		g.drawImage(x, 0, 0); const dx = g.getImageData(0, 0, c.width, c.height).data;
 		g.drawImage(y, 0, 0); const dy = g.getImageData(0, 0, c.width, c.height).data;
-		let sum = 0; for (let i = 0; i < dx.length; i++) sum += Math.abs(dx[i] - dy[i]);
-		return sum / dx.length / 255;
+		let sum = 0, clear = 0;
+		for (let i = 0; i < dx.length; i += 4) {
+			const d = Math.abs(dx[i] - dy[i]) + Math.abs(dx[i + 1] - dy[i + 1]) + Math.abs(dx[i + 2] - dy[i + 2]);
+			sum += d;
+			if (d > 120) clear++;
+		}
+		return clear >= 400 ? 1 : sum / (dx.length * 0.75) / 255;
 	}, [a.toString('base64'), b.toString('base64'), type]);
 	await page.close();
 	return diff < 0.002;
@@ -221,6 +228,38 @@ const SCENES = {
 		}
 		console.log('  no trial was offered in 20 tries; kept the old picture'); await p.close();
 	},
+	// the phone pictures for app stores (F-Droid reads them from fastlane/):
+	// the title, a board, the map, a tomb, a river event and a win
+	async store() {
+		const dir = path.join(ROOT, 'fastlane', 'metadata', 'android', 'en-US', 'images', 'phoneScreenshots');
+		const phoneShot = async (p, n) => save(`${n}.png`, await p.screenshot({ type: 'png' }), dir);
+		let p = await open(journeySave({ current: 4 }), { device: PHONE });
+		await p.waitForTimeout(700);
+		await phoneShot(p, 1);
+		await toBoard(p);
+		await phoneShot(p, 2);
+		await p.click('#btnMap'); await p.waitForTimeout(900);
+		await phoneShot(p, 3); await p.close();
+		p = await open(journeySave(), { device: PHONE }); await toBoard(p);
+		await p.click('#btnMap'); await p.waitForTimeout(500);
+		await p.click('.stop-btn[data-i="2"]'); await p.waitForTimeout(500);
+		await p.click('[data-part="door"]'); await p.waitForTimeout(300);
+		await p.click('#ovMsg .act-go:not([hidden])'); await p.waitForTimeout(1500);
+		await p.click('#ovMsg .act-go:not([hidden])'); await p.waitForTimeout(2200);
+		await phoneShot(p, 4); await p.close();
+		p = await open(null, { hash: '#try=ferry', device: PHONE }); await p.waitForTimeout(700);
+		await p.evaluate(() => document.querySelector('.try-badge')?.remove());
+		await phoneShot(p, 5); await p.close();
+		p = await open(journeySave({ current: 6, stars: [3, 2, 3, 2, 2, 1, 0, 0, 0, 0, 0, 0], boons: Array(30).fill('flood') }),
+			{ device: PHONE });
+		await toBoard(p);
+		for (let i = 0; i < 30 && !await p.$('#ovMsg.open'); i++) {
+			const b = await p.$('.boon >> visible=true'); if (!b) break;
+			await b.click(); await p.waitForTimeout(1300);
+		}
+		await p.waitForTimeout(1200);
+		await phoneShot(p, 6); await p.close();
+	},
 	// the beginner's guide: try-out mode, and scripts/new.py in a terminal
 	async tryout() {
 		const p = await open(null, { hash: '#try=memphis', device: { viewport: { width: 1280, height: 800 }, deviceScaleFactor: 1 } });
@@ -233,7 +272,7 @@ const SCENES = {
 		const text = '$ python3 scripts/new.py\n' + menu + 'Type a number: 1\n'
 			+ 'Give the stop an id: lowercase letters, numbers and hyphens, like golden-barque: siwa\n'
 			+ 'Copied a starting picture to images/backdrops/siwa.svg\nCopied a starting picture to images/boards/siwa.svg\n\n'
-			+ 'Made content/stops/13-siwa.json: a new stop on the journey, with its own floor, scenery and music.\n'
+			+ 'Made content/stops/13-siwa.jsonc: a new stop on the journey, with its own floor, scenery and music.\n'
 			+ 'It works as it is. Next:\n'
 			+ '  1. Open it in a text editor and change it; the comments say what each line does.\n'
 			+ '     Draw over the pictures copied into images/ (see images/README.md).\n'

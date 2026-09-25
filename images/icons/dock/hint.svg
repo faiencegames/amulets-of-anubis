@@ -1,5 +1,8 @@
-<!-- Button along the bottom: hint. 32 by 32. -->
+<!-- Button along the bottom: hint, an oil lamp of fired clay, lit, to shed light on a move. 32 by 32. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-<path d="M16 4a9 9 0 0 0-5 16.5V24h10v-3.5A9 9 0 0 0 16 4z" fill="#f4d46a" stroke="#4a2c10" stroke-width="2"/>
-<path d="M12 26h8M13 29h6" stroke="#4a2c10" stroke-width="2" stroke-linecap="round"/>
+<path d="M16 3 C19 7.5 20 10 18.8 12.6 C17.9 14.4 14.1 14.4 13.2 12.6 C12 10 13 7.5 16 3 Z" fill="#f4b93a" stroke="#4a2c10" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M16 7.4 C17.2 9.4 17.4 10.8 16.6 12 C16.2 12.5 15.8 12.5 15.4 12 C14.6 10.8 14.8 9.4 16 7.4 Z" fill="#fff0b0"/>
+<path d="M3 19 C3 16.5 8 15.5 16 15.5 C21 15.5 25 16 27 17 L30 16.2 L28.5 19.5 C27 24 22 27 16 27 C9 27 3 24 3 19 Z" fill="#b8452a" stroke="#4a2c10" stroke-width="2" stroke-linejoin="round"/>
+<ellipse cx="14" cy="18.4" rx="5.6" ry="1.6" fill="#4a2c10"/>
+<path d="M6 21.5 C7.5 23.6 10.5 24.8 14 25" fill="none" stroke="#e8866a" stroke-width="1.2" stroke-linecap="round"/>
 </svg>

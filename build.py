@@ -9,7 +9,8 @@ Builds the whole game into one file: dist/amulets-of-anubis.html
 
 It also writes dist/try-it.html: double-click it to open the game in try-out
 mode, with a separate save and everything unlocked, straight at the stop or
-river event you changed last. (Your real save is never touched.)
+river event you changed last. (Your real save is never touched.) And, when
+rsvg-convert is installed, dist/art-references/: every picture as a PNG.
 To start a new thing from a ready-made file:  python scripts/new.py
 
 It needs only Python 3, and the file it makes needs only a web browser.
@@ -34,6 +35,7 @@ For the simulators in tools/:  python build.py --content-json  prints the
 checked content, as the game sees it, and nothing else.
 """
 import base64, difflib, json, os, re, subprocess, sys, time
+from xml.etree import ElementTree
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -75,6 +77,23 @@ def say(*a):
 	if not QUIET: print(*a)
 
 errors, warnings = [], []
+
+# The code runs as one script, so two functions with the same name don't
+# clash: the later one quietly replaces the earlier, everywhere. Stop on it.
+def check_function_names():
+	seen = {}
+	files = [('src', n) for n in sorted(os.listdir(path('src'))) if n.endswith('.js')] + [('src', 'game', n) for n in GAME_FILES]
+	for parts in files:
+		for no, line in enumerate(read(*parts).splitlines(), 1):
+			m = re.match(r'(?:async\s+)?function\s+(\w+)\s*\(', line)
+			if not m: continue
+			where = f'{"/".join(parts)}:{no}'
+			if m.group(1) in seen:
+				errors.append(f'{where}: a function called {m.group(1)}() is already in {seen[m.group(1)]}. '
+							  'The later one would replace it everywhere; give one of them another name.')
+			else:
+				seen[m.group(1)] = where
+check_function_names()
 
 # =============================================================================
 # Names built into the code. Content files may use these; the build checks
@@ -131,8 +150,18 @@ BADGE_POWERS = re.findall(r'^\t(\w+):\s*\{', js_block('01-core.js', 'const BADGE
 # Icons: every SVG in images/icons/<group>/<name>.svg, cleaned of comments and
 # the XML line, for the game (ICONS in src/game/06-icons.js) and for {{svg:...}} in
 # web/shell.html. Replace a file to change an icon; keep its viewBox.
+def well_formed(svg, where):
+	"""An SVG must be well-formed XML: browsers and other tools may refuse
+	one that isn't, even where this game happens to cope."""
+	try:
+		ElementTree.fromstring(svg)
+		return True
+	except ElementTree.ParseError as e:
+		errors.append(f'{where}: this is not a well-formed SVG ({e}). A comment may not contain "--".')
+		return False
+
 def load_icons():
-	icons = {}
+	icons, ids = {}, {}
 	base = path('images', 'icons')
 	for group in sorted(os.listdir(base)) if os.path.isdir(base) else []:
 		gdir = os.path.join(base, group)
@@ -140,12 +169,24 @@ def load_icons():
 		for n in sorted(os.listdir(gdir)):
 			if not n.endswith('.svg'): continue
 			svg = open(os.path.join(gdir, n), encoding='utf-8').read()
+			if not well_formed(svg, f'images/icons/{group}/{n}'): continue
 			svg = re.sub(r'<\?xml[^>]*\?>|<!--[\s\S]*?-->|<!DOCTYPE[^>]*>', '', svg).strip()
 			if not svg.startswith('<svg') or not svg.endswith('</svg>'):
 				errors.append(f'images/icons/{group}/{n}: should be one <svg ...> ... </svg> drawing.'); continue
 			if 'viewBox' not in svg.split('>', 1)[0]:
 				errors.append(f'images/icons/{group}/{n}: the <svg> needs a viewBox, like viewBox="0 0 32 32".'); continue
 			icons.setdefault(group, {})[n[:-4]] = svg
+			# icons share one page, so an id (a gradient's, say) names one thing
+			# everywhere: the same id twice must be the same drawing. Drawing
+			# programs name their gradients _Linear1, _Linear2..., so a picture
+			# saved from one can quietly take another's colours.
+			for el in ElementTree.fromstring(svg).iter():
+				if el.get('id'):
+					drawn = re.sub(rb'>\s+<', b'><', ElementTree.tostring(el).strip())
+					same = ids.setdefault(el.get('id'), (f'{group}/{n}', drawn))
+					if same[1] != drawn:
+						errors.append(f'images/icons/{group}/{n}: the id "{el.get("id")}" is also used by images/icons/{same[0]} '
+									  'for something else. Give it a name of its own (and change the url(#...) that uses it).')
 	return icons
 ICONS = load_icons()
 RELIC_ICONS = sorted(ICONS.get('relics', {}))
@@ -177,7 +218,9 @@ def embed(full):
 	"""A picture for the game file: SVG as its text (the game makes it an
 	address), anything else as a base64 data: address."""
 	if full.lower().endswith('.svg'):
-		svg = re.sub(r'<\?xml[^>]*\?>|<!--[\s\S]*?-->|<!DOCTYPE[^>]*>', '', open(full, encoding='utf-8').read()).strip()
+		raw = open(full, encoding='utf-8').read()
+		well_formed(raw, rel(full))
+		svg = re.sub(r'<\?xml[^>]*\?>|<!--[\s\S]*?-->|<!DOCTYPE[^>]*>', '', raw).strip()
 		if not svg.startswith('<svg'): errors.append(f'{rel(full)}: should be one <svg ...> ... </svg> drawing.')
 		return svg
 	return data_uri(full)
@@ -263,13 +306,13 @@ def load_json(full):
 		return None
 
 def content_files(folder):
-	"""Every .json file in content/<folder>/, in order of file name."""
+	"""Every .jsonc file in content/<folder>/, in order of file name."""
 	d = path('content', folder)
 	if not os.path.isdir(d): return []
 	names = sorted((n for n in os.listdir(d) if n.lower().endswith(('.json', '.jsonc')) and not n.startswith(('.', '_'))), key=str.lower)
 	for n in os.listdir(d):
 		if not n.startswith(('.', '_')) and not n.lower().endswith(('.json', '.jsonc', '.md', '.txt')) and os.path.isfile(os.path.join(d, n)):
-			warnings.append(f'content/{folder}/{n}: ignored; content files must end in .json')
+			warnings.append(f'content/{folder}/{n}: ignored; content files must end in .jsonc')
 	return [os.path.join(d, n) for n in names]
 
 # =============================================================================
@@ -763,6 +806,11 @@ def stall(ck):
 		for b in pool:
 			if b not in BOONS + ['random']: g.fail(f'the boon "{b}" doesn\'t exist. Boons: {", ".join(BOONS)}, or "random".')
 		it.update(kind='boon', give={'boon': pool})
+	if ck.has('icon'):   # a picture in images/icons/stall/ (a boon shows its own without one)
+		icon = ck.text('icon')
+		if icon not in ICONS.get('stall', {}):
+			ck.fail(f'"icon": there is no icon "{icon}" in images/icons/stall/. There are: {", ".join(sorted(ICONS.get("stall", {})))}.')
+		it['icon'] = icon
 	return it
 
 def upgrade(ck):
@@ -840,7 +888,7 @@ KINDS = [
 	('omens', 'omens', ['id', 'name', 'text', 'effect', 'amount'], omen, None),
 	('river-events', 'events', ['id', 'kind', 'title', 'text', 'weight', 'goal', 'moves', 'amulet_types', 'amulets', 'by_lamplight', 'floor_plan', 'reward', 'choices'], event, None),
 	('chambers', 'chambers', ['id', 'at', 'name', 'text', 'setting', 'scenery', 'moves', 'amulet_types', 'amulets', 'floor_plan', 'reward', 'return_reward'], chamber, None),
-	('anubis-stall', 'stall', ['id', 'name', 'description', 'currency', 'price', 'gives'], stall, None),
+	('anubis-stall', 'stall', ['id', 'name', 'description', 'icon', 'currency', 'price', 'gives'], stall, None),
 	('treasury', 'upgrades', ['id', 'name', 'description', 'currency', 'prices', 'effect', 'amount_per_level'], upgrade, None),
 	('amulet-sets', 'skins', LOOK_FIELDS + ['colour_changes', 'css_filter', 'glow', 'tint', 'tint_strength'], skin, 'faience'),
 	('floor-sets', 'floorSets', LOOK_FIELDS + ['uses_each_stops_own_stone'], floor_set, 'temple'),
@@ -850,13 +898,13 @@ KINDS = [
 NEED_AT_LEAST_ONE = {'badges', 'boons', 'stops', 'trials', 'stall', 'skins', 'floorSets', 'frames', 'sparkles'}
 
 def settings():
-	"""content/settings.json: the numbers that tune the game. Every field is
+	"""content/settings.jsonc: the numbers that tune the game. Every field is
 	optional; what is left out keeps the value written here as the default."""
-	full = path('content', 'settings.json')
+	full = path('content', 'settings.jsonc')
 	s = load_json(full) if os.path.isfile(full) else {}
 	if s is None: s = {}
 	try:
-		ck = Check(s, 'content/settings.json', ['river_event_percent', 'stall_price_rise_percent', 'persistence', 'earnings',
+		ck = Check(s, 'content/settings.jsonc', ['river_event_percent', 'stall_price_rise_percent', 'persistence', 'earnings',
 												'stops_open_at_start', 'stars', 'trial_offer_percent', 'staging', 'badges', 'returning',
 												'omens', 'seals', 'difficulty', 'sound'])
 		p = ck.sub('persistence', ['extra_moves_per_failure', 'failures_that_count', 'boon_after_failures'], False) or Check({}, ck.where)
@@ -868,11 +916,12 @@ def settings():
 							   'extra_moves_before_badges_percent'], False) or Check({}, ck.where)
 		stage_defaults = {'seals': 2, 'badges': 3, 'trials': 4, 'stall': 5, 'events': 6, 'curses': 8, 'chambers': 9, 'omens': 'after the journey'}
 		staging = {}
+		after = ', or "after the journey"'
 		for k, d in stage_defaults.items():
 			v = sg.get(k, d)
 			if v == 'after the journey': staging[k] = 'journey'
 			elif isinstance(v, int) and not isinstance(v, bool) and 1 <= v <= 99: staging[k] = v - 1   # stop number -> how far the journey has got
-			else: sg.fail(f'"{k}" should be a stop number, like 3 (from stop 3){", or \"after the journey\"" if k == "omens" else ""}.')
+			else: sg.fail(f'"{k}" should be a stop number, like 3 (from stop 3){after if k == "omens" else ""}.')
 		pace = sg.choice('learning_pace', ['one at a time', 'everything now'], False, 'one at a time')
 		# each badge's weight is in its file (content/badges/)
 		b = ck.sub('badges', ['most_good_badges_at_once'], False) or Check({}, ck.where)
@@ -891,7 +940,7 @@ def settings():
 			ck.fail(f'"difficulty" should name some of: {", ".join(diff_default)}.')
 		difficulty = []
 		for name, (mp, bp, ha) in diff_default.items():
-			dc = Check(dv.get(name, {}), f'content/settings.json ("difficulty", {name})', ['moves_percent', 'badge_chance_percent', 'hint_after_seconds'])
+			dc = Check(dv.get(name, {}), f'content/settings.jsonc ("difficulty", {name})', ['moves_percent', 'badge_chance_percent', 'hint_after_seconds'])
 			difficulty.append({'name': name, 'movesMult': dc.number('moves_percent', False, mp, 30, 300) / 100,
 							   'powerChance': dc.number('badge_chance_percent', False, bp, 0, 20) / 100,
 							   'hintAfter': dc.number('hint_after_seconds', False, ha, 0, 120)})
@@ -918,7 +967,7 @@ def settings():
 						 'winLapis': e.whole('lapis_for_winning', False, 1, 0, 1000)}}
 	except Bad: return None
 
-# content/text.json: the words on screen. Nested groups are flattened into
+# content/text.jsonc: the words on screen. Nested groups are flattened into
 # keys like "win.title"; the code asks for them with T('win.title'), and
 # web/shell.html with {{hud.moves}}. Every key the code uses must be there.
 TEXT_FAMILIES = {   # keys the code builds from an id, so they can't be found by searching
@@ -932,23 +981,24 @@ TEXT_FAMILIES = {   # keys the code builds from an id, so they can't be found by
 	'codex.places': (['intro', 'sand', 'sand_text', 'water', 'water_text', 'tombs', 'tombs_text', 'oases', 'oases_text', 'line', 'reward'], None),
 	'customise.tabs': (['sets', 'floors', 'frames', 'sparkles'], None),
 	# an oasis's words, looked up by placeKey() in src/game/11-chambers.js
-	'oasis': (['kicker', 'sub', 'hud', 'enter', 'cover', 'again', 'won', 'lost', 'lost_text', 'heading', 'card_new', 'card_done',
-			   'locked', 'win_note', 'win_again', 'explore', 'map_new', 'map_done'], None),
+	'oasis': (['kicker', 'sub', 'enter', 'cover', 'again', 'go_back', 'won', 'lost', 'lost_text', 'heading', 'card_new',
+			   'card_done', 'locked', 'win_note', 'win_again', 'explore', 'explore_short', 'go_back_short', 'map_new',
+			   'map_done'], None),
 	'popup': (['buried', 'under_water'], None),
 }
 def load_text():
-	full = path('content', 'text.json')
+	full = path('content', 'text.jsonc')
 	raw = load_json(full) if os.path.isfile(full) else None
 	if raw is None:
-		errors.append('content/text.json: the file with the words on screen is missing or could not be read.'); return {}
+		errors.append('content/text.jsonc: the file with the words on screen is missing or could not be read.'); return {}
 	flat = {}
 	def walk(obj, prefix):
 		for k, v in obj.items():
 			key = prefix + k
 			if isinstance(v, dict): walk(v, key + '.')
 			elif isinstance(v, str): flat[key] = v
-			else: errors.append(f'content/text.json: "{key}" should be text in quotes.')
-	if not isinstance(raw, dict): errors.append('content/text.json: should be one { ... } block.'); return {}
+			else: errors.append(f'content/text.jsonc: "{key}" should be text in quotes.')
+	if not isinstance(raw, dict): errors.append('content/text.jsonc: should be one { ... } block.'); return {}
 	walk(raw, '')
 	used = set()
 	code = ''.join(read('src', n) for n in sorted(os.listdir(path('src'))) if n.endswith('.js')) + game_source()
@@ -962,7 +1012,7 @@ def load_text():
 	missing = sorted(k for k in used if k not in flat)
 	for k in missing:
 		close = difflib.get_close_matches(k, list(flat), 1, .7)
-		errors.append(f'content/text.json: the game needs the text "{k}", but it is not there.' + (f' Did you mean "{close[0]}"?' if close else ''))
+		errors.append(f'content/text.jsonc: the game needs the text "{k}", but it is not there.' + (f' Did you mean "{close[0]}"?' if close else ''))
 	return flat
 
 def load_content():
@@ -1049,17 +1099,26 @@ say(f'  content: {len(CONTENT["stops"])} stops, {len(CONTENT.get("chambers", [])
 if '--check' in sys.argv:
 	report(); say('\nThe content files are fine. (Checked only; nothing was written.)'); sys.exit(0)
 
-core = read('src', '01-core.js').replace('/*CONTENT*/null', content_json.replace('</', '<\\/'))
+# Each placeholder (/*CONTENT*/null and the like; a formatter may put a space
+# before the null) is replaced by the data it stands for. A missing one stops
+# the build, or the game would start with nothing in it.
+def fill(code, name, data, where):
+	pattern = re.compile(r'/\*' + name + r'\*/\s*null')
+	if not pattern.search(code):
+		print(f'Problem: the /*{name}*/null placeholder is missing from {where}. Nothing was written.')
+		sys.exit(1)
+	return pattern.sub(lambda m: data, code, count=1)
+
+core = fill(read('src', '01-core.js'), 'CONTENT', content_json.replace('</', '<\\/'), 'src/01-core.js')
 ui = ''.join(read('src', n) for n in ['00-open.js', '02-pictures.js', '03-themes.js', '04-boards.js']) + game_source()
-ui = ui.replace('/*IMAGES*/null', json.dumps(PICTURES, ensure_ascii=False).replace('</', '<\\/'))
-if '/*ICONS*/null' not in ui: errors.append('src/game/06-icons.js: the /*ICONS*/null placeholder is missing.')
-ui = ui.replace('/*ICONS*/null', json.dumps(ICONS))
+ui = fill(ui, 'IMAGES', json.dumps(PICTURES, ensure_ascii=False).replace('</', '<\\/'), 'src/00-open.js')
+ui = fill(ui, 'ICONS', json.dumps(ICONS), 'src/game/06-icons.js')
 # The stylesheet lives in web/css/, one file per part of the screen; they are
 # joined in file-name order (the numbers), so later files can override earlier
 # ones on purpose (20-small-screens.css last).
 css_files = sorted(n for n in os.listdir(path('web', 'css')) if n.endswith('.css'))
 styles = '\n'.join(read('web', 'css', n) for n in css_files)
-# the words in the page itself ({{hud.moves}} and the like) come from content/text.json
+# the words in the page itself ({{hud.moves}} and the like) come from content/text.jsonc
 def shell_text(m):
 	t = (CONTENT or {}).get('text', {}).get(m.group(1), m.group(1))
 	return t.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;')
@@ -1084,7 +1143,7 @@ def newest_id():
 	for folder in ('stops', 'river-events', 'chambers'):
 		d = path('content', folder)
 		for n in os.listdir(d) if os.path.isdir(d) else []:
-			if not n.endswith('.json'): continue
+			if not n.endswith(('.json', '.jsonc')): continue
 			m = re.search(r'"id"\s*:\s*"([\w-]+)"', read('content', folder, n))
 			t = os.path.getmtime(os.path.join(d, n))
 			if m and t > best[0]: best = (t, m.group(1))
@@ -1098,3 +1157,10 @@ with open(path('dist', 'try-it.html'), 'w', encoding='utf-8') as f:
 say(f'Done: dist/amulets-of-anubis.html ({len(html)//1024} KB)')
 say(f'To test: double-click dist/try-it.html (try-out mode{", at " + target if target else ""}; your real save is untouched)')
 report()
+
+# dist/art-references/: every picture in images/ as a PNG, in the same folders,
+# for showing the art outside the game. Optional (it needs rsvg-convert), and
+# never stops the build: see tools/art-references.py.
+if not QUIET:
+	sys.stdout.flush()
+	subprocess.call([sys.executable, path('tools', 'art-references.py')])

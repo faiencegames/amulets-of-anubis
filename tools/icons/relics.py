@@ -424,6 +424,65 @@ def duet():
 		+ circle(25, 3.5, 1.8, CARN, D, 0.9))
 
 
+# ---- later journeys (25 September 2026) ------------------------------------------
+
+@icon('the calendar of lucky days: a papyrus of days, each marked in black for lucky or red for unlucky, like the Cairo Calendar.')
+def calendar():
+	marks = ''
+	for r, row in enumerate(('bbr', 'brb', 'rbb', 'bbb', 'brr')):
+		for c, k in enumerate(row):
+			x, y = 11 + c * 5, 9 + r * 3.8
+			marks += line(f'M{x - 1.4} {y} H{x + 1.4}', CARN if k == 'r' else '#1a1410', 1.6)
+	return (p('M8 5 H24 V27 H8 Z', '#f6e6b8') + marks
+		+ p('M5 5 C5 3.5 8 3.5 8 5 V27 C8 28.5 5 28.5 5 27 Z') + p('M24 5 C24 3.5 27 3.5 27 5 V27 C27 28.5 24 28.5 24 27 Z'))
+
+
+@icon('the was sceptre: a staff of power with the head of an animal at the top and a fork at its foot.')
+def was():
+	return (p('M14.3 9 H17.7 V27 H14.3 Z', G, D, 1.2)
+		+ p('M12.5 26.5 L14.5 30.5 L16 28 L17.5 30.5 L19.5 26.5 Z', G, D, 1.2)
+		+ p('M13.5 5 C16 2.5 22 2.5 26 5 L24.8 7.8 C22 6.8 19.8 7 18.6 8 L18.6 11 H13.4 V7 C13.4 6.2 13.4 5.6 13.5 5 Z')
+		+ line('M15.8 3.6 L14.8 1.3', D, 1.4) + circle(16.5, 5.6, 0.8, D, 'none', 0))
+
+
+@icon('the necropolis seal: an oval of clay stamped with a recumbent jackal over bound captives, the seal on the doors of royal tombs.')
+def necropolis():
+	captives = ''.join(p(f'M{x} 23 C{x - 1.5} 21 {x - 1.5} 19 {x} 18.6 C{x + 1.5} 19 {x + 1.5} 21 {x} 23 Z', '#5a3a1a', D, 0.8) for x in (11, 16, 21))
+	return (p('M16 3 C24 3 29 9 29 16 C29 23 24 29 16 29 C8 29 3 23 3 16 C3 9 8 3 16 3 Z', '#a8744a')
+		+ p('M16 5.5 C22.5 5.5 26.5 10 26.5 16 C26.5 22 22.5 26.5 16 26.5 C9.5 26.5 5.5 22 5.5 16 C5.5 10 9.5 5.5 16 5.5 Z', '#c89868', '#6b4a22', 0.8)
+		+ p('M9 16 H20 C20.5 14 21 12.5 22 11.5 L22.5 9 L23.5 11 L24.5 9.5 L24.5 12 L23 13 C23 14.5 22.5 16 22.5 16 L23 16.5 H9 Z', '#1a1410', D, 0.6)
+		+ line('M9 16 C7.5 15 7.5 13 8.5 12', '#1a1410', 1.2) + captives)
+
+
+@icon('the gold of honour: a collar of gold disc beads, the reward a king gave for valour.')
+def honour():
+	# three strands of gold discs, one under another, hanging from the neck
+	beads = ''
+	for k, n in enumerate((11, 10, 9)):
+		rx, ry, cy = 12.5 - k * 0.6, 8.5 - k * 0.3, 4 + k * 3.8
+		for i in range(n):
+			a = math.pi * (0.06 + 0.88 * i / (n - 1))
+			beads += circle(round(16 - rx * math.cos(a), 2), round(cy + ry * math.sin(a), 2), 1.7, G, D, 0.8)
+	return beads + p('M14 23.5 H18 V27.5 C18 29 14 29 14 27.5 Z', G, D, 1) + circle(16, 25.8, 0.9, CARN, D, 0.5)
+
+
+@icon('the incense of Punt: a myrrh tree in a basket on a carrying pole, as Hatshepsut\'s expedition brought them home.')
+def punt():
+	return (line('M2 25 H30', D, 3.2) + line('M2 25 H30', '#b88a48', 1.6)
+		+ p('M9 17 H23 L21.5 27 H10.5 Z', '#c8963a')
+		+ line('M10 20.5 H22 M10.5 23.5 H21.5', '#6b4a22', 0.9)
+		+ line('M16 17 V11 M16 13 L12.5 9.5 M16 12 L19.5 8.5', '#6b4a22', 1.6)
+		+ p('M16 2.5 C21 2.5 24 5.5 23 8.5 C22 11 19 11 16 10.5 C13 11 10 11 9 8.5 C8 5.5 11 2.5 16 2.5 Z', GREEN))
+
+
+@icon('the sounding pole: a long pole marked in bands, as the man at the bow held it to find the depth of the river.')
+def sounding():
+	bands = ''.join(line(f'M{9 + i * 2.6} {5 + i * 3.6} L{10.4 + i * 2.6} {6 + i * 3.6}', CARN, 1.6) for i in range(0, 6, 2))
+	return (line('M8 3 L22 25', D, 4) + line('M8 3 L22 25', G, 2.2) + bands
+		+ p('M3 23.5 C6 21.5 9 21.5 12 23.5 C15 25.5 18 25.5 21 23.5 C24 21.5 27 21.5 30 23.5 V29 H3 Z', WATER, D, 1.1)
+		+ line('M6 26.5 C8 25.5 10 25.5 12 26.5 M17 27 C19 26 21 26 23 27', WHITE, 0.9))
+
+
 names = sys.argv[1:] or list(ICONS)
 for n in names:
 	comment, fn = ICONS[n]

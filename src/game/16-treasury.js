@@ -1,3 +1,23 @@
+/* =============================================================================
+ * 16-treasury.js  —  the Treasury, and putting on a look.
+ *
+ * What's here:
+ *   openTreasury()      the Treasury: lasting upgrades bought with gold and
+ *                       lapis (content/treasury/); purchases can be taken
+ *                       back until it closes (logBuy(), 12-stall.js)
+ *   levelSquares()      an upgrade's level as gold squares
+ *   applyLook()         puts on an amulet set, floor, frame or sparkle and
+ *                       redraws the board. Always go through this: it also
+ *                       empties the amulet picture cache.
+ *   dockAmulet()        the Amulets button's picture: the scarab in the
+ *                       amulet set in use (applyLook(), and 30-boot.js)
+ *   skinPreview(), floorPreview(), cachedPreview()
+ *                       the small pictures of each look, drawn once and kept
+ *                       (the Customise screen uses them)
+ *
+ * Changes in the save: upg (upgrades bought), gold or lapis.
+ * ===========================================================================*/
+
 // ---------- the Treasury ----------
 // Looks are bought here and put on with applyLook(); the previews of each
 // look are drawn once and cached (the Customise screen uses them too).
@@ -6,13 +26,31 @@
 // pictures would keep being drawn until the next stop.
 function applyLook() {
 	if (TILE_NAMES.length) {
-		TILE_SPRITES = TILE_NAMES.map(n => skinned(SPR[n], n, save.skin));
-		TILE_SPRITES[6] = skinned(SPR.sun, 'sun', save.skin);
+		TILE_SPRITES = TILE_NAMES.map(n => skinned(AMULET_PICS[n], n, save.skin));
+		TILE_SPRITES[6] = skinned(AMULET_PICS.sun, 'sun', save.skin);
 	}
 	buildFloors(levelIdx);
 	scaledTiles.clear();
-	halo = null;
+	haloCanvas = null;
 	bgDirty = true;
+	dockAmulet();
+}
+
+// The Amulets button along the bottom shows a real amulet, the scarab, in
+// the amulet set in use; the drawn icon in web/shell.html stands in until the
+// pictures have loaded.
+function dockAmulet() {
+	const btn = $('btnAmulets'),
+		pic = AMULET_PICS.scarab && skinned(AMULET_PICS.scarab, 'scarab', save.skin);
+	if (!btn || !pic) return;
+	let img = btn.querySelector('.dock-amulet');
+	if (!img) {
+		img = document.createElement('img');
+		img.className = 'dock-amulet';
+		img.alt = '';
+		btn.querySelector('svg').replaceWith(img);
+	}
+	img.src = pic.toDataURL();
 }
 
 // Customise previews are cached: drawing and PNG-encoding thirty-odd of them
@@ -34,9 +72,9 @@ function floorPreview(id) {
 		const c = document.createElement('canvas');
 		c.width = 180;
 		c.height = 60;
-		const g = c.getContext('2d');
-		floorTextures(id, levelIdx).forEach((img, k) => g.drawImage(img, k * 60 + 1, 1, 58, 58));
-		g.drawImage(skinned(SPR.scarab, 'scarab', save.skin), 126, 6, 48, 48);
+		const pen = c.getContext('2d');
+		floorTextures(id, levelIdx).forEach((img, k) => pen.drawImage(img, k * 60 + 1, 1, 58, 58));
+		pen.drawImage(skinned(AMULET_PICS.scarab, 'scarab', save.skin), 126, 6, 48, 48);
 		return c.toDataURL();
 	});
 }
@@ -48,14 +86,23 @@ function skinPreview(id) {
 }
 
 function skinPreviewDraw(id) {
-	const here = ((THEMES[levelIdx] || THEMES[0]).set || []).filter(n => SPR[n]);
+	const here = ((THEMES[levelIdx] || THEMES[0]).set || []).filter(n => AMULET_PICS[n]);
 	const names = (here.length >= 4 ? here : ['scarab', 'ankh', 'eye', 'lotus']).slice(0, 4);
 	const c = document.createElement('canvas');
 	c.width = 200;
 	c.height = 50;
-	const g = c.getContext('2d');
-	names.forEach((n, i) => g.drawImage(skinned(SPR[n], n, id), i * 50, 0, 50, 50));
+	const pen = c.getContext('2d');
+	names.forEach((n, i) => pen.drawImage(skinned(AMULET_PICS[n], n, id), i * 50, 0, 50, 50));
 	return c.toDataURL();
+}
+
+// an upgrade's level as small gold squares, one for each level, gilded as
+// they are bought (like the relic bar), with the words for screen readers
+function levelSquares(n, of) {
+	return html`
+		<span class="gild-bar tier-bar" role="img" aria-label="${Tplain('treasury.level', { n, of })}">
+			${Array.from({ length: of }, (_, j) => `<i${j < n ? ' class="on"' : ''}></i>`).join('')}
+		</span>`;
 }
 
 function openTreasury() {
@@ -65,10 +112,26 @@ function openTreasury() {
 			maxed = t >= u.tiers,
 			cost = maxed ? 0 : u.cost(t),
 			can = !maxed && save[u.cur] >= cost;
-		return `<div class="shop-row">
-			<div><strong>${u.name}</strong>${u.tiers > 1 ? ` <span class="tier">${t}/${u.tiers}</span>` : ''}<br><span class="shop-desc">${u.desc}</span></div>
-			<div class="buy-col">${undoButton('upg', u.id)}${maxed ? `<span class="owned">${T('shop.owned')}</span>` : `<button class="btn buy" data-u="${u.id}" ${can ? '' : 'disabled'}>${cost.toLocaleString()} <i class="g-ico ${u.cur}"></i></button>`}</div>
-		</div>`;
+		return html`
+			<div class="shop-row">
+				<div>
+					<strong>${u.name}</strong>
+					<br>
+					<span class="shop-desc">${u.desc}</span>
+					${u.tiers > 1 ? levelSquares(t, u.tiers) : ''}
+				</div>
+				<div class="buy-col">
+					${undoButton('upg', u.id)}${
+						maxed
+							? `<span class="owned">${T('shop.owned')}</span>`
+							: html`
+				<button class="btn buy" data-u="${u.id}" ${can ? '' : 'disabled'}>
+					${cost.toLocaleString()} 
+					<i class="g-ico ${u.cur}"></i>
+				</button>`
+					}
+				</div>
+			</div>`;
 	};
 	$('msgBody').innerHTML = `<h2 id="msgTitle">${T('treasury.title')}</h2>
 		<p class="lede">${T('treasury.lede')}</p>
@@ -83,7 +146,7 @@ function openTreasury() {
 				(b.onclick = () => {
 					undoBuy(b.dataset.undoSrc, b.dataset.undo);
 					openTreasury();
-				})
+				}),
 		);
 	$('msgBody')
 		.querySelectorAll('.buy')
@@ -104,7 +167,7 @@ function openTreasury() {
 					sfx(u.cur === 'gold' ? 'coins' : 'gems');
 					sfx('create');
 					openTreasury();
-				})
+				}),
 		);
 	openOverlay('ovMsg');
 }

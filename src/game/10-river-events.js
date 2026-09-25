@@ -1,3 +1,27 @@
+/* =============================================================================
+ * 10-river-events.js  —  river events, and the small boards they share with
+ * tombs, temples and oases.
+ *
+ * Between stops the barque may meet something on the river
+ * (content/river-events/): a choice, or a small puzzle board with a goal.
+ *
+ * What's here:
+ *   goNext(from)        sail on from a stop: maybe a river event first, then
+ *                       the next stop (after a win, or leaving a chamber)
+ *   startEvent(ev)      shows an event: its choice, or its puzzle
+ *   eventChoice()       a choice as cards, each saying what it costs and gives
+ *   setupSmallBoard()   the board of a puzzle or a chamber, 8 wide and as tall
+ *                       as its floor plan
+ *                       (11-chambers.js uses it too)
+ *   eventAfterMove()    after each move on a puzzle: goal met, or out of moves
+ *   giveReward(), rewardText(), getLine()
+ *                       paying a reward, and saying it in words ("You get:")
+ *   eventState          the event under way, or null
+ *
+ * Changes in the save: gold, lapis, boons, life, lastEvent; chambers and
+ * chamberWins for chambers.
+ * ===========================================================================*/
+
 // ---------- river events ----------
 let eventState = null; // {ev, next, collected, target, lamp} while an event puzzle is on the board
 function goNext(next) {
@@ -31,18 +55,39 @@ function rewardText(r) {
 function riverHead(ev, next) {
 	const from = LEVELS[next - 1] || LEVELS[0],
 		to = LEVELS[next];
-	return `<p class="river-kicker"><span class="arrow-label">${T('event.kicker')}</span></p><h2 id="msgTitle">${ev.title}</h2>
+	return html`
+		<p class="river-kicker"><span class="arrow-label">${T('event.kicker')}</span></p>
+		<h2 id="msgTitle">${ev.title}</h2>
 		<div class="route" role="img" aria-label="${Tplain('event.between', { from: from.name, to: to.name })}">
-			<span class="route-stop from">${from.name}</span><span class="route-water">${iconSvg('ui', 'barque', 'class="route-boat" aria-hidden="true"')}</span><span class="route-stop to">${to.name}</span></div>`;
+			<span class="route-stop from">${from.name}</span>
+			<span class="route-water">
+				${iconSvg('ui', 'barque', 'class="route-boat" aria-hidden="true"')}
+			</span>
+			<span class="route-stop to">${to.name}</span>
+		</div>`;
 }
 
 // What a reward block gives, as the "You get:" line of a card: a single boon
 // shows its icon, name and what it does, as on a trial card; gold and lapis
 // show their symbols.
-function getLine(r) {
+// bare: without the "You get:" label, where the reward is plainly the prize
+function getLine(r, bare) {
+	const label = bare ? '' : `<span class="arrow-label prize-label">${T('event.get')}</span>`;
 	if (r.boon && r.boon !== 'random' && !r.gold && !r.lapis)
-		return `<p class="trial-prize">${BOON_ICON[r.boon] || ''}<span><span class="arrow-label prize-label">${T('event.get')}</span><strong>${BOONS[r.boon].name}</strong><br>${BOONS[r.boon].desc}</span></p>`;
-	return `<p class="trial-prize"><span><span class="arrow-label prize-label">${T('event.get')}</span>${rewardText(r)}</span></p>`;
+		return html`
+			<p class="trial-prize">
+				${BOON_ICON[r.boon] || ''}
+				<span>
+					${label}
+					<strong>${BOONS[r.boon].name}</strong>
+					<br>
+					${BOONS[r.boon].desc}
+				</span>
+			</p>`;
+	return html`
+		<p class="trial-prize">
+			<span>${label}${rewardText(r)}</span>
+		</p>`;
 }
 
 function giveReward(r) {
@@ -84,9 +129,12 @@ function eventCompleted() {
 	persist();
 }
 
-// The small 8 x 8 board of a river puzzle or a chamber, in the scenery,
+// The small board of a river puzzle or a chamber (8 wide, as tall as its plan), in the scenery,
 // amulets and music of stop `at`. `state` is merged into eventState.
 function setupSmallBoard(ev, at, state, sub) {
+	stopOver = false;
+	tubeWas = -1;
+	$('boardEnd').hidden = true;
 	if (trial && !trial.done && !trial.failed) failTrial(true);
 	trial = null;
 	armed = -1;
@@ -97,19 +145,24 @@ function setupSmallBoard(ev, at, state, sub) {
 	const pick = ev.sets ? ev.sets[Math.floor(Math.random() * ev.sets.length)] : ev.set || th.set;
 	const names = pick.slice(0, ev.types);
 	TILE_NAMES = names.slice();
-	TILE_SPRITES = names.map(n => skinned(SPR[n], n, save.skin));
-	TILE_SPRITES[6] = skinned(SPR.sun, 'sun', save.skin);
+	TILE_SPRITES = names.map(n => skinned(AMULET_PICS[n], n, save.skin));
+	TILE_SPRITES[6] = skinned(AMULET_PICS.sun, 'sun', save.skin);
 	buildFloors(at);
 	setBackdrop(at, ev.scene || LEVELS[at].id);
 	setBoard(at);
 	document.body.classList.remove('omega');
-	setBoardSize(8, 8);
+	// the board is as tall as its floor plan: empty rows at its top and foot
+	// are left out, so the squares fill the frame
+	const plan = ev.map ? ev.map.slice() : null;
+	while (plan && plan.length > 3 && !/[^.]/.test(plan[0])) plan.shift();
+	while (plan && plan.length > 3 && !/[^.]/.test(plan[plan.length - 1])) plan.pop();
+	setBoardSize(8, plan ? plan.length : 8);
 	document.body.classList.toggle('in-chamber', !!ev.torch);
 	music.inside = !!ev.torch;
 	musicVolume();
 	core = new Core(
-		{ name: ev.title, sub, fact: ev.text, map: ev.map, moves: ev.moves, types: names.length },
-		Object.assign({ map: ev.map, powerChance: 0.02 }, ev.chamber ? returnBadges(ev) : {})
+		{ name: ev.title, sub, fact: ev.text, map: plan, moves: ev.moves, types: names.length },
+		Object.assign({ map: plan, powerChance: 0.02 }, ev.chamber ? returnBadges(ev) : {}),
 	);
 	core.fill();
 	core.boonUsed = false;
@@ -121,9 +174,9 @@ function setupSmallBoard(ev, at, state, sub) {
 			ev,
 			collected: 0,
 			target: ev.goal.amulet ? names.indexOf(ev.goal.amulet) : -1,
-			lamp: { x: N / 2, y: ROWS / 2, tx: N / 2, ty: ROWS / 2 },
+			lamp: { x: COLS / 2, y: ROWS / 2, tx: COLS / 2, ty: ROWS / 2 },
 		},
-		state
+		state,
 	);
 	dying = [];
 	particles = [];
@@ -133,11 +186,11 @@ function setupSmallBoard(ev, at, state, sub) {
 	orbs = [];
 	flashes.clear();
 	hint = null;
-	core.cells.forEach((t, k) => {
-		if (!t) return;
-		t.x = k % N;
-		t.y = ((k / N) | 0) - ROWS - 1 - (k % N) * 0.35 - Math.random() * 0.2;
-		t.vy = 0;
+	core.cells.forEach((tile, sq) => {
+		if (!tile) return;
+		tile.x = sq % COLS;
+		tile.y = ((sq / COLS) | 0) - ROWS - 1 - (sq % COLS) * 0.35 - Math.random() * 0.2;
+		tile.vy = 0;
 	});
 	$('placeName').textContent = ev.title;
 	$('placeSub').textContent = sub;
@@ -164,11 +217,15 @@ function startEvent(ev, next) {
 	setupSmallBoard(ev, next, { next }, Tplain('event.on_the_way', { stop: LEVELS[next].name }));
 	const goal = eventGoalText();
 	showMsg(
-		`${riverHead(ev, next)}
-		<p class="story">${ev.text}</p>
-		<div class="trial-card river-card static"><p class="trial-goal"><span class="arrow-label">${T('trial.do')}</span>${T('event.goal', { goal: goal.text, n: core.startMoves })}</p>
-		${getLine(ev.reward)}
-		<p class="trial-risk calm">${T('event.no_harm')}</p></div>`,
+		html`
+			${riverHead(ev, next)} <p class="story">${ev.text}</p>
+			<div class="chamber-plaque">
+				<div class="card-body">
+					<p class="plaque-goal">${T('event.goal', { goal: goal.text, n: core.startMoves })}</p>
+					${getLine(ev.reward, true)}
+				</div>
+				<div class="card-foot">${T('event.no_harm')}</div>
+			</div>`,
 		[
 			[Tplain('event.begin'), () => {}, { kind: 'go', icon: iconSvg('ui', 'barque') }],
 			[
@@ -179,13 +236,14 @@ function startEvent(ev, next) {
 				},
 				{ kind: 'quiet' },
 			],
-		]
+		],
 	);
 }
 
 function eventAfterMove() {
 	updateHUD();
 	persist();
+	if (eventDone() || core.movesLeft <= 0) stopOver = true;
 	if (eventDone() && eventState.ev.chamber) {
 		const c = eventState.ev,
 			first = !save.chambers[c.id],
@@ -198,14 +256,18 @@ function eventAfterMove() {
 		checkRelics();
 		sfx('win');
 		musicResolve(true);
-		for (let i = 0; i < 30; i++) burst(Math.random() * N - 0.5, Math.random() * ROWS - 0.5, 1);
+		for (let i = 0; i < 30; i++) burst(Math.random() * COLS - 0.5, Math.random() * ROWS - 0.5, 1);
 		setTimeout(() => {
 			busy = false;
 			showMsg(
-				`${chamberHead(c)}<p class="lede">${T(placeKey(c, 'won'))}</p>
-			<p class="river-outcome" style="text-align:center">${T('event.gain', { reward: rewardText(paid) })}</p>`,
+				html`
+					${chamberHead(c)}
+					<p class="lede">${T(placeKey(c, 'won'))}</p>
+					<p class="river-outcome" style="text-align:center">
+						${T('event.gain', { reward: rewardText(paid) })}
+					</p>`,
 				[[after.label, leaveChamber, { kind: 'go', icon: iconSvg('ui', 'barque') }]],
-				{ noClose: true }
+				{ noClose: true },
 			);
 		}, 900);
 		return;
@@ -217,12 +279,16 @@ function eventAfterMove() {
 		eventCompleted();
 		sfx('win');
 		musicResolve(true);
-		for (let i = 0; i < 30; i++) burst(Math.random() * N - 0.5, Math.random() * ROWS - 0.5, 1);
+		for (let i = 0; i < 30; i++) burst(Math.random() * COLS - 0.5, Math.random() * ROWS - 0.5, 1);
 		setTimeout(() => {
 			busy = false;
 			showMsg(
-				`<h2 id="msgTitle">${ev.title}</h2><p class="lede">${T('event.won')}</p>
-			<p class="river-outcome" style="text-align:center">${T('event.gain', { reward: rewardText(ev.reward) })}</p>`,
+				html`
+					<h2 id="msgTitle">${ev.title}</h2>
+					<p class="lede">${T('event.won')}</p>
+					<p class="river-outcome" style="text-align:center">
+						${T('event.gain', { reward: rewardText(ev.reward) })}
+					</p>`,
 				[
 					[
 						Tplain('event.sail', { stop: LEVELS[next].name }),
@@ -233,7 +299,7 @@ function eventAfterMove() {
 						{ kind: 'go', sub: LEVELS[next].sub, icon: iconSvg('ui', 'barque') },
 					],
 				],
-				{ noClose: true }
+				{ noClose: true },
 			);
 		}, 900);
 		return;
@@ -254,9 +320,9 @@ function eventAfterMove() {
 						() => startChamber(c, after, true),
 						{ kind: 'go', dark: true, oasis: !!c.oasis, icon: iconSvg('dock', 'restart') },
 					],
-					[after.label, leaveChamber, { kind: 'quiet' }],
+					[after.label, leaveChamber, { kind: 'quiet', short: Tplain('chamber.leave') }],
 				],
-				{ noClose: true }
+				{ noClose: true },
 			);
 		}, 700);
 		return;
@@ -280,9 +346,13 @@ function eventAfterMove() {
 						},
 						{ kind: 'go', sub: LEVELS[next].sub, icon: iconSvg('ui', 'barque') },
 					],
-					[Tplain('event.try_again'), () => startEvent(ev, next), { kind: 'quiet', icon: iconSvg('dock', 'restart') }],
+					[
+						Tplain('event.try_again'),
+						() => startEvent(ev, next),
+						{ kind: 'quiet', icon: iconSvg('dock', 'restart') },
+					],
 				],
-				{ noClose: true }
+				{ noClose: true },
 			);
 		}, 700);
 		return;
@@ -308,17 +378,42 @@ function eventChoice(ev, next) {
 	const card = (ch, i) => {
 		const no = why(ch);
 		const pay = ch.cost
-			? `<p class="trial-prize"><span><span class="arrow-label prize-label">${T('event.pay')}</span>${rewardText(ch.cost)}</span></p>`
+			? html`
+				<p class="trial-prize">
+					<span>
+						<span class="arrow-label prize-label">${T('event.pay')}</span>
+						${rewardText(ch.cost)}
+					</span>
+				</p>`
 			: ch.takeBoon
-				? `<p class="trial-prize"><span><span class="arrow-label prize-label">${T('event.pay')}</span>${T('event.pay_boon')}</span></p>`
+				? html`
+					<p class="trial-prize">
+						<span>
+							<span class="arrow-label prize-label">${T('event.pay')}</span>
+							${T('event.pay_boon')}
+						</span>
+					</p>`
 				: '';
 		const get = ch.gamble
-			? `<p class="trial-prize"><span><span class="arrow-label prize-label">${T('event.get')}</span>${T('event.gamble_get')}</span></p><p class="trial-risk">${T('event.gamble_risk')}</p>`
+			? html`
+				<p class="trial-prize">
+					<span>
+						<span class="arrow-label prize-label">${T('event.get')}</span>
+						${T('event.gamble_get')}
+					</span>
+				</p>`
 			: ch.give
 				? getLine(ch.give)
 				: '';
-		return `<div class="trial-card river-card${no ? ' blocked' : ''}" role="button" tabindex="${no ? -1 : 0}" aria-disabled="${!!no}" data-ch="${i}">
-			<p class="trial-goal">${ch.label}</p>${pay}${get}${no ? `<p class="trial-risk">${no}</p>` : ''}</div>`;
+		const foot = no || (ch.gamble ? T('event.gamble_risk') : '');
+		return html`
+			<div class="trial-card river-card${no ? ' blocked' : ''}" role="button" tabindex="${no ? -1 : 0}" aria-disabled="${!!no}" data-ch="${i}">
+				<div class="card-body">
+					<p class="trial-goal">${ch.label}</p>
+					${pay}${get}
+				</div>
+				${foot ? `<div class="card-foot">${foot}</div>` : ''}
+			</div>`;
 	};
 	const choose = ch => {
 		closeOverlays();
@@ -367,15 +462,15 @@ function eventChoice(ev, next) {
 							{ kind: 'go', sub: LEVELS[next].sub, icon: iconSvg('ui', 'barque') },
 						],
 					],
-					{ onClose: () => startLevel(next) }
+					{ onClose: () => startLevel(next) },
 				),
-			50
+			50,
 		);
 	};
 	showMsg(
 		`${riverHead(ev, next)}<p class="story">${ev.text}</p>${doing.map(card).join('')}`,
-		leaving.map(ch => [ch.label, () => startLevel(next), { kind: 'quiet' }]),
-		{ onClose: () => startLevel(next) }
+		leaving.map(ch => [ch.label, () => startLevel(next), { kind: 'exit' }]),
+		{ onClose: () => startLevel(next) },
 	);
 	$('msgBody')
 		.querySelectorAll('.river-card[data-ch]')

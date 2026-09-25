@@ -1,9 +1,0 @@
-// Something Anubis sells: bought for one stop, used once.
-{
-	"id": "wind",
-	"name": "Second wind",
-	"description": "Kept until needed. When your moves run out, you get three more instead of failing. Used once.",
-	"currency": "gold",
-	"price": 900,
-	"gives": {"second_wind": 1}
-}

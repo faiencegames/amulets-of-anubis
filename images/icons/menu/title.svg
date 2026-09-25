@@ -1,6 +1,7 @@
-<!-- Menu and title-screen icon (title). 32 by 32. -->
+<!-- Menu icon: the title screen, the ankh from beside the game's name, in gold. 32 by 32. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-<path d="M6 28V13L16 5l10 8v15z" fill="#e8d49e" stroke="#4a2c10" stroke-width="2" stroke-linejoin="round"/>
-<path d="M11 28v-8h10v8" fill="#c8962e" stroke="#4a2c10" stroke-width="2" stroke-linejoin="round"/>
-<circle cx="16" cy="11" r="2" fill="#8e2415"/>
+<g transform="translate(5.5 0.5) scale(0.82)">
+<path d="M13 2c-5 0-7.5 4.5-7.5 8.5 0 3 1.6 5.6 3.6 7.5H2v5h8.6L9 36h8l-1.6-13H24v-5h-7.1c2-1.9 3.6-4.5 3.6-7.5C20.5 6.5 18 2 13 2zm0 4.5c1.6 0 2.8 1.8 2.8 4.2S14.6 16 13 16s-2.8-2.9-2.8-5.3S11.4 6.5 13 6.5z" fill="#e8b93e" stroke="#4a2c10" stroke-width="2.3" stroke-linejoin="round"/>
+<path d="M8.4 8 A5 5 0 0 1 11 4.4 M4 20.5 H8" fill="none" stroke="#fff4c8" stroke-width="1.2" stroke-linecap="round"/>
+</g>
 </svg>

@@ -1,3 +1,16 @@
+/* =============================================================================
+ * 29-buttons.js  —  what the buttons around the board do: the dock (map,
+ * hints, restart, the shops, How to play, the Menu) and the note beside the
+ * board. Each only opens the screen that another file makes.
+ *
+ * What's here:
+ *   the click handlers  $('btnMap').onclick and the rest
+ *   syncInfoOpen()      the note beside the board starts open on a wide
+ *                       screen
+ *
+ * Changes in the save: nothing.
+ * ===========================================================================*/
+
 // ---------- buttons ----------
 $('btnMap').onclick = () => {
 	if (!busy) openMap();
@@ -49,15 +62,21 @@ $('openMuseum').onclick = $('relicStrip').onclick = () => {
 $('stripPlace').onclick = () => {
 	if (busy) return;
 	showMsg(
-		`<h2 id="msgTitle">${core.level.name}</h2><p class="lede">${core.level.sub}</p><p class="fact">${core.level.fact}</p><h3 class="help-h">${T('place.amulets_heading')}</h3>${amuletList()}`,
-		[[Tplain('place.back'), () => {}]]
+		html`
+			<h2 id="msgTitle">${core.level.name}</h2>
+			<p class="lede">${core.level.sub}</p>
+			<p class="fact">${core.level.fact}</p>
+			<h3 class="help-h">${T('place.amulets_heading')}</h3>
+			${amuletList()}`,
+		[[Tplain('place.back'), () => {}, { kind: 'exit' }]],
 	);
 };
 
 $('btnAmulets').onclick = showAmulets;
 $('btnRestart').onclick = () => {
 	if (busy) return;
-	const used = core && core.movesLeft < core.startMoves;
+	// nothing to lose by restarting: nothing played yet, or the stop is over
+	const used = core && core.movesLeft < core.startMoves && !stopOver;
 	const again = () => {
 		if (eventState && eventState.ev.chamber) startChamber(eventState.ev, eventState.after, true);
 		else if (eventState) startEvent(eventState.ev, eventState.next);
@@ -68,13 +87,16 @@ $('btnRestart').onclick = () => {
 		return;
 	} // nothing played yet: no need to ask
 	showMsg(
-		`<h2 id="msgTitle">${T('restart.title')}</h2>
-		<p class="lede">${T('restart.played', { n: core.startMoves - core.movesLeft })}</p>
-		<p style="text-align:center">${T('restart.text')}${trial && !trial.done && !trial.failed && trial.curse ? T('restart.trial') : ''}</p>`,
+		html`
+			<h2 id="msgTitle">${T('restart.title')}</h2>
+			<p class="lede">${T('restart.played', { n: core.startMoves - core.movesLeft })}</p>
+			<p style="text-align:center">
+				${T('restart.text')}${trial && !trial.done && !trial.failed && trial.curse ? T('restart.trial') : ''}
+			</p>`,
 		[
 			[Tplain('restart.keep'), () => {}],
 			[Tplain('restart.restart'), again],
-		]
+		],
 	);
 };
 
@@ -86,16 +108,12 @@ $('btnHint').onclick = () => {
 	}
 };
 
-function syncSound() {}
-
-syncSound();
-
 // every stone-like control knocks when pressed (codex tabs rustle instead)
 document.addEventListener('click', e => {
 	if (!e.target.closest) return;
 	if (
 		e.target.closest(
-			'.btn, .rbtn, .menu-item, .close-x, .stop-btn, .skin:not([disabled]), .size-pick button, .boon, .strip-place, .diff-ticks button, .trial-card'
+			'.btn, .rbtn, .menu-item, .close-x, .stop-btn, .skin:not([disabled]), .size-pick button, .boon, .strip-place, .diff-ticks button, .trial-card',
 		)
 	)
 		sfx('stone');

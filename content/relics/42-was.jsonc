@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "was",
+	"name": "The was sceptre",
+	"description": "Make a cascade of fifteen in a stop, and win it.",
+	"found_when": {"win_best_cascade": 15},
+	"reward": {"gold": 300}
+}

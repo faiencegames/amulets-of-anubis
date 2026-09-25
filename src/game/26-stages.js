@@ -1,11 +1,33 @@
+/* =============================================================================
+ * 26-stages.js  —  staging: on a first journey the game's parts arrive one at
+ * a time, and "new" dots.
+ *
+ * What's here:
+ *   STAGES              each part (trials, boons, the stall, badges, curses,
+ *                       chambers, ...): the stop it arrives at is in
+ *                       content/settings.jsonc ("staging"), its banner in
+ *                       content/text.jsonc
+ *   stageOn(name)       whether a part is on yet; check it before showing
+ *                       anything that belongs to one
+ *   meetStages()        banners for anything newly on (at the start of every
+ *                       stop)
+ *   markNew(), clearNew(), isNew()
+ *                       "new" dots on the dock and the Menu, until that
+ *                       screen is opened
+ *   openPace()          Menu → Learning pace: everything on at once, or back
+ *                       to one at a time
+ *
+ * Changes in the save: staged, met, fresh.
+ * ===========================================================================*/
+
 // ---------- staging: one new thing at a time ----------
 // On the first journey the game's systems arrive one by one, each with a
 // one-line banner the first time it is on. `at` is how far the journey must
 // have got (save.unlocked, the furthest stop open, counted from 0); 'journey'
 // means the whole journey has been gilded once. From the second journey on, in
 // try-out mode, and for saves from before staging, everything is on.
-// When each arrives is in content/settings.json ("staging"); its words (title,
-// banner text, and a line saying what it is) in content/text.json ("stages").
+// When each arrives is in content/settings.jsonc ("staging"); its words (title,
+// banner text, and a line saying what it is) in content/text.jsonc ("stages").
 const STAGE_MARKS = {
 	seals: ['map', 'codex:omens'],
 	badges: ['codex:badges'],
@@ -45,12 +67,27 @@ function journeyRoadmap(compact) {
 	const all = stageAllOn();
 	const rows = STAGES.map(st => {
 		const on = stageOn(st.id);
-		return `<li class="${on ? 'on' : ''}"><span class="rm-mark" aria-hidden="true">${on ? '\u2713' : '\u25CB'}</span><span class="rm-text"><strong>${st.title}</strong> <span class="rm-what">\u2014 ${st.what}</span></span><span class="rm-when">${on ? T('roadmap.open') : stageWhen(st)}</span></li>`;
+		return html`
+			<li class="${on ? 'on' : ''}">
+				<span class="rm-mark" aria-hidden="true">${on ? '\u2713' : '\u25CB'}</span>
+				<span class="rm-text">
+					<strong>${st.title}</strong> <span class="rm-what">\u2014 ${st.what}</span>
+				</span>
+				<span class="rm-when">${on ? T('roadmap.open') : stageWhen(st)}</span>
+			</li>`;
 	}).join('');
 	return `<div class="roadmap${compact ? ' compact' : ''}">
 		<p class="rm-head">${T('roadmap.head')} ${all ? T('roadmap.head_all') : T('roadmap.head_more')}</p>
 		<ul class="rm-list">${rows}</ul>
-		${all ? '' : `<p class="rm-foot">${T('roadmap.rather')} <button type="button" class="btn small" data-pace>${T('roadmap.pace_button')}</button></p>`}
+		${
+			all
+				? ''
+				: html`
+			<p class="rm-foot">
+				${T('roadmap.rather')} 
+				<button type="button" class="btn small" data-pace>${T('roadmap.pace_button')}</button>
+			</p>`
+		}
 	</div>`;
 }
 
@@ -61,7 +98,7 @@ function wirePace(root) {
 				sfx('ui');
 				closeOverlays();
 				openPace();
-			})
+			}),
 	);
 }
 
@@ -75,14 +112,23 @@ function stageAllOn() {
 function openPace() {
 	const all = save.staged === 'all';
 	showMsg(
-		`<h2 id="msgTitle">${T('pace.title')}</h2>
-		<p class="lede">${T('pace.lede')}</p>
-		<div class="size-pick pace-pick">
-			<button type="button" data-p="staged" class="${all ? '' : 'on'}"><strong>${T('pace.one')}</strong><span>${T('pace.one_sub')}</span></button>
-			<button type="button" data-p="all" class="${all ? 'on' : ''}"><strong>${T('pace.all')}</strong><span>${T('pace.all_sub')}</span></button>
-		</div>
-		<p class="shop-desc" style="text-align:center">${T('pace.note')}${(save.journeys || 1) > 1 ? T('pace.note_later') : ''}</p>`,
-		[[Tplain('pace.done'), () => {}]]
+		html`
+			<h2 id="msgTitle">${T('pace.title')}</h2>
+			<p class="lede">${T('pace.lede')}</p>
+			<div class="size-pick pace-pick">
+				<button type="button" data-p="staged" class="${all ? '' : 'on'}">
+					<strong>${T('pace.one')}</strong>
+					<span>${T('pace.one_sub')}</span>
+				</button>
+				<button type="button" data-p="all" class="${all ? 'on' : ''}">
+					<strong>${T('pace.all')}</strong>
+					<span>${T('pace.all_sub')}</span>
+				</button>
+			</div>
+			<p class="shop-desc" style="text-align:center">
+				${T('pace.note')}${(save.journeys || 1) > 1 ? T('pace.note_later') : ''}
+			</p>`,
+		[[Tplain('pace.done'), () => {}, { kind: 'exit' }]],
 	);
 	$('msgBody')
 		.querySelectorAll('.pace-pick button')
@@ -106,7 +152,7 @@ function openPace() {
 								T('banner.everything_name'),
 								'',
 								T('banner.everything_text'),
-								'create'
+								'create',
 							);
 					}
 					persist();
@@ -114,7 +160,7 @@ function openPace() {
 					applyNewMarks();
 					sfx('select');
 					openPace();
-				})
+				}),
 		);
 }
 
@@ -193,4 +239,6 @@ function applyStages() {
 	[$('boonRow'), $('boonRowM')].forEach(el => {
 		if (el) el.hidden = !showBoons;
 	});
+	document.body.classList.toggle('no-boons', !showBoons); // on a phone the dock then keeps its own top edge
+	document.body.classList.toggle('no-stall', !stall); // one dock button fewer, so the boons above follow
 }

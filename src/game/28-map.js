@@ -1,32 +1,67 @@
+/* =============================================================================
+ * 28-map.js  —  the map of the journey, the stop card, and the Amulets
+ * scroll.
+ *
+ * What's here:
+ *   openMap()           the map: the river with every stop, and a list under
+ *                       it with each stop's stars and what else is there
+ *   openStop(i)         the stop card: tiles for its seals, omens and
+ *                       doorway, one open at a time; the big button follows
+ *                       the open tile (onto the stop, or into the doorway)
+ *   showAmulets(), amuletList()
+ *                       the Amulets scroll: the amulets on the board and what
+ *                       each meant
+ *
+ * Changes in the save: omenPick (the omens chosen for the next go at a
+ * stop).
+ * ===========================================================================*/
+
 // ---------- the map and the stop card ----------
+// the first sentence of a story, for a short line under a picture
+function firstSentence(text) {
+	const m = String(text).match(/^.*?[.!?](?=\s|$)/);
+	return m ? m[0] : text;
+}
+
 // The stop scroll: shown when a stop is picked on the map. It lists the stop's
 // seals and, once the stop is gilded, lets the player brave omens.
 function openStop(i) {
-	const L = LEVELS[i],
+	const stop = LEVELS[i],
 		won = (save.stars[i] || 0) > 0,
 		st = save.stars[i] || 0;
-	const pick = new Set(save.omenPick && save.omenPick.stop === L.id ? save.omenPick.list : []);
-	const best = (save.omens || {})[L.id] || 0;
+	const pick = new Set(save.omenPick && save.omenPick.stop === stop.id ? save.omenPick.list : []);
 	const ch = chamberAt(i),
 		chOpen = chamberOpen(ch);
 	// the stop's parts: its seals, the omens to brave, a doorway. With more than
 	// one, each is a small tile with the gist, and only the chosen one is open.
 	const parts = [];
 	const notes = [];
-	if (stageOn('seals') && (L.seals || []).length)
+	if (stageOn('seals') && (stop.seals || []).length)
 		parts.push({
 			id: 'seals',
 			name: T('stop.seals'),
-			gist: T('stop.seals_gist', { n: sealsOf(i).filter(Boolean).length, total: L.seals.length }),
+			gist: marks('seal', sealsOf(i).filter(Boolean).length, stop.seals.length),
+			say: T('stop.seals_gist', { n: sealsOf(i).filter(Boolean).length, total: stop.seals.length }),
 			html: sealsLine(i, []),
 		});
 	if (won && stageOn('omens'))
 		parts.push({
 			id: 'omens',
 			name: T('stop.omens'),
-			gist: '',
-			html: `<p class="shop-desc" style="text-align:center">${T('stop.omens_lede')}${best ? T('stop.omens_best', { n: best }) : ''}</p>
-			<div class="omen-list">${OMENS.map(o => `<label class="fill-toggle omen"><input type="checkbox" data-o="${o.id}" ${pick.has(o.id) ? 'checked' : ''}> <span><strong>${o.name}</strong><br><span class="shop-desc">${o.text}</span></span></label>`).join('')}</div>`,
+			gist: marks('apep', pick.size, OMENS.length),
+			say: pick.size ? T('stop.omens_some', { n: pick.size }) : T('stop.omens_none'),
+			html: html`
+				<p class="shop-desc" style="text-align:center">
+					${T('stop.omens_lede')}
+				</p>
+				<div class="omen-list">
+					${OMENS.map(
+						o => html`
+				<label class="fill-toggle omen">
+					<input type="checkbox" data-o="${o.id}" ${pick.has(o.id) ? 'checked' : ''}>${mark('apep', true)} <span><strong>${o.name}</strong><br><span class="shop-desc">${o.text}</span></span>
+				</label>`,
+					).join('')}
+				</div>`,
 		});
 	else if (won) notes.push(T('stop.omens_later'));
 	else notes.push(T('stop.omens_first_win'));
@@ -39,26 +74,66 @@ function openStop(i) {
 		parts.push({
 			id: 'door',
 			name: T(placeKey(ch, 'heading')),
-			gist: T(save.chambers[ch.id] ? 'stop.door_explored' : 'stop.door_open'),
-			html: `<p class="trial-goal stop-door">${iconSvg('map', placeIcon(ch), 'class="door-ico" aria-hidden="true"')}${ch.title}</p><p>${chText}</p>`,
+			gist: doorMark(ch),
+			say: T(save.chambers[ch.id] ? 'stop.door_explored' : 'stop.door_open'),
+			// the doorway's picture on a carved plaque, as on the doorway's own
+			// scroll: the reward, then the first line of its story (or how often
+			// it has been explored)
+			html: html`
+				<div class="chamber-plaque door-plaque">
+					${iconSvg('ui', ch.oasis ? 'oasis-view' : 'chamber-door', 'class="door-pic" aria-hidden="true"')}
+					<div class="card-body">
+						<p class="plaque-goal">${ch.title}</p>
+						<p class="trial-prize"><span>${rewardText(save.chambers[ch.id] ? visitReward(ch) : ch.reward)}</span></p>
+					</div>
+					<div class="card-foot">
+						${save.chambers[ch.id] ? T(placeKey(ch, 'again'), { n: save.chamberWins[ch.id] || 1 }) : firstSentence(ch.text)}
+					</div>
+				</div>`,
 		});
 	else if (ch && stageOn('chambers') && !won) notes.push(T(placeKey(ch, 'locked')));
 	const tiles = parts.length > 1;
 	const partsHtml = tiles
-		? `<div class="stop-tiles" role="tablist">${parts.map((p, j) => `<button type="button" role="tab" class="stop-tile${j ? '' : ' on'}" aria-selected="${!j}" data-part="${p.id}"><b>${p.name}</b><span data-gist="${p.id}">${p.gist}</span></button>`).join('')}</div>
-			${parts.map((p, j) => `<div class="stop-part" role="tabpanel" data-panel="${p.id}"${j ? ' hidden' : ''}>${p.html}</div>`).join('')}`
+		? html`
+			<div class="stop-tiles" role="tablist">
+				${parts
+					.map(
+						(p, j) => html`
+			<button type="button" role="tab" class="stop-tile${j ? '' : ' on'}" aria-selected="${!j}" data-part="${p.id}">
+				<b>${p.name}</b>
+				<span data-gist="${p.id}" aria-label="${p.say}" role="img">${p.gist}</span>
+			</button>`,
+					)
+					.join('')}
+			</div> ${parts
+				.map(
+					(p, j) => html`
+				<div class="stop-part" role="tabpanel" data-panel="${p.id}"${j ? ' hidden' : ''}>
+					${p.html}
+				</div>`,
+				)
+				.join('')}`
 		: parts.map(p => `<h3 class="shop-head">${p.name}</h3>${p.html}`).join('');
 	showMsg(
-		`<h2 id="msgTitle">${L.name}</h2><p class="lede" style="text-align:center">${L.sub || ''}${st ? `<br>${'\u2605'.repeat(st)}${'\u2606'.repeat(3 - st)}` : ''}</p>
-		${partsHtml}${notes.map(n => `<p class="shop-desc stop-note">${n}</p>`).join('')}`,
+		html`
+			<h2 id="msgTitle">${stop.name}</h2>
+			<p class="lede" style="text-align:center">
+				${stop.sub || ''}${
+					st
+						? html`
+			<br>
+			${'\u2605'.repeat(st)}${'\u2606'.repeat(3 - st)}`
+						: ''
+				}
+			</p> ${partsHtml}${notes.map(n => `<p class="shop-desc stop-note">${n}</p>`).join('')}`,
 		[
 			[
 				Tplain('stop.set_out'),
 				() => {
 					const list = [...$('msgBody').querySelectorAll('.omen input:checked')].map(
-						x => x.dataset.o
+						x => x.dataset.o,
 					);
-					save.omenPick = list.length ? { stop: L.id, list } : null;
+					save.omenPick = list.length ? { stop: stop.id, list } : null;
 					persist();
 					startLevel(i);
 				},
@@ -68,7 +143,9 @@ function openStop(i) {
 			...(chOpen
 				? [
 						[
-							Tplain(placeKey(ch, save.chambers[ch.id] ? 'go_back' : 'explore'), { name: midSentence(ch.title) }),
+							Tplain(placeKey(ch, save.chambers[ch.id] ? 'go_back' : 'explore'), {
+								name: midSentence(ch.title),
+							}),
 							() => startChamber(ch, chamberFromCard()),
 							{
 								kind: tiles ? 'go' : 'card',
@@ -77,12 +154,20 @@ function openStop(i) {
 								hidden: tiles,
 								icon: iconSvg('map', placeIcon(ch)),
 								sub: tiles ? '' : chText,
+								short: tiles
+									? Tplain(
+											placeKey(
+												ch,
+												save.chambers[ch.id] ? 'go_back_short' : 'explore_short',
+											),
+										)
+									: '',
 							},
 						],
 					]
 				: []),
 		],
-		{ onClose: openMap } // the \u00d7 goes back to the map, where the stop was chosen
+		{ onClose: openMap }, // the \u00d7 goes back to the map, where the stop was chosen
 	);
 	$('msgBody')
 		.querySelectorAll('.stop-tile')
@@ -103,7 +188,7 @@ function openStop(i) {
 					$('msgBody')
 						.querySelectorAll('.act-go')
 						.forEach(b => (b.hidden = (b.dataset.i === '1') !== (t.dataset.part === 'door')));
-				})
+				}),
 		);
 	const total = () => {
 		const n = $('msgBody').querySelectorAll('.omen input:checked').length,
@@ -113,7 +198,10 @@ function openStop(i) {
 			el.innerHTML = n
 				? T('stop.total', { n, x: (1 + OMEN_BONUS * n).toFixed(1) })
 				: T('stop.total_none');
-		if (gist) gist.innerHTML = n ? T('stop.omens_some', { n }) : T('stop.omens_none');
+		if (gist) {
+			gist.innerHTML = marks('apep', n, OMENS.length);
+			gist.setAttribute('aria-label', n ? T('stop.omens_some', { n }) : T('stop.omens_none'));
+		}
 	};
 	$('msgBody')
 		.querySelectorAll('.omen input')
@@ -122,40 +210,53 @@ function openStop(i) {
 				(x.onchange = () => {
 					sfx('select');
 					total();
-				})
+				}),
 		);
 	total();
 }
 
 function openMap() {
 	clearNew('map');
-	const sites = LEVELS.map((L, i) => {
+	const sites = LEVELS.map((stop, i) => {
 		const locked = i > save.unlocked,
 			st = save.stars[i] || 0,
 			cur = i === levelIdx;
-		const tx = L.anchor === 'start' ? L.x + 15 : L.x - 15;
-		const hw = L.name.length * 7.6 + 34 + (chamberOpen(chamberAt(i)) ? 18 : 0),
-			hx = L.anchor === 'start' ? L.x - 17 : L.x + 17 - hw; // a generous tap area over the marker and its name
-		return `<g class="site" data-i="${i}" ${locked ? '' : 'tabindex="0" role="button"'} aria-label="${L.name}${locked ? ', locked' : st ? `, ${st} of 3 stars` : ''}" opacity="${locked ? 0.55 : 1}">
-			<rect class="hit" x="${hx}" y="${L.y - 13}" width="${hw}" height="${st ? 30 : 26}" rx="6" fill="#000" fill-opacity="0"/>
-			<g transform="translate(${L.x} ${L.y})">${iconArt('map', locked ? 'stop-locked' : 'stop')}</g>
-			<circle class="mark" cx="${L.x}" cy="${L.y}" r="11" fill="none" stroke="${cur ? '#8e2415' : 'none'}" stroke-width="3.5"/>
-			<text x="${L.x}" y="${L.y + 4.5}" text-anchor="middle" font-size="12" font-weight="700" fill="#2b1606">${i + 1}</text>
-			<text class="site-name" x="${tx}" y="${L.y + 4}" text-anchor="${L.anchor}" font-size="13" font-weight="700" fill="${locked ? '#6b5a3a' : '#3a1e08'}" stroke="#ead7a4" stroke-width="3" paint-order="stroke">${L.name}</text>
-			${st ? `<text x="${tx}" y="${L.y + 17}" text-anchor="${L.anchor}" font-size="11" fill="#9a6a12" stroke="#ead7a4" stroke-width="3" paint-order="stroke">${'\u2605'.repeat(st)}${'\u2606'.repeat(3 - st)}<tspan fill="#a8341c"> ${sealsOf(i).some(Boolean) ? sealDots(i) : ''}</tspan></text>` : ''}
-			${chamberOpen(chamberAt(i)) ? `<g class="door-mark" data-anchor="${L.anchor}" transform="translate(${L.x} ${L.y}) scale(.8)" opacity="${save.chambers[chamberAt(i).id] ? 0.7 : 1}">${iconArt('map', placeIcon(chamberAt(i)))}</g>` : ''}
+		const tx = stop.anchor === 'start' ? stop.x + 15 : stop.x - 15;
+		const hw = stop.name.length * 7.6 + 34 + (chamberOpen(chamberAt(i)) ? 18 : 0),
+			hx = stop.anchor === 'start' ? stop.x - 17 : stop.x + 17 - hw; // a generous tap area over the marker and its name
+		return `<g class="site" data-i="${i}" ${locked ? '' : 'tabindex="0" role="button"'} aria-label="${stop.name}${locked ? ', locked' : st ? `, ${st} of 3 stars` : ''}" opacity="${locked ? 0.55 : 1}">
+			<rect class="hit" x="${hx}" y="${stop.y - 13}" width="${hw}" height="${st ? 30 : 26}" rx="6" fill="#000" fill-opacity="0"/>
+			<g transform="translate(${stop.x} ${stop.y})">${iconArt('map', locked ? 'stop-locked' : 'stop')}</g>
+			<circle class="mark" cx="${stop.x}" cy="${stop.y}" r="11" fill="none" stroke="${cur ? '#8e2415' : 'none'}" stroke-width="3.5"/>
+			<text x="${stop.x}" y="${stop.y + 4.5}" text-anchor="middle" font-size="12" font-weight="700" fill="#2b1606">${i + 1}</text>
+			<text class="site-name" x="${tx}" y="${stop.y + 4}" text-anchor="${stop.anchor}" font-size="13" font-weight="700" fill="${locked ? '#6b5a3a' : '#3a1e08'}" stroke="#ead7a4" stroke-width="3" paint-order="stroke">${stop.name}</text>
+			${
+				st
+					? html`
+				<text x="${tx}" y="${stop.y + 17}" text-anchor="${stop.anchor}" font-size="11" fill="#9a6a12" stroke="#ead7a4" stroke-width="3" paint-order="stroke">
+					${'\u2605'.repeat(st)}${'\u2606'.repeat(3 - st)}
+				</text>`
+					: ''
+			}
+			${
+				chamberOpen(chamberAt(i))
+					? html`
+				<g class="door-mark" data-anchor="${stop.anchor}" transform="translate(${stop.x} ${stop.y}) scale(.8)" opacity="${save.chambers[chamberAt(i).id] ? 0.7 : 1}">
+					${iconArt('map', placeIcon(chamberAt(i)))}
+				</g>`
+					: ''
+			}
 		</g>`;
 	}).join('');
-	$('mapBody').innerHTML =
-		`<h2 style="margin:0 0 2px;font-family:var(--display);font-size:28px;color:var(--carnelian);text-align:center">${T('map.title')}</h2>
-	 <p class="lede" style="text-align:center;margin:0 0 6px;font-style:italic;color:#6b4a22">${T('map.lede')}</p>
+	$('mapBody').innerHTML = `<h2>${T('map.title')}</h2>
+	 <p class="lede map-lede">${T('map.lede')}</p>
 	 <div class="map-scroll" id="mapScroll"><svg id="mapSvg" viewBox="0 0 360 560" role="group" aria-label="${T('map.label')}">
 		${iconInner('map', 'nile')}
 		${sites}
 	 </svg></div>
 	 <h3 class="shop-head" style="margin-top:10px">${T('map.stops')}</h3>
-	 <div class="stop-list">${LEVELS.map((L, i) => stopButton(L, i)).join('')}</div>
-	 <div class="actions"><button class="btn" id="mapClose">${T('map.back')}</button></div>`;
+	 <div class="stop-list">${LEVELS.map((stop, i) => stopButton(stop, i)).join('')}</div>
+	 ${exitButton(T('map.back'), 'id="mapClose"')}`;
 	$('mapBody')
 		.querySelectorAll('.stop-btn:not([disabled])')
 		.forEach(
@@ -163,18 +264,18 @@ function openMap() {
 				(el.onclick = () => {
 					closeOverlays();
 					openStop(+el.dataset.i);
-				})
+				}),
 		);
 	// on a phone the map is zoomed in: open it centred on the current stop
 	requestAnimationFrame(() => {
 		const sc = $('mapScroll'),
 			svg = $('mapSvg');
 		if (!sc || sc.scrollHeight <= sc.clientHeight + 4) return;
-		const L = LEVELS[levelIdx],
+		const stop = LEVELS[levelIdx],
 			k = svg.getBoundingClientRect().height / 560,
 			kx = svg.getBoundingClientRect().width / 360;
-		sc.scrollTop = Math.max(0, L.y * k - sc.clientHeight / 2);
-		sc.scrollLeft = Math.max(0, L.x * kx - sc.clientWidth / 2);
+		sc.scrollTop = Math.max(0, stop.y * k - sc.clientHeight / 2);
+		sc.scrollLeft = Math.max(0, stop.x * kx - sc.clientWidth / 2);
 	});
 	$('mapBody')
 		.querySelectorAll('.site[tabindex]')
@@ -205,16 +306,26 @@ function stopButton(L, i) {
 	const notes = [];
 	if (locked) notes.push(T('map.locked'));
 	else {
-		const seals = (L.seals || []).length;
-		if (seals && stageOn('seals'))
-			notes.push(T('map.meta_seals', { n: sealsOf(i).filter(Boolean).length, total: seals }));
+		// how far the stop has come, in pictures: its seals, the omens braved
+		// there, its doorway (sealed once explored); the words for screen readers
+		const seals = (L.seals || []).length,
+			said = (words, pic) => `<span role="img" aria-label="${words}">${pic}</span>`;
+		if (seals && stageOn('seals')) {
+			const n = sealsOf(i).filter(Boolean).length;
+			notes.push(said(T('map.meta_seals', { n, total: seals }), marks('seal', n, seals)));
+		}
 		const omens = (save.omens || {})[L.id];
-		if (omens) notes.push(T('map.meta_omens', { n: omens }));
+		// one serpent and the count: small serpents in a row read as "SSS"
+		if (omens)
+			notes.push(
+				said(
+					T('map.meta_omens', { n: omens }),
+					`<span class="marks">${mark('apep', true)}${omens > 1 ? `<b class="mark-n">\u00d7${omens}</b>` : ''}</span>`,
+				),
+			);
 		const ch = chamberAt(i);
 		if (chamberOpen(ch))
-			notes.push(
-				`${iconSvg('map', placeIcon(ch), 'class="door-ico" aria-hidden="true"')}${T(placeKey(ch, save.chambers[ch.id] ? 'map_done' : 'map_new'))}`
-			);
+			notes.push(said(T(placeKey(ch, save.chambers[ch.id] ? 'map_done' : 'map_new')), doorMark(ch)));
 	}
 	const starText = locked ? '' : '\u2605'.repeat(stars) + '\u2606'.repeat(3 - stars);
 	return (
@@ -222,9 +333,7 @@ function stopButton(L, i) {
 		`<b>${i + 1}</b>` +
 		`<span class="stop-name">${L.name}</span>` +
 		`<em class="stop-stars" aria-label="${T('map.stars', { n: stars })}">${starText}</em>` +
-		(notes.length
-			? `<small class="stop-meta">${notes.map(n => `<span>${n}</span>`).join(' \u00b7 ')}</small>`
-			: '') +
+		(notes.length ? `<small class="stop-meta">${notes.join('')}</small>` : '') +
 		`</button>`
 	);
 }
@@ -265,6 +374,6 @@ function showAmulets() {
 	showMsg(
 		`<h2 id="msgTitle">${T('place.amulets_title', { place: $('placeName').textContent })}</h2>` +
 			amuletList(),
-		[[Tplain('place.back'), () => {}]]
+		[[Tplain('place.back'), () => {}, { kind: 'exit' }]],
 	);
 }

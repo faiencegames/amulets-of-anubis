@@ -1,6 +1,7 @@
-<!-- Menu and title-screen icon (pace). 32 by 32. -->
+<!-- Menu icon: learning pace, a step pyramid, the game rising one step at a time. 32 by 32. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-<path d="M5 26h22" stroke="#4a2c10" stroke-width="2.4" stroke-linecap="round"/>
-<path d="M7 26V20h5v6M14 26V14h5v12M21 26V8h5v18" fill="#e8d49e" stroke="#4a2c10" stroke-width="2" stroke-linejoin="round"/>
-<circle cx="23.5" cy="4.5" r="2.2" fill="#8e2415"/>
+<path d="M3 27 H29 V22 H26 V17 H23 V12 H20 V7.5 H12 V12 H9 V17 H6 V22 H3 Z" fill="#e3c283" stroke="#4a2c10" stroke-width="2" stroke-linejoin="round"/>
+<path d="M6 22 H26 M9 17 H23 M12 12 H20" stroke="#4a2c10" stroke-width="1.4"/>
+<path d="M4.5 25.4 H14 M7.5 20.4 H13 M10.5 15.4 H14" stroke="#fff4d8" stroke-width="1" stroke-linecap="round"/>
+<circle cx="26" cy="6" r="2.6" fill="#b8452a" stroke="#4a2c10" stroke-width="1.2"/>
 </svg>

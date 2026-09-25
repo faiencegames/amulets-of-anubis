@@ -1,8 +1,0 @@
-// What the codex says about an amulet. The drawing itself is built in,
-// or comes from a picture in images/amulets/ with the same name as the id.
-{
-	"id": "bee",
-	"name": "Bee",
-	"plural": "bees",
-	"meaning": "The bee was a sign of Lower Egypt: the king's title “He of the Sedge and the Bee” named him ruler of both lands. Bees were kept in pottery hives, and honey was prized."
-}

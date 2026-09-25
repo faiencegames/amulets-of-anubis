@@ -1,0 +1,33 @@
+// A tomb or temple chamber beside a stop: a small, dim board, opened once
+// that stop is gilded. Some amulets start buried in sand: in "floor_plan",
+// s is a stone with a buried amulet on it and S a thick stone with one.
+// A buried amulet can't be moved; a match beside it brushes the sand off.
+// "reward" is paid the first time the chamber is explored; "return_reward" on every visit after.
+{
+	"id": "sanctuary",
+	"at": "abu-simbel",
+	"name": "The sanctuary of Abu Simbel",
+	"text": "At the back of the great temple of Abu Simbel we came to the sanctuary, where four Gods sit together in the dark. They are Ptah, Amun-Ra, Ra-Horakhty and the deified Ramesses II himself; he could hardly have left himself out. Twice a year, in February and October, the rising sun reaches down the whole length of the temple to light Them, all but Ptah, who stays in shadow.",
+	"scenery": "sanctuary",
+	// Three sets: each time the place opens, the game picks one at random.
+	"amulets": [
+		["eye", "torch", "cartouche", "scarab", "ankh"],
+		["baboon", "torch", "sara", "was", "shen"],
+		["falcon", "torch", "cartouche", "crown", "nefer"]
+	],
+	"moves": 28,
+	"floor_plan": [
+		"..1111..",
+		"..1111..",
+		".111111.",
+		".1s11s1.",
+		"11111111",
+		"1s1111s1",
+		"11111111",
+		".1SSSS1."
+	],
+	"reward": {"lapis": 25},
+	// "return_reward" is paid on the first return; each return after pays more,
+	// as the chamber wakes a little more each time (cursed badges; see "returning" in settings.json).
+	"return_reward": {"lapis": 25}
+}

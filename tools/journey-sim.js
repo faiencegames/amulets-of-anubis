@@ -1,5 +1,5 @@
 // A first journey, as a new player meets it: the parts of the game arrive at
-// the stops settings.json says (badges, cursed badges...), a lost stop is
+// the stops settings.jsonc says (badges, cursed badges...), a lost stop is
 // tried again with the persistence moves, and every board is built by
 // stopOptions() in 01-core.js, exactly as the game builds it. It reports, for
 // each stop, how often the first try wins and how many tries it takes, on the

@@ -13,7 +13,7 @@ Every field that appears anywhere is in the table for its section.
 
 - **One thing per file.** A file holds a single `{ ... }` block.
 - **Order is the file name.** The number at the front sets the order of the
-  things of that kind: `03-giza.json` comes after `02-saqqara.json`. Renumber
+  things of that kind: `03-giza.jsonc` comes after `02-saqqara.jsonc`. Renumber
   to reorder; the build reads files in name order.
 - **`id` is permanent.** It is what saves remember things by. Use lowercase
   letters, numbers and hyphens, starting with a letter, like `"golden-barque"`.
@@ -23,8 +23,10 @@ Every field that appears anywhere is in the table for its section.
   Long text can be a list of lines, which the build joins with spaces:
   `["the first part", "the second part"]`.
 - **Comments** start with `//` and are fine anywhere (so each file can explain
-  its own fields). **Trailing commas** are fine. Just keep the brackets and
-  quotes balanced.
+  its own fields). That is why the files end in `.jsonc`, "JSON with
+  comments": editors know the comments are allowed. The build also forgives a
+  comma before a closing bracket, but some editors don't, so leave it out.
+  Keep the brackets and quotes balanced.
 - **Colours** are `#rrggbb` (or `#rgb`), or `rgba(…)` / `hsla(…)` for
   see-through.
 - A field the build doesn't recognise is ignored, and the build tells you,
@@ -276,6 +278,7 @@ trial card names its curse before the player accepts.
 Effects, shared with the omens (the hardships): `fewer_moves` (n fewer
 moves), `fewer_moves_percent` (n percent fewer moves), `thick_stones` (n bare
 stones start thick), `thick_stones_share` (one bare stone in n starts thick),
+`buried_amulets` (n amulets start buried in sand, as in a tomb),
 `fewer_badges` (badged amulets fall n percent less often; 100 means none),
 `more_cursed_badges` (cursed badges fall, n times as often), `no_boons` (no
 boons can be used). A strength is at most 100.
@@ -283,7 +286,7 @@ boons can be used). A strength is at most 100.
 ## Omens (`content/omens/`)
 
 A hardship a player may choose to brave at a stop they have already gilded,
-for a richer reward (`omens.reward_percent_each` in `settings.json`). It
+for a richer reward (`omens.reward_percent_each` in `settings.jsonc`). It
 lasts for that stop and its restarts. Saves remember omens by id.
 
 | field | required | what it is |
@@ -313,7 +316,7 @@ Something that can happen on the river between two stops. Two kinds.
 
 Common fields: `id`, `kind` (`"puzzle"` or `"choice"`), `title`, `text`,
 `weight` (how likely it is, 0–100, default 1; the overall chance is
-`river_event_percent` in `settings.json`).
+`river_event_percent` in `settings.jsonc`).
 
 **A puzzle** is a short game on its own little board:
 
@@ -342,8 +345,8 @@ On the scroll, each choice that does something is a card, like a trial card:
 the `label` as its heading, then "You pay:" and "You get:" lines built from
 `cost`, `give`, `take_a_boon` and `gamble`, with the gold and lapis symbols. So
 keep the `label` a short action ("Pay him for the channel", "Join the dance")
-and leave the price out of it. A choice that does nothing becomes a plain
-button below the cards. A card the player cannot afford stays on the scroll,
+and leave the price out of it. A choice that does nothing becomes the way out, full
+width below the cards. A card the player cannot afford stays on the scroll,
 dimmed, with the reason.
 
 ## Chambers (`content/chambers/`)
@@ -352,13 +355,13 @@ A place beside a stop, with a small board of its own. It is either a **tomb or
 temple** (`"setting": "tomb"`, the default): dim, lit by torches, some amulets
 buried in sand; or an **oasis** (`"setting": "oasis"`): in daylight, some
 amulets under water. The two differ only in their look and words. Its doorway opens once that stop is gilded (and the
-"chambers" stage has arrived, see `settings.json`). The player finds it on the
+"chambers" stage has arrived, see `settings.jsonc`). The player finds it on the
 win screen, on the stop's card and as a doorway beside the stop on the map.
 The goal is always to gild the floor. The reward is paid the first time; every
 later visit pays `return_reward`. A tomb or temple also wakes each time the
 player goes back in: cursed badges turn up, likelier with each return, and its
 return reward grows with them (`reward_percent_each_return`)
-(`"returning"` in `settings.json`; not on Relaxed, and not before curses have
+(`"returning"` in `settings.jsonc`; not on Relaxed, and not before curses have
 arrived on a first journey). Oases stay calm.
 
 | field | required | what it is |
@@ -390,6 +393,7 @@ Something Anubis sells: bought for one stop, used once (or held).
 | `id` | yes | short id |
 | `name` | yes | the name shown |
 | `description` | yes | what it does |
+| `icon` | no | a picture in `images/icons/stall/` (without `.svg`); an item that gives one boon shows the boon's own without it |
 | `currency` | yes | `gold` or `lapis` |
 | `price` | yes | the one-time price (the build raises it `stall_price_rise_percent` each repeat at the same stop) |
 | `gives` | yes | exactly one of the four below |
@@ -461,7 +465,7 @@ to let each stop keep its own carved stone.
 
 The light that flies off a match. `colours` is a list of exactly two colours.
 
-## settings.json
+## settings.jsonc
 
 The whole-game numbers. Every one is optional; leave one out and the game uses
 the default shown. The file itself has a comment beside each.
@@ -490,7 +494,7 @@ the default shown. The file itself has a comment beside each.
 | `earnings.gold_for_winning` | 25 | gold for gilding a stop |
 | `earnings.gold_per_spare_move` | 2 | plus this for each move left over |
 | `earnings.lapis_for_winning` | 1 | lapis for gilding a stop |
-| `sound.steady_buffer_ms` | 80 | the audio buffer asked for when a player turns on "Steadier sound" (Menu → Sound); longer is steadier, but sounds come later |
+| `sound.steady_buffer_ms` | 80 | the audio buffer asked for when a player turns on "Steadier sound" (Menu → Settings → Sound and music); longer is steadier, but sounds come later |
 
 ## Pictures and icons (`images/`)
 
@@ -502,7 +506,7 @@ must be SVG: keep each `viewBox`, and give gradients ids no other icon uses
 `"icon"`; a picture in `images/relics/` wins over both. The build complains
 about a file that isn't one `<svg viewBox="…">` drawing.
 
-## text.json
+## text.jsonc
 
 The words on screen, grouped by screen (`hud`, `dock`, `title`, `menu`,
 `stages`, `win`, `lose`, `shop`, `stall`, `treasury`, `customise`, `saves`,
@@ -553,7 +557,7 @@ Special: `relic` (one relic id unlocks the next).
 ### Hardships (`effect` in curses and omens)
 
 `fewer_moves`, `fewer_moves_percent`, `thick_stones`, `thick_stones_share`,
-`fewer_badges`, `more_cursed_badges`, `no_boons`.
+`buried_amulets`, `fewer_badges`, `more_cursed_badges`, `no_boons`.
 
 ### Boons (rewards, stall items, events)
 

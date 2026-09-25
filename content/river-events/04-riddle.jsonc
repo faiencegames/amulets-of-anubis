@@ -1,0 +1,21 @@
+// Something that can happen on the river between two stops.
+{
+	"id": "riddle",
+	"kind": "puzzle",
+	"title": "The priest’s riddle",
+	"text": "A priest barred the landing, arms folded, and would not let us pass. “The floor of my shrine is heavy stone,” he said. “Gild it, and Anubis will remember you.” We were not entirely sure this counted as a riddle, but we set to work all the same.",
+	"goal": {"type": "gild"},
+	"moves": 14,
+	"amulet_types": 4,
+	"floor_plan": [
+		"........",
+		"..2222..",
+		".222222.",
+		".222222.",
+		".222222.",
+		".222222.",
+		"..2222..",
+		"........"
+	],
+	"reward": {"boon": "scales"}
+}

@@ -12,20 +12,19 @@
 /*STYLES*/
 </style>
 </head>
-<body class="booting">
+<body class="booting no-keys">
 <div id="backdrop" aria-hidden="true"><div class="bd"></div><div class="bd"></div></div>
 <div class="app">
 
 	<header class="hud stone">
 		<div class="hud-title">{{svg:ui/title-ankh class="orn"}}<h1>Amulets of Anubis</h1></div>
-		<div class="hud-prog" aria-hidden="true"><i id="hudProgFill"></i></div>
 		<div class="gauges">
 			<div class="gauge g-moves" id="gMoves" title="{{hud.moves_title}}"><span class="g-ico">&#8635;</span><b id="movesNum">25</b><small>{{hud.moves}}</small></div>
 			<div class="gauge g-gold" title="{{hud.gold_title}}"><span class="g-ico gold"></span><b id="goldTxt">0</b><small>{{hud.gold}}</small></div>
 			<div class="gauge g-lapis" title="{{hud.lapis_title}}"><span class="g-ico lapis"></span><b id="lapisTxt">0</b><small>{{hud.lapis}}</small></div>
-			<div class="gauge g-relics" title="{{hud.relics_title}}"><span class="g-ico relic"></span><b id="relicTxt">0/8</b><small>{{hud.relics}}</small></div>
+			<div class="gauge g-relics" title="{{hud.relics_title}}"><span class="g-ico jar"></span><span id="relicBar"></span></div>
 			<div class="gauge g-score wide" title="{{hud.score_title}}"><b id="scoreTxt">0</b><small>{{hud.score}}</small></div>
-			<div class="gauge g-stop" title="{{hud.stop_title}}"><b id="stopTxt">1/12</b><small>{{hud.stop}}</small></div>
+			<div class="gauge g-stop" title="{{hud.stop_title}}"><span class="g-stack"><b id="stopTxt"></b><span id="stopRiver"></span></span></div>
 		</div>
 	</header>
 
@@ -48,7 +47,7 @@
 				<div class="boon-row" id="boonRow"></div>
 			</div>
 			<div class="tablet stone collection">
-				<div class="tablet-row"><span>{{side.relics}}</span><strong id="relicTxt2">0 / 8</strong><button class="museum-link" id="openMuseum" type="button" title="{{side.open_museum_title}}">{{side.open_museum}}</button></div>
+				<div class="tablet-row"><span>{{side.relics}}</span><button class="museum-link" id="openMuseum" type="button" title="{{side.open_museum_title}}">{{side.open_museum}}</button></div>
 				<div class="relic-strip" id="relicStrip" title="{{side.open_museum_title}}"></div>
 			</div>
 		</aside>
@@ -57,21 +56,26 @@
 			<div class="board-frame">
 				<span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
 				<div class="band"></div>
-				<div class="canvas-wrap"><div id="boardBg" aria-hidden="true"></div><canvas id="board" tabindex="0" aria-label="{{hud.board_label}}"></canvas></div>
+				<div class="canvas-wrap"><div id="boardBg" aria-hidden="true"></div><canvas id="board" tabindex="0" aria-label="{{hud.board_label}}"></canvas><div class="board-end" id="boardEnd" hidden></div></div>
 				<div class="band bottom"></div>
 			</div>
 			<div class="tube" id="tube" role="img" aria-label="{{hud.gilded_label}}">
 				<div class="tube-cap top"></div>
-				<div class="tube-body"><div class="tube-stream"></div><div class="tube-fill" id="tubeFill"></div><div class="tube-shine"></div></div>
+				<div class="tube-body" id="tubeBody"><div class="tube-fill" id="tubeFill"></div><div class="tube-shine"></div></div>
 				<div class="tube-cap bottom"></div>
 				<span class="tube-txt" id="gildTxt">0 / 36</span>
 			</div>
 		</section>
 
 		<div class="mobile-strip" id="mobileStrip">
-			<button class="strip-place" id="stripPlace" type="button"></button>
-			<div class="trial-row" id="trialRowM" hidden></div>
-			<div class="boon-row" id="boonRowM"></div>
+			<div class="strip-top">
+				<div class="band strip-band"></div>
+				<div class="strip-plaque" id="stripPlaque">
+					<button class="strip-place" id="stripPlace" type="button"></button><span class="strip-river" id="stripRiver" aria-hidden="true"></span>
+					<div class="trial-row" id="trialRowM" hidden></div>
+				</div>
+			</div>
+			<div class="boon-row stone" id="boonRowM"></div>
 		</div>
 	</main>
 
@@ -103,7 +107,12 @@
 /*CORE*/
 </script>
 <script>
+// The game: src/00-open.js to 04-boards.js, then src/game/ in file-name
+// order, joined by build.py. It runs inside one function, so its names stay
+// its own and don't collide with the page's.
+(() => {
 /*UI*/
+})();
 </script>
 </body>
 </html>

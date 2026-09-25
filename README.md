@@ -2,11 +2,15 @@
 
 ![A tomb by torchlight: the Grand Gallery at Giza, with some amulets buried in sand](docs/images/screenshot-tomb.jpg)
 
-Amulets of Anubis is a match-3 game about a journey down the Nile. You sail
-from Memphis to Alexandria and stop at twelve places along the way. At each
-one you swap amulets into rows of three until the grey stone floor has turned
-to gold. Every stop has its own amulets, scenery, floor plans and music, and a
-short note on its history that I have tried hard to get right.
+Amulets of Anubis is a match-3 roguelite on the Nile. Each journey runs from
+Memphis to Alexandria through twelve stops, and at each one you swap amulets
+into rows of three until the grey stone floor has turned to gold. No two
+journeys go the same way. The priests set different trials, a failed one
+brings a curse, boons come and go, and the river throws up puzzles and choices
+between the stops. What you earn is kept for the next journey, in the
+Treasury's upgrades, the relics in the museum and the looks you unlock. Every
+stop has its own amulets, scenery, floor plans and music, and a short note on
+its history that I have tried hard to get right.
 
 The whole game is a single HTML file. There is nothing to install and no
 account to make, and it never goes online: no ads, no tracking, and no update
@@ -42,13 +46,14 @@ version without writing any code.
   gilded them. The tombs are lit by torches and some of their amulets are
   buried in sand. The oases lie among date palms, with amulets under water.
 - **Reasons to come back:** three seals at every stop, omens you can brave for
-  a bigger reward, 40 relics for the museum, and amulet sets, floors, frames
+  a bigger reward, 46 relics for the museum, and amulet sets, floors, frames
   and sparkles to earn.
 - **A gentle start.** On your first journey the game brings in its parts one
   at a time, each with a short note. If you would rather have everything at
   once, you can.
-- **Four board sizes, four difficulties**, full keyboard controls and support
-  for reduced motion.
+- **Four board sizes, four difficulties**, full keyboard controls, and in
+  Settings dark and high-contrast colours, less motion, and fewer effects for
+  older phones.
 
 There are more pictures on the [screenshots page](docs/screenshots.md).
 
@@ -95,8 +100,8 @@ Most of the game is content rather than code:
 | To change | Edit |
 |---|---|
 | stops, tombs and temples, boons, badges, curses, omens, relics, trials, river events, shop items and looks | one small file each in `content/` |
-| the words on every screen | `content/text.json` |
-| the numbers that tune it: rewards, difficulty, stars, when each part arrives | `content/settings.json` |
+| the words on every screen | `content/text.jsonc` |
+| the numbers that tune it: rewards, difficulty, stars, when each part arrives | `content/settings.jsonc` |
 | every picture: amulets, scenery, floors, badges and icons | files in `images/` (mostly SVG, see `images/README.md`) |
 
 If you have never programmed, start with the
@@ -115,20 +120,23 @@ pictures at every step, and ends with how to write a boon of your own.
 
 ## Licence
 
-Amulets of Anubis © 2026 Faience Games.
+Amulets of Anubis © 2026 Faience Games. There are three licences, one for
+each kind of thing:
 
 * **The code** (the game, the build, the tools and the scripts) is free
   software under the GNU General Public License, version 3 or (at your option)
-  any later version: see [LICENSE](LICENSE). You may use it, study it, change
-  it and share it, as long as what you share stays under the same licence.
-* **The pictures** in `images/` and `docs/` are in the public domain under
-  [CC0 1.0](LICENSES/CC0-1.0.txt), so you can use them for anything without
-  asking. The few exceptions are listed with their own terms in
-  [images/CREDITS.md](images/CREDITS.md). (The David Roberts prints there are
-  public domain too.)
+  any later version (`GPL-3.0-or-later`): see [LICENSE](LICENSE). You may use
+  it, study it, change it and share it, as long as what you share stays under
+  the same licence.
+* **The pictures** are in the public domain under
+  [CC0 1.0](LICENSES/CC0-1.0.txt) (`CC0-1.0`), so you can use them for
+  anything without asking. That is every picture in `images/` and `docs/`,
+  the app icons in `web/` and `platforms/`, and the store pictures in
+  `fastlane/`. What little comes from elsewhere is listed, with its source,
+  in [images/CREDITS.md](images/CREDITS.md).
 * **The two typefaces** in `web/fonts.css`, IM Fell Double Pica and IM Fell
   English, were digitised by Igino Marini from the Fell Types and are under
-  the SIL Open Font License 1.1
+  the SIL Open Font License 1.1 (`OFL-1.1`)
   ([Double Pica](LICENSES/OFL-1.1-IM-Fell-Double-Pica.txt),
   [English](LICENSES/OFL-1.1-IM-Fell-English.txt)).
 
@@ -137,7 +145,7 @@ Amulets of Anubis © 2026 Faience Games.
 ```
 build.py        builds the game into dist/ (build.bat on Windows)
 build.sh        builds everything: game, apps, docs and website, all into dist/
-content/        stops, relics, events, shop items, looks, text.json, settings.json, icons/
+content/        stops, relics, events, shop items, looks, text.jsonc, settings.jsonc, icons/
 images/         every picture: amulets, scenery, floors, specials, badges, icons
 src/            the code: the rules (01-core.js) and the game (game/, one file per part)
 web/            the page shell, stylesheet (css/), fonts, web-app files

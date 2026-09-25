@@ -1,8 +1,0 @@
-// What the codex says about an amulet. The drawing itself is built in,
-// or comes from a picture in images/amulets/ with the same name as the id.
-{
-	"id": "fish",
-	"name": "Nile fish",
-	"plural": "Nile fish",
-	"meaning": "The tilapia, which seemed to be reborn from its own mouth: a sign of renewal."
-}

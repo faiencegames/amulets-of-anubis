@@ -15,7 +15,7 @@ If you only want to *play* the game, you need nothing but a web browser. Open
 | ---------- | ----------------------------------------------- | ------------------------------- |
 | HTML       | `dist/amulets-of-anubis.html`                   | Python 3                        |
 | Desktop    | `dist/desktop/amulets-of-anubis-<plat>.zip`     | Node.js (npx), zip              |
-| Android    | `dist/android/AmuletsOfTheNile.apk`             | JDK, Android SDK (build-tools 34.0.0 + platform android-34) |
+| Android    | `dist/android/amulets-of-anubis.apk`            | JDK 17 or newer, Android SDK (build-tools 35.0.0 + platform android-35), zip |
 
 `./build.sh` runs all targets in sequence and skips any whose tools are missing.
 You can also target a single step:
@@ -30,7 +30,7 @@ You can also target a single step:
 
 ## Prerequisites (CachyOS / Arch, fish shell)
 
-### 1. Python 3 (for the HTML build)
+### 1. Python 3.9 or newer (for the HTML build)
 
 ```fish
 sudo pacman -S python
@@ -88,15 +88,15 @@ fish_add_path /opt/android-sdk/cmdline-tools/latest/bin
 
 ### 5. Install the two SDK components the build calls
 
-The build script invokes four binaries from `build-tools/34.0.0` (`aapt2`,
+The build script invokes four binaries from `build-tools/35.0.0` (`aapt2`,
 `d8`, `zipalign`, `apksigner`) and reads `android.jar` from
-`platforms/android-34`. Install both:
+`platforms/android-35`. Install both:
 
 ```fish
 # /opt/android-sdk is root-owned; make your user own it so sdkmanager can write
 sudo chown -R $(whoami) /opt/android-sdk
 
-sdkmanager "build-tools;34.0.0" "platforms;android-34"
+sdkmanager "build-tools;35.0.0" "platforms;android-35"
 yes | sdkmanager --licenses
 ```
 
@@ -119,8 +119,8 @@ Run these before building. Each line should print a path (not an error):
 ```fish
 javac --version
 zip --version
-ls $ANDROID_SDK/build-tools/34.0.0/aapt2
-ls $ANDROID_SDK/platforms/android-34/android.jar
+ls $ANDROID_SDK/build-tools/35.0.0/aapt2
+ls $ANDROID_SDK/platforms/android-35/android.jar
 ```
 
 ---
@@ -128,7 +128,7 @@ ls $ANDROID_SDK/platforms/android-34/android.jar
 ## Building
 
 ```fish
-cd ~/path/to/amulets-of-the-nile
+cd ~/path/to/amulets-of-anubis
 
 # Everything (HTML + desktop + Android + docs + website)
 ./build.sh
@@ -175,6 +175,106 @@ build picks up `release.jks` and `release.pass` automatically on the next
 run, and `.gitignore` keeps both out of git.
 **Keep that file safe.** Losing it means you can no longer update existing
 installs under the same identity.
+
+### An unsigned APK (F-Droid)
+
+F-Droid builds the app from this source and signs it with its own key, so it
+needs the APK unsigned:
+
+```sh
+ANDROID_UNSIGNED=1 ./build.sh android
+```
+
+That writes `dist/android/amulets-of-anubis-unsigned.apk` and makes no key.
+Everything else is the same as the signed build.
+
+The Android build asks nothing and needs no network: Python builds the game,
+then the SDK's own tools (`aapt2`, `javac`, `d8`, `zipalign`) pack it. It
+uses these versions, and nothing else:
+
+| Tool | Version |
+|---|---|
+| Android build-tools | 35.0.0 (`ANDROID_BUILD_TOOLS`) |
+| Android platform | android-35 (`ANDROID_PLATFORM`); minimum Android 7 (API 24) |
+| JDK | 17 or newer (the Java is compiled for Java 8, `--release 8`) |
+| Python | 3.9 or newer |
+| zip | any (Info-ZIP) |
+
+**The same source makes the same APK.** Two unsigned builds of one commit
+are identical, byte for byte, so anyone can check that an APK was built
+from this source: build it and compare the checksums
+(`shasum -a 256 dist/android/*.apk`). The build keeps it so by giving the one
+file it adds to the APK, `classes.dex`, a fixed date.
+
+### Version numbers and tags
+
+A release has one version, like `0.9.2`, and the source of that release is
+the tag `v0.9.2`. Android also needs a *version code*, a whole number that
+must rise with every release, or phones refuse the update. It is made from
+the version: major × 10000 + minor × 100 + patch, so `0.9.2` is `902`,
+`0.9.3` is `903` and `1.0.0` is `10000`. (So the minor and patch numbers stay
+below 100.) Both numbers are written in `platforms/android/AndroidManifest.xml`,
+where F-Droid looks for them, and `build.sh` gives the same ones to `aapt2`.
+
+Each version also has a line for app stores on what changed:
+`fastlane/metadata/android/en-US/changelogs/<version code>.txt`, in plain
+words, at most 500 characters. The rest of the store listing (the title,
+the descriptions, the icon and the phone screenshots) is beside it in
+`fastlane/metadata/android/en-US/`; `node tools/screenshots/take.mjs store`
+retakes the screenshots from the built game.
+
+### Downloads on GitHub (and Obtainium)
+
+Every release on GitHub has the game and the apps attached, with the version
+in their names:
+
+| File | What |
+|---|---|
+| `amulets-of-anubis.html` | the game, one file |
+| `amulets-of-anubis-<version>-android.apk` | the Android app, signed |
+| `amulets-of-anubis-<version>-windows-x64.zip` | Windows |
+| `amulets-of-anubis-<version>-macos-apple-silicon.zip`, `-macos-intel.zip` | macOS |
+| `amulets-of-anubis-<version>-linux-x64.zip`, `-linux-arm64.zip` | Linux |
+
+The APK is the only `.apk` in a release, so an app such as Obtainium, given
+the repository's address, finds and updates it without any settings. The
+APK attached on GitHub and the one F-Droid makes are signed with different
+keys, so a phone can't update one with the other: pick one source and keep
+to it.
+
+### A clean build in a container
+
+To check that the Android app builds from a fresh copy with nothing but the
+tools above, in a throwaway Debian container (Docker or Podman). The first
+command fetches the tools; the build itself runs with no network. On a Mac
+with Apple silicon keep `--platform linux/amd64`, because the SDK's Linux
+tools are only made for x86-64.
+
+```sh
+git clone https://github.com/faiencegames/amulets-of-anubis.git
+cd amulets-of-anubis
+docker build --platform linux/amd64 -t amulets-android - <<'EOF'
+FROM debian:bookworm-slim
+RUN apt-get update && apt-get install -y --no-install-recommends \
+	openjdk-17-jdk-headless python3 zip unzip curl ca-certificates
+RUN curl -fsSLo /tmp/tools.zip \
+	https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip \
+	&& mkdir -p /opt/android-sdk/cmdline-tools \
+	&& unzip -q /tmp/tools.zip -d /opt/android-sdk/cmdline-tools \
+	&& mv /opt/android-sdk/cmdline-tools/cmdline-tools /opt/android-sdk/cmdline-tools/latest \
+	&& yes | /opt/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null \
+	&& /opt/android-sdk/cmdline-tools/latest/bin/sdkmanager "build-tools;35.0.0" "platforms;android-35"
+ENV ANDROID_SDK=/opt/android-sdk
+EOF
+docker run --rm --platform linux/amd64 --network none -v "$PWD":/src -w /src \
+	-e ANDROID_UNSIGNED=1 amulets-android ./build.sh android
+docker run --rm --platform linux/amd64 --network none -v "$PWD":/src -w /src \
+	amulets-android /opt/android-sdk/build-tools/35.0.0/aapt2 dump badging \
+	dist/android/amulets-of-anubis-unsigned.apk
+```
+
+The last command should begin `package: name='com.amulets.nile'`, with the
+version code and name of the copy you built.
 
 ---
 

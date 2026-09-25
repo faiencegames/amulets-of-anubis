@@ -13,6 +13,6 @@ function contentJson(){
 }
 module.exports = function (names){
 	const src = fs.readFileSync(path.join(root, 'src', '01-core.js'), 'utf8')
-		.replace('/*CONTENT*/null', contentJson().trim());
+		.replace(/\/\*CONTENT\*\/\s*null/, () => contentJson().trim());
 	return new Function(src + ';return {' + names.join(',') + '};')();
 };

@@ -1,3 +1,21 @@
+/* =============================================================================
+ * 13-saves.js  —  saving to a code and back, and starting a new journey.
+ *
+ * What's here:
+ *   openSaves()         the Saves scroll (the Menu, the title screen): copy
+ *                       the save out as a code, paste one in, or reset
+ *                       everything
+ *   saveCode(), readCode()
+ *                       the save as text ("AMULETS1:" and a code) and back;
+ *                       an imported save goes through applySaveDefaults()
+ *                       (00-open.js)
+ *   openNewJourney()    starts the river again from the first stop. Relics
+ *                       and earned looks stay; everything that buys power is
+ *                       reset.
+ *
+ * Changes in the save: all of it (importing, resetting, a new journey).
+ * ===========================================================================*/
+
 // ---------- save and restore ----------
 // The whole save is one JSON object. It is exported as text with a short
 // prefix, so it can be copied into a note, an email or an archive and pasted
@@ -8,9 +26,9 @@ function saveCode() {
 		btoa(
 			unescape(
 				encodeURIComponent(
-					JSON.stringify(Object.assign({}, save, { exportedAt: new Date().toISOString() }))
-				)
-			)
+					JSON.stringify(Object.assign({}, save, { exportedAt: new Date().toISOString() })),
+				),
+			),
 		)
 	);
 }
@@ -27,12 +45,18 @@ function readCode(text) {
 function openSaves() {
 	const code = saveCode(),
 		stars = save.stars.reduce((a, b) => a + (b || 0), 0);
-	$('msgBody').innerHTML = `<h2 id="msgTitle">${T('saves.title')}</h2>
+	$('msgBody').innerHTML = html`
+		<h2 id="msgTitle">${T('saves.title')}</h2>
 		<p class="lede">${T('saves.lede')}</p>
-		<p class="save-sum">${T('saves.summary', { stars, relics: Object.keys(save.relics).length, gold: save.gold.toLocaleString(), lapis: save.lapis })}</p>
+		<p class="save-sum">
+			${T('saves.summary', { stars, relics: Object.keys(save.relics).length, gold: save.gold.toLocaleString(), lapis: save.lapis })}
+		</p>
 		<h3 class="shop-head">${T('saves.export')}</h3>
 		<textarea class="code" id="exportCode" readonly rows="4">${code}</textarea>
-		<div class="actions"><button class="btn" id="copyCode">${T('saves.copy')}</button><button class="btn" id="dlCode">${T('saves.file')}</button></div>
+		<div class="actions">
+			<button class="btn" id="copyCode">${T('saves.copy')}</button>
+			<button class="btn" id="dlCode">${T('saves.file')}</button>
+		</div>
 		<p class="save-msg" id="exportMsg"></p>
 		<h3 class="shop-head">${T('saves.restore')}</h3>
 		<textarea class="code" id="importCode" rows="4" placeholder="${T('saves.paste')}"></textarea>
@@ -89,8 +113,9 @@ function openSaves() {
 		try {
 			const data = readCode($('importCode').value);
 			const s2 = data.stars.reduce((a, b) => a + (b || 0), 0);
-			$('importMsg').innerHTML =
-				`${T('saves.found', { stars: s2, relics: Object.keys(data.relics || {}).length })} <button class="btn" id="confirmImport">${T('saves.replace')}</button>`;
+			$('importMsg').innerHTML = html`
+					${T('saves.found', { stars: s2, relics: Object.keys(data.relics || {}).length })} 
+					<button class="btn" id="confirmImport">${T('saves.replace')}</button>`;
 			$('confirmImport').onclick = () => {
 				delete data.exportedAt;
 				save = applySaveDefaults(
@@ -114,16 +139,17 @@ function openSaves() {
 							upg: {},
 							relics: {},
 						},
-						data
-					)
+						data,
+					),
 				);
 				persist();
+				applyColours();
+				applyMotion();
 				closeOverlays();
-				syncSound();
 				startLevel(Math.min(save.current || 0, save.unlocked || 0));
 				popups.push({
 					text: Tplain('saves.restored'),
-					x: N / 2,
+					x: COLS / 2,
 					y: ROWS / 2,
 					life: 2,
 					size: 0.6,
@@ -146,24 +172,38 @@ function openNewJourney() {
 		sets = Object.keys(save.skins).length;
 	const up = UPGRADES.reduce((a, u) => a + (save.upg[u.id] || 0), 0);
 	const J = (k, v) => T('journey.' + k, v);
-	$('msgBody').innerHTML = `<h2 id="msgTitle">${J('title')}</h2>
+	$('msgBody').innerHTML = html`
+		<h2 id="msgTitle">${J('title')}</h2>
 		<p class="lede">${J('lede', { first: LEVELS[0].name })}</p>
 		<div class="journey-cols">
-			<div><h3 class="shop-head">${J('keep')}</h3><ul class="plain">
-				<li>${J('relics', { n: relics, total: RELICS.length })}</li>
-				<li>${J('looks', { sets, floors: Object.keys(save.floors || {}).length, frames: Object.keys(save.frames || {}).length, sparkles: Object.keys(save.sparkles || {}).length })}</li>
-				<li>${J('settings')}</li></ul></div>
-			<div><h3 class="shop-head">${J('leave')}</h3><ul class="plain">
-				<li>${J('stops', { n: save.unlocked + 1, stars })}</li>
-				<li>${J('money', { gold: save.gold.toLocaleString(), lapis: save.lapis })}</li>
-				<li>${J('upgrades', { n: up, boons: save.boons.length })}${save.charges.wind ? J('wind', { n: save.charges.wind }) : ''}</li>
-				<li>${J('counters')}</li></ul></div>
+			<div>
+				<h3 class="shop-head">${J('keep')}</h3>
+				<ul class="plain">
+					<li>${J('relics')} ${gildBar(relics, RELICS.length)}</li>
+					<li>
+						${J('looks', { sets, floors: Object.keys(save.floors || {}).length, frames: Object.keys(save.frames || {}).length, sparkles: Object.keys(save.sparkles || {}).length })}
+					</li>
+					<li>${J('settings')}</li>
+				</ul>
+			</div>
+			<div>
+				<h3 class="shop-head">${J('leave')}</h3>
+				<ul class="plain">
+					<li>${J('stops', { n: save.unlocked + 1, stars })}</li>
+					<li>${J('money', { gold: save.gold.toLocaleString(), lapis: save.lapis })}</li>
+					<li>
+						${J('upgrades', { n: up, boons: save.boons.length })}${save.charges.wind ? J('wind', { n: save.charges.wind }) : ''}
+					</li>
+					<li>${J('counters')}</li>
+				</ul>
+			</div>
 		</div>
-		<p class="curse-note" style="color:#6b4a22">${J('way_back')}</p>
+		<p class="curse-note" style="color:var(--ink-3)">${J('way_back')}</p>
 		<div class="actions">
 			<button class="btn" id="njSave">${J('save_first')}</button>
 			<button class="btn" id="njGo">${J('begin')}</button>
-			<button class="btn" data-a="close">${J('cancel')}</button></div>`;
+			<button class="btn" data-a="close">${J('cancel')}</button>
+		</div>`;
 	$('njSave').onclick = () => {
 		closeOverlays();
 		openSaves();
@@ -214,7 +254,7 @@ function openNewJourney() {
 				lastWin: null,
 				curse: null,
 			},
-			keep
+			keep,
 		);
 		trial = null;
 		persist();
@@ -223,7 +263,7 @@ function openNewJourney() {
 		startLevel(0);
 		popups.push({
 			text: Tplain('journey.popup', { n: save.journeys }),
-			x: N / 2,
+			x: COLS / 2,
 			y: ROWS / 2 - 0.4,
 			life: 2.4,
 			size: 0.7,
@@ -231,7 +271,7 @@ function openNewJourney() {
 		});
 		popups.push({
 			text: Tplain('journey.awaits', { stop: LEVELS[0].name }),
-			x: N / 2,
+			x: COLS / 2,
 			y: ROWS / 2 + 0.5,
 			life: 2.4,
 			size: 0.44,

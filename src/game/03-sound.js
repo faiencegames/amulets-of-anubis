@@ -1,13 +1,37 @@
+/* =============================================================================
+ * 03-sound.js  —  the sound effects, all made at run time with Web Audio:
+ * plucked strings, bells, gongs, flutes, papyrus, the sistrum.
+ *
+ * What's here:
+ *   sfx(name, n)        plays an effect ('match', 'gild', 'unroll', ...);
+ *                       called from everywhere. When the music plays, pitched
+ *                       effects take their notes from its chord.
+ *   getCtx(), audioCtx  the audio engine, made on the player's first tap
+ *   restartAudio()      starts it again, for the "Steadier sound" setting
+ *   soundDelay()        how late this device plays sound, in milliseconds
+ *   bell(), playInst(), note(), theme()
+ *                       the instruments and notes, shared with 04-music.js
+ *   prewarmKS(), prewarmBells()
+ *                       make a stop's notes ahead of time, so a match never
+ *                       waits for them (05-state.js, at the start of a stop)
+ *
+ * The effects play about 6 dB above the music; keep it so (the manual,
+ * part 2, "Sound and music").
+ *
+ * Changes in the save: nothing (the sound settings are changed in
+ * 14-menu.js).
+ * ===========================================================================*/
+
 // ---------- sound ----------
-let actx = null,
+let audioCtx = null,
 	sfxOut = null,
 	sfxCentre = null,
 	masterOut = null,
 	audioArmed = false; // no audio engine until the player first taps: browsers mute it before that anyway, and creating it is slow
 const ksCache = new Map();
 function getCtx() {
-	if (!actx && !audioArmed) return null;
-	if (!actx) {
+	if (!audioCtx && !audioArmed) return null;
+	if (!audioCtx) {
 		try {
 			// Phones get a larger audio buffer: with the default (about 5 ms on many
 			// Android phones) a busy moment misses the deadline and crackles. The
@@ -20,34 +44,34 @@ function getCtx() {
 			let buffer = touch ? 'playback' : null;
 			if (save.steadySound) buffer = CONTENT.settings.steadyBuffer;
 			try {
-				actx = new AC(buffer ? { latencyHint: buffer } : {});
+				audioCtx = new AC(buffer ? { latencyHint: buffer } : {});
 			} catch (e) {
-				actx = new AC();
+				audioCtx = new AC();
 			}
 			// master bus: a firm compressor then a little headroom, so music and a big
 			// cascade landing together never clip
-			const comp = actx.createDynamicsCompressor();
+			const comp = audioCtx.createDynamicsCompressor();
 			comp.threshold.value = -16;
 			comp.knee.value = 6;
 			comp.ratio.value = 10;
 			comp.attack.value = 0.002;
 			comp.release.value = 0.18;
-			const trim = actx.createGain();
+			const trim = audioCtx.createGain();
 			trim.gain.value = 0.8;
-			comp.connect(trim).connect(actx.destination);
+			comp.connect(trim).connect(audioCtx.destination);
 			masterOut = comp;
-			sfxOut = actx.createGain();
+			sfxOut = audioCtx.createGain();
 			sfxOut.gain.value = 0.9 * (save.sfxVol == null ? 1 : save.sfxVol);
 			sfxOut.connect(comp);
-			sfxCentre = actx.createGain();
+			sfxCentre = audioCtx.createGain();
 			sfxCentre.gain.value = Math.SQRT1_2;
 			sfxCentre.connect(sfxOut);
 			// A small temple reverb. It runs on every sound, and a reverb is the
 			// costliest thing the audio does, so it is kept cheap: a short tail, and
 			// one channel, heard in the left ear and 13 ms later in the right, which
 			// is as wide as two channels for half the work.
-			const len = Math.floor(actx.sampleRate * 1.1);
-			const ir = actx.createBuffer(1, len, actx.sampleRate);
+			const len = Math.floor(audioCtx.sampleRate * 1.1);
+			const ir = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
 			const d = ir.getChannelData(0);
 			const k = Math.pow(0.001, 1 / len); // an exponential tail by repeated multiplication: cheaper than a power per sample
 			let e = 1;
@@ -55,16 +79,16 @@ function getCtx() {
 				d[i] = (Math.random() * 2 - 1) * e;
 				e *= k;
 			}
-			const conv = actx.createConvolver();
+			const conv = audioCtx.createConvolver();
 			conv.channelCount = 1;
 			conv.channelCountMode = 'explicit';
 			conv.buffer = ir;
-			const sides = actx.createChannelMerger(2);
-			const later = actx.createDelay(0.1);
+			const sides = audioCtx.createChannelMerger(2);
+			const later = audioCtx.createDelay(0.1);
 			later.delayTime.value = 0.013;
 			conv.connect(sides, 0, 0);
 			conv.connect(later).connect(sides, 0, 1);
-			const wet = actx.createGain();
+			const wet = audioCtx.createGain();
 			wet.gain.value = 0.24;
 			sfxOut.connect(conv);
 			sides.connect(wet).connect(comp);
@@ -76,26 +100,22 @@ function getCtx() {
 			return null;
 		}
 	}
-	if (actx.state === 'suspended') actx.resume();
-	return actx;
-}
-
-function ac() {
-	return getCtx();
+	if (audioCtx.state === 'suspended') audioCtx.resume();
+	return audioCtx;
 }
 
 // Starts the audio engine again, so a new buffer size takes effect at once.
 // The music starts again in the same stop; the made sound buffers are kept.
 function restartAudio() {
-	if (!actx) return;
+	if (!audioCtx) return;
 	const musicWasOn = music.running;
 	stopMusic();
 	clearInterval(music.timer);
 	music.timer = null;
 	music.ready = false;
 	music.layers = {};
-	const old = actx;
-	actx = null;
+	const old = audioCtx;
+	audioCtx = null;
 	old.close().catch(() => {});
 	lastLand = 0; // a time on the old engine's clock
 	getCtx();
@@ -105,8 +125,8 @@ function restartAudio() {
 // The delay between a sound being started and being heard, in milliseconds,
 // as this device reports it (0 if it doesn't)
 function soundDelay() {
-	if (!actx) return 0;
-	return Math.round(((actx.baseLatency || 0) + (actx.outputLatency || 0)) * 1000);
+	if (!audioCtx) return 0;
+	return Math.round(((audioCtx.baseLatency || 0) + (audioCtx.outputLatency || 0)) * 1000);
 }
 
 // One noise buffer, made once and shared: generating fresh noise for every
@@ -114,7 +134,7 @@ function soundDelay() {
 let sharedNoise = null;
 function noiseBuf(dur) {
 	if (!sharedNoise) {
-		const a = actx,
+		const a = audioCtx,
 			n = Math.floor(a.sampleRate * 3),
 			b = a.createBuffer(1, n, a.sampleRate),
 			d = b.getChannelData(0);
@@ -124,10 +144,10 @@ function noiseBuf(dur) {
 	return sharedNoise;
 }
 
-function env(g, t, atk, vol, len) {
-	g.gain.setValueAtTime(0.0001, t);
-	g.gain.exponentialRampToValueAtTime(vol, t + atk);
-	g.gain.exponentialRampToValueAtTime(0.0001, t + len);
+function envelope(gain, t, atk, vol, len) {
+	gain.gain.setValueAtTime(0.0001, t);
+	gain.gain.exponentialRampToValueAtTime(vol, t + atk);
+	gain.gain.exponentialRampToValueAtTime(0.0001, t + len);
 }
 
 // Into the effects bus (or wherever routeTo points), through a panner only
@@ -140,28 +160,28 @@ function toOut(g, pan) {
 		return g;
 	}
 	const dest = routeTo || sfxOut;
-	if (actx.createStereoPanner) {
-		const p = actx.createStereoPanner();
+	if (audioCtx.createStereoPanner) {
+		const p = audioCtx.createStereoPanner();
 		p.pan.value = pan;
 		g.connect(p).connect(dest);
 	} else g.connect(dest);
 	return g;
 }
 
-function out(vol, t, atk, len, pan = 0) {
-	const g = actx.createGain();
-	env(g, t, atk, vol, len);
-	return toOut(g, pan);
+function soundOut(vol, t, atk, len, pan = 0) {
+	const gain = audioCtx.createGain();
+	envelope(gain, t, atk, vol, len);
+	return toOut(gain, pan);
 }
 
 // Karplus-Strong plucked string: a short noise burst circulating in a damped delay line
 function ksBuffer(f, dur, bright, decay) {
 	const key = [Math.round(f), dur, bright, decay].join('|');
 	if (ksCache.has(key)) return ksCache.get(key);
-	const sr = actx.sampleRate,
+	const sr = audioCtx.sampleRate,
 		len = Math.floor(sr * dur),
 		p = Math.max(2, Math.round(sr / f)),
-		b = actx.createBuffer(1, len, sr),
+		b = audioCtx.createBuffer(1, len, sr),
 		d = b.getChannelData(0);
 	const ring = new Float32Array(p);
 	let prev = 0;
@@ -184,13 +204,13 @@ function ksBuffer(f, dur, bright, decay) {
 }
 
 function pluck(f, t, vol, { bright = 0.7, decay = 0.996, dur = 1.2, bend = 0, pan = 0 } = {}) {
-	const s = actx.createBufferSource();
+	const s = audioCtx.createBufferSource();
 	s.buffer = ksBuffer(f, dur, bright, decay);
 	if (bend) {
 		s.playbackRate.setValueAtTime(1 + bend, t);
 		s.playbackRate.exponentialRampToValueAtTime(1, t + 0.06);
 	}
-	const g = out(vol, t, 0.002, dur, pan);
+	const g = soundOut(vol, t, 0.002, dur, pan);
 	s.connect(g);
 	s.start(t);
 	s.stop(t + dur);
@@ -201,7 +221,7 @@ function pluck(f, t, vol, { bright = 0.7, decay = 0.996, dur = 1.2, bend = 0, pa
 // source. It is the same sound as four (or six) live oscillators, each with
 // its own envelope and panner, for a small part of the audio work: a winged
 // sun used to start over 150 nodes at once, which crackled on phones.
-// Each envelope follows Web Audio's own exponential ramps (see env()); as
+// Each envelope follows Web Audio's own exponential ramps (see envelope()); as
 // those end at a fixed floor, a quiet bell fades sooner than a loud one, so a
 // buffer is made at the loudness it is played at.
 const BELL_PARTIALS = [
@@ -229,9 +249,9 @@ function toneBuffer(key, len, fill) {
 		toneCache.set(key, b);
 		return b;
 	} // most recent last
-	const sr = actx.sampleRate,
+	const sr = audioCtx.sampleRate,
 		n = Math.ceil(sr * len),
-		b = actx.createBuffer(1, n, sr);
+		b = audioCtx.createBuffer(1, n, sr);
 	fill(b.getChannelData(0), sr);
 	toneCache.set(key, b);
 	toneSamples += n;
@@ -268,41 +288,41 @@ function addPartial(d, sr, f, a, atk, len, f0 = f, glide = 0) {
 
 function bellBuffer(f, dur, vol) {
 	return toneBuffer('b|' + Math.round(f) + '|' + dur + '|' + vol.toFixed(4), dur, (d, sr) =>
-		BELL_PARTIALS.forEach(([r, a], i) => addPartial(d, sr, f * r, vol * a, 0.002, dur / (1 + i * 0.7)))
+		BELL_PARTIALS.forEach(([r, a], i) => addPartial(d, sr, f * r, vol * a, 0.002, dur / (1 + i * 0.7))),
 	);
 }
 
 function bell(f, t, vol, dur = 1.6, pan = 0) {
-	const s = actx.createBufferSource();
+	const s = audioCtx.createBufferSource();
 	s.buffer = bellBuffer(f, dur, vol);
 	toOut(s, pan);
 	s.start(t);
 }
 
 function flute(f, t, vol, dur = 0.7, pan = 0) {
-	const g = actx.createGain();
-	g.gain.setValueAtTime(0.0001, t);
-	g.gain.linearRampToValueAtTime(vol, t + 0.05);
-	g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-	g.connect(routeTo || sfxOut);
-	const o = actx.createOscillator();
+	const gain = audioCtx.createGain();
+	gain.gain.setValueAtTime(0.0001, t);
+	gain.gain.linearRampToValueAtTime(vol, t + 0.05);
+	gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+	gain.connect(routeTo || sfxOut);
+	const o = audioCtx.createOscillator();
 	o.type = 'sine';
 	o.frequency.value = f;
-	const lfo = actx.createOscillator();
+	const lfo = audioCtx.createOscillator();
 	lfo.frequency.value = 5.5;
-	const lg = actx.createGain();
+	const lg = audioCtx.createGain();
 	lg.gain.value = f * 0.008;
 	lfo.connect(lg).connect(o.frequency);
-	o.connect(g);
-	const n = actx.createBufferSource();
+	o.connect(gain);
+	const n = audioCtx.createBufferSource();
 	n.buffer = noiseBuf(dur);
-	const bp = actx.createBiquadFilter();
+	const bp = audioCtx.createBiquadFilter();
 	bp.type = 'bandpass';
 	bp.frequency.value = f * 2;
 	bp.Q.value = 4;
-	const ng = actx.createGain();
+	const ng = audioCtx.createGain();
 	ng.gain.value = 0.25;
-	n.connect(bp).connect(ng).connect(g);
+	n.connect(bp).connect(ng).connect(gain);
 	[o, lfo, n].forEach(x => {
 		x.start(t);
 		x.stop(t + dur);
@@ -320,34 +340,34 @@ function playInst(inst, f, t, vol, pan = 0) {
 
 function noiseHit(
 	t,
-	{ vol = 0.2, dur = 0.15, type = 'lowpass', f = 800, f2 = null, q = 1, atk = 0.003 } = {}
+	{ vol = 0.2, dur = 0.15, type = 'lowpass', f = 800, f2 = null, q = 1, atk = 0.003 } = {},
 ) {
-	const n = actx.createBufferSource();
+	const n = audioCtx.createBufferSource();
 	n.buffer = noiseBuf(dur + 0.05);
-	const fl = actx.createBiquadFilter();
+	const fl = audioCtx.createBiquadFilter();
 	fl.type = type;
 	fl.Q.value = q;
 	fl.frequency.setValueAtTime(f, t);
 	if (f2) fl.frequency.exponentialRampToValueAtTime(f2, t + dur);
-	const g = out(vol, t, atk, dur);
+	const g = soundOut(vol, t, atk, dur);
 	n.connect(fl).connect(g);
 	n.start(t);
 	n.stop(t + dur + 0.05);
 }
 
 function sweep(t, f1, f2, dur, vol, type = 'sine') {
-	const o = actx.createOscillator();
+	const o = audioCtx.createOscillator();
 	o.type = type;
 	o.frequency.setValueAtTime(f1, t);
 	o.frequency.exponentialRampToValueAtTime(f2, t + dur);
-	const g = out(vol, t, 0.004, dur);
+	const g = soundOut(vol, t, 0.004, dur);
 	o.connect(g);
 	o.start(t);
 	o.stop(t + dur + 0.02);
 }
 
 function gong(t, f = 82, vol = 0.3) {
-	const s = actx.createBufferSource();
+	const s = audioCtx.createBufferSource();
 	s.buffer = gongBufferFor(f, vol);
 	toOut(s, 0);
 	s.start(t);
@@ -358,7 +378,7 @@ function gong(t, f = 82, vol = 0.3) {
 // swept through a band-pass filter.
 function paper(t, dur, rate, f1, f2, vol) {
 	if (!paper.buf) {
-		const a = actx,
+		const a = audioCtx,
 			n = Math.floor(a.sampleRate * 0.6),
 			b = a.createBuffer(1, n, a.sampleRate),
 			d = b.getChannelData(0);
@@ -370,15 +390,15 @@ function paper(t, dur, rate, f1, f2, vol) {
 		}
 		paper.buf = b;
 	}
-	const src = actx.createBufferSource();
+	const src = audioCtx.createBufferSource();
 	src.buffer = paper.buf;
 	src.playbackRate.value = rate;
-	const bp = actx.createBiquadFilter();
+	const bp = audioCtx.createBiquadFilter();
 	bp.type = 'bandpass';
 	bp.Q.value = 0.7;
 	bp.frequency.setValueAtTime(f1, t);
 	bp.frequency.exponentialRampToValueAtTime(f2, t + dur);
-	const g = out(vol, t, 0.02, dur);
+	const g = soundOut(vol, t, 0.02, dur);
 	src.connect(bp).connect(g);
 	src.start(t);
 	src.stop(t + dur + 0.05);
@@ -386,24 +406,24 @@ function paper(t, dur, rate, f1, f2, vol) {
 
 function sistrum(t, vol = 0.12) {
 	if (!sistrum.buf) {
-		const len = Math.floor(actx.sampleRate * 0.55),
-			buf = actx.createBuffer(1, len, actx.sampleRate),
+		const len = Math.floor(audioCtx.sampleRate * 0.55),
+			buf = audioCtx.createBuffer(1, len, audioCtx.sampleRate),
 			d = buf.getChannelData(0);
 		for (let i = 0; i < len; i++) {
-			const tt = i / actx.sampleRate;
+			const tt = i / audioCtx.sampleRate;
 			d[i] = (Math.random() * 2 - 1) * Math.exp(-tt * 6) * (0.55 + 0.45 * Math.sin(tt * TAU * 19));
 		}
 		sistrum.buf = buf;
 	}
-	const s = actx.createBufferSource();
+	const s = audioCtx.createBufferSource();
 	s.buffer = sistrum.buf;
-	const f = actx.createBiquadFilter();
+	const f = audioCtx.createBiquadFilter();
 	f.type = 'bandpass';
 	f.frequency.value = 7000;
 	f.Q.value = 1.4;
-	const g = actx.createGain();
-	g.gain.value = vol;
-	s.connect(f).connect(g).connect(sfxOut);
+	const gain = audioCtx.createGain();
+	gain.gain.value = vol;
+	s.connect(f).connect(gain).connect(sfxOut);
 	s.start(t);
 	[3520, 4186, 4699].forEach((fr, i) => bell(fr, t + i * 0.03, vol * 0.25, 0.5));
 }
@@ -427,7 +447,7 @@ function note(i, oct = 1) {
 // buffers are byte-identical to on-demand generation; only the timing moves
 // earlier. Only harp/lyre/oud use KS buffers; flute and bell don't.
 function prewarmKS() {
-	if (!actx) return;
+	if (!audioCtx) return;
 	const th = THEMES[levelIdx];
 	if (!th || !th.audio) return;
 	const opts = {
@@ -445,7 +465,7 @@ function prewarmKS() {
 // use. Any bell not made here is made the first time it rings.
 let bellJob = 0;
 function prewarmBells() {
-	if (!actx) return;
+	if (!audioCtx) return;
 	const job = ++bellJob,
 		todo = [() => gongBufferFor(note(0, 0.5), 0.34)];
 	for (let i = 0; i < 16; i++) todo.push(() => bellBuffer(note(i, 2), 0.6, 0.045)); // gild, following the music
@@ -453,7 +473,7 @@ function prewarmBells() {
 		todo.push(
 			() => bellBuffer(note(i, 4), 0.6, 0.045),
 			() => bellBuffer(note(i, 4), 0.8, 0.05),
-			() => bellBuffer(note(i, 4), 0.9, 0.04)
+			() => bellBuffer(note(i, 4), 0.9, 0.04),
 		); // gild, create, sun
 	for (let i = 0; i < 10; i++) todo.push(() => bellBuffer(note(i, 3), 1, 0.05)); // blessing
 	for (const i of [0, 2, 4, scaleLen()])
@@ -470,8 +490,8 @@ function prewarmBells() {
 function gongBufferFor(f, vol) {
 	return toneBuffer('g|' + Math.round(f) + '|' + vol.toFixed(4), 3.2, (d, sr) =>
 		GONG_PARTIALS.forEach(([r, a, len]) =>
-			addPartial(d, sr, f * r, vol * a, 0.03, len, f * r * 1.01, 0.4)
-		)
+			addPartial(d, sr, f * r, vol * a, 0.03, len, f * r * 1.01, 0.4),
+		),
 	);
 }
 
@@ -542,7 +562,7 @@ function sfx(name, n = 1, x = 0.5) {
 					t + i * 0.055 + Math.random() * 0.02,
 					0.045,
 					0.3,
-					(Math.random() - 0.5) * 0.6
+					(Math.random() - 0.5) * 0.6,
 				);
 			break;
 		case 'gems':
@@ -599,7 +619,7 @@ function sfx(name, n = 1, x = 0.5) {
 					t + 0.06 + j * 0.045,
 					0.045,
 					0.6,
-					Math.random() - 0.5
+					Math.random() - 0.5,
 				);
 			break;
 		case 'crack':

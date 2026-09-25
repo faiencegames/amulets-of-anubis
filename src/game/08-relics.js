@@ -1,9 +1,27 @@
+/* =============================================================================
+ * 08-relics.js  —  relics: their pictures, and what happens when one is found.
+ *
+ * Relics are content files (content/relics/), each saying in "found_when"
+ * what finds it; 09-unlocks.js checks that after every stop.
+ *
+ * What's here:
+ *   relicIcon(id)       a relic's picture: its own from images/relics/, else
+ *                       the drawing its file names (images/icons/relics/),
+ *                       else a plain gold disc. Undiscovered relics show it
+ *                       dimmed (CSS).
+ *   grantRelic(r)       the relic is found: pays its reward, shows a banner
+ *                       and puts a "new" dot on the Museum
+ *
+ * Changes in the save: relics, and gold, lapis or boons from a relic's
+ * reward.
+ * ===========================================================================*/
+
 // ---------- relic icons ----------
 // One small drawing per relic, in a 32 x 32 box: gold with a dark outline.
 // Undiscovered relics show the same drawing as a dim silhouette (CSS).
-const RI_G = 'url(#relicGold)',
-	RI_D = '#3b2406';
-// Relic drawings: content/icons/relics/<name>.svg (32 by 32). A relic uses the
+const RELIC_GOLD = 'url(#relicGold)',
+	RELIC_INK = '#3b2406';
+// Relic drawings: images/icons/relics/<name>.svg (32 by 32). A relic uses the
 // one named by its "icon", or the one with its own id.
 const RELIC_ICONS = {};
 Object.keys(ICONS.relics || {}).forEach(k => {
@@ -19,7 +37,11 @@ function relicIcon(id, cls = 'relic-svg') {
 	const art = pic
 		? `<image href="${pic}" x="0" y="0" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>`
 		: RELIC_ICONS[r.icon || id] ||
-			'<circle cx="16" cy="16" r="10" fill="' + RI_G + '" stroke="' + RI_D + '" stroke-width="1.5"/>';
+			'<circle cx="16" cy="16" r="10" fill="' +
+				RELIC_GOLD +
+				'" stroke="' +
+				RELIC_INK +
+				'" stroke-width="1.5"/>';
 	return `<svg class="${cls}" viewBox="0 0 32 32" aria-hidden="true">${art}</svg>`;
 }
 
@@ -41,5 +63,5 @@ function grantRelic(id) {
 	announce(T('banner.relic_found'), r.name, relicIcon(id, 'ut-relic'), rw ? '+ ' + rw : '', 'sun');
 	markNew('museum');
 	if (r.reward && r.reward.boon) renderBoons();
-	for (let i = 0; i < 20; i++) burst(Math.random() * N - 0.5, Math.random() * ROWS - 0.5, 1);
+	for (let i = 0; i < 20; i++) burst(Math.random() * COLS - 0.5, Math.random() * ROWS - 0.5, 1);
 }

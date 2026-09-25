@@ -1,17 +1,28 @@
 /* =============================================================================
- * 04-boards.js  —  the board: frame colours, amulet sets and floors.
+ * 04-boards.js  —  what the board is made of: the colours of its frame, the
+ * amulet sets (looks), and the floor squares.
  *
- * BOARDS is built from the stops, one per stop, in the order of LEVELS:
- *   frame  [face, shade, edge] colours for the carved frame round the board
- * What shows through the gaps of the floor is a picture (images/boards/).
- * Below: amulet sets (skinned, the same pictures through a canvas filter) and
- * the floor squares, made from the pictures in images/floors/.
+ * What's here:
+ *   BOARDS              one per stop, in the order of LEVELS: the [face,
+ *                       shade, edge] colours of the carved frame. What shows
+ *                       through the gaps of the floor is a picture,
+ *                       images/boards/<stop id>.
+ *   TILE_SPRITES        the amulets in play, drawn in the chosen amulet set
+ *   skinned()           an amulet set's pictures: the same drawings through a
+ *                       canvas filter (content/amulet-sets/)
+ *   FLOOR_SETS          the floor sets (content/floor-sets/, images/floors/)
+ *   buildFloors()       makes FLOOR_STONE, FLOOR_THICK and FLOOR_GOLD, the
+ *                       squares for the stop being played (05-state.js,
+ *                       river events, the Treasury)
+ *   floorTextures()     the same, for a preview, without touching the board
+ *
+ * Changes in the save: nothing.
  * ===========================================================================*/
 
 // One board per stop, in LEVELS order: the colours of the carved frame round
 // it. What is seen through the gaps of the floor is a picture,
 // images/boards/<stop id>.svg (or .png / .jpg), shown by setBoard() in src/game/05-state.js.
-const BOARDS = LEVELS.map(L => ({ frame: L.frame }));
+const BOARDS = LEVELS.map(stop => ({ frame: stop.frame }));
 let TILE_SPRITES = [],
 	TILE_NAMES = []; // TILE_NAMES: which amulets the board is using right now
 // Cosmetic finishes: the same drawings re-rendered through a canvas filter.
@@ -22,28 +33,28 @@ function skinned(src, name, skinId) {
 	const key = name + '|' + skinId;
 	if (skinCache.has(key)) return skinCache.get(key);
 	const c = document.createElement('canvas');
-	c.width = c.height = S;
-	const g = c.getContext('2d');
+	c.width = c.height = PIC_SIZE;
+	const pen = c.getContext('2d');
 	if (skin.glow) {
-		g.save();
-		g.shadowColor = skin.glow;
-		g.shadowBlur = 14;
-		for (let i = 0; i < 3; i++) g.drawImage(src, 0, 0);
-		g.restore();
-		g.globalCompositeOperation = 'destination-out';
-		g.drawImage(src, 0, 0);
-		g.globalCompositeOperation = 'source-over';
+		pen.save();
+		pen.shadowColor = skin.glow;
+		pen.shadowBlur = 14;
+		for (let i = 0; i < 3; i++) pen.drawImage(src, 0, 0);
+		pen.restore();
+		pen.globalCompositeOperation = 'destination-out';
+		pen.drawImage(src, 0, 0);
+		pen.globalCompositeOperation = 'source-over';
 	}
-	g.filter = skin.filter || 'none';
-	g.drawImage(src, 0, 0);
-	g.filter = 'none';
+	pen.filter = skin.filter || 'none';
+	pen.drawImage(src, 0, 0);
+	pen.filter = 'none';
 	if (skin.tint) {
-		g.globalCompositeOperation = 'source-atop';
-		g.globalAlpha = skin.tintAlpha || 0.25;
-		g.fillStyle = skin.tint;
-		g.fillRect(0, 0, S, S);
-		g.globalAlpha = 1;
-		g.globalCompositeOperation = 'source-over';
+		pen.globalCompositeOperation = 'source-atop';
+		pen.globalAlpha = skin.tintAlpha || 0.25;
+		pen.fillStyle = skin.tint;
+		pen.fillRect(0, 0, PIC_SIZE, PIC_SIZE);
+		pen.globalAlpha = 1;
+		pen.globalCompositeOperation = 'source-over';
 	}
 	if (skinCache.size > 150) skinCache.clear(); // up to ~10 MB of 128px canvases
 	skinCache.set(key, c);
@@ -76,12 +87,12 @@ function floorSquares(setId, i) {
 		p = FLOOR_PICS[set.id],
 		col = THEMES[i].floor;
 	const on = (under, img) =>
-		mk(g => {
+		makeCanvas(pen => {
 			if (under) {
-				g.fillStyle = under;
-				g.fillRect(0, 0, S, S);
+				pen.fillStyle = under;
+				pen.fillRect(0, 0, PIC_SIZE, PIC_SIZE);
 			}
-			if (img) g.drawImage(img, 0, 0, S, S);
+			if (img) pen.drawImage(img, 0, 0, PIC_SIZE, PIC_SIZE);
 		});
 	return [
 		on(set.temple && col, p.bare),

@@ -1,10 +1,30 @@
-// ---------- icons: SVG files in content/icons/<group>/<name>.svg ----------
+/* =============================================================================
+ * 06-icons.js  —  the icons: SVG files in images/icons/<group>/<name>.svg,
+ * put into ICONS by the build.
+ *
+ * What's here:
+ *   iconSvg(group, name) a whole icon, ready for the page
+ *   iconArt(group, name) an icon's inside only, for code that wraps it in its
+ *                       own <svg>
+ *   --ico-gold, --ico-lapis, --ico-relic  their pictures, as CSS variables for
+ *                       the .g-ico marks (web/css/03-hud.css)
+ *   BOON_ICON[id]       each boon's icon (a boon's file may name another's)
+ *   sharedDefs()        the gradients the icons share, put once in the page.
+ *                       That is why a gradient id must be unique across all
+ *                       the icon files.
+ *
+ * In web/shell.html, {{svg:group/name}} puts an icon in the page.
+ *
+ * Changes in the save: nothing.
+ * ===========================================================================*/
+
+// ---------- icons ----------
 // The build puts every file in ICONS (comments and the XML line removed).
 // iconSvg() gives a whole icon ready for the page; iconArt() its inside only,
 // for code that wraps it in its own <svg>. The gradients and patterns in an
 // icon's <defs> are moved once into the shared defs (see sharedDefs below):
 // that is why their ids must be unique across all the icon files.
-const ICONS = /*ICONS*/null;
+const ICONS = /*ICONS*/ null;
 function iconSvg(group, name, attrs = '') {
 	const svg = (ICONS[group] || {})[name];
 	if (!svg) return '';
@@ -16,6 +36,16 @@ function iconInner(group, name) {
 		.replace(/^<svg[^>]*>/, '')
 		.replace(/<\/svg>\s*$/, '');
 }
+
+// Gold, lapis and relics are marks in the stylesheet (.g-ico), in the top bar
+// and in running text on every scroll; their pictures are icon files, handed
+// to the stylesheet once as CSS variables.
+['gold', 'lapis', 'relic'].forEach(k =>
+	document.documentElement.style.setProperty(
+		'--ico-' + k,
+		`url("data:image/svg+xml,${encodeURIComponent(iconSvg('ui', k))}")`,
+	),
+);
 
 const DEFS_SEEN = new Set();
 function iconArt(group, name) {
@@ -59,7 +89,7 @@ function sharedDefs(extra) {
 	if (!el) {
 		document.body.insertAdjacentHTML(
 			'afterbegin',
-			'<svg id="sharedDefs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><defs></defs></svg>'
+			'<svg id="sharedDefs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><defs></defs></svg>',
 		);
 		el = document.getElementById('sharedDefs');
 	}

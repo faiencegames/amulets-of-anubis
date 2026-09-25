@@ -1,0 +1,730 @@
+// The words on screen. Change any text here, build, and the game shows it.
+//
+// How to write it:
+//   **bold** and *italic* work.  A new line (\n) starts a new line on screen.
+//   {name} is filled in by the game: keep those words in curly brackets as
+//     they are, like {stop} (the stop's name) or {n} (a number).
+//   {n|star|stars} picks the first word when n is 1, the second otherwise.
+//   Keep the key on the left of each line exactly as it is; change only the
+//   text on the right. The build tells you if a key is missing or misspelt.
+//
+// The names and descriptions of stops, relics, trials, river events, shop
+// items and looks are in their own files in content/, not here.
+{
+	// ---- the top bar, the side panel and the buttons along the bottom ----
+	"hud": {
+		"moves": "moves", "moves_title": "Moves left",
+		"gold": "gold", "gold_title": "Gold",
+		"lapis": "lapis", "lapis_title": "Lapis",
+		"relics": "relics", "relics_title": "Relics found",
+		"score": "score", "score_title": "Score",
+		"stop": "stop", "stop_title": "Stop on the journey",
+		"river_label": "Stop {n} of {total}", "bar_label": "{n} of {total}",
+		"board_label": "Game board. Use arrow keys to move, Enter to pick up an amulet, then an arrow key to swap.",
+		"gilded_label": "Floor gilded"
+	},
+	"side": {
+		"difficulty": "Difficulty",
+		"change_difficulty": "Change the difficulty and the board",
+		"stars": "Stars",
+		"relics": "Relics",
+		"open_museum": "Museum ›",
+		"open_museum_title": "Visit the Museum of relics",
+		"no_boons": "No boons yet. Win a trial to earn one.",
+		"boons_help": "What each boon does"
+	},
+	"dock": {
+		"controls": "Game controls",
+		"map": "Map", "map_title": "Nile map",
+		"hint": "Hint", "hint_title": "Hint",
+		"amulets": "Amulets", "amulets_title": "The amulets here and what they mean",
+		"restart": "Restart", "restart_title": "Restart this stop",
+		"treasury": "Treasury", "treasury_title": "Treasury: lasting upgrades",
+		"stall": "Anubis", "stall_title": "Anubis's stall",
+		"help": "Help", "help_title": "How to play",
+		"customise": "Customise", "customise_title": "Customise",
+		"menu": "Menu", "menu_title": "Menu",
+		"close": "Close",
+		"map_scroll": "Map of the Nile"
+	},
+
+	// ---- the title screen ----
+	"title": {
+		"name": "Amulets of Anubis",
+		"sub": "A match-3 roguelite down the Nile",
+		"heading_new": "Twelve stops from Memphis to Alexandria",
+		"heading_back": "Welcome back",
+		"status_journey": "Journey {n} · ",
+		"status": "{stop} ·",
+		"relics": "{n} of {total}",
+		"stars_title": "{stars} {stars|star|stars} so far",
+		"relics_title": "{n} of {total} relics found",
+		"quote": "“…the Egypt to which the Greeks go in their ships is an acquired country, the gift of the river.”",
+		// who wrote it: Herodotus, about 430 BCE, in George Rawlinson’s translation (1858)
+		"quote_by": "Herodotus, *Histories*, Book II, tr. George Rawlinson",
+		"how_to_play": "How to play",
+		"difficulty_now": "Difficulty: {difficulty}",
+		"begin": "Begin the journey", "begin_sub": "Set out from {first}.",
+		"continue": "Continue", "continue_sub": "Return to {stop}.",
+		"new_journey": "New journey",
+		"saves": "Save and restore",
+		"sound": "Sound and music"
+	},
+
+
+	// ---- the menu ----
+	"menu": {
+		"title": "Menu",
+		"journey": "Journey {n} · ",
+		"at_event": "A river event",
+		"back": "Back to the board", "back_sub": "The stop you are on.",
+		"title_screen": "Title screen", "title_screen_sub": "Return to the start screen.",
+		"saves": "Save and restore", "saves_sub": "Copy your progress somewhere safe, or bring it back.",
+		"map": "Nile map", "map_sub": "Choose a stop, or replay one for more stars.",
+		"stall": "Anubis’s stall", "stall_sub": "One-time help for gold and lapis.",
+		"treasury": "Treasury", "treasury_sub": "Lasting upgrades, bought with gold and lapis.",
+		"museum": "Museum", "museum_sub": "The relics you have found: {n} of {total}.",
+		"customise": "Customise", "customise_sub": "Amulet sets, floors, board frames and sparkle colours.",
+		"difficulty": "Difficulty and board", "difficulty_sub": "Now: **{difficulty}**. How forgiving it is, and the size and shape of the floor.",
+		"settings_sub": "Sound, vibration, colours, motion and this device.",
+		"on": "on", "off": "off",
+		"help": "How to play", "help_sub": "Everything the game can do, with pictures.",
+		"pace": "Learning pace", "pace_sub": "New things arrive one at a time. Or turn everything on now.", "pace_sub_all": "Everything is on.",
+		"new_journey": "New journey", "new_journey_sub": "Start again from {first}. Relics, sets and floors are kept.",
+		"new_journey_short": "New journey…",
+		// the eight tiles: a short name, and a word of how things stand where it helps
+		"tiles": {
+			"map": "Nile map", "treasury": "Treasury", "stall": "Anubis’s stall", "pace": "Learning pace",
+			"museum": "Museum", "difficulty": "Difficulty", "customise": "Customise",
+			"settings": "Settings", "audio_state": "music {music}", "help": "How to play"
+		}
+	},
+
+	// ---- the parts of the game that arrive one at a time (content/settings.json, "staging", says when) ----
+	"stages": {
+		"seals":  {"title": "Seals", "what": "three small challenges at every stop",
+							 "text": "Every stop has three small challenges. Pick a stop on the map to see them."},
+		"badges": {"title": "Badged amulets", "what": "amulets that fall wearing a power",
+							 "text": "Some amulets now fall wearing a badge. Match one to use its power."},
+		"trials": {"title": "Trials and boons", "what": "a priest’s task, won for a boon to keep",
+							 "text": "Priests may set you a trial. Finish it, and win a boon to keep."},
+		"stall":  {"title": "Anubis’s stall", "what": "one-time help for gold and lapis",
+							 "text": "The jackal is open for trade: one-time help for gold and lapis."},
+		"events": {"title": "The river", "what": "puzzles and choices on the water",
+							 "text": "Sailing on, things may now happen on the water between stops."},
+		"curses": {"title": "Cursed badges", "what": "red-ringed badges that do harm",
+							 "text": "Beware the red ring: a cursed badge does harm when it is cleared."},
+		"chambers": {"title": "Tombs, temples and oases", "what": "places beside the stops, with amulets under sand or water",
+							 "text": "Doorways and oases have opened beside the stops you have gilded. Look for them on the map."},
+		"omens":  {"title": "Omens", "what": "hardships you choose, for a richer reward",
+							 "text": "At any gilded stop you may now brave omens, for a richer reward."}
+	},
+	"roadmap": {
+		"head": "**The game grows as you travel.**",
+		"head_all": "Everything is open now.",
+		"head_more": "It starts with just matching and specials; new parts arrive one at a time, each with a short note, and a red dot marks anything new.",
+		"open": "open",
+		"after_first_win": "after your first win",
+		"from_stop": "from stop {n}",
+		"after_journey": "once the journey is gilded",
+		"rather": "Rather have everything now?",
+		"pace_button": "Learning pace"
+	},
+	"pace": {
+		"title": "Learning pace",
+		"lede": "On your first journey, the game brings in its parts one at a time: seals, badges, trials and boons, Anubis’s stall, river events, cursed badges and omens, each with a short note when it arrives.",
+		"one": "One at a time", "one_sub": "A calm start; new things arrive as you travel.",
+		"all": "Everything now", "all_sub": "Every system on from the first stop.",
+		"note": "This only changes what the game shows you. It unlocks no looks, relics or stops.",
+		"note_later": " From your second journey on, everything is on anyway.",
+		"done": "Done"
+	},
+
+	// ---- banners at the top of the screen ----
+	// ---- Back (Android's button or swipe, a browser's Back) on the board ----
+	"back": {
+		"title": "Leaving?",
+		"again": "Go back once more to leave the game."
+	},
+
+	"banner": {
+		"new": "New",
+		"relic_found": "Relic found",
+		"seal_stamped": "Seal stamped",
+		"seal_extra": "{stop} · +{n} lapis",
+		"look_where": "In Customise",
+		"more": "+{n} more",
+		"everything": "Everything is on",
+		"everything_name": "Every part of the game",
+		"everything_text": "New things are marked with a dot until you look."
+	},
+
+	// ---- the stop scroll (picking a stop on the map), seals and omens ----
+	"stop": {
+		"seals": "Seals",
+		"omens": "Omens",
+		"omens_lede": "Brave any of these for a richer reward. Each adds a third more gold and lapis.",
+		"omens_later": "*Gild the whole journey once, and omens can be braved here.*",
+		"omens_first_win": "*Gild this stop once, and you may brave omens here for a richer reward.*",
+		"total": "{n} {n|omen|omens}: rewards ×{x}",
+		"total_none": "No omens: the usual reward",
+		"set_out": "Set out",
+		// the small tiles on a stop's card, with the gist of each part
+		"seals_gist": "{n} of {total}",
+		"omens_none": "none braved",
+		"omens_some": "{n} braved",
+		"door_open": "open",
+		"door_explored": "explored",
+		"omen_row": "Omens: {names} · rewards ×{x}",
+		"cursed_mark": "· cursed",
+		"cursed_row": "Cursed: {text}",
+		"silent": "The Gods are silent",
+		"chamber": "A doorway",
+		"chamber_new": "Explore it for {reward}.",
+		"chamber_done": "Explored. Go back in for {reward}, if you dare: it stirs more each time, and pays more.",
+		"chamber_locked": "*There is a doorway here. Gild this stop to open it.*"
+	},
+
+	// ---- winning and losing a stop ----
+	"win": {
+		"title": "{stop} is gilded",
+		"lede": "The floor gleamed like the sun at noon; we allowed ourselves a moment to admire it.",
+		"lede_last": "Every floor from {first} to {last} shone with gold. Why, we could hardly believe we had done it!",
+		"score": "Score {score}",
+		"score_bonus": " (including {bonus} for {n} unused moves)",
+		"rewards": "+{gold} gold, +{lapis} lapis",
+		"omens": "(×{x} for {n} {n|omen|omens} braved)",
+		"curse": "The trial was not met. At the next stop: {curse}.",
+		"journey_done": "And so our journey down the Nile came to an end, though we had a feeling it would not be our last. Any stop can be played again from the map, for more stars.",
+		"sail": "Sail to {stop}",
+		"map": "Nile map",
+		"replay": "Replay or brave omens",
+		"play_again": "Play again",
+		"chamber": "A doorway has opened here: **{name}**.",
+		"chamber_again": "You have explored {name}. Go back in, if you dare: the danger grows each time, and so does the reward.",
+		"explore": "Explore {name}",
+		"go_back": "Go back into {name}",
+		"explore_short": "Explore it",
+		"go_back_short": "Go back in"
+	},
+
+	// ---- oases: like a tomb, but in daylight, with water instead of sand ----
+	"oasis": {
+		"kicker": "An oasis near {stop}",
+		"sub": "An oasis near {stop}",
+		"enter": "Walk down to the water",
+		"cover": "Some amulets lie under water. They can’t be moved: make a match beside one to lift it out.",
+		"again": "You have rested here {n} {n|time|times} before. The oasis still has a little to give.",
+		"go_back": "Walk back to {name}",
+		"won": "The water shone like gold. We rested in the shade of the palms, then turned back to the river.",
+		"lost": "The sun climbed too high.",
+		"lost_text": "We walked back to the river, none the worse. The oasis will still be there.",
+		"heading": "An oasis",
+		"card_new": "Explore it for {reward}.",
+		"card_done": "Explored. Go back for {reward} each time.",
+		"locked": "*There is an oasis near here. Gild this stop to find the way.*",
+		"win_note": "An oasis lies near here: **{name}**.",
+		"win_again": "You have explored {name}. You can go back for a little more.",
+		"explore": "Walk to {name}",
+		"explore_short": "Walk there",
+		"go_back_short": "Walk back",
+		"map_new": "an oasis to explore",
+		"map_done": "oasis explored"
+	},
+
+	// ---- tomb and temple chambers ----
+	"chamber": {
+		"kicker": "A doorway at {stop}",
+		"sub": "A chamber at {stop}",
+		"enter": "Enter by torchlight",
+		"back": "Back to {stop}",
+		"leave": "Leave", // the way out on a phone, where "Back to …" beside the big button won't fit
+		"sand": "Some amulets are buried in sand. They can't be moved: make a match beside one to brush it clean.",
+		"again": "You have explored this chamber {n} {n|time|times} before.",
+		"stirs": "Each time you return it stirs a little more: cursed badges turn up, and more of them. The reward grows with the danger.",
+		"won": "Every stone gleamed in the torchlight, and we found our way back out into the day.",
+		"lost": "The torches burned low.",
+		"lost_text": "We climbed back out into the light, none the worse. The doorway will still be there."
+	},
+	"lose": {
+		"title": "The sands return",
+		"lede": "Your moves ran out with {n} {n|stone|stones} still bare.",
+		"persist": "The Gods notice your persistence: your next try here has **+{n} moves**",
+		"gift": " and {boon}",
+		"buy": "So close? Anubis will sell you {n} more {n|move|moves} right now, and you carry on where you are.",
+		"curse": "Your trial was not met either. At the next stop: {curse}.",
+		"try_again": "Try again",
+		"map": "Nile map",
+		"tip": "Aim your matches at the corners and edges early. Banded and ringed amulets reach stones that are hard to match."
+	},
+
+	// ---- difficulty (the numbers are in content/settings.json) ----
+	"difficulty": {
+		"relaxed": "Plenty of moves and generous power-ups. Hints appear quickly. For unwinding.",
+		"normal": "The journey as intended. Most stops can be won with a little thought.",
+		"hard": "Fewer moves and rarer power-ups. Plan your cascades and aim for the corners early.",
+		"pharaoh": "Tight move counts, very rare power-ups and no automatic hints. Only for the bold."
+	},
+
+	// ---- How to play (the codex) ----
+	"codex": {
+		"title": "How to play",
+		"tabs": {
+			"basics": "Basics", "amulets": "Amulets", "specials": "Specials", "badges": "Badges", "boons": "Boons",
+			"floors": "Floors", "trials": "Trials & curses", "events": "River events", "places": "Tombs & oases", "relics": "Relics",
+			"omens": "Seals & omens", "shops": "Treasury & stall"
+		},
+		// the two groups of chapters, and the page turning on narrow screens
+		"groups": { "board": "On the board", "journey": "On the journey" },
+		"contents": "Contents", "back_to_contents": "‹ Contents",
+		"chapter": "Chapter {n} of {total}",
+		"basics": {
+			"lede": "Sail down the Nile, stop by stop. At each one, match amulets to turn the stone floor to gold before your moves run out.",
+			"pieces": "The pieces",
+			"amulet": "An amulet", "amulet_text": "The pieces you swap. Line up three or more of a kind to match them.",
+			"bare": "Bare stone", "bare_text": "One match on top of it gilds it. *Thick stone* needs two.",
+			"gilded": "Gilded", "gilded_text": "Done. Gild the whole floor to win the stop.",
+			"stop_works": "How a stop works",
+			"swap": "**Swap** two neighbouring amulets to line up three or more of a kind.",
+			"gilds": "**Every match gilds** the stone beneath it. The bar by the board shows how far you are.",
+			"bigger": "**Bigger matches** make special amulets that clear more at once (see Specials).",
+			"stars": "**Stars:** finish with moves to spare. Three stars need about a third of your moves left.",
+			"goes_wrong": "When it goes wrong",
+			"fail_moves": "Each failure at the same stop gives **two more moves** next try (up to six).",
+			"fail_boon": "A second failure in a row also brings a **boon**.",
+			"fail_buy": "Just short? You can buy **three more moves** on the spot.",
+			"money": "Gold, lapis and looks",
+			"earn": "Gilding stones earns **{gold} gold**; special amulets and trials earn **{lapis} lapis**.",
+			"spend": "Spend them on lasting upgrades at the **Treasury**.",
+			"spend_stall": "Spend them on lasting upgrades at the **Treasury** and one-time help at **Anubis’s stall**.",
+			"looks": "**Customise** (the palette button) holds amulet sets, floors, frames and sparkles, all earned by playing. They change only the look.",
+			"controls": "Controls and sound",
+			"touch": "**Touch or mouse:** tap an amulet, then its neighbour; or drag it.",
+			"keys": "**Keyboard:** arrow keys to move, Enter to pick up, then an arrow to swap.",
+			"menu": "**Menu** (☰) holds every other screen: the map, sound and music, difficulty, saving your progress, and Learning pace.",
+			"music": "The music is composed as you play, in each stop’s own key: quicker as moves run low, brighter as the floor turns gold."
+		},
+		"amulets_intro": "Every amulet in the game, and what the symbol meant. The stops where it appears are listed under each.",
+		"specials": {
+			"intro": "Special amulets are made by bigger matches. Match a special again to set it off.",
+			"band": "Banded amulet", "band_text": "Match four in a row. When matched, it clears its whole row, or its whole column if the band runs up and down.",
+			"ring": "Ringed amulet", "ring_text": "Match in an L or a T shape. When matched, it clears the nine squares around it.",
+			"star": "Star of Sopdet", "star_text": "Match in an L or T shape where one arm is four long. When matched, it clears both diagonals through its square. Sopdet was the star Sirius, whose rising at dawn announced the Nile flood.",
+			"sun": "Winged sun", "sun_text": "Match five in a row. Swap it with any amulet to clear every amulet of that kind. Two winged suns swapped together clear the whole board.",
+			"combo": "Combining specials", "combo_text": "Swap two specials with each other to set both off at once, even without a match."
+		},
+		"badges": {
+			"intro": "Now and then an amulet falls wearing a small badge. Match it like any other amulet to use its power. At most two good badges are on the board at once.",
+			"cursed_intro": "**Cursed badges** wear a **red ring**. They are rare, never appear on Relaxed, and whatever clears them sets them off, a cascade included."
+		},
+		"boons": {
+			"intro": "Boons are yours to keep until you use them, from stop to stop. They sit under the board; tap one to use it. Some ask you to choose a square first: the board glows gold while it waits.",
+			"choose": "You choose the square.",
+			"where": "Trials pay out the great boons. The chisel, the scribe’s band and the Dance of Bes are sold at Anubis’s stall, and so are some of the great ones."
+		},
+		"floors": {
+			"bare": "Bare stone", "bare_text": "Needs one match on top of it to be gilded.",
+			"thick": "Thick stone", "thick_text": "Cracked and dark. Needs two matches: the first cracks it to bare stone, the second gilds it. The Scales of Anubis strip a layer from all of them at once.",
+			"gilded": "Gilded", "gilded_text": "Done. Matches here still score, but do not count towards the floor.",
+			"shapes": "The shapes a stop can take: its own temple floor, {shapes}."
+		},
+		"trials": {
+			"intro": "When you arrive at a stop, a priest often offers two trials. Finish one during the stop and you keep its boon. Fail it, or leave the stop without finishing it, and you carry a curse to the *next* stop.",
+			"curses_on": "Curses on {difficulty}",
+			"no_curses": "On Relaxed, failing a trial costs nothing.",
+			"harsher": "Curses grow harsher on Hard and Pharaoh. Each trial card tells you its curse before you accept.",
+			"river": "On the river, asking the Gods is a gamble too. Half the time They give a boon; otherwise you carry a curse to the next stop.",
+			"every": "Every trial"
+		},
+		"omens": {
+			"seals": "**Seals.** Every stop has three seals: small challenges, stamped the first time you win there and meet one. Each is worth {n} lapis, and seals open new looks. Pick a stop on the map to see its seals; the list of stops under the map shows them as small wax seals.",
+			"omens": "**Omens.** Once a stop is gilded, you may brave omens before setting out there again. Each omen makes the stop harder and adds a third more gold and lapis to the win. The most you have braved at each stop is shown in the list of stops under the map. Omens last for that stop and its restarts; sailing on clears them."
+		},
+		"relics": {
+			"intro": "Relics are lasting rewards for deeds along the river. Find one and it is yours for every journey; some also pay out gold, lapis or a boon the moment you do. Undiscovered relics show only their purpose.",
+			"unknown": "Unknown relic"
+		},
+		// "Tombs & oases" (also on the website)
+		"places": {
+			"intro": "Beside nine of the stops lies a place you can visit: a tomb, a temple or an oasis. Its way opens once you gild that stop. Look for a doorway or a palm beside the stop on the map, on the stop’s card, or on the scroll when you win it.",
+			"sand": "Buried in sand",
+			"sand_text": "This amulet can’t be moved, and it is in no match. Make a match right beside it, or blast it with a special, and the sand is brushed off. From then on it is an ordinary amulet, and the stone under it is gilded when you match it.",
+			"water": "Under water",
+			"water_text": "The same in an oasis: the amulet can’t be moved until a match beside it lifts it out of the water.",
+			"tombs": "Tombs and temples",
+			"tombs_text": "Dim and lit by torches, with amulets of their own: mummies, canopic jars, broad collars, cracked jars and torches. Some amulets lie buried in sand.",
+			"oases": "Oases",
+			"oases_text": "In daylight among date palms, with the amulets of the oases: date palms, pomegranates, grapes and the sacred ibis. Some amulets lie under water.",
+			"line": "Beside {stop}. The first time: {reward}; going back: {again}.",
+			"reward": "Each place pays its reward the first time you gild its floor, and another every time you go back (from the map, or the stop's card). A tomb or temple stirs each time you return: cursed badges turn up, more with every visit, and the reward grows with them. Oases stay calm, and pay a smaller, steady reward."
+		}
+	},
+
+	// ---- shared by the stall and the Treasury ----
+	"shop": {
+		"undo": "Undo",
+		"undo_note": "Bought something by mistake? Anything bought since you opened this can be undone in full until you close it.",
+		"held": "{n} held",
+		"owned": "Owned",
+		"purse_gold": "{n} gold",
+		"purse_lapis": "{n} lapis"
+	},
+
+	// ---- Anubis's stall ----
+	"stall": {
+		"title": "Anubis’s stall",
+		"lede": "The jackal weighs your coin as carefully as your heart. Everything here is used once.",
+		"note": "Prices rise a little each time you buy the same thing at one stop, and settle again at the next."
+	},
+
+	// ---- the Treasury (upgrades) ----
+	"treasury": {
+		"title": "Treasury",
+		"lede": "Gold comes from gilding, lapis from specials and trials.",
+		"level": "Level {n} of {of}",
+		"looks_note": "Amulet sets, floors, board frames and sparkle colours live in **Customise**. They change the look, not the game. The relics you find are in the **Museum**."
+	},
+
+	// ---- the Museum (relics: found, never bought) ----
+	"museum": {
+		"title": "The museum",
+		"lede": "Relics are found by deeds along the river, and kept on every journey. Tap one to read about it.",
+		"gave": "It gave",
+		"gives": "Finding it gives",
+		"nothing": "Simply a fine piece for the collection.",
+		"unknown": "Unknown relic",
+		"codex": "See every relic in How to play"
+	},
+
+	// ---- Save and restore ----
+	"saves": {
+		"title": "Save and restore",
+		"reset": "Complete reset",
+		"reset_sure": "Are you sure? This deletes everything.",
+		"lede": "Your progress lives in this browser or app. Keep a copy of this code somewhere safe to move it or bring it back.",
+		"summary": "{stars} stars · {relics} relics · {gold} gold · {lapis} lapis",
+		"export": "Export",
+		"copy": "Copy code",
+		"file": "Save as file",
+		"restore": "Restore",
+		"paste": "Paste a save code here",
+		"restore_button": "Restore this save",
+		"copied": "Copied. Paste it anywhere you keep notes.",
+		"selected": "The code is selected: long-press or use your copy shortcut.",
+		"file_maybe": "If no file appeared, use Copy code instead; some app versions cannot save files.",
+		"file_no": "Saving a file is not possible here; use Copy code instead.",
+		"found": "Found a save with {stars} stars and {relics} relics. This replaces your current progress.",
+		"replace": "Replace my progress",
+		"restored": "Save restored",
+		"unreadable": "That code could not be read.",
+		"not_a_save": "This does not look like an Amulets of Anubis save code.",
+		"damaged": "The save code is damaged or incomplete."
+	},
+
+	// ---- Customise ----
+	"customise": {
+		"title": "Customise",
+		"lede": "Dress the game to your taste. These change nothing but the look, and they are earned by playing.",
+		"tabs": {
+			"sets": "Amulets", "floors": "Floors", "frames": "Frames", "sparkles": "Sparkles"
+		},
+		"in_use": "✓ In use",
+		"progress": "{have} of {need}"
+	},
+
+	// ---- what an unlock or relic asks for; {n} is its number, {name} a relic, stop, difficulty or board ----
+	"conditions": {
+		"so_far": "{text} ({n} so far)",
+		"and": ", and ",
+		"stars": "Earn {n} {n|star|stars}",
+		"three_star_stops": "Three stars at {n} {n|stop|stops}",
+		"stops_gilded": "Gild {n} different {n|stop|stops}",
+		"stops_won": "Gild {n} {n|stop|stops} in all",
+		"hard_wins": "Win {n} {n|stop|stops} on Hard or Pharaoh",
+		"trials_finished": "Finish {n} {n|trial|trials}",
+		"river_events": "Complete {n} river {n|event|events}",
+		"chambers_explored": "Explore {n} {n|tomb, temple or oasis|tombs, temples or oases}",
+		"relics_found": "Find {n} {n|relic|relics}",
+		"suns_forged": "Forge {n} winged {n|sun|suns}",
+		"best_cascade": "Set off a cascade of {n}",
+		"thick_stones_cracked": "Crack {n} thick {n|stone|stones}",
+		"gold_earned": "Earn {n} gold in all",
+		"gold_held": "Hold {n} gold at once",
+		"lapis_held": "Hold {n} lapis at once",
+		"win_streak": "Win {n} stops in a row",
+		"journeys": "Begin journey {n}",
+		"relic": "Find {name}",
+		"win_moves_to_spare": "Win a stop with {n} {n|move|moves} to spare",
+		"win_on_difficulty": "Win a stop on {name}",
+		"win_at_stop": "Gild {name}",
+		"win_without_boons": "Win a stop without spending a boon",
+		"win_on_board": "Win a stop on the {name} board",
+		"win_two_specials_at_once": "Set off two specials at once in a winning stop",
+		"win_after_failures": "Win a stop after failing it {n} {n|time|times}",
+		"seals_stamped": "Stamp {n} {n|seal|seals}",
+		"omens_braved": "Brave {n} {n|omen|omens} across the stops (the most at each counts)",
+		"win_with_omens": "Win a stop with {n} {n|omen|omens} braved",
+		"win_suns_forged": "Forge {n} winged {n|sun|suns} in one winning stop",
+		"win_best_cascade": "Set off a cascade of {n} in a winning stop",
+		"win_specials_made": "Make {n} specials in one winning stop"
+	},
+
+	// ---- board sizes (Difficulty and board) ----
+	"boards": {
+		"classic": {
+			"name": "Classic",
+			"label": "8 × 8",
+			"desc": "Each stop’s own floor plan. Quick stops."
+		},
+		"grand": {
+			"name": "Grand",
+			"label": "10 × 10",
+			"desc": "The same shapes, larger: longer cascades, more moves."
+		},
+		"omega": {
+			"name": "Omega",
+			"label": "fills the screen",
+			"desc": "As large as the screen, often split by the Nile. Pays half the gold and lapis."
+		},
+		"ruins": {
+			"name": "Ruins",
+			"label": "12 × 12",
+			"desc": "A broken temple floor with a jagged edge. The biggest of all."
+		}
+	},
+
+	// ---- Sound and music ----
+	"audio": {
+		"title": "Sound and music",
+		"lede": "The music is composed as you play: it takes each stop's key and instrument, quickens as your moves run low, and brightens as the floor turns to gold.",
+		"music": "Music",
+		"music_volume": "Music volume",
+		"harmonise": "Matches play along with the music: breaking stones plays notes from the chord the music is on, and cascades climb it.",
+		"effects": "Sound effects",
+		"effects_volume": "Sound effects volume",
+		"vibrate": "Vibrate on matches, specials and wins",
+		"no_vibrate": "This browser can't vibrate the phone. The Android app can.",
+		"webgl": "Draw the board with the graphics chip (WebGL)",
+		"webgl_note": "Smoother on most phones. Turn it off if the board ever looks wrong.",
+		"webgl_none": "Not available here: the board is drawn the plain way.",
+		"webgl_next": "Takes effect the next time the game starts.",
+		"steady": "Steadier sound: for a phone where the sound hitches now and then. Each sound comes a little later.",
+		"delay": "Sound delay on this device: about {ms} ms."
+	},
+
+	// ---- Settings: five parts, each a tile that opens it ----
+	"settings": {
+		"title": "Settings",
+		"lede": "How the game sounds, looks and moves.",
+		"sound": "Sound and music", "vibration": "Vibration", "colours": "Colours",
+		"motion": "Motion and effects", "device": "This device",
+		"not_here": "not here",
+		"device_gl": "WebGL on", "device_2d": "WebGL off", "device_plain": "plain drawing",
+		"colours_lede": "The amulets, floors and scenery keep their colours in every mode: their colours tell them apart.",
+		"colours_name": {"game": "The game’s", "dark": "Dark", "hcl": "High contrast, light", "hcd": "High contrast, dark", "phone": "Follow the phone"},
+		"colours_desc": {
+			"game": "Papyrus and sandstone.",
+			"dark": "Papyrus and sandstone by lamplight.",
+			"hcl": "Black on white, with strong edges.",
+			"hcd": "White and yellow on black, with strong edges.",
+			"phone": "Dark when the phone is dark, high contrast when it asks for more contrast."
+		},
+		"colours_gist": {"game": "the game’s", "dark": "dark", "hcl": "high contrast, light", "hcd": "high contrast, dark", "phone": "as the phone"},
+		"colours_note": "Kept in your save.",
+		"motion_head": "Motion",
+		"motion_name": {"phone": "As the phone", "less": "Less", "full": "Full"},
+		"motion_desc": {
+			"phone": "Less if the phone asks to reduce motion.",
+			"less": "No sand pouring, pulses or wobbles; scrolls open at once.",
+			"full": "Everything moves."
+		},
+		"motion_gist": {"phone": "as the phone", "less": "less motion", "full": "full motion"},
+		"fx_head": "Effects",
+		"fx_name": {"auto": "Automatic", "full": "Full", "fewer": "Fewer"},
+		"fx_desc": {
+			"auto": "Full, unless an older phone keeps struggling.",
+			"full": "Every spark and glow.",
+			"fewer": "Fewer sparks and glows, for an older phone."
+		},
+		"fx_note": "Automatic only ever turns effects down on a phone with 4 GB of memory or less, after the game struggled at two different stops.",
+		"fx_note_on": "Automatic has turned effects down on this phone. Choose Full to have them all back.",
+		"fx_auto_label": "Settings",
+		"fx_auto_name": "Fewer effects",
+		"fx_auto_extra": "For a smoother game. Change it in Settings.",
+		"device_note": "These belong to this phone or browser, not to your save: a save code taken to another device doesn’t bring them."
+	},
+
+	// ---- the Difficulty and board screen ----
+	"difficulty_screen": {
+		"title": "Difficulty & board",
+		"lede": "Choose how forgiving the journey is, and how large a floor you play on.",
+		"slider": "Difficulty",
+		"board": "Board",
+		"fill": "Fill the screen: on a tall screen the floor gains extra rows instead of leaving empty space.",
+		"moves": "At {stop}: {n} moves on a {shape} floor",
+		"no_hints": ", no automatic hints",
+		"done": "Done",
+		"start": "Start with this difficulty",
+		"cancel": "Cancel",
+		"restart": "Restart this stop",
+		"later": "Use from the next stop"
+	},
+
+	// ---- New journey ----
+	"journey": {
+		"title": "A new journey",
+		"lede": "Set out from {first} once more, with an empty purse.",
+		"keep": "You keep",
+		"leave": "You leave behind",
+		"relics": "Your relics",
+		"looks": "{sets} amulet {sets|set|sets}, {floors} floors, {frames} frames and {sparkles} sparkles in Customise",
+		"settings": "Your difficulty, board and sound settings",
+		"stops": "{n} stops reached and {stars} stars",
+		"money": "{gold} gold and {lapis} lapis",
+		"upgrades": "{n} treasury {n|upgrade|upgrades}, {boons} {boons|boon|boons}",
+		"wind": ", {n} second wind",
+		"counters": "Trial and relic counters start again",
+		"way_back": "Want a way back? Save a copy of your progress first; you can restore it from the menu at any time.",
+		"save_first": "Save a copy first",
+		"begin": "Begin the new journey",
+		"cancel": "Cancel",
+		"popup": "Journey {n}",
+		"awaits": "{stop} awaits"
+	},
+
+	// ---- the Nile map ----
+	"map": {
+		"title": "The Nile",
+		"lede": "Choose a stop on your journey. Finish one to open the next.",
+		"label": "Map of Egypt along the Nile",
+		"stops": "Stops",
+		"back": "Back to the board",
+		"seals": "Seals",
+		"most_omens": "Most omens braved",
+		"locked": "Locked: win the stop before it",
+		"stars": "{n} of 3 stars",
+		"meta_seals": "{n} of {total} seals",
+		"meta_omens": "{n} {n|omen|omens} braved",
+		"door_new": "a doorway to explore",
+		"door_done": "doorway explored"
+	},
+
+	// ---- trial cards and the trial line ----
+	"trial": {
+		"title": "A priest sets a trial",
+		"lede": "Take on one task at {stop}. Finish it and the boon is yours to keep; fail, and the next stop is harder.",
+		"risk": "**If you fail** {curse}, {text} at the next stop.",
+		"no_risk": "No penalty for failing on Relaxed.",
+		"decline": "No trial today",
+		"none": "No trial at this stop",
+		"failed": "failed"
+	},
+
+	// ---- river events ----
+	"event": {
+		"gild": "Gild the whole floor",
+		"collect": "Clear {n} {amulets}",
+		"collect_default": "amulets",
+		"score": "Score {n} points",
+		"sub": "A river event",
+		"on_the_way": "A river event on the way to {stop}",
+		"kicker": "On the river",
+		"between": "On the river between {from} and {to}",
+		"goal": "{goal} in {n} moves",
+		"no_harm": "Failing costs nothing but the reward.",
+		"begin": "Begin",
+		"skip": "Sail on past",
+		"won": "The river let us pass.",
+		"gain": "You gain **{reward}**.",
+		"lost": "Not this time.",
+		"lost_text": "The moment passed. We sailed on without the reward, and without harm.",
+		"sail": "Sail on to {stop}",
+		"try_again": "Try again",
+		"pay": "You pay:",
+		"get": "You get:",
+		"pay_boon": "One of your boons",
+		"any_boon": "A boon, chosen by chance",
+		"gamble_get": "A great boon, chosen by chance",
+		"gamble_risk": "**Or,** if the Gods are unkind: a curse on the next stop.",
+		"short_gold": "You have too little gold.",
+		"short_lapis": "You have too little lapis.",
+		"no_boon": "You have no boon to give.",
+		"paid": "You pay {cost}. ",
+		"part_with": "You part with {boon}. ",
+		"receive": "You receive {reward}.",
+		"receive_boon": "a boon: {boon}",
+		"kind": "The Gods are kind: {boon} is yours.",
+		"unkind": "The Gods are not kind today. {curse}: {text} at the next stop."
+	},
+
+	// ---- the short words that float up on the board ----
+	"popup": {
+		"persistence_n_moves": "Persistence: +{n} moves",
+		"trial_failed": "Trial failed",
+		"choose_a_square": "Choose a square",
+		"trial_complete": "Trial complete",
+		"already_used": "Already used",
+		"n_moves": "+{n} moves",
+		"star_of_sopdet": "Star of Sopdet",
+		"cascade_n": "Cascade ×{n}",
+		"the_amulets_shift": "The amulets shift…",
+		"buried": "Buried in sand: match beside it",
+		"under_water": "Under water: match beside it",
+		"second_wind_moves": "Second wind: +3 moves"
+	},
+
+	// ---- How to play: the River events and Treasury & stall tabs ----
+	"codex_more": {
+		"events_intro": "Sometimes, sailing on from a stop you have won, something happens on the river. Some events are short puzzles on a small board with their own goal; others are a choice. Failing a puzzle costs nothing but its reward, and you can always sail on past.",
+		"event_gild": "Gild a small floor",
+		"event_collect": "Clear {n} {amulets}",
+		"event_score": "Score {n} points",
+		"event_line": "{goal} in {moves} moves{lamp}. Reward: {reward}.",
+		"event_lamp": ", by the light of a single lamp",
+		"event_choice": "A choice.",
+		"event_counts": "Completing river events counts towards {list}.",
+		"relic_name": "the {name} relic",
+		"and": " and ",
+		"shops_money": "Gilding stones earns **gold**. Making special amulets and finishing trials earns **lapis**.",
+		"shops_treasury": "**The treasury** (chest button) sells lasting upgrades: {upgrades}. Your **relics**, {n} rewards for deeds along the river, are kept in the **museum** (Menu, or the relics counter at the top).",
+		"shops_customise": "**Customise** (palette button) is where the looks live: amulet sets, floor sets, board frames and sparkle colours, all earned by playing and all change nothing but the look. Sound, vibration, colours and motion are in Menu → Settings.",
+		"shops_stall": "**Anubis’s stall** (jackal button) sells one-time help: {items}. Buying the same thing twice at one stop costs a little more each time."
+	},
+
+	// ---- tapping the stop's name ----
+	"place": {
+		"back": "Back to the board",
+		// the end of a note beside the board that is too long to show whole
+		"read_on": "Read on ›",
+		// the scroll of the amulets on the board (the Amulets button)
+		"amulets_title": "The amulets of {place}",
+		"amulets_heading": "The amulets here"
+	},
+
+	// ---- restarting a stop ----
+	"restart": {
+		"title": "Start this stop again?",
+		"played": "You have played {n} {n|move|moves} here.",
+		"text": "Restarting sets out a new floor and gives your moves back.",
+		"trial": " Your trial counts as failed.",
+		"keep": "Keep playing",
+		"restart": "Restart"
+	},
+
+	// ---- banners for a new look ----
+	"banner_looks": {
+		"floor": "New floor set",
+		"set": "New amulet set",
+		"frame": "New frame",
+		"sparkle": "New sparkle"
+	},
+
+	// ---- amulets added as pictures ----
+	"amulets": {
+		"added": "An amulet added to this copy of the game."
+	},
+
+	// ---- rewards, and the names of the built-in floor shapes ----
+	"reward": {"gold": "{n} gold", "lapis": "{n} lapis", "and": " and "},
+	"shapes": {"temple": "Temple floor", "ruins": "Ruined floor", "two_banks": "The two banks", "great_ruin": "The great ruin"}
+}

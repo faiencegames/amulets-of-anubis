@@ -1,3 +1,20 @@
+/* =============================================================================
+ * 12-stall.js  —  Anubis's stall, where boons and moves are bought during a
+ * stop, and the refunds that the stall and the Treasury share.
+ *
+ * What's here:
+ *   openStall()      the stall's scroll (the Anubis button in the dock, the
+ *                    Menu); what it sells is content/anubis-stall/
+ *   stallPrice()     what an item costs now: it rises each time the same item
+ *                    is bought at this stop (STALL_RISE, content/settings.jsonc)
+ *   logBuy(), undoBuy(), undoButton(), purseLine()
+ *                    refunds: anything bought can be taken back until the
+ *                    scroll closes. 16-treasury.js uses these too, and
+ *                    closeOverlays() (23-scrolls.js) empties the list.
+ *
+ * Changes in the save: gold, lapis, boons, charges.
+ * ===========================================================================*/
+
 // ---------- refunds ----------
 // Everything bought since the stall or treasury was opened can be undone, in
 // full, until that screen is closed (for misclicks). Each entry knows how to
@@ -18,7 +35,7 @@ function undoBuy(src, id) {
 		if (e.undo && e.undo() === false) {
 			popups.push({
 				text: Tplain('popup.already_used'),
-				x: N / 2,
+				x: COLS / 2,
 				y: ROWS / 2,
 				life: 1.4,
 				size: 0.5,
@@ -64,9 +81,26 @@ function openStall() {
 			it.kind === 'charge' && save.charges.wind
 				? ` <span class="tier">${T('shop.held', { n: save.charges.wind })}</span>`
 				: '';
-		const one = it.kind === 'boon' && it.give.boon.length === 1 && BOON_ICON[it.give.boon[0]];
-		return `<div class="shop-row"><div>${one ? `<span class="stall-ico" aria-hidden="true">${one}</span>` : ''}<strong>${it.name}</strong>${held}<br><span class="shop-desc">${it.desc}</span></div>
-			<div class="buy-col">${undoButton('stall', it.id)}<button class="btn buy" data-i="${it.id}" ${can ? '' : 'disabled'}>${price.toLocaleString()} <i class="g-ico ${it.cur}"></i></button></div></div>`;
+		// its own picture (images/icons/stall/), or a single boon's
+		const one = it.icon
+			? iconSvg('stall', it.icon)
+			: it.kind === 'boon' && it.give.boon.length === 1 && BOON_ICON[it.give.boon[0]];
+		return html`
+			<div class="shop-row">
+				<div>
+					${one ? `<span class="stall-ico" aria-hidden="true">${one}</span>` : ''}
+					<strong>${it.name}</strong>
+					${held}
+					<br>
+					<span class="shop-desc">${it.desc}</span>
+				</div>
+				<div class="buy-col">
+					${undoButton('stall', it.id)}
+					<button class="btn buy" data-i="${it.id}" ${can ? '' : 'disabled'}>
+						${price.toLocaleString()} <i class="g-ico ${it.cur}"></i>
+					</button>
+				</div>
+			</div>`;
 	};
 	$('msgBody').innerHTML =
 		`<div class="stall-head">${ANUBIS_BADGE}<div><h2 id="msgTitle">${T('stall.title')}</h2>
@@ -97,7 +131,7 @@ function openStall() {
 						core.movesLeft += n;
 						popups.push({
 							text: Tplain('popup.n_moves', { n: n }),
-							x: N / 2,
+							x: COLS / 2,
 							y: ROWS / 2,
 							life: 1.6,
 							size: 0.6,
@@ -133,20 +167,20 @@ function openStall() {
 						closeOverlays();
 						busy = true;
 						sfx('shuffle');
-						core.cells.forEach(t => {
-							if (t) t.swapping = true;
+						core.cells.forEach(tile => {
+							if (tile) tile.swapping = true;
 						});
 						core.shuffle();
 						await settle();
-						core.cells.forEach(t => {
-							if (t) t.swapping = false;
+						core.cells.forEach(tile => {
+							if (tile) tile.swapping = false;
 						});
 						busy = false;
 						return;
 					}
 					if (it.kind !== 'now') sfx('create');
 					openStall();
-				})
+				}),
 		);
 	$('msgBody')
 		.querySelectorAll('.undo')
@@ -155,7 +189,7 @@ function openStall() {
 				(b.onclick = () => {
 					undoBuy(b.dataset.undoSrc, b.dataset.undo);
 					openStall();
-				})
+				}),
 		);
 	openOverlay('ovMsg');
 }

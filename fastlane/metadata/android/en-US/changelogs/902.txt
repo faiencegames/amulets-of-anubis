@@ -1,0 +1,8 @@
+* How to play reads like a book, with a contents page on a phone.
+* Calmer scrolls: one big button for the usual next step; the map and replaying are small at the foot.
+* A new title screen over the stop's scenery.
+* The Menu is eight tiles.
+* The gilding tube fills with sand.
+* The note beside the board shows whole lines, with "Read on" when it doesn't fit.
+* The board no longer flashes up before the title screen.
+* Small fixes to the text.

@@ -1,25 +1,38 @@
 /* =============================================================================
- * 01-core.js  —  rules of the game, with no browser code at all.
+ * 01-core.js  —  the rules of the game, with no browser code at all.
  *
- * Everything here can be run in plain Node (see tools/sim.js), which is how the
- * difficulty of every stop is tested.
+ * Everything here can be run in plain Node, which is how the simulators in
+ * tools/ test the difficulty of every stop. Keep it that way: no document,
+ * window, canvas or sound here. It is loaded on its own, before the rest.
  *
- * The game's content (stops, shapes, trials, relics, river events, the stall,
- * the treasury, the looks) is NOT written here: it lives in the files under
- * content/, which build.py checks and pours into CONTENT below. This file
- * holds the rules those files plug into:
- *   CONTENT       everything from content/, already checked (see build.py)
- *   LEVELS ...    short names for parts of CONTENT used throughout the code
- *   DIFFICULTY    the four slider steps
- *   BOARD_MODES   Classic / Grand / Ruins / Omega, and how each builds a floor
- *   BOONS/CURSES  what boons do and what failed trials cost
- *   conditions    when a relic is found or a look unlocked (conditionMet)
- *   Core          one playthrough of one stop: grid, matching, gravity, scoring
+ * The game's content (stops, amulets, trials, relics, river events, the
+ * stall, the looks) is NOT written here: it lives in content/, which build.py
+ * checks and pours into CONTENT below. This file holds the rules those files
+ * plug into.
+ *
+ * What's here:
+ *   CONTENT, T()        everything from content/; T(key) gives the
+ *                       words on screen (content/text.jsonc)
+ *   LEVELS, TRIALS ...  short names for parts of CONTENT, used everywhere
+ *   BOARD_MODES         Classic, Grand, Ruins and Omega, and how each builds
+ *                       its floor
+ *   DIFFICULTY          the four difficulties
+ *   BADGE_POWERS        what badges do (content/badges/ picks one each)
+ *   HARDSHIPS           what curses and omens do (content/curses/, omens/)
+ *   BOONS               the boons from content/boons/
+ *   conditionMet()      whether a relic is found or a look unlocked
+ *   Core                one game of one stop: the grid, matching, falling,
+ *                       specials, scoring
+ *   stopOptions()       everything a stop needs to start; the game and every
+ *                       simulator build their boards through it
+ *
+ * Changes in the save: nothing (it never sees the save; the game passes in
+ * what it needs).
  * ===========================================================================*/
 
 // ===== CONTENT (filled in by build.py from the content/ folder) =====
-const CONTENT = /*CONTENT*/null;
-// ---- the words on screen (content/text.json) ------------------------------
+const CONTENT = /*CONTENT*/ null;
+// ---- the words on screen (content/text.jsonc) ------------------------------
 // T("section.key", {n: 3}) gives the text for a key, ready to put in the page:
 // **bold** and *italic* become bold and italic, {name} is filled from vars,
 // and {n|omen|omens} picks the singular or plural by the number n. The build
@@ -41,7 +54,7 @@ function fill(s, vars) {
 		.replace(/\n/g, '<br>');
 	if (vars) {
 		s = s.replace(/\{(\w+)\|([^|}]*)\|([^}]*)\}/g, (m, k, one, many) =>
-			k in vars ? (+vars[k] === 1 ? one : many) : m
+			k in vars ? (+vars[k] === 1 ? one : many) : m,
 		);
 		s = s.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? vars[k] : m));
 	}
@@ -51,12 +64,15 @@ function fill(s, vars) {
 if (!CONTENT) throw new Error('No content: build the game with build.py, which fills this in from content/.');
 
 // ===== CORE (DOM-free game logic) =====
-// N is the number of columns, ROWS the number of rows. A square board has
+// COLS is the number of columns, ROWS the number of rows. A square board has
 // them equal; on a tall phone screen ROWS can be larger so the floor fills the
-// screen. Square index k = r * N + c throughout.
-let N = 8,
+// screen. The squares are one list: square sq = row * COLS + col throughout.
+let COLS = 8,
 	ROWS = 8;
-const SUN = 6;
+// An amulet's type is a number: 0 to 5 for the six kinds at a stop, and
+// SUN_TYPE for a winged sun, which is of no kind: swapped with an amulet, it
+// clears every amulet of that kind.
+const SUN_TYPE = 6;
 // ---- move budget tuning ----------------------------------------------------
 // base:  multiplies every stop's moves (lower is harder)
 // size:  how strongly moves grow with the amount of floor. Bigger boards cascade
@@ -77,7 +93,7 @@ const MOVE_TUNING = { base: 0.82, size: 0.12, tall: 0.6 };
 const SHAPES = CONTENT.shapes;
 // Which shared shapes each stop may use, in LEVELS order (each stop's
 // "shared_floor_shapes").
-const STOP_SHAPES = CONTENT.stops.map(L => L.shapes || []);
+const STOP_SHAPES = CONTENT.stops.map(stop => stop.shapes || []);
 // The stop's own plan comes up about 40% of the time; otherwise one of its shapes.
 function pickShape(idx) {
 	const pool = STOP_SHAPES[idx] || [];
@@ -136,11 +152,11 @@ const BOARD_MODES = [
 	},
 ];
 
-// their name, size label and description: content/text.json, "boards"
+// their name, size label and description: content/text.jsonc, "boards"
 BOARD_MODES.forEach(m =>
 	['name', 'label', 'desc'].forEach(f =>
-		Object.defineProperty(m, f, { get: () => T(`boards.${m.id}.${f}`), enumerable: true })
-	)
+		Object.defineProperty(m, f, { get: () => T(`boards.${m.id}.${f}`), enumerable: true }),
+	),
 );
 function boardMode(id) {
 	return BOARD_MODES.find(m => m.id === id) || BOARD_MODES[0];
@@ -286,7 +302,7 @@ function playable(rows) {
 function allMatchable(rows) {
 	const m = rows.length,
 		n = rows[0].length,
-		ok = (r, c) => r >= 0 && c >= 0 && r < m && c < n && rows[r][c] !== '.';
+		ok = (row, col) => row >= 0 && col >= 0 && row < m && col < n && rows[row][col] !== '.';
 	for (let r = 0; r < m; r++)
 		for (let c = 0; c < n; c++) {
 			if (!ok(r, c)) continue;
@@ -302,7 +318,7 @@ function allMatchable(rows) {
 }
 
 function setBoardSize(cols, rows) {
-	N = cols;
+	COLS = cols;
 	ROWS = rows || cols;
 }
 
@@ -332,8 +348,9 @@ const BADGE_POWERS = {
 		amount: 4,
 		fire: (core, at, n) => {
 			const cand = [];
-			for (let j = 0; j < N * ROWS; j++)
-				if (core.mask[j] && core.floor[j] > 0 && !at.clear.has(j) && !at.extraGild.includes(j)) cand.push(j);
+			for (let j = 0; j < COLS * ROWS; j++)
+				if (core.mask[j] && core.floor[j] > 0 && !at.clear.has(j) && !at.extraGild.includes(j))
+					cand.push(j);
 			for (let i = cand.length - 1; i > 0; i--) {
 				const j = Math.floor(Math.random() * (i + 1));
 				[cand[i], cand[j]] = [cand[j], cand[i]];
@@ -351,12 +368,12 @@ const BADGE_POWERS = {
 				for (let dc = -1; dc <= 1; dc++) {
 					const rr = at.r + dr,
 						cc = at.c + dc,
-						j = rr * N + cc;
+						j = rr * COLS + cc;
 					if (
 						rr >= 0 &&
 						rr < ROWS &&
 						cc >= 0 &&
-						cc < N &&
+						cc < COLS &&
 						core.mask[j] &&
 						core.floor[j] > 0 &&
 						!at.clear.has(j) &&
@@ -372,8 +389,8 @@ const BADGE_POWERS = {
 	// clears the whole row and the whole column it sits in
 	row_and_column: {
 		fire: (core, at) => {
-			for (let x = 0; x < N; x++) at.aff.push(at.r * N + x);
-			for (let y = 0; y < ROWS; y++) at.aff.push(y * N + at.c);
+			for (let x = 0; x < COLS; x++) at.aff.push(at.r * COLS + x);
+			for (let y = 0; y < ROWS; y++) at.aff.push(y * COLS + at.c);
 			return {};
 		},
 	},
@@ -404,8 +421,9 @@ const BADGE_POWERS = {
 		amount: 3,
 		fire: (core, at, n) => {
 			const cand = [];
-			for (let j = 0; j < N * ROWS; j++)
-				if (core.mask[j] && core.floor[j] === 0 && !at.clear.has(j) && !at.unGild.includes(j)) cand.push(j);
+			for (let j = 0; j < COLS * ROWS; j++)
+				if (core.mask[j] && core.floor[j] === 0 && !at.clear.has(j) && !at.unGild.includes(j))
+					cand.push(j);
 			for (let i = cand.length - 1; i > 0; i--) {
 				const j = Math.floor(Math.random() * (i + 1));
 				[cand[i], cand[j]] = [cand[j], cand[i]];
@@ -452,23 +470,23 @@ class Core {
 		this.types = level.types;
 		this.badBadges = !!opts.badBadges;
 		this.badMult = opts.badMult || 1;
-		this.mask = new Array(N * ROWS).fill(false);
-		this.floor = new Array(N * ROWS).fill(0);
-		this.cells = new Array(N * ROWS).fill(null);
+		this.mask = new Array(COLS * ROWS).fill(false);
+		this.floor = new Array(COLS * ROWS).fill(0);
+		this.cells = new Array(COLS * ROWS).fill(null);
 		// a floor plan's s and S (tombs) are stone 1 and 2 with an amulet buried
 		// in sand on it when the board is first filled; w and W (oases) the same
 		// under water. Both follow one rule; only the picture differs (t.wet).
 		this.sandAt = [];
 		this.wetAt = [];
 		(opts.map || level.map).forEach((row, r) => {
-			for (let c = 0; c < N; c++) {
-				const ch = row[c],
-					k = r * N + c;
+			for (let col = 0; col < COLS; col++) {
+				const ch = row[col],
+					sq = r * COLS + col;
 				if (ch !== '.') {
-					this.mask[k] = true;
-					this.floor[k] = 'sw'.includes(ch) ? 1 : 'SW'.includes(ch) ? 2 : +ch;
-					if ('sSwW'.includes(ch)) this.sandAt.push(k);
-					if ('wW'.includes(ch)) this.wetAt.push(k);
+					this.mask[sq] = true;
+					this.floor[sq] = 'sw'.includes(ch) ? 1 : 'SW'.includes(ch) ? 2 : +ch;
+					if ('sSwW'.includes(ch)) this.sandAt.push(sq);
+					if ('wW'.includes(ch)) this.wetAt.push(sq);
 				}
 			}
 		});
@@ -485,7 +503,7 @@ class Core {
 				.split('')
 				.reduce(
 					(a, ch) => a + (ch === '.' ? 0 : 'sw'.includes(ch) ? 1 : 'SW'.includes(ch) ? 2 : +ch),
-					0
+					0,
 				) ||
 			1;
 		// generated floors budget from a common base, with more for six amulet types,
@@ -500,11 +518,11 @@ class Core {
 					(opts.movesMult || 1) *
 					(opts.ease || 1) *
 					Math.pow(this.total / baseTotal, opts.sizeExp != null ? opts.sizeExp : MOVE_TUNING.size) *
-					Math.pow(Math.min(1, N / ROWS), opts.tall != null ? opts.tall : MOVE_TUNING.tall) *
-					(opts.areaCap ? Math.pow(Math.min(1, opts.areaCap / (N * ROWS)), 0.5) : 1)
+					Math.pow(Math.min(1, COLS / ROWS), opts.tall != null ? opts.tall : MOVE_TUNING.tall) *
+					(opts.areaCap ? Math.pow(Math.min(1, opts.areaCap / (COLS * ROWS)), 0.5) : 1),
 			) +
 				(opts.movesBonus || 0) -
-				(opts.movesPenalty || 0)
+				(opts.movesPenalty || 0),
 		);
 		this.movesLeft = this.startMoves;
 		this.uid = 1;
@@ -515,8 +533,16 @@ class Core {
 		Object.assign(o, this);
 		o.mask = this.mask.slice();
 		o.floor = this.floor.slice();
-		o.cells = this.cells.map(t =>
-			t ? { type: t.type, special: t.special, id: t.id, sand: t.sand || 0, wet: t.wet || 0 } : null
+		o.cells = this.cells.map(tile =>
+			tile
+				? {
+						type: tile.type,
+						special: tile.special,
+						id: tile.id,
+						sand: tile.sand || 0,
+						wet: tile.wet || 0,
+					}
+				: null,
 		);
 		return o;
 	}
@@ -527,19 +553,19 @@ class Core {
 			id: this.uid++,
 		};
 	}
-	t(r, c) {
-		if (r < 0 || c < 0 || r >= ROWS || c >= N) return null;
-		return this.cells[r * N + c];
+	t(row, col) {
+		if (row < 0 || col < 0 || row >= ROWS || col >= COLS) return null;
+		return this.cells[row * COLS + col];
 	}
 	// an amulet buried in sand (t.sand) can't be moved and is in no run: a match
 	// or a blast next to it, or on it, brushes the sand off (see clearStep)
-	typeAt(r, c) {
-		const t = this.t(r, c);
-		return t && t.type !== SUN && !t.sand ? t.type : -1;
+	typeAt(row, col) {
+		const tile = this.t(row, col);
+		return tile && tile.type !== SUN_TYPE && !tile.sand ? tile.type : -1;
 	}
 	remaining() {
 		let s = 0;
-		for (let k = 0; k < N * ROWS; k++) if (this.mask[k]) s += this.floor[k];
+		for (let sq = 0; sq < COLS * ROWS; sq++) if (this.mask[sq]) s += this.floor[sq];
 		return s;
 	}
 	won() {
@@ -547,61 +573,61 @@ class Core {
 	}
 	fill() {
 		for (let tries = 0; tries < 300; tries++) {
-			for (let r = 0; r < ROWS; r++)
-				for (let c = 0; c < N; c++) {
-					const k = r * N + c;
-					if (!this.mask[k]) {
-						this.cells[k] = null;
+			for (let row = 0; row < ROWS; row++)
+				for (let col = 0; col < COLS; col++) {
+					const sq = row * COLS + col;
+					if (!this.mask[sq]) {
+						this.cells[sq] = null;
 						continue;
 					}
 					const opts = [];
 					for (let ty = 0; ty < this.types; ty++) {
-						if (this.typeAt(r, c - 1) === ty && this.typeAt(r, c - 2) === ty) continue;
-						if (this.typeAt(r - 1, c) === ty && this.typeAt(r - 2, c) === ty) continue;
+						if (this.typeAt(row, col - 1) === ty && this.typeAt(row, col - 2) === ty) continue;
+						if (this.typeAt(row - 1, col) === ty && this.typeAt(row - 2, col) === ty) continue;
 						opts.push(ty);
 					}
-					this.cells[k] = this.newTile(opts[Math.floor(Math.random() * opts.length)]);
+					this.cells[sq] = this.newTile(opts[Math.floor(Math.random() * opts.length)]);
 				}
-			this.sandAt.forEach(k => {
-				const t = this.cells[k];
-				if (!t) return;
-				t.sand = 1;
-				if (this.wetAt.includes(k)) t.wet = 1;
+			this.sandAt.forEach(sq => {
+				const tile = this.cells[sq];
+				if (!tile) return;
+				tile.sand = 1;
+				if (this.wetAt.includes(sq)) tile.wet = 1;
 			});
 			if (this.hasMove()) return;
 		}
 	}
-	lineLen(r, c, dr, dc, ty) {
+	lineLen(row, col, dr, dc, ty) {
 		let n = 0;
-		r += dr;
-		c += dc;
-		while (this.typeAt(r, c) === ty) {
+		row += dr;
+		col += dc;
+		while (this.typeAt(row, col) === ty) {
 			n++;
-			r += dr;
-			c += dc;
+			row += dr;
+			col += dc;
 		}
 		return n;
 	}
-	runAt(k) {
-		const r = (k / N) | 0,
-			c = k % N,
-			ty = this.typeAt(r, c);
+	runAt(sq) {
+		const row = (sq / COLS) | 0,
+			col = sq % COLS,
+			ty = this.typeAt(row, col);
 		if (ty < 0) return false;
 		return (
-			1 + this.lineLen(r, c, 0, -1, ty) + this.lineLen(r, c, 0, 1, ty) >= 3 ||
-			1 + this.lineLen(r, c, -1, 0, ty) + this.lineLen(r, c, 1, 0, ty) >= 3
+			1 + this.lineLen(row, col, 0, -1, ty) + this.lineLen(row, col, 0, 1, ty) >= 3 ||
+			1 + this.lineLen(row, col, -1, 0, ty) + this.lineLen(row, col, 1, 0, ty) >= 3
 		);
 	}
 	swap(a, b) {
-		const t = this.cells[a];
+		const tile = this.cells[a];
 		this.cells[a] = this.cells[b];
-		this.cells[b] = t;
+		this.cells[b] = tile;
 	}
 	adjacent(a, b) {
-		const ra = (a / N) | 0,
-			ca = a % N,
-			rb = (b / N) | 0,
-			cb = b % N;
+		const ra = (a / COLS) | 0,
+			ca = a % COLS,
+			rb = (b / COLS) | 0,
+			cb = b % COLS;
 		return Math.abs(ra - rb) + Math.abs(ca - cb) === 1;
 	}
 	isValid(a, b) {
@@ -618,59 +644,59 @@ class Core {
 	}
 	allMoves() {
 		const m = [];
-		for (let k = 0; k < N * ROWS; k++) {
-			const r = (k / N) | 0,
-				c = k % N;
-			if (c < N - 1 && this.isValid(k, k + 1)) m.push([k, k + 1]);
-			if (r < ROWS - 1 && this.isValid(k, k + N)) m.push([k, k + N]);
+		for (let sq = 0; sq < COLS * ROWS; sq++) {
+			const row = (sq / COLS) | 0,
+				col = sq % COLS;
+			if (col < COLS - 1 && this.isValid(sq, sq + 1)) m.push([sq, sq + 1]);
+			if (row < ROWS - 1 && this.isValid(sq, sq + COLS)) m.push([sq, sq + COLS]);
 		}
 		return m;
 	}
 	hasMove() {
-		for (let k = 0; k < N * ROWS; k++) {
-			const r = (k / N) | 0,
-				c = k % N;
-			if (c < N - 1 && this.isValid(k, k + 1)) return true;
-			if (r < ROWS - 1 && this.isValid(k, k + N)) return true;
+		for (let sq = 0; sq < COLS * ROWS; sq++) {
+			const row = (sq / COLS) | 0,
+				col = sq % COLS;
+			if (col < COLS - 1 && this.isValid(sq, sq + 1)) return true;
+			if (row < ROWS - 1 && this.isValid(sq, sq + COLS)) return true;
 		}
 		return false;
 	}
 	findRuns() {
 		const runs = [];
-		for (let r = 0; r < ROWS; r++) {
-			let c = 0;
-			while (c < N) {
-				const ty = this.typeAt(r, c);
+		for (let row = 0; row < ROWS; row++) {
+			let col = 0;
+			while (col < COLS) {
+				const ty = this.typeAt(row, col);
 				if (ty < 0) {
-					c++;
+					col++;
 					continue;
 				}
-				let e = c + 1;
-				while (e < N && this.typeAt(r, e) === ty) e++;
-				if (e - c >= 3) {
+				let e = col + 1;
+				while (e < COLS && this.typeAt(row, e) === ty) e++;
+				if (e - col >= 3) {
 					const cells = [];
-					for (let x = c; x < e; x++) cells.push(r * N + x);
+					for (let x = col; x < e; x++) cells.push(row * COLS + x);
 					runs.push({ dir: 'h', cells });
 				}
-				c = e;
+				col = e;
 			}
 		}
-		for (let c = 0; c < N; c++) {
-			let r = 0;
-			while (r < ROWS) {
-				const ty = this.typeAt(r, c);
+		for (let col = 0; col < COLS; col++) {
+			let row = 0;
+			while (row < ROWS) {
+				const ty = this.typeAt(row, col);
 				if (ty < 0) {
-					r++;
+					row++;
 					continue;
 				}
-				let e = r + 1;
-				while (e < ROWS && this.typeAt(e, c) === ty) e++;
-				if (e - r >= 3) {
+				let e = row + 1;
+				while (e < ROWS && this.typeAt(e, col) === ty) e++;
+				if (e - row >= 3) {
 					const cells = [];
-					for (let y = r; y < e; y++) cells.push(y * N + c);
+					for (let y = row; y < e; y++) cells.push(y * COLS + col);
 					runs.push({ dir: 'v', cells });
 				}
-				r = e;
+				row = e;
 			}
 		}
 		return runs;
@@ -695,14 +721,14 @@ class Core {
 				triggered.add(s);
 				fired.push({ k: s, kind: 'sun' });
 				if (to.special === 'sun') {
-					this.cells.forEach((t, k) => {
-						if (t) clear.add(k);
+					this.cells.forEach((tile, sq) => {
+						if (tile) clear.add(sq);
 					});
 					triggered.add(o);
 				} else {
 					const ty = to.type;
-					this.cells.forEach((t, k) => {
-						if (t && t.type === ty) clear.add(k);
+					this.cells.forEach((tile, sq) => {
+						if (tile && tile.type === ty) clear.add(sq);
 					});
 				}
 			} else if (ta && tb && COMBO.has(ta.special) && COMBO.has(tb.special)) {
@@ -711,8 +737,8 @@ class Core {
 			}
 		}
 		if (!clear.size && seed) {
-			seed.forEach(k => {
-				if (this.cells[k]) clear.add(k);
+			seed.forEach(sq => {
+				if (this.cells[sq]) clear.add(sq);
 			});
 		}
 		if (!clear.size) {
@@ -721,18 +747,18 @@ class Core {
 			const prefer = new Set(swap || []);
 			const cellRuns = new Map();
 			runs.forEach((run, i) =>
-				run.cells.forEach(k => {
-					clear.add(k);
-					if (!cellRuns.has(k)) cellRuns.set(k, []);
-					cellRuns.get(k).push(i);
-				})
+				run.cells.forEach(sq => {
+					clear.add(sq);
+					if (!cellRuns.has(sq)) cellRuns.set(sq, []);
+					cellRuns.get(sq).push(i);
+				}),
 			);
 			const used = new Set();
 			const place = (cands, special) => {
-				for (const k of cands) {
-					const t = this.cells[k];
-					if (t && !t.special && !created.has(k)) {
-						created.set(k, special);
+				for (const sq of cands) {
+					const tile = this.cells[sq];
+					if (tile && !tile.special && !created.has(sq)) {
+						created.set(sq, special);
 						return true;
 					}
 				}
@@ -749,46 +775,46 @@ class Core {
 			runs.forEach((run, i) => {
 				if (used.has(i) || run.cells.length < 4) return;
 				const L = run.cells.length,
-					pref = run.cells.filter(k => prefer.has(k)),
+					pref = run.cells.filter(sq => prefer.has(sq)),
 					mid = run.cells[(L - 1) >> 1];
 				place([...pref, mid, ...run.cells], L >= 5 ? 'sun' : run.dir);
 				used.add(i);
 			});
 		}
 		const queue = [...clear].filter(
-			k =>
-				this.cells[k] &&
-				this.cells[k].special &&
-				!this.cells[k].sand &&
-				!triggered.has(k) &&
-				!created.has(k)
+			sq =>
+				this.cells[sq] &&
+				this.cells[sq].special &&
+				!this.cells[sq].sand &&
+				!triggered.has(sq) &&
+				!created.has(sq),
 		);
 		while (queue.length) {
-			const k = queue.shift();
-			if (triggered.has(k)) continue;
-			triggered.add(k);
-			const t = this.cells[k],
-				r = (k / N) | 0,
-				c = k % N;
+			const sq = queue.shift();
+			if (triggered.has(sq)) continue;
+			triggered.add(sq);
+			const tile = this.cells[sq],
+				row = (sq / COLS) | 0,
+				col = sq % COLS;
 			const aff = [];
-			if (t.special === 'h') {
-				for (let x = 0; x < N; x++) aff.push(r * N + x);
-				fired.push({ k, kind: 'h' });
-			} else if (t.special === 'v') {
-				for (let y = 0; y < ROWS; y++) aff.push(y * N + c);
-				fired.push({ k, kind: 'v' });
-			} else if (t.special === 'bomb') {
+			if (tile.special === 'h') {
+				for (let x = 0; x < COLS; x++) aff.push(row * COLS + x);
+				fired.push({ k: sq, kind: 'h' });
+			} else if (tile.special === 'v') {
+				for (let y = 0; y < ROWS; y++) aff.push(y * COLS + col);
+				fired.push({ k: sq, kind: 'v' });
+			} else if (tile.special === 'bomb') {
 				for (let dr = -1; dr <= 1; dr++)
 					for (let dc = -1; dc <= 1; dc++) {
-						const rr = r + dr,
-							cc = c + dc;
-						if (rr >= 0 && rr < ROWS && cc >= 0 && cc < N) aff.push(rr * N + cc);
+						const rr = row + dr,
+							cc = col + dc;
+						if (rr >= 0 && rr < ROWS && cc >= 0 && cc < COLS) aff.push(rr * COLS + cc);
 					}
-				fired.push({ k, kind: 'bomb' });
-			} else if (t.special === 'sun') {
+				fired.push({ k: sq, kind: 'bomb' });
+			} else if (tile.special === 'sun') {
 				const cnt = new Array(this.types).fill(0);
 				this.cells.forEach((u, j) => {
-					if (u && u.type < SUN && !clear.has(j)) cnt[u.type]++;
+					if (u && u.type < SUN_TYPE && !clear.has(j)) cnt[u.type]++;
 				});
 				let best = 0;
 				cnt.forEach((v, i) => {
@@ -797,22 +823,22 @@ class Core {
 				this.cells.forEach((u, j) => {
 					if (u && u.type === best) aff.push(j);
 				});
-				fired.push({ k, kind: 'sun' });
-			} else if (t.special === 'star') {
-				const m = Math.max(N, ROWS);
+				fired.push({ k: sq, kind: 'sun' });
+			} else if (tile.special === 'star') {
+				const m = Math.max(COLS, ROWS);
 				for (let d = -m; d <= m; d++) {
-					for (const cc of [c + d, c - d]) {
-						const rr = r + d;
-						if (rr >= 0 && rr < ROWS && cc >= 0 && cc < N) aff.push(rr * N + cc);
+					for (const cc of [col + d, col - d]) {
+						const rr = row + d;
+						if (rr >= 0 && rr < ROWS && cc >= 0 && cc < COLS) aff.push(rr * COLS + cc);
 					}
 				}
-				fired.push({ k, kind: 'star' });
-			} else if (BADGES[t.special]) {
+				fired.push({ k: sq, kind: 'star' });
+			} else if (BADGES[tile.special]) {
 				// a badge: its power (BADGE_POWERS, above)
-				const b = BADGES[t.special];
-				const at = { k, r, c, aff, clear, extraGild, unGild };
+				const b = BADGES[tile.special];
+				const at = { k: sq, r: row, c: col, aff, clear, extraGild, unGild };
 				const shown = BADGE_POWERS[b.effect].fire(this, at, b.n);
-				fired.push(Object.assign({ k, kind: t.special, effect: b.effect }, shown));
+				fired.push(Object.assign({ k: sq, kind: tile.special, effect: b.effect }, shown));
 			}
 			for (const a of aff) {
 				const u = this.cells[a];
@@ -825,63 +851,63 @@ class Core {
 		// and so is one next to anything cleared. Its stone is gilded later, when
 		// the amulet itself is matched.
 		const brushed = [];
-		for (const k of [...clear]) {
-			const t = this.cells[k];
-			if (t && t.sand) {
-				clear.delete(k);
-				t.sand = 0;
-				brushed.push(k);
+		for (const sq of [...clear]) {
+			const tile = this.cells[sq];
+			if (tile && tile.sand) {
+				clear.delete(sq);
+				tile.sand = 0;
+				brushed.push(sq);
 			}
 		}
-		for (const k of clear) {
-			const r = (k / N) | 0,
-				c = k % N;
+		for (const sq of clear) {
+			const row = (sq / COLS) | 0,
+				col = sq % COLS;
 			for (const [rr, cc] of [
-				[r - 1, c],
-				[r + 1, c],
-				[r, c - 1],
-				[r, c + 1],
+				[row - 1, col],
+				[row + 1, col],
+				[row, col - 1],
+				[row, col + 1],
 			]) {
-				const t = this.t(rr, cc),
-					j = rr * N + cc;
-				if (t && t.sand && !clear.has(j)) {
-					t.sand = 0;
+				const tile = this.t(rr, cc),
+					j = rr * COLS + cc;
+				if (tile && tile.sand && !clear.has(j)) {
+					tile.sand = 0;
 					brushed.push(j);
 				}
 			}
 		}
 		const cleared = [];
-		for (const k of clear) {
-			if (created.has(k)) continue;
-			cleared.push({ k, tile: this.cells[k] });
-			this.cells[k] = null;
+		for (const sq of clear) {
+			if (created.has(sq)) continue;
+			cleared.push({ k: sq, tile: this.cells[sq] });
+			this.cells[sq] = null;
 		}
 		const gild = [];
-		for (const k of clear) {
-			if (this.mask[k] && this.floor[k] > 0) {
-				this.floor[k]--;
-				gild.push({ k, now: this.floor[k] });
+		for (const sq of clear) {
+			if (this.mask[sq] && this.floor[sq] > 0) {
+				this.floor[sq]--;
+				gild.push({ k: sq, now: this.floor[sq] });
 			}
 		}
-		for (const k of extraGild) {
-			if (this.floor[k] > 0) {
-				this.floor[k]--;
-				gild.push({ k, now: this.floor[k], blessed: true });
+		for (const sq of extraGild) {
+			if (this.floor[sq] > 0) {
+				this.floor[sq]--;
+				gild.push({ k: sq, now: this.floor[sq], blessed: true });
 			}
 		}
 		const buried = [];
-		for (const k of unGild) {
-			if (this.floor[k] === 0 && !gild.some(g => g.k === k)) {
-				this.floor[k] = 1;
-				buried.push(k);
+		for (const sq of unGild) {
+			if (this.floor[sq] === 0 && !gild.some(g => g.k === sq)) {
+				this.floor[sq] = 1;
+				buried.push(sq);
 			}
 		}
 		const made = [];
 		for (const [k, s] of created) {
-			const t = this.cells[k];
-			t.special = s;
-			if (s === 'sun') t.type = SUN;
-			made.push({ k, tile: t });
+			const tile = this.cells[k];
+			tile.special = s;
+			if (s === 'sun') tile.type = SUN_TYPE;
+			made.push({ k, tile: tile });
 		}
 		const pts = (cleared.length + made.length) * 10 * mult + made.length * 40 + gild.length * 5;
 		this.score += pts;
@@ -890,33 +916,33 @@ class Core {
 	gravity() {
 		const moves = [],
 			spawns = [];
-		for (let c = 0; c < N; c++) {
+		for (let col = 0; col < COLS; col++) {
 			const rows = [];
-			for (let r = 0; r < ROWS; r++) if (this.mask[r * N + c]) rows.push(r);
+			for (let row = 0; row < ROWS; row++) if (this.mask[row * COLS + col]) rows.push(row);
 			const tiles = [];
 			for (let i = rows.length - 1; i >= 0; i--) {
-				const t = this.cells[rows[i] * N + c];
-				if (t) tiles.push(t);
+				const sq = this.cells[rows[i] * COLS + col];
+				if (sq) tiles.push(sq);
 			}
 			const numNew = rows.length - tiles.length;
 			for (let j = 0; j < rows.length; j++) {
 				const idx = rows.length - 1 - j,
-					r = rows[idx],
-					k = r * N + c;
+					row = rows[idx],
+					sq = row * COLS + col;
 				if (j < tiles.length) {
-					const t = tiles[j];
-					if (this.cells[k] !== t) moves.push({ tile: t, k });
-					this.cells[k] = t;
+					const tile = tiles[j];
+					if (this.cells[sq] !== tile) moves.push({ tile: tile, k: sq });
+					this.cells[sq] = tile;
 				} else {
-					const t = this.newTile();
-					this.cells[k] = t;
-					spawns.push({ tile: t, k, startRow: idx - numNew });
+					const tile = this.newTile();
+					this.cells[sq] = tile;
+					spawns.push({ tile: tile, k: sq, startRow: idx - numNew });
 					if (
 						this.powerChance &&
 						Math.random() < this.powerChance &&
 						this.powerCount() < MAX_GOOD_BADGES
 					)
-						t.special = pickBadge(this.badBadges && !this.curseOnBoard(), this.badMult);
+						tile.special = pickBadge(this.badBadges && !this.curseOnBoard(), this.badMult);
 				}
 			}
 		}
@@ -926,24 +952,24 @@ class Core {
 	// steering round never blocks a gift from falling; and one curse at a time
 	powerCount() {
 		let n = 0;
-		for (const t of this.cells)
-			if (t && POWERS.includes(t.special) && !BAD_BADGES.includes(t.special)) n++;
+		for (const tile of this.cells)
+			if (tile && POWERS.includes(tile.special) && !BAD_BADGES.includes(tile.special)) n++;
 		return n;
 	}
 	curseOnBoard() {
-		return this.cells.some(t => t && BAD_BADGES.includes(t.special));
+		return this.cells.some(tile => tile && BAD_BADGES.includes(tile.special));
 	}
 	shuffle() {
 		const ks = [];
-		for (let k = 0; k < N * ROWS; k++)
-			if (this.mask[k] && !(this.cells[k] && this.cells[k].sand)) ks.push(k); // buried amulets stay put
-		const tiles = ks.map(k => this.cells[k]);
+		for (let sq = 0; sq < COLS * ROWS; sq++)
+			if (this.mask[sq] && !(this.cells[sq] && this.cells[sq].sand)) ks.push(sq); // buried amulets stay put
+		const tiles = ks.map(sq => this.cells[sq]);
 		for (let tries = 0; tries < 300; tries++) {
 			for (let i = tiles.length - 1; i > 0; i--) {
 				const j = Math.floor(Math.random() * (i + 1));
 				[tiles[i], tiles[j]] = [tiles[j], tiles[i]];
 			}
-			ks.forEach((k, i) => (this.cells[k] = tiles[i]));
+			ks.forEach((sq, i) => (this.cells[sq] = tiles[i]));
 			if (!this.findRuns().length && this.hasMove()) return;
 		}
 		this.fill();
@@ -951,7 +977,7 @@ class Core {
 }
 
 const DIFFICULTY = CONTENT.settings.difficulty.map(d =>
-	Object.assign({}, d, { text: T('difficulty.' + d.name.toLowerCase()) })
+	Object.assign({}, d, { text: T('difficulty.' + d.name.toLowerCase()) }),
 );
 // Trials a priest can set (content/trials/). `goal` is one of the measures
 // tracked in trialProgress() and levelWon() in src/game/; `text` may hold
@@ -1003,6 +1029,13 @@ const HARDSHIPS = {
 			o.badMult *= n;
 		},
 	},
+	// n amulets, chosen at random, start buried in sand, as in a tomb: they
+	// can't be moved until a match beside them brushes the sand away. Not
+	// before the chambers have arrived, where the player learns about sand.
+	buried_amulets: {
+		stage: 'chambers',
+		board: (core, n) => buryAmulets(core, n),
+	},
 	// no boons can be used (see armBoon)
 	no_boons: {
 		board: core => {
@@ -1042,21 +1075,42 @@ function hardshipsAt(omens, curse) {
 // Turns n bare stones, chosen at random, thick
 function thickenStones(core, n) {
 	const bare = [];
-	for (let k = 0; k < core.mask.length; k++) if (core.mask[k] && core.floor[k] === 1) bare.push(k);
+	for (let sq = 0; sq < core.mask.length; sq++) if (core.mask[sq] && core.floor[sq] === 1) bare.push(sq);
 	for (let j = bare.length - 1; j > 0; j--) {
 		const r = Math.floor(Math.random() * (j + 1));
 		[bare[j], bare[r]] = [bare[r], bare[j]];
 	}
-	bare.slice(0, n).forEach(k => {
-		core.floor[k] = 2;
+	bare.slice(0, n).forEach(sq => {
+		core.floor[sq] = 2;
 		core.total++;
 	});
+}
+
+// Buries n amulets, chosen at random among the plain ones (no specials or
+// badges), in sand. One that would leave no possible move stays unburied.
+function buryAmulets(core, n) {
+	const plain = [];
+	for (let sq = 0; sq < core.cells.length; sq++) {
+		const tile = core.cells[sq];
+		if (core.mask[sq] && tile && !tile.special && !tile.sand) plain.push(sq);
+	}
+	for (let j = plain.length - 1; j > 0; j--) {
+		const r = Math.floor(Math.random() * (j + 1));
+		[plain[j], plain[r]] = [plain[r], plain[j]];
+	}
+	let buried = 0;
+	for (const sq of plain) {
+		if (buried >= n) break;
+		core.cells[sq].sand = 1;
+		if (core.hasMove()) buried++;
+		else core.cells[sq].sand = 0;
+	}
 }
 
 // How many bare stones a board has
 function bareStones(core) {
 	let n = 0;
-	for (let k = 0; k < core.mask.length; k++) if (core.mask[k] && core.floor[k] === 1) n++;
+	for (let sq = 0; sq < core.mask.length; sq++) if (core.mask[sq] && core.floor[sq] === 1) n++;
 	return n;
 }
 // ---- omens: hardships chosen on purpose -----------------------------------
@@ -1071,7 +1125,7 @@ const OMENS = CONTENT.omens.map(o => ({
 	n: o.amount,
 	text: fill(o.text, { n: o.amount }),
 }));
-const OMEN_BONUS = CONTENT.settings.omenBonus; // content/settings.json, "omens"
+const OMEN_BONUS = CONTENT.settings.omenBonus; // content/settings.jsonc, "omens"
 
 // ---- boons: held powers the player spends ----------------------------------
 // The boons are content files (content/boons/): each has its words, its icon
@@ -1103,7 +1157,7 @@ UPGRADES.forEach(u => {
 function upgradeTotal(effect, owned) {
 	return UPGRADES.reduce(
 		(a, u) => a + (u.effect === effect ? ((owned || {})[u.id] || 0) * u.amount : 0),
-		0
+		0,
 	);
 }
 
@@ -1114,7 +1168,7 @@ function upgradeTotal(effect, owned) {
 // give: {moves:n} | {reshuffle:true} | {boon:[names or 'random']} | {wind:n}
 const STALL = CONTENT.stall;
 const STALL_RISE = CONTENT.settings.stallRise;
-// What playing earns (content/settings.json, "earnings").
+// What playing earns (content/settings.jsonc, "earnings").
 const EARN = CONTENT.settings.earn;
 // Relics for the museum (content/relics/): `when` says what finds one.
 const RELICS = CONTENT.relics;
@@ -1213,7 +1267,7 @@ Object.entries(CONTENT.amulets).forEach(([id, a]) => {
 // puzzle on its own little board with its own goal, or a choice. Failing a
 // puzzle costs nothing but the reward. Kinds of goal:
 //   gild     gild the whole (small) floor, as at a stop
-//   collect  clear a number of one amulet, named by its SPR name
+//   collect  clear a number of one amulet, named by its picture name
 //   score    reach a score within the moves
 // `set` optionally replaces the amulets; `fog` plays the board by lamplight;
 // `weight` makes an event more (2) or less (0.5) likely than the others.
@@ -1234,9 +1288,9 @@ function pickEvent(avoid) {
 // Consecutive failures at the same stop add moves to the next attempt; the
 // second failure also hands over a boon. Winning the stop resets the count.
 const PERSISTENCE = CONTENT.settings.persistence;
-// On a first journey badges arrive at a later stop (settings.json, "staging").
+// On a first journey badges arrive at a later stop (settings.jsonc, "staging").
 // The stops are balanced with badges in play, so until they arrive a stop
-// gets this many times its moves instead (settings.json, staging,
+// gets this many times its moves instead (settings.jsonc, staging,
 // "extra_moves_before_badges_percent").
 const MOVES_BEFORE_BADGES = CONTENT.settings.movesBeforeBadges || 1;
 

@@ -1,3 +1,30 @@
+/* =============================================================================
+ * 05-state.js  —  the stop being played: its state, starting it, and the
+ * display around the board.
+ *
+ * What's here:
+ *   core                the game of the stop now on the board (a Core,
+ *                       01-core.js)
+ *   busy, selected, trial, armed, particles, popups ...
+ *                       what is going on: an animation running, the chosen
+ *                       amulet, the trial, a boon ready to use, the effects
+ *   startLevel(i)       starts stop i: builds its board with stopOptions(),
+ *                       sets the scenery, the music and the trial. Called
+ *                       from the map, a win, a loss, a new journey, the boot.
+ *   setBoard(), paintBoardFrame(), setBackdrop()
+ *                       the board's size, its frame, the scenery behind it
+ *   rowsForScreen(), omegaSize()
+ *                       how many rows fit (a taller board on a phone)
+ *   updateHUD()         the top bar, the gilding tube and the column beside
+ *                       the board; call it after anything they show changes
+ *   fitNote()           the stop's note beside the board, cut to whole lines
+ *                       with "Read on"
+ *   settle(), delay()   wait for the board to stop moving, or for a time
+ *
+ * Changes in the save: current (the stop being played), curse (used up),
+ * omenPick.
+ * ===========================================================================*/
+
 // ---------- game state ----------
 let core = null,
 	levelIdx = 0,
@@ -8,6 +35,9 @@ let core = null,
 let trial = null,
 	armed = -1,
 	trialMoves = 0;
+// the stop (or tomb, or river puzzle) is over, won or lost: no more moves or
+// boons on its board, and its rewards are paid once (levelWon, levelLost)
+let stopOver = false;
 let dying = [],
 	particles = [],
 	popups = [],
@@ -16,7 +46,7 @@ let dying = [],
 	flashes = new Map(),
 	hint = null,
 	idleTimer = 0,
-	time = 0;
+	animTime = 0;
 let waiters = [],
 	orbs = [];
 const settle = () => new Promise(res => waiters.push(res));
@@ -46,16 +76,16 @@ function omegaSize() {
 // columns that are all water between two banks
 function riverCols() {
 	if (!core) return [];
-	const empty = c => {
-		for (let r = 0; r < ROWS; r++) if (core.mask[r * N + c]) return false;
+	const empty = col => {
+		for (let row = 0; row < ROWS; row++) if (core.mask[row * COLS + col]) return false;
 		return true;
 	};
 	let first = -1,
 		last = -1;
-	for (let c = 0; c < N; c++)
-		if (!empty(c)) {
-			if (first < 0) first = c;
-			last = c;
+	for (let col = 0; col < COLS; col++)
+		if (!empty(col)) {
+			if (first < 0) first = col;
+			last = col;
 		}
 	const out = [];
 	for (let c = first + 1; c < last; c++) if (empty(c)) out.push(c);
@@ -75,7 +105,7 @@ function frameChrome() {
 				b.getBoundingClientRect().height +
 				parseFloat(getComputedStyle(b).marginTop) +
 				parseFloat(getComputedStyle(b).marginBottom),
-			0
+			0,
 		)
 	);
 }
@@ -100,6 +130,9 @@ function rowsForScreen(cols) {
 
 function startLevel(i) {
 	eventState = null;
+	stopOver = false;
+	tubeWas = -1; // no sand for the new floor
+	$('boardEnd').hidden = true;
 	if (document.body.classList.contains('in-chamber')) {
 		document.body.classList.remove('in-chamber');
 		music.inside = false;
@@ -109,17 +142,17 @@ function startLevel(i) {
 	levelIdx = i;
 	save.current = i;
 	persist();
-	const L = LEVELS[i],
+	const stop = LEVELS[i],
 		th = THEMES[i];
 	// a stop that lists several amulet sets plays a different one each start
-	if (L.sets) {
-		const pick = L.sets[Math.floor(Math.random() * L.sets.length)];
-		L.set = th.set = pick;
-		L.types = pick.length;
+	if (stop.sets) {
+		const pick = stop.sets[Math.floor(Math.random() * stop.sets.length)];
+		stop.set = th.set = pick;
+		stop.types = pick.length;
 	}
 	TILE_NAMES = th.set.slice();
-	TILE_SPRITES = th.set.map(n => skinned(SPR[n], n, save.skin));
-	TILE_SPRITES[6] = skinned(SPR.sun, 'sun', save.skin);
+	TILE_SPRITES = th.set.map(n => skinned(AMULET_PICS[n], n, save.skin));
+	TILE_SPRITES[6] = skinned(AMULET_PICS.sun, 'sun', save.skin);
 	buildFloors(i);
 	setBackdrop(i);
 	setBoard(i);
@@ -140,17 +173,20 @@ function startLevel(i) {
 				? { id: 'omega', name: T('shapes.two_banks'), map: null, ease: 1 }
 				: pickShape(i);
 	// very large floors play with at most five amulet types
-	const Lp = mode.maxTypes && L.types > mode.maxTypes ? Object.assign({}, L, { types: mode.maxTypes }) : L;
-	if (Lp !== L) {
+	const Lp =
+		mode.maxTypes && stop.types > mode.maxTypes
+			? Object.assign({}, stop, { types: mode.maxTypes })
+			: stop;
+	if (Lp !== stop) {
 		TILE_NAMES = th.set.slice(0, Lp.types);
-		TILE_SPRITES = TILE_NAMES.map(n => skinned(SPR[n], n, save.skin));
-		TILE_SPRITES[6] = skinned(SPR.sun, 'sun', save.skin);
+		TILE_SPRITES = TILE_NAMES.map(n => skinned(AMULET_PICS[n], n, save.skin));
+		TILE_SPRITES[6] = skinned(AMULET_PICS.sun, 'sun', save.skin);
 	}
 	const curse = save.curse || null;
 	save.curse = null;
 	// omens chosen on the stop scroll apply to this stop (and its restarts) only,
 	// and only once it has been gilded
-	if (save.omenPick && save.omenPick.stop !== L.id) save.omenPick = null;
+	if (save.omenPick && save.omenPick.stop !== stop.id) save.omenPick = null;
 	const omens =
 		save.omenPick && (save.stars[i] || 0) > 0
 			? save.omenPick.list.filter(id => OMENS.some(o => o.id === id))
@@ -161,10 +197,10 @@ function startLevel(i) {
 	core = new Core(
 		Lp,
 		stopOptions({
-			level: L,
+			level: stop,
 			idx: i,
 			mode,
-			cols: N,
+			cols: COLS,
 			rows: ROWS,
 			shape,
 			variant: Math.floor(Math.random() * 5),
@@ -175,7 +211,7 @@ function startLevel(i) {
 			curse,
 			badgesOn: stageOn('badges'),
 			cursesOn: stageOn('curses'),
-		})
+		}),
 	);
 	core.shapeName =
 		mode.id === 'omega'
@@ -204,21 +240,21 @@ function startLevel(i) {
 	flashes.clear();
 	hint = null;
 	selected = -1;
-	core.cells.forEach((t, k) => {
-		if (!t) return;
-		t.x = k % N;
-		t.y = ((k / N) | 0) - ROWS - 1 - (k % N) * 0.35 - Math.random() * 0.2;
-		t.vy = 0;
+	core.cells.forEach((tile, sq) => {
+		if (!tile) return;
+		tile.x = sq % COLS;
+		tile.y = ((sq / COLS) | 0) - ROWS - 1 - (sq % COLS) * 0.35 - Math.random() * 0.2;
+		tile.vy = 0;
 	});
-	$('placeName').textContent = L.name;
-	$('placeSub').textContent = L.sub;
-	$('placeFact').textContent = L.fact;
-	$('stripPlace').textContent = `${L.name} \u2014 ${shapeLabel()}`;
+	$('placeName').textContent = stop.name;
+	$('placeSub').textContent = stop.sub;
+	$('placeFact').textContent = stop.fact;
+	$('stripPlace').innerHTML = `${stop.name}<span class="strip-shape"> \u2014 ${shapeLabel()}</span>`;
 	$('placeSub').textContent =
-		L.sub + (core.shapeName && core.shapeId !== 'own' ? ` \u00b7 ${core.shapeName}` : '');
+		stop.sub + (core.shapeName && core.shapeId !== 'own' ? ` \u00b7 ${core.shapeName}` : '');
 	renderCurse();
 	requestAnimationFrame(fitNote);
-	const hasThick = L.map.some(r => r.includes('2'));
+	const hasThick = stop.map.some(r => r.includes('2'));
 	$('legend').innerHTML =
 		'<span><i class="sw-stone"></i>Bare stone</span>' +
 		(hasThick ? '<span><i class="sw-thick"></i>Thick stone, match twice</span>' : '') +
@@ -240,7 +276,7 @@ function startLevel(i) {
 		if (core.curse) {
 			popups.push({
 				text: core.curse.name,
-				x: N / 2,
+				x: COLS / 2,
 				y: ROWS / 2 - 0.4,
 				life: 2.4,
 				size: 0.52,
@@ -251,7 +287,7 @@ function startLevel(i) {
 		if (core.persistMoves) {
 			popups.push({
 				text: Tplain('popup.persistence_n_moves', { n: core.persistMoves }),
-				x: N / 2,
+				x: COLS / 2,
 				y: ROWS / 2 + (core.curse ? 0.5 : 0),
 				life: 2.4,
 				size: 0.5,
@@ -310,8 +346,7 @@ function setBackdrop(i, key = LEVELS[i].id) {
 	bdFront = 1 - bdFront;
 }
 
-let tubeWas = 0,
-	tubeTimer = 0; // how full the sand tube was, and when its stream stops
+let tubeWas = 0; // how many stones were gilded at the last update (the sand)
 
 // The note beside the board shows as many whole lines as fit, without a
 // scroll bar; when the rest won't fit, it ends in "Read on", which opens the
@@ -333,17 +368,74 @@ function fitNote() {
 		over = sheet.scrollHeight - sheet.clientHeight;
 	fact.style.maxHeight = Math.max(2, Math.floor((fact.offsetHeight - over) / lh)) * lh + 'px';
 }
-if (window.ResizeObserver) new ResizeObserver(() => fitNote()).observe(document.querySelector('.side .tablet'));
+if (window.ResizeObserver)
+	new ResizeObserver(() => fitNote()).observe(document.querySelector('.side .tablet'));
 window.addEventListener('resize', () => fitNote());
 
 $('placeMore').onclick = () => {
 	if (busy) return;
 	const text = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 	showMsg(
-		`<h2 id="msgTitle">${text($('placeName').textContent)}</h2><p class="lede">${text($('placeSub').textContent)}</p><p class="fact">${text($('placeFact').textContent)}</p>`,
-		[[Tplain('place.back'), () => {}]]
+		html`
+			<h2 id="msgTitle">${text($('placeName').textContent)}</h2>
+			<p class="lede">${text($('placeSub').textContent)}</p>
+			<p class="fact">${text($('placeFact').textContent)}</p>`,
+		[[Tplain('place.back'), () => {}, { kind: 'exit' }]],
 	);
 };
+
+// Sand for the stones a move gilded: on a desktop, a grain for each falls
+// down the tube onto the heap; on a phone, where the plaque fills with sand
+// from the left, grains blow off its edge. A bigger move pours more sand.
+function pourSand(stones, full) {
+	if (reduceMotion || lowFx) return;
+	const tube = $('tubeBody'),
+		plaque = $('stripPlaque'),
+		inTube = tube.offsetHeight > 0,
+		box = inTube ? tube : plaque;
+	if (!box.animate || !box.offsetHeight) return;
+	const n = Math.max(3, Math.min(inTube ? 30 : 14, stones * (inTube ? 2 : 1))),
+		h = box.clientHeight,
+		w = box.clientWidth,
+		cols = inTube
+			? ['#f6d676', '#fff2b8', '#e8b93e', '#fbe3a0']
+			: ['#c8902c', '#a8701c', '#e8b93e', '#8a5a14'];
+	for (let i = 0; i < n; i++) {
+		const grain = document.createElement('i'),
+			size = 2.5 + Math.random() * 2.5;
+		grain.className = 'grain';
+		grain.style.cssText = `width:${size}px;height:${size}px;background:${cols[i % 4]}`;
+		box.appendChild(grain);
+		let path;
+		if (inTube) {
+			// from the top, somewhere near the middle, down to the heap
+			const x = w * (0.35 + Math.random() * 0.3),
+				land = h * (1 - full / 100) - 2;
+			path = [
+				{ transform: `translate(${x}px, -4px)` },
+				{ transform: `translate(${x + (Math.random() - 0.5) * 8}px, ${land}px)` },
+			];
+		} else {
+			// from the edge of the sand, a little way on with the wind, and down
+			const x = (w * full) / 100,
+				y = h * (0.15 + Math.random() * 0.7);
+			path = [
+				{ transform: `translate(${x - 3}px, ${y}px)`, opacity: 1 },
+				{
+					transform: `translate(${x + 8 + Math.random() * 22}px, ${y + 2 + Math.random() * 6}px)`,
+					opacity: 0,
+				},
+			];
+		}
+		const a = grain.animate(path, {
+			duration: 380 + Math.random() * 300,
+			delay: Math.random() * (inTube ? 520 : 400),
+			easing: inTube ? 'cubic-bezier(.5,0,1,1)' : 'ease-out',
+			fill: 'both',
+		});
+		a.onfinish = () => grain.remove();
+	}
+}
 
 function updateHUD() {
 	$('movesNum').textContent = core.movesLeft;
@@ -351,39 +443,50 @@ function updateHUD() {
 	const done = core.total - core.remaining();
 	$('gildTxt').textContent = `${done} / ${core.total}`;
 	const full = core.total ? (done / core.total) * 100 : 100;
-	// sand runs into the tube while it rises (a stream of grains, for a moment)
-	if (full > tubeWas) {
-		$('tube').classList.add('filling');
-		clearTimeout(tubeTimer);
-		tubeTimer = setTimeout(() => $('tube').classList.remove('filling'), 900);
-	}
-	tubeWas = full;
+	if (done > tubeWas && tubeWas >= 0) pourSand(done - tubeWas, full);
+	tubeWas = done;
+	// the tube beside the board; on a phone, the plaque under the top bar
 	$('tubeFill').style.height = full + '%';
-	$('hudProgFill').style.width = (core.total ? (done / core.total) * 100 : 100) + '%';
+	$('stripPlaque').style.setProperty('--gild', full + '%');
+	// the stop's name over the river of stops (in a chamber, the stop it is
+	// beside; on the river, "On the river"; the river of beads still shows where
+	// the journey has got to)
 	$('stopTxt').textContent = eventState
 		? eventState.ev.chamber
-			? Tplain(placeKey(eventState.ev, 'hud'))
-			: 'event'
-		: `${levelIdx + 1}/${LEVELS.length}`;
+			? LEVELS[eventState.ev.at].name
+			: Tplain('event.kicker')
+		: core.level.name;
+	$('stopRiver').innerHTML = $('stripRiver').innerHTML = journeyRiver(levelIdx); // top bar; phone plaque
 	$('goldTxt').textContent = save.gold.toLocaleString();
 	$('lapisTxt').textContent = save.lapis.toLocaleString();
 	const found = Object.keys(save.relics || {}).length;
-	$('relicTxt').textContent = `${found}/${RELICS.length}`;
-	if ($('relicTxt2')) $('relicTxt2').textContent = `${found} / ${RELICS.length}`;
+	$('relicBar').innerHTML = gildBar(found, RELICS.length);
 	if ($('starTxt'))
-		$('starTxt').textContent = `${save.stars.reduce((a, b) => a + (b || 0), 0)} / ${LEVELS.length * 3}`;
+		$('starTxt').innerHTML =
+			`${save.stars.reduce((a, b) => a + (b || 0), 0)} <span class="star-mark">\u2605</span>`;
 	// The relic strip is 20-odd SVGs; rebuilding it on every HUD update (several
 	// times a move) cost several ms of style and layout each time. Only redraw it
 	// when the set of relics found changes.
 	const strip = $('relicStrip'),
-		stripKey = RELICS.map(r => (save.relics[r.id] ? 1 : 0)).join('');
-	if (strip && strip.dataset.k !== stripKey) {
+		stripKey = RELICS.map(r => (save.relics[r.id] ? 1 : 0)).join('') + '|' + save.floor + '|' + levelIdx;
+	const sq = museumSquares();
+	if (strip && sq && strip.dataset.k !== stripKey) {
 		strip.dataset.k = stripKey;
-		// found ones first, so the row shows them; the rest wait, greyed
-		strip.innerHTML = [...RELICS.filter(r => save.relics[r.id]), ...RELICS.filter(r => !save.relics[r.id])].map(
-			r =>
-				`<span class="relic-slot${save.relics[r.id] ? ' has' : ''}" title="${save.relics[r.id] ? r.name + ': ' + r.desc : 'Undiscovered relic'}">${relicIcon(r.id)}</span>`
-		).join('');
+		// the newest found first, so the row shows what was found lately; the
+		// rest wait, greyed. Each stands on a square of the floor, gilded once
+		// found, as in the Museum. (save.relics holds when each was found.)
+		strip.innerHTML = [
+			...RELICS.filter(r => save.relics[r.id]).sort((a, b) => save.relics[b.id] - save.relics[a.id]),
+			...RELICS.filter(r => !save.relics[r.id]),
+		]
+			.map(
+				r =>
+					html`
+						<span class="relic-slot${save.relics[r.id] ? ' has' : ''}" style="background-image:url(${save.relics[r.id] ? sq.gilded : sq.bare})" title="${save.relics[r.id] ? r.name + ': ' + r.desc : Tplain('museum.unknown')}">
+							${relicIcon(r.id)}
+						</span>`,
+			)
+			.join('');
 	}
 	$('scoreTxt').textContent = core.score.toLocaleString();
 	musicFollow();

@@ -221,11 +221,35 @@ folders:
 | `relics/` | one per relic |
 | `menu/` | the tiles of the Menu and the title screen |
 | `codex/` | one per chapter of How to play, named after the chapter |
+| `stall/` | the things Anubis sells that aren't boons (a stall file names one with `"icon"`) |
 | `ui/` | the ankh, stars, the seal, the barque, the doorways |
 | `map/` | the Nile map and its markers |
 
 Icons must stay SVG. Keep the `viewBox` at the top of the file as it is, and
 give any gradient inside a name no other icon uses.
+
+### In another drawing program
+
+The SVGs open in Inkscape, Affinity, Illustrator and Figma as shapes you can
+change. For other programs, `python3 tools/art-export.py` makes
+`dist/art-export/` with every picture as a vector PDF, the small ones as
+pixel art at 32 and 64 pixels, as Aseprite files, and as sprite sheets for
+game engines. (The build also makes a large PNG of every picture, in
+`dist/art-references/`.)
+
+When you save an icon back from a drawing program, check two things, and
+the build checks them too:
+
+- **It's a clean SVG**: in Affinity or Illustrator, export as SVG with the
+  text as shapes. A picture that isn't well-formed stops the build.
+- **Its gradients have names of their own.** Drawing programs call them
+  `_Linear1`, `_Linear2` and so on in every file, and icons share one page,
+  so the second icon would take the first one's colours. The build names
+  the clash; rename the gradient (and the `url(#...)` that uses it).
+
+Some pictures are drawn by a script: the scenery (`tools/scenery/`) and
+many amulets (`tools/amulets/draw.py`). If you edit one of those by hand,
+don't run its script again, or it draws the old picture back.
 
 **Keep pictures small.** Everything goes inside the one game file, and big
 photographs make it slow to load on a phone. The build warns about anything
@@ -248,10 +272,10 @@ A comma after the last item is fine. Just don't delete a bracket, a quote or
 a colon. Apostrophes are fine in text (*Khufu's*); a double quote inside
 text is not.
 
-### Every word on the screens: `content/text.json`
+### Every word on the screens: `content/text.jsonc`
 
 Every word the game's own screens show lives in one file,
-`content/text.json`, grouped by screen: the title screen, the Menu, the
+`content/text.jsonc`, grouped by screen: the title screen, the Menu, the
 buttons, the shops, the scrolls for winning and losing, How to play, the
 banners.
 
@@ -301,7 +325,7 @@ In the same file: `"moves": 20`. More is easier. The difficulty and the
 board size scale from this number, so change it a little at a time; two or
 three moves make a real difference.
 
-### The numbers that tune the game: `content/settings.json`
+### The numbers that tune the game: `content/settings.jsonc`
 
 One file holds the whole-game numbers, each with a comment. Among them:
 
@@ -316,7 +340,7 @@ One file holds the whole-game numbers, each with a comment. Among them:
 - `earnings`, `omens`, `seals`, `persistence`: rewards, and how kind the
   game is after a failed try.
 
-**An example: a gentler game for young players.** In `settings.json`, open
+**An example: a gentler game for young players.** In `settings.jsonc`, open
 every stop at once and bring in the game's parts all together:
 
 ```jsonc
@@ -344,11 +368,11 @@ new player can go anywhere from the start. Nothing else changes.
 The easiest start is `scripts/new.py` (chapter 2). By hand works too: copy
 the nearest existing file, give the copy the next number and a new `id`,
 change what you need, and build. **The number at the front of a file name
-is its place in the order**: `13-koptos.json` comes after `12-alexandria.json`.
+is its place in the order**: `13-koptos.jsonc` comes after `12-alexandria.jsonc`.
 
 ### A new stop
 
-`python3 scripts/new.py stop koptos` writes `content/stops/13-koptos.json`
+`python3 scripts/new.py stop koptos` writes `content/stops/13-koptos.jsonc`
 and copies Saqqara's pictures for it, so it works at once. Then change:
 
 - `name`, `subtitle`, `history`, and `moves`.
@@ -398,7 +422,7 @@ from the stop's file; the omens and the doorway from their own files.*
 ### A new amulet
 
 `python3 scripts/new.py amulet golden-falcon` writes
-`content/amulets/NN-golden-falcon.json` (its name, plural and what the
+`content/amulets/NN-golden-falcon.jsonc` (its name, plural and what the
 symbol meant, shown in How to play) and a picture to draw over in
 `images/amulets/`. Then add `golden-falcon` to a stop's `amulets`.
 
@@ -545,17 +569,17 @@ close, and this chapter explains every line you will meet.
 Code can look dense, but the entries in these lists use only five ideas.
 
 1. **Names for things.** `core.movesLeft` is the number of moves left.
-   `const c0 = k % N;` makes a new name, `c0`, for a number worked out once
+   `const c0 = sq % COLS;` makes a new name, `c0`, for a number worked out once
    and used below. `let n = 0;` is the same, for a number that will change.
 2. **Lists of named parts**, written between `{` and `}`, just like a content
    file: `{ target: true, amount: 5 }`. The lists in this chapter
    (`BOON_EFFECTS`, `BADGE_POWERS`, `HARDSHIPS`) are big ones of these, and
    each entry in them is a small one.
-3. **Doing something**: a *function*, written `(b, k) => { ... }`. The
+3. **Doing something**: a *function*, written `(b, sq) => { ... }`. The
    names in the brackets are what it is given; the lines between `{` and `}`
    are what it does, one after another.
-4. **Repeating and choosing.** `for (let r = 0; r < ROWS; r++) { ... }` runs
-   the lines inside once for every row, with `r` counting 0, 1, 2 and so on.
+4. **Repeating and choosing.** `for (let row = 0; row < ROWS; row++) { ... }` runs
+   the lines inside once for every row, with `row` counting 0, 1, 2 and so on.
    `if (...) { ... }` runs its lines only when the thing in brackets is true.
 5. **Waiting.** `await settle()` waits until the amulets have stopped moving
    before going on. A function that waits is marked `async`.
@@ -564,21 +588,21 @@ Code can look dense, but the entries in these lists use only five ideas.
 
 The board is **one long list of squares**, row after row. On a board eight
 squares wide, squares 0 to 7 are the top row, 8 to 15 the next, and so on. So
-for square number `k`:
+for square number `sq`:
 
-- its **column** is `k % N` (the remainder when `k` is divided by the width,
-  `N`), and its **row** is `Math.floor(k / N)`;
-- the square in row `r`, column `c`, is number `r * N + c`.
+- its **column** is `sq % COLS` (the remainder when `sq` is divided by the
+  width, `COLS`), and its **row** is `Math.floor(sq / COLS)`;
+- the square in row `row`, column `col`, is number `row * COLS + col`.
 
 For each square, three lists say what is there:
 
 | The list | Says | For example |
 |---|---|---|
-| `core.mask[k]` | is this square part of the floor at all | `false` for a gap in a shaped floor |
-| `core.floor[k]` | how many layers of stone are left | `0` gilded, `1` bare stone, `2` thick stone |
-| `core.cells[k]` | the amulet on it | its kind, whether it's a special, a badge, sand; or nothing |
+| `core.mask[sq]` | is this square part of the floor at all | `false` for a gap in a shaped floor |
+| `core.floor[sq]` | how many layers of stone are left | `0` gilded, `1` bare stone, `2` thick stone |
+| `core.cells[sq]` | the amulet on it | its kind, whether it's a special, a badge, sand; or nothing |
 
-`N` is the number of columns and `ROWS` the number of rows. Boards are often
+`COLS` is the number of columns and `ROWS` the number of rows. Boards are often
 taller than wide, so never assume they are the same.
 
 ### Reading a boon that already exists
@@ -596,8 +620,8 @@ Wisdom of Thoth:
 			core.movesLeft += b.n;
 			updateHUD();
 			sfx('moves');
-			boonPopup(b, false, { x: N / 2, y: ROWS / 2, life: 1.6, size: 0.6, col: '#bfe8ff' });
-			rings.push({ x: N / 2 - 0.5, y: ROWS / 2 - 0.5, life: 1, big: true });
+			boonPopup(b, false, { x: COLS / 2, y: ROWS / 2, life: 1.6, size: 0.6, col: '#bfe8ff' });
+			rings.push({ x: COLS / 2 - 0.5, y: ROWS / 2 - 0.5, life: 1, big: true });
 		},
 	},
 ```
@@ -605,7 +629,7 @@ Wisdom of Thoth:
 - `extra_moves` is the name a boon file uses in `"effect"`.
 - `target: false`: the player doesn't pick a square. With `true`, the board
   glows gold and waits for a tap (as in the picture below), and the chosen
-  square is handed to `use` as `k`.
+  square is handed to `use` as `sq`.
 - `amount: 6` is the number used when a boon file doesn't give its own.
 - `use` is what happens. It is handed `b`, the boon, and `b.n` is its amount.
 - `core.movesLeft += b.n` is **the rule itself**: add the moves. Everything
@@ -631,12 +655,12 @@ list does that. The Cord of Seshat is close, though: it works on the
 ```js
 	cord_row: {
 		target: true,
-		use: async (b, k) => {
-			const r0 = (k / N) | 0;
-			const c0 = k % N;
+		use: async (b, sq) => {
+			const r0 = (sq / COLS) | 0;
+			const c0 = sq % COLS;
 			let n = 0;
-			for (let c = 0; c < N; c++) {
-				const j = r0 * N + c;
+			for (let col = 0; col < COLS; col++) {
+				const j = r0 * COLS + col;
 				if (core.mask[j] && core.floor[j] > 0) {
 					core.floor[j]--;
 					...
@@ -652,11 +676,11 @@ time, and only touch **thick** stone.
 	// every thick stone in the chosen column becomes plain bare stone
 	thin_column: {
 		target: true,
-		use: async (b, k) => {
-			const c0 = k % N;
+		use: async (b, sq) => {
+			const c0 = sq % COLS;
 			let n = 0;
-			for (let r = 0; r < ROWS; r++) {
-				const j = r * N + c0;
+			for (let row = 0; row < ROWS; row++) {
+				const j = row * COLS + c0;
 				if (core.mask[j] && core.floor[j] > 1) {
 					core.floor[j] = 1;
 					flashes.set(j, 1);
@@ -679,11 +703,11 @@ Line by line:
 |---|---|
 | `thin_column: {` | the name a boon file will use in `"effect"` |
 | `target: true,` | the player chooses a square first |
-| `use: async (b, k) => {` | what happens; `b` is the boon, `k` the chosen square |
-| `const c0 = k % N;` | the column of the chosen square |
+| `use: async (b, sq) => {` | what happens; `b` is the boon, `sq` the chosen square |
+| `const c0 = sq % COLS;` | the column of the chosen square |
 | `let n = 0;` | a count of the stones we soften, starting at none |
-| `for (let r = 0; r < ROWS; r++) {` | for every row, top to bottom… |
-| `const j = r * N + c0;` | …`j` is the square in that row and our column |
+| `for (let row = 0; row < ROWS; row++) {` | for every row, top to bottom… |
+| `const j = row * COLS + c0;` | …`j` is the square in that row and our column |
 | `if (core.mask[j] && core.floor[j] > 1) {` | if it's part of the floor **and** thick… |
 | `core.floor[j] = 1;` | …it becomes bare stone (**the rule**) |
 | `flashes.set(j, 1);` | a flash of light on that square |
@@ -701,7 +725,7 @@ makes it feel like something happened. A boon with no show works, but feels
 broken.
 
 **Step 3: make the boon.** `python3 scripts/new.py boon hapi` writes
-`content/boons/11-hapi.json`, a working boon to change. Set:
+`content/boons/11-hapi.jsonc`, a working boon to change. Set:
 
 ```jsonc
 	"name": "Blessing of Hapi",

@@ -1,3 +1,23 @@
+/* =============================================================================
+ * 04-music.js  —  the music: a score made as it plays, in each stop's scale
+ * and instrument (THEMES, 03-themes.js).
+ *
+ * Layers (a choir pad, a drone, plucks, an arpeggio, a pulse, a lead, bells)
+ * come and go with how the stop is going: calm at first, busier as the moves
+ * run out.
+ *
+ * What's here:
+ *   startMusic(), stopMusic()  on and off (the Menu's sound settings)
+ *   musicVolume()       follows the volume setting
+ *   musicStopBegins(), musicFollow(), musicCascade(), musicResolve()
+ *                       how the game talks to the music: a stop starts, the
+ *                       moves run down, a cascade, a win or a loss
+ *   music               the music's state; 03-sound.js reads its chord so
+ *                       effects play in key
+ *
+ * Changes in the save: nothing.
+ * ===========================================================================*/
+
 // ---------- music ----------
 // A generative score, built on plain Web Audio so it runs offline. Based on a
 // layered design: a slow chord progression carried by a choir pad and a sub
@@ -131,20 +151,20 @@ function musicSetup() {
 	pL.connect(music.revIn);
 	music.delays = [L, R];
 	for (const [name, cfg] of Object.entries(MUSIC_LAYERS)) {
-		const g = a.createGain();
-		g.gain.value = 0;
+		const gain = a.createGain();
+		gain.gain.value = 0;
 		const dry = a.createGain();
 		dry.gain.value = 1;
-		g.connect(dry).connect(music.bus);
+		gain.connect(dry).connect(music.bus);
 		const r = a.createGain();
 		r.gain.value = cfg.rev;
-		g.connect(r).connect(music.revIn);
+		gain.connect(r).connect(music.revIn);
 		if (cfg.dly) {
 			const d = a.createGain();
 			d.gain.value = cfg.dly;
-			g.connect(d).connect(music.dlyIn);
+			gain.connect(d).connect(music.dlyIn);
 		}
-		music.layers[name] = g;
+		music.layers[name] = gain;
 		music.want[name] = false;
 	}
 	// the choir pad shares one filter, so the whole pad can brighten at once
@@ -198,27 +218,27 @@ function buildChord(deg) {
 }
 
 function musicPadChord(ch, t) {
-	const a = actx;
+	const a = audioCtx;
 	music.pad.forEach(v => {
 		v.g.gain.cancelScheduledValues(t);
 		v.g.gain.setTargetAtTime(0.0001, t, 0.9);
 		v.o.forEach(o => o.stop(t + 5));
 	});
 	music.pad = ch.pad.map((f, i) => {
-		const g = a.createGain();
-		g.gain.setValueAtTime(0.0001, t);
-		g.gain.linearRampToValueAtTime(i === 3 ? 0.5 : 0.8, t + 2.2);
+		const gain = a.createGain();
+		gain.gain.setValueAtTime(0.0001, t);
+		gain.gain.linearRampToValueAtTime(i === 3 ? 0.5 : 0.8, t + 2.2);
 		const o = [-9, 0, 9].map(c => {
 			const x = a.createOscillator();
 			x.type = 'sawtooth';
 			x.frequency.value = f;
 			x.detune.value = c + (Math.random() * 4 - 2);
-			x.connect(g);
+			x.connect(gain);
 			x.start(t);
 			return x;
 		});
-		g.connect(music.padFilter);
-		return { g, o };
+		gain.connect(music.padFilter);
+		return { g: gain, o };
 	});
 	// each chord sweeps the pad filter; gilding more of the floor opens it further
 	const bright = 600 + music.progress * 1500 + Math.random() * 500;
@@ -227,13 +247,13 @@ function musicPadChord(ch, t) {
 }
 
 function musicDrone(ch, t, dur) {
-	const a = actx,
-		g = a.createGain();
-	g.gain.setValueAtTime(0.0001, t);
-	g.gain.linearRampToValueAtTime(1, t + 2.5);
-	g.gain.setValueAtTime(1, t + dur - 0.2);
-	g.gain.exponentialRampToValueAtTime(0.0001, t + dur + 2.5);
-	g.connect(music.layers.drone);
+	const a = audioCtx,
+		gain = a.createGain();
+	gain.gain.setValueAtTime(0.0001, t);
+	gain.gain.linearRampToValueAtTime(1, t + 2.5);
+	gain.gain.setValueAtTime(1, t + dur - 0.2);
+	gain.gain.exponentialRampToValueAtTime(0.0001, t + dur + 2.5);
+	gain.connect(music.layers.drone);
 	[
 		[ch.root * 2, 'triangle', 0.7],
 		[ch.root, 'sine', 1],
@@ -243,17 +263,17 @@ function musicDrone(ch, t, dur) {
 		o.type = ty;
 		o.frequency.value = f;
 		og.gain.value = v;
-		o.connect(og).connect(g);
+		o.connect(og).connect(gain);
 		o.start(t);
 		o.stop(t + dur + 3);
 	});
 }
 
 function musicArp(f, t, bright) {
-	const a = actx,
+	const a = audioCtx,
 		o = a.createOscillator(),
 		fl = a.createBiquadFilter(),
-		g = a.createGain();
+		gain = a.createGain();
 	o.type = 'sawtooth';
 	o.frequency.value = f;
 	fl.type = 'lowpass';
@@ -261,51 +281,51 @@ function musicArp(f, t, bright) {
 	const top = 250 * Math.pow(2, 2 + bright * 2.2);
 	fl.frequency.setValueAtTime(top, t);
 	fl.frequency.exponentialRampToValueAtTime(260, t + 0.22);
-	g.gain.setValueAtTime(0.0001, t);
-	g.gain.exponentialRampToValueAtTime(1, t + 0.008);
-	g.gain.exponentialRampToValueAtTime(0.12, t + 0.16);
-	g.gain.exponentialRampToValueAtTime(0.0001, t + 0.34);
-	o.connect(fl).connect(g).connect(music.layers.arp);
+	gain.gain.setValueAtTime(0.0001, t);
+	gain.gain.exponentialRampToValueAtTime(1, t + 0.008);
+	gain.gain.exponentialRampToValueAtTime(0.12, t + 0.16);
+	gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.34);
+	o.connect(fl).connect(gain).connect(music.layers.arp);
 	o.start(t);
 	o.stop(t + 0.36);
 }
 
 function musicPulse(f, t) {
-	const a = actx,
+	const a = audioCtx,
 		o = a.createOscillator(),
 		fl = a.createBiquadFilter(),
-		g = a.createGain();
+		gain = a.createGain();
 	o.type = 'square';
 	o.frequency.value = f;
 	fl.type = 'lowpass';
 	fl.Q.value = 5;
 	fl.frequency.setValueAtTime(180 * 16, t);
 	fl.frequency.exponentialRampToValueAtTime(190, t + 0.15);
-	g.gain.setValueAtTime(0.0001, t);
-	g.gain.exponentialRampToValueAtTime(1, t + 0.005);
-	g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
-	o.connect(fl).connect(g).connect(music.layers.pulse);
+	gain.gain.setValueAtTime(0.0001, t);
+	gain.gain.exponentialRampToValueAtTime(1, t + 0.005);
+	gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
+	o.connect(fl).connect(gain).connect(music.layers.pulse);
 	o.start(t);
 	o.stop(t + 0.22);
 }
 
 function musicKalimba(f, t) {
-	const a = actx,
+	const a = audioCtx,
 		c = a.createOscillator(),
 		m = a.createOscillator(),
 		mg = a.createGain(),
-		g = a.createGain();
+		gain = a.createGain();
 	c.type = 'sine';
 	c.frequency.value = f;
 	m.type = 'triangle';
 	m.frequency.value = f * 2.01;
 	mg.gain.setValueAtTime(f * 3.5, t);
 	mg.gain.exponentialRampToValueAtTime(f * 0.05, t + 0.2);
-	g.gain.setValueAtTime(0.0001, t);
-	g.gain.exponentialRampToValueAtTime(1, t + 0.002);
-	g.gain.exponentialRampToValueAtTime(0.0001, t + 0.45);
+	gain.gain.setValueAtTime(0.0001, t);
+	gain.gain.exponentialRampToValueAtTime(1, t + 0.002);
+	gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.45);
 	m.connect(mg).connect(c.frequency);
-	c.connect(g).connect(music.layers.kalimba);
+	c.connect(gain).connect(music.layers.kalimba);
 	c.start(t);
 	m.start(t);
 	c.stop(t + 0.5);
@@ -353,7 +373,7 @@ function musicArrange() {
 
 function musicApplyGains(fade) {
 	if (!music.ready) return;
-	const t = actx.currentTime;
+	const t = audioCtx.currentTime;
 	for (const [k, g] of Object.entries(music.layers)) {
 		const target = music.want[k] ? MUSIC_LAYERS[k].vol : 0;
 		g.gain.cancelScheduledValues(t);
@@ -363,7 +383,7 @@ function musicApplyGains(fade) {
 
 function musicVolume() {
 	if (!music.ready) return;
-	const t = actx.currentTime;
+	const t = audioCtx.currentTime;
 	// .5 keeps the score about 6 dB under the sound effects at the default setting
 	const v =
 		save.music === false
@@ -436,9 +456,9 @@ function musicStep(step, t, late) {
 const MUSIC_AHEAD = 0.4; // seconds scheduled in advance
 const MUSIC_MARGIN = 0.03; // the soonest a note may start
 function musicTick() {
-	if (!music.running || !actx) return;
+	if (!music.running || !audioCtx) return;
 	const spb = 60 / music.tempo / 4;
-	const now = actx.currentTime;
+	const now = audioCtx.currentTime;
 	if (music.next < now - 0.5) music.next = now + 0.05; // woke from a pause: don't rush to catch up
 	while (music.next < now + MUSIC_AHEAD) {
 		const late = music.next < now + MUSIC_MARGIN;
@@ -455,7 +475,7 @@ function startMusic() {
 	music.step = 0;
 	music.chordI = 0;
 	music.cycle = 0;
-	music.next = actx.currentTime + 0.1;
+	music.next = audioCtx.currentTime + 0.1;
 	music.prog = PROGRESSIONS[Math.floor(Math.random() * PROGRESSIONS.length)];
 	musicArrange();
 	musicVolume();
@@ -465,7 +485,7 @@ function startMusic() {
 function stopMusic() {
 	if (!music.running) return;
 	music.running = false;
-	const t = actx.currentTime;
+	const t = audioCtx.currentTime;
 	music.bus.gain.cancelScheduledValues(t);
 	music.bus.gain.setTargetAtTime(0.0001, t, 0.4);
 	music.pad.forEach(v => v.o.forEach(o => o.stop(t + 3)));
@@ -501,8 +521,8 @@ function musicFollow() {
 }
 
 function musicCascade(mult, made) {
-	if (!music.running || !actx) return;
-	const t = actx.currentTime + MUSIC_MARGIN,
+	if (!music.running || !audioCtx) return;
+	const t = audioCtx.currentTime + MUSIC_MARGIN,
 		L = scaleLen();
 	if (mult >= 3) {
 		for (let i = 0; i < Math.min(mult + 2, 8); i++)
@@ -515,8 +535,8 @@ function musicCascade(mult, made) {
 
 function musicResolve(won) {
 	// end of a stop
-	if (!music.running || !actx) return;
-	const t = actx.currentTime + 0.1;
+	if (!music.running || !audioCtx) return;
+	const t = audioCtx.currentTime + 0.1;
 	music.resting = true;
 	music.tension = 0;
 	music.tempo = 84;
@@ -535,9 +555,9 @@ function musicDuck(on) {
 }
 
 document.addEventListener('visibilitychange', () => {
-	if (!actx) return;
-	if (document.hidden) actx.suspend();
-	else if (music.running || save.sound) actx.resume();
+	if (!audioCtx) return;
+	if (document.hidden) audioCtx.suspend();
+	else if (music.running || save.sound) audioCtx.resume();
 });
 
 window.addEventListener(
@@ -549,7 +569,7 @@ window.addEventListener(
 			setTimeout(startMusic, 350);
 		}
 	},
-	{ capture: true }
+	{ capture: true },
 );
 window.addEventListener(
 	'keydown',
@@ -560,7 +580,7 @@ window.addEventListener(
 			setTimeout(startMusic, 350);
 		}
 	},
-	{ capture: true }
+	{ capture: true },
 );
 // a light tactile click whenever any button is pressed (dock, menu, overlays);
 // e.target.closest handles taps that land on the icon inside the button

@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "necropolis",
+	"name": "The necropolis seal",
+	"description": "Explore every tomb, temple and oasis.",
+	"found_when": {"chambers_explored": 9},
+	"reward": {"lapis": 40}
+}

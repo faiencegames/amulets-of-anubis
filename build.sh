@@ -14,6 +14,8 @@
 #   ./build.sh html         the game only
 #   ./build.sh desktop      the game + desktop apps
 #   ./build.sh android      the game + the Android app
+#   ./build.sh aab          the game + the Android App Bundle for Google Play
+#                           (needs bundletool; not part of "everything")
 #   ./build.sh screenshots  the game + the screenshots in docs/images/
 #   ./build.sh docs         the documentation pages
 #   ./build.sh website      the game + the website (uses apps already in dist/)
@@ -23,20 +25,28 @@
 # a browser's path). The Android app needs the Android SDK (set ANDROID_SDK or
 # ANDROID_HOME) and a JDK. Missing tools are skipped.
 #
-# GAME_VERSION (default 0.9.2) is the version the apps show. Android also
+# GAME_VERSION (default 0.9.3) is the version the apps show. Android also
 # needs a version code that rises with every release; it is made from the
 # version (1.2.3 becomes 10203) unless ANDROID_VERSION_CODE says otherwise.
-# Android settings: ANDROID_BUILD_TOOLS (default 34.0.0), ANDROID_PLATFORM
-# (android-34). The app is signed with platforms/android/release.jks and the
+# (The same two numbers are written in platforms/android/AndroidManifest.xml,
+# where F-Droid looks for them; the release script keeps them in step.)
+# Android settings: ANDROID_BUILD_TOOLS (default 35.0.0), ANDROID_PLATFORM
+# (android-35), ANDROID_TARGET (35, the Android level the app is made for;
+# Google Play asks for a recent one). The app is signed with platforms/android/release.jks and the
 # password in release.pass beside it (both kept out of git), or with
 # ANDROID_KEYSTORE and ANDROID_KEYSTORE_PASS_FILE if they are set.
+# ANDROID_UNSIGNED=1 leaves it unsigned instead, for a store that signs it
+# with its own key (F-Droid): dist/android/amulets-of-anubis-unsigned.apk.
+# ANDROID_DEBUG=1 makes a debug build, whose page Chrome's tools can inspect
+# over USB, for measuring on a phone; never publish one.
+# The Android build needs no network and asks nothing.
 
 set -e
 cd "$(dirname "$0")"
 
 ELECTRON_VERSION="44.4.3"
 APP_NAME="Amulets of Anubis"
-GAME_VERSION="${GAME_VERSION:-0.9.2}"
+GAME_VERSION="${GAME_VERSION:-0.9.3}"
 GAME="dist/amulets-of-anubis.html"
 
 info() { printf '\033[1m==> %s\033[0m\n' "$*"; }
@@ -46,8 +56,8 @@ have() { command -v "$1" >/dev/null 2>&1; }
 
 TARGET="${1:-all}"
 case "$TARGET" in
-		all|html|desktop|android|screenshots|docs|website) ;;
-		*) echo "Usage: $0 [all|html|desktop|android|screenshots|docs|website]"; exit 1 ;;
+		all|html|desktop|android|aab|screenshots|docs|website) ;;
+		*) echo "Usage: $0 [all|html|desktop|android|aab|screenshots|docs|website]"; exit 1 ;;
 esac
 want() { [ "$TARGET" = all ] || [ "$TARGET" = "$1" ]; }
 
@@ -89,7 +99,7 @@ if want desktop; then
 fi
 
 # --- Android --------------------------------------------------------------------
-if want android; then
+if want android || [ "$TARGET" = aab ]; then
 		SDK="${ANDROID_SDK:-${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}}"
 		if [ -z "$SDK" ]; then
 				for d in "$HOME/Android/Sdk" "$HOME/Library/Android/sdk" "$HOME/android-sdk" \
@@ -97,47 +107,98 @@ if want android; then
 						if [ -d "$d/build-tools" ]; then SDK="$d"; break; fi
 				done
 		fi
-		B="$SDK/build-tools/${ANDROID_BUILD_TOOLS:-34.0.0}"
-		J="$SDK/platforms/${ANDROID_PLATFORM:-android-34}/android.jar"
+		B="$SDK/build-tools/${ANDROID_BUILD_TOOLS:-35.0.0}"
+		J="$SDK/platforms/${ANDROID_PLATFORM:-android-35}/android.jar"
 		if [ -z "$SDK" ] || [ ! -f "$B/aapt2" ] || [ ! -f "$J" ]; then
 				skip "Android SDK not found: no Android app. Set ANDROID_SDK to its folder."
 		elif ! have javac; then
 				skip "javac not found: no Android app (a JDK is needed)."
+		elif [ "$TARGET" = aab ] && ! have bundletool; then
+				skip "bundletool not found: no App Bundle (brew install bundletool)."
 		else
 				info "Building the Android app..."
 				SRC="platforms/android"
 				OUT="dist/android"
 				WORK="$OUT/work"                     # scratch, removed afterwards
-				rm -rf "$OUT"; mkdir -p "$WORK/dex" "$WORK/assets"
+				# a new APK clears the folder; a bundle leaves the APK beside it
+				[ "$TARGET" = aab ] || rm -rf "$OUT"
+				rm -rf "$WORK"; mkdir -p "$WORK/dex" "$WORK/assets"
 				cp "$GAME" "$WORK/assets/index.html"
+				# a debug build carries the edge tests' hook (window.__edge), so a
+				# computer can play it on a phone and measure (tools/perf/phone.mjs)
+				if [ -n "$ANDROID_DEBUG" ] && [ "$TARGET" != aab ] && have node \
+						&& node tools/screenshots/edge.mjs --copy; then
+						cp dist/edge/game.html "$WORK/assets/index.html"
+				fi
 				"$B/aapt2" compile --dir "$SRC/res" -o "$WORK/res.zip"
-				"$B/aapt2" link -o "$WORK/base.apk" -I "$J" --manifest "$SRC/AndroidManifest.xml" \
-						-A "$WORK/assets" --java "$WORK/gen" --min-sdk-version 24 --target-sdk-version 34 \
+				# an App Bundle wants the resources in "proto" form
+				PROTO=""; [ "$TARGET" = aab ] && PROTO="--proto-format"
+				# ANDROID_DEBUG=1: a debug build, whose page can be inspected from a
+				# computer over USB (for measuring on a phone); never for a release
+				[ -n "$ANDROID_DEBUG" ] && [ "$TARGET" != aab ] && PROTO="$PROTO --debug-mode"
+				"$B/aapt2" link $PROTO -o "$WORK/base.apk" -I "$J" --manifest "$SRC/AndroidManifest.xml" \
+						-A "$WORK/assets" --java "$WORK/gen" --min-sdk-version 24 --target-sdk-version "${ANDROID_TARGET:-35}" \
 						--version-code "${ANDROID_VERSION_CODE:-$(echo "$GAME_VERSION" | awk -F. '{print $1*10000 + $2*100 + $3}')}" \
-						--version-name "$GAME_VERSION" "$WORK/res.zip"
+						--version-name "$GAME_VERSION" --replace-version "$WORK/res.zip"
 				javac --release 8 -cp "$J" -d "$WORK/classes" \
 						"$WORK/gen/com/amulets/nile/R.java" "$SRC/MainActivity.java" "$SRC/Vibration.java"
 				"$B/d8" --min-api 24 --lib "$J" --output "$WORK/dex" $(find "$WORK/classes" -name '*.class')
-				cp "$WORK/base.apk" "$WORK/unsigned.apk"
-				(cd "$WORK/dex" && zip -q ../unsigned.apk classes.dex)
-				"$B/zipalign" -f -p 4 "$WORK/unsigned.apk" "$WORK/aligned.apk"
-				# Sign with the release key if there is one (its password from a file,
-				# so nothing is asked). Otherwise a debug key, kept beside it so every
-				# build can update the last one.
-				KEY="${ANDROID_KEYSTORE:-$SRC/release.jks}"; PASS=""
+				# a fixed date on classes.dex, so the same source makes the same app
+				touch -t 198001010000 "$WORK/dex/classes.dex"
+				KEY="${ANDROID_KEYSTORE:-$SRC/release.jks}"
 				PASSFILE="${ANDROID_KEYSTORE_PASS_FILE:-$SRC/release.pass}"
-				[ -f "$KEY" ] && [ -f "$PASSFILE" ] && PASS="--ks-pass file:$PASSFILE"
-				if [ ! -f "$KEY" ]; then
-						KEY="$SRC/debug.keystore"; PASS="--ks-pass pass:android"
-						[ -f "$KEY" ] || keytool -genkeypair -keystore "$KEY" -storepass android -keypass android \
-								-alias androiddebugkey -keyalg RSA -keysize 2048 -validity 10000 \
-								-dname "CN=Android Debug,O=Android,C=US" 2>/dev/null
-						ok "No release.jks: signed with the debug key"
+				if [ "$TARGET" = aab ]; then
+						# The bundle's one module, "base": the linked resources as they are,
+						# the manifest in manifest/ and the code in dex/. bundletool makes the
+						# bundle; it is signed with the release key (Google Play keeps it as
+						# the app's key, so Play and GitHub installs update each other).
+						M="$WORK/module"
+						mkdir -p "$M/manifest" "$M/dex"
+						(cd "$M" && unzip -q ../base.apk)
+						mv "$M/AndroidManifest.xml" "$M/manifest/"
+						cp "$WORK/dex/classes.dex" "$M/dex/"
+						find "$M" -exec touch -t 198001010000 {} +
+						(cd "$M" && zip -qrX ../base.zip .)
+						bundletool build-bundle --modules="$WORK/base.zip" --output="$WORK/app.aab" --overwrite
+						if [ -f "$KEY" ] && [ -f "$PASSFILE" ]; then
+								ALIAS=$(keytool -list -keystore "$KEY" -storepass:file "$PASSFILE" 2>/dev/null \
+										| awk -F, '/PrivateKeyEntry/ { print $1; exit }')
+								jarsigner -keystore "$KEY" -storepass:file "$PASSFILE" -sigalg SHA256withRSA \
+										-digestalg SHA-256 -signedjar "$OUT/amulets-of-anubis.aab" "$WORK/app.aab" "$ALIAS" >/dev/null
+								ok "App Bundle: dist/android/amulets-of-anubis.aab"
+						else
+								mv "$WORK/app.aab" "$OUT/amulets-of-anubis-unsigned.aab"
+								ok "No release.jks: App Bundle unsigned, dist/android/amulets-of-anubis-unsigned.aab"
+						fi
+						rm -rf "$WORK"
+				else
+						cp "$WORK/base.apk" "$WORK/unsigned.apk"
+						(cd "$WORK/dex" && zip -qX ../unsigned.apk classes.dex)
+						"$B/zipalign" -f -p 4 "$WORK/unsigned.apk" "$WORK/aligned.apk"
+						if [ -n "$ANDROID_UNSIGNED" ]; then
+								# Unsigned, for a store that signs with its own key (F-Droid).
+								mv "$WORK/aligned.apk" "$OUT/amulets-of-anubis-unsigned.apk"
+								rm -rf "$WORK"
+								ok "Android app, unsigned: dist/android/amulets-of-anubis-unsigned.apk"
+						else
+								# Sign with the release key if there is one (its password from a file,
+								# so nothing is asked). Otherwise a debug key, kept beside it so every
+								# build can update the last one.
+								PASS=""
+								[ -f "$KEY" ] && [ -f "$PASSFILE" ] && PASS="--ks-pass file:$PASSFILE"
+								if [ ! -f "$KEY" ]; then
+										KEY="$SRC/debug.keystore"; PASS="--ks-pass pass:android"
+										[ -f "$KEY" ] || keytool -genkeypair -keystore "$KEY" -storepass android -keypass android \
+												-alias androiddebugkey -keyalg RSA -keysize 2048 -validity 10000 \
+												-dname "CN=Android Debug,O=Android,C=US" 2>/dev/null
+										ok "No release.jks: signed with the debug key"
+								fi
+								"$B/apksigner" sign --v1-signing-enabled true --v2-signing-enabled true \
+										--ks "$KEY" $PASS --out "$OUT/amulets-of-anubis.apk" "$WORK/aligned.apk"
+								rm -rf "$WORK"
+								ok "Android app: dist/android/amulets-of-anubis.apk"
+						fi
 				fi
-				"$B/apksigner" sign --v1-signing-enabled true --v2-signing-enabled true \
-						--ks "$KEY" $PASS --out "$OUT/amulets-of-anubis.apk" "$WORK/aligned.apk"
-				rm -rf "$WORK"
-				ok "Android app: dist/android/amulets-of-anubis.apk"
 		fi
 fi
 

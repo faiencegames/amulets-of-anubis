@@ -1,23 +1,57 @@
 /* 02-layout.css: The app shell: a fixed grid that never scrolls, and the carved stone strips. */
 
 /* ---------- app shell: fixed, never scrolls ---------- */
-html,body{ height:100%; overflow:hidden; position:fixed; inset:0; width:100%; overscroll-behavior:none; -webkit-user-select:none; user-select:none; }
-.app{ position:relative; z-index:1; height:100%; width:100%; max-width:1180px; margin:0 auto; padding:8px 10px 10px; display:grid; grid-template-rows:auto minmax(0,1fr) auto; gap:9px; overflow:hidden; }
+html,
+body {
+	height: 100%;
+	overflow: hidden;
+	position: fixed;
+	inset: 0;
+	width: 100%;
+	overscroll-behavior: none;
+	-webkit-user-select: none;
+	user-select: none;
+}
+.app {
+	position: relative;
+	z-index: 1;
+	height: 100%;
+	width: 100%;
+	max-width: 1180px;
+	margin: 0 auto;
+	padding: 8px 10px 10px;
+	display: grid;
+	grid-template-rows: auto minmax(0, 1fr) auto;
+	gap: 9px;
+	overflow: hidden;
+}
 
 /* Scrollbars, the same everywhere: thin, a brown thumb, no track. Firefox and
    Chrome read scrollbar-color; Safari and older Android WebViews read the
    -webkit- rules. Only a bar that is needed shows (overflow:auto, never scroll). */
-*{ scrollbar-width:thin; scrollbar-color:#8a6a3a99 transparent; }
-::-webkit-scrollbar{ width:6px; height:6px; }
-::-webkit-scrollbar-track{ background:transparent; }
-::-webkit-scrollbar-thumb{ background:#8a6a3a99; border-radius:3px; }
-::-webkit-scrollbar-corner{ background:transparent; }
+* {
+	scrollbar-width: thin;
+	scrollbar-color: var(--scrollbar) transparent;
+}
+::-webkit-scrollbar {
+	width: 6px;
+	height: 6px;
+}
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+::-webkit-scrollbar-thumb {
+	background: var(--scrollbar);
+	border-radius: 3px;
+}
+::-webkit-scrollbar-corner {
+	background: transparent;
+}
 
 /* carved stone strips */
-.stone{
-	background-color:var(--sandstone);
-	background-image:
-		url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .22 0 0 0 0 .1 0 0 0 .35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
-		linear-gradient(180deg, #d9c093, #b99b6a);
-	border:3px solid; border-color:var(--sandstone-hi) var(--sandstone-lo) var(--sandstone-lo) var(--sandstone-hi);
+.stone {
+	background-color: var(--sandstone);
+	background-image: var(--stone-grain), linear-gradient(180deg, var(--slab-hi), var(--slab-lo));
+	border: 3px solid;
+	border-color: var(--sandstone-hi) var(--sandstone-lo) var(--sandstone-lo) var(--sandstone-hi);
 }

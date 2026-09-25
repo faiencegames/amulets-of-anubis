@@ -1,3 +1,22 @@
+/* =============================================================================
+ * 21-moves.js  —  playing a move: the swap, the matches, the cascade that
+ * follows, and what they earn.
+ *
+ * What's here:
+ *   attemptSwap(a, b)   swaps two amulets (22-input.js); if they match, runs
+ *                       cascade(), else swaps them back
+ *   cascade()           clear, score, fall and refill, again and again until
+ *                       the board is still; then checks the trial, the river
+ *                       event, the win and the loss
+ *   showClear()         what one clearing earns: gold, lapis, sparks and
+ *                       sounds (the numbers are EARN, content/settings.jsonc)
+ *   BADGE_SHOWS         how each badge power shows on the board when it fires
+ *                       (the powers are BADGE_POWERS, 01-core.js)
+ *
+ * Changes in the save: gold, lapis (and what they count towards: goldEarned,
+ * lapisEarned, goldBits, lapisBits), suns, thickCracked, bestCascade.
+ * ===========================================================================*/
+
 // ---------- playing a move ----------
 // attemptSwap() swaps two amulets and, if they match, runs cascade(): clear,
 // score (showClear), fall and refill until the board settles.
@@ -12,56 +31,80 @@ const BADGE_SHOWS = {
 	gild_stones: {
 		sounds: ['blessing'],
 		buzz: true,
-		show: (f, b, r, c) => {
-			badgePopup(f, b, { x: Math.min(N - 2, Math.max(2, c + 0.5)), y: r + 0.1, life: 1.6, size: 0.42, col: '#fff2a0' });
+		show: (f, b, row, col) => {
+			badgePopup(f, b, {
+				x: Math.min(COLS - 2, Math.max(2, col + 0.5)),
+				y: row + 0.1,
+				life: 1.6,
+				size: 0.42,
+				col: '#fff2a0',
+			});
 			f.targets.forEach((to, i) => orbs.push({ from: f.k, to, t: -i * 0.12, dur: 0.55 }));
 		},
 	},
 	gild_around: {
 		sounds: ['blessing'],
 		buzz: true,
-		show: (f, b, r, c) => {
-			badgePopup(f, b, { x: Math.min(N - 2, Math.max(2, c + 0.5)), y: r + 0.1, life: 1.5, size: 0.42, col: '#ffd0ea' });
+		show: (f, b, row, col) => {
+			badgePopup(f, b, {
+				x: Math.min(COLS - 2, Math.max(2, col + 0.5)),
+				y: row + 0.1,
+				life: 1.5,
+				size: 0.42,
+				col: '#ffd0ea',
+			});
 			f.targets.forEach((to, i) => orbs.push({ from: f.k, to, t: -i * 0.05, dur: 0.4 }));
 		},
 	},
 	row_and_column: {
 		sounds: ['line'],
 		buzz: true,
-		show: (f, b, r, c) => {
-			beams.push({ dir: 'h', idx: r, life: 1 });
-			beams.push({ dir: 'v', idx: c, life: 1 });
-			badgePopup(f, b, { x: c + 0.5, y: r + 0.1, life: 1.3, size: 0.42, col: '#ffc0a0' });
+		show: (f, b, row, col) => {
+			beams.push({ dir: 'h', idx: row, life: 1 });
+			beams.push({ dir: 'v', idx: col, life: 1 });
+			badgePopup(f, b, { x: col + 0.5, y: row + 0.1, life: 1.3, size: 0.42, col: '#ffc0a0' });
 		},
 	},
 	extra_moves: {
 		sounds: ['moves'],
-		show: (f, b, r, c) => {
-			badgePopup(f, b, { x: c + 0.5, y: r + 0.2, life: 1.5, size: 0.5, col: '#bfe8ff' });
-			rings.push({ x: c, y: r, life: 1 });
+		show: (f, b, row, col) => {
+			badgePopup(f, b, { x: col + 0.5, y: row + 0.2, life: 1.5, size: 0.5, col: '#bfe8ff' });
+			rings.push({ x: col, y: row, life: 1 });
 		},
 	},
 	give_lapis: {
 		sounds: ['create'],
 		buzz: true,
-		show: (f, b, r, c) => {
+		show: (f, b, row, col) => {
 			save.lapis += f.n;
-			badgePopup(f, b, { x: c + 0.5, y: r + 0.2, life: 1.6, size: 0.5, col: '#aebfff' });
-			rings.push({ x: c, y: r, life: 1 });
+			badgePopup(f, b, { x: col + 0.5, y: row + 0.2, life: 1.6, size: 0.5, col: '#aebfff' });
+			rings.push({ x: col, y: row, life: 1 });
 		},
 	},
 	lose_moves: {
 		sounds: ['bad', 'lose'],
 		harm: true,
-		show: (f, b, r, c) => {
-			badgePopup(f, b, { x: Math.min(N - 2, Math.max(2, c + 0.5)), y: r + 0.1, life: 1.8, size: 0.46, col: '#ff9a8a' });
+		show: (f, b, row, col) => {
+			badgePopup(f, b, {
+				x: Math.min(COLS - 2, Math.max(2, col + 0.5)),
+				y: row + 0.1,
+				life: 1.8,
+				size: 0.46,
+				col: '#ff9a8a',
+			});
 		},
 	},
 	ungild_stones: {
 		sounds: ['bad', 'lose'],
 		harm: true,
-		show: (f, b, r, c) => {
-			badgePopup(f, b, { x: Math.min(N - 2, Math.max(2, c + 0.5)), y: r + 0.1, life: 1.8, size: 0.46, col: '#ff9a8a' });
+		show: (f, b, row, col) => {
+			badgePopup(f, b, {
+				x: Math.min(COLS - 2, Math.max(2, col + 0.5)),
+				y: row + 0.1,
+				life: 1.8,
+				size: 0.46,
+				col: '#ff9a8a',
+			});
 		},
 	},
 };
@@ -76,7 +119,7 @@ function badgePopup(f, b, where) {
 function showClear(res, mult) {
 	res.cleared.forEach(({ k, tile }) => {
 		dying.push({ tile, x: tile.x, y: tile.y, t: 0 });
-		burst(k % N, (k / N) | 0);
+		burst(k % COLS, (k / COLS) | 0);
 	});
 	res.made.forEach(({ tile }) => {
 		tile.pop = 1;
@@ -90,12 +133,12 @@ function showClear(res, mult) {
 	// water cleared off one in an oasis: a splash of drops
 	let splashed = 0,
 		sanded = 0;
-	(res.brushed || []).forEach(k => {
-		const t = core.cells[k];
-		if (!t) return;
-		const wet = t.wet;
-		t.wet = 0;
-		t.pop = 0.5;
+	(res.brushed || []).forEach(sq => {
+		const tile = core.cells[sq];
+		if (!tile) return;
+		const wet = tile.wet;
+		tile.wet = 0;
+		tile.pop = 0.5;
 		if (wet) splashed++;
 		else sanded++;
 		const cols = wet ? ['#bfe4ff', '#4a9ad8'] : ['#e8c98a', '#b88a48'];
@@ -103,8 +146,8 @@ function showClear(res, mult) {
 			const a = Math.random() * TAU,
 				sp = 0.5 + Math.random() * 1.4;
 			particles.push({
-				x: (k % N) + 0.5,
-				y: ((k / N) | 0) + 0.6,
+				x: (sq % COLS) + 0.5,
+				y: ((sq / COLS) | 0) + 0.6,
 				vx: Math.cos(a) * sp,
 				vy: Math.sin(a) * sp - 0.8,
 				life: 0.5 + Math.random() * 0.4,
@@ -115,14 +158,14 @@ function showClear(res, mult) {
 	});
 	if (sanded) sfx('sand', sanded);
 	if (splashed) sfx('splash', splashed);
-	(res.buried || []).forEach(k => {
-		bgCells.add(k);
+	(res.buried || []).forEach(sq => {
+		bgCells.add(sq);
 		for (let i = 0; i < 6; i++) {
 			const a = Math.random() * TAU,
 				sp = 0.6 + Math.random() * 1.6;
 			particles.push({
-				x: (k % N) + 0.5,
-				y: ((k / N) | 0) + 0.5,
+				x: (sq % COLS) + 0.5,
+				y: ((sq / COLS) | 0) + 0.5,
 				vx: Math.cos(a) * sp,
 				vy: Math.sin(a) * sp - 0.6,
 				life: 0.6 + Math.random() * 0.4,
@@ -133,33 +176,33 @@ function showClear(res, mult) {
 	});
 	const kinds = new Set();
 	res.fired.forEach(f => {
-		const r = (f.k / N) | 0,
-			c = f.k % N;
+		const row = (f.k / COLS) | 0,
+			col = f.k % COLS;
 		kinds.add(f.kind);
-		if (f.kind === 'h') beams.push({ dir: 'h', idx: r, life: 1 });
-		else if (f.kind === 'v') beams.push({ dir: 'v', idx: c, life: 1 });
+		if (f.kind === 'h') beams.push({ dir: 'h', idx: row, life: 1 });
+		else if (f.kind === 'v') beams.push({ dir: 'v', idx: col, life: 1 });
 		else if (f.kind === 'star') {
-			beams.push({ dir: 'd1', r, c, life: 1 });
-			beams.push({ dir: 'd2', r, c, life: 1 });
+			beams.push({ dir: 'd1', r: row, c: col, life: 1 });
+			beams.push({ dir: 'd2', r: row, c: col, life: 1 });
 			popups.push({
 				text: Tplain('popup.star_of_sopdet'),
-				x: c + 0.5,
-				y: r + 0.1,
+				x: col + 0.5,
+				y: row + 0.1,
 				life: 1.3,
 				size: 0.42,
 				col: '#dcebff',
 			});
-		} else if (f.effect) BADGE_SHOWS[f.effect].show(f, BADGES[f.kind], r, c);
-		else rings.push({ x: c, y: r, life: 1, big: f.kind === 'sun' });
+		} else if (f.effect) BADGE_SHOWS[f.effect].show(f, BADGES[f.kind], row, col);
+		else rings.push({ x: col, y: row, life: 1, big: f.kind === 'sun' });
 	});
 	const all = [...res.cleared.map(o => o.k), ...res.made.map(o => o.k)];
-	const cx = all.reduce((s, k) => s + (k % N), 0) / all.length + 0.5,
-		cy = all.reduce((s, k) => s + ((k / N) | 0), 0) / all.length + 0.5;
+	const cx = all.reduce((s, sq) => s + (sq % COLS), 0) / all.length + 0.5,
+		cy = all.reduce((s, sq) => s + ((sq / COLS) | 0), 0) / all.length + 0.5;
 	popups.push({ text: '+' + res.pts, x: cx, y: cy, life: 1.1, size: 0.42 });
 	if (mult >= 3)
 		popups.push({
 			text: Tplain('popup.cascade_n', { n: mult }),
-			x: N / 2,
+			x: COLS / 2,
 			y: ROWS / 2 - 0.6,
 			life: 1.4,
 			size: 0.62,
@@ -169,12 +212,12 @@ function showClear(res, mult) {
 		eventState.lamp.tx = cx;
 		eventState.lamp.ty = cy;
 	}
-	const pan = cx / N;
+	const pan = cx / COLS;
 	sfx('match', mult, pan);
 	musicCascade(mult, res.made);
 	const golds = res.gild.filter(g => g.now === 0 && !g.blessed).length;
 	if (golds) sfx('gild', golds);
-	// earnings (content/settings.json): one gold for every so many stones gilded,
+	// earnings (content/settings.jsonc): one gold for every so many stones gilded,
 	// one lapis for every so many specials made; the remainders carry over so
 	// nothing is lost. Boards that earn less (Omega, whose size makes gold pour
 	// in) count up to a larger number before paying out
@@ -206,11 +249,13 @@ function showClear(res, mult) {
 	const badgeSounds = shows.flatMap(sh => sh.sounds);
 	if (kinds.has('sun')) sfx('sun');
 	else if (kinds.has('bomb')) sfx('bomb', 1, pan);
-	if (kinds.has('h') || kinds.has('v') || kinds.has('star') || badgeSounds.includes('line')) sfx('line', 1, pan);
+	if (kinds.has('h') || kinds.has('v') || kinds.has('star') || badgeSounds.includes('line'))
+		sfx('line', 1, pan);
 	badgeSounds.filter(x => x !== 'line').forEach(x => sfx(x));
 	if (shows.some(sh => sh.harm)) vibrate([0, 40, 60, 40]);
 	// a soft buzz on the match; a stronger one when a special amulet or a good badge fires
-	const specialFired = ['sun', 'bomb', 'h', 'v', 'star'].some(x => kinds.has(x)) || shows.some(sh => sh.buzz);
+	const specialFired =
+		['sun', 'bomb', 'h', 'v', 'star'].some(x => kinds.has(x)) || shows.some(sh => sh.buzz);
 	vibrate(specialFired ? 28 : 10);
 }
 
@@ -231,7 +276,7 @@ async function cascade(swap, seed, noTrial) {
 		await settle();
 		const g = core.gravity();
 		g.spawns.forEach(s => {
-			s.tile.x = s.k % N;
+			s.tile.x = s.k % COLS;
 			s.tile.y = s.startRow;
 			s.tile.vy = 0;
 		});
@@ -242,7 +287,7 @@ async function cascade(swap, seed, noTrial) {
 	if (!core.won() && !core.hasMove()) {
 		popups.push({
 			text: Tplain('popup.the_amulets_shift'),
-			x: N / 2,
+			x: COLS / 2,
 			y: ROWS / 2,
 			life: 1.6,
 			size: 0.55,
@@ -250,27 +295,28 @@ async function cascade(swap, seed, noTrial) {
 		});
 		sfx('shuffle');
 		await delay(500);
-		core.cells.forEach(t => {
-			if (t) t.swapping = true;
+		core.cells.forEach(tile => {
+			if (tile) tile.swapping = true;
 		});
 		core.shuffle();
 		await settle();
-		core.cells.forEach(t => {
-			if (t) t.swapping = false;
+		core.cells.forEach(tile => {
+			if (tile) tile.swapping = false;
 		});
 	}
 }
 
 async function attemptSwap(a, b) {
-	if (busy || !core.adjacent(a, b) || !core.cells[a] || !core.cells[b] || core.movesLeft <= 0) return;
+	if (busy || stopOver || !core.adjacent(a, b) || !core.cells[a] || !core.cells[b] || core.movesLeft <= 0)
+		return;
 	if (core.cells[a].sand || core.cells[b].sand) {
-		const k = core.cells[a].sand ? a : b;
+		const sq = core.cells[a].sand ? a : b;
 		sfx('bad');
 		selected = -1;
 		popups.push({
-			text: Tplain(core.cells[k].wet ? 'popup.under_water' : 'popup.buried'),
-			x: Math.min(N - 2, Math.max(2, (k % N) + 0.5)),
-			y: ((k / N) | 0) + 0.2,
+			text: Tplain(core.cells[sq].wet ? 'popup.under_water' : 'popup.buried'),
+			x: Math.min(COLS - 2, Math.max(2, (sq % COLS) + 0.5)),
+			y: ((sq / COLS) | 0) + 0.2,
 			life: 1.6,
 			size: 0.42,
 			col: '#f4dca4',
@@ -285,7 +331,7 @@ async function attemptSwap(a, b) {
 		tb = core.cells[b];
 	ta.swapping = tb.swapping = true;
 	const valid = core.isValid(a, b);
-	ac();
+	getCtx();
 	sfx('swap');
 	core.swap(a, b);
 	await settle();

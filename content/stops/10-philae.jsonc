@@ -1,0 +1,38 @@
+// Stop 10 of the journey: Philae.
+// The number at the front of the file name sets the order of the stops.
+// Every field is explained in docs/content-reference.md.
+{
+	"id": "philae",
+	"name": "Philae",
+	"subtitle": "The pearl of the Nile",
+	"history": "At Philae we landed at the temple of Isis, one of the last places where the old Gods were worshipped. Here, in 394 CE, someone carved the last hieroglyphic inscription we know of, after more than three and a half thousand years of the script. Imagine being the last! In the 1970s the whole temple was taken apart, stone by stone, and raised again on a nearby island, out of reach of the flood waters.",
+	"moves": 42,
+	// Three sets: each time the stop starts, the game picks one at random.
+	"amulets": [
+		["tyet", "feather", "bluelotus", "fish", "cat", "papyrus"],
+		["throne", "falcon", "tyet", "bluelotus", "cat", "hippo"],
+		["hathor", "sistrum", "papyrus", "fish", "ka", "cat"]
+	],
+	"floor_plan": [
+		"........",
+		".111111.",
+		"11111111",
+		"11222211",
+		"11222211",
+		"11111111",
+		".111111.",
+		"........"
+	],
+	"shared_floor_shapes": ["eye", "pools"],
+	"stone_colour": "#8a7c6c",
+	"music": {"key": "G3", "scale": "dorian", "instrument": "flute"},
+	"frame_colours": ["#4a3a72", "#1c1432", "#b5709a"],
+	"map_position": {"x": 266, "y": 420, "label": "right"},
+	// Three seals: challenges stamped the first time a win here meets them.
+	// Keep their order; saves remember seals by position.
+	"seals": [
+		{"text": "Win with twelve moves to spare", "when": {"win_moves_to_spare": 12}},
+		{"text": "Make six special amulets", "when": {"win_specials_made": 6}},
+		{"text": "Win with three omens braved", "when": {"win_with_omens": 3}}
+	]
+}

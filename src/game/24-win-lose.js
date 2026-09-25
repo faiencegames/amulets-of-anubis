@@ -1,5 +1,47 @@
+/* =============================================================================
+ * 24-win-lose.js  —  winning and losing a stop.
+ *
+ * What's here:
+ *   levelWon()          the stop is gilded: stars, rewards, seals, the trial,
+ *                       unlocks, and the win scroll with the way on (the next
+ *                       stop, a doorway, the map)
+ *   levelLost()         out of moves: the lose scroll; when the floor was
+ *                       nearly gilded, more moves to buy (the stall's "Three
+ *                       more breaths")
+ *   showBoardEnd()      the plaque on a won or lost board, when its scroll
+ *                       was left by the map; from closeOverlays()
+ *
+ * Both are called from cascade() (21-moves.js) when the board is still.
+ *
+ * Changes in the save: stars, unlocked (the furthest stop), wins, streak,
+ * fails, lastWin, life, met, omens, gold, lapis, goldEarned, lapisEarned,
+ * boons, charges.
+ * ===========================================================================*/
+
 // ---------- winning and losing a stop ----------
+// The plaque on a finished board. Leave the win or lose scroll by the map and
+// close the map, and the board can't be played any more: it dims, and a plaque
+// says how it ended, with the one way on and the map.
+let boardEnd = null; // { core, title, marks, label, go: action }
+
+function showBoardEnd() {
+	const el = $('boardEnd'),
+		on = stopOver && boardEnd && boardEnd.core === core && !document.querySelector('.overlay.open');
+	el.hidden = !on;
+	if (!on) return;
+	const acts = [boardEnd.go, [Tplain('win.map'), openMap, { kind: 'quiet', icon: iconSvg('dock', 'map') }]];
+	el.innerHTML = html`
+		<div class="end-plaque papyrus" role="group" aria-labelledby="endTitle">
+			<h3 id="endTitle">${boardEnd.title}</h3>
+			<div class="end-marks" role="img" aria-label="${boardEnd.label}">${boardEnd.marks}</div>
+			<div class="actions paired">${acts.map(actionHtml).join('')}</div>
+		</div>`;
+	el.querySelectorAll('[data-i]').forEach(b => (b.onclick = () => acts[+b.dataset.i][1]()));
+}
+
 function levelWon() {
+	if (stopOver) return; // paid once
+	stopOver = true;
 	if (trial && !trial.done && !trial.failed) {
 		if (trial.goal === 'moves_to_spare') {
 			trial.n = core.movesLeft;
@@ -19,7 +61,7 @@ function levelWon() {
 	updateHUD();
 	const ratio = core.movesLeft / core.startMoves,
 		SS = CONTENT.settings.stars,
-		stars = ratio >= SS.three ? 3 : ratio >= SS.two ? 2 : 1; // content/settings.json, "stars"
+		stars = ratio >= SS.three ? 3 : ratio >= SS.two ? 2 : 1; // content/settings.jsonc, "stars"
 	save.stars[levelIdx] = Math.max(save.stars[levelIdx] || 0, stars);
 	save.unlocked = Math.max(save.unlocked, Math.min(levelIdx + 1, LEVELS.length - 1));
 	const earnK = boardMode(save.board).earn || 1;
@@ -28,7 +70,7 @@ function levelWon() {
 	const winGold = Math.round(
 			((core.movesLeft * EARN.spareMoveGold + EARN.winGold) * earnK +
 				upgradeTotal('win_gold', save.upg)) *
-				omenK
+				omenK,
 		),
 		winLapis = Math.round((EARN.winLapis + upgradeTotal('win_lapis', save.upg)) * omenK);
 	const stopId = LEVELS[levelIdx].id;
@@ -69,7 +111,7 @@ function levelWon() {
 	sfx('win');
 	musicResolve(true);
 	vibrate([0, 60, 90]);
-	for (let i = 0; i < 40; i++) burst(Math.random() * N - 0.5, Math.random() * ROWS - 0.5, 1);
+	for (let i = 0; i < 40; i++) burst(Math.random() * COLS - 0.5, Math.random() * ROWS - 0.5, 1);
 	const last = levelIdx === LEVELS.length - 1,
 		next = LEVELS[levelIdx + 1],
 		wonAt = levelIdx;
@@ -79,17 +121,38 @@ function levelWon() {
 		markNew('map');
 		persist();
 	}
+	boardEnd = {
+		core,
+		title: T('win.title', { stop: core.level.name }),
+		marks: [1, 2, 3].map(i => starSvg(i <= stars)).join(''),
+		label: Tplain('map.stars', { n: stars }),
+		go: last
+			? [
+					Tplain('win.play_again'),
+					() => openStop(levelIdx),
+					{ kind: 'go', icon: iconSvg('dock', 'restart') },
+				]
+			: [
+					Tplain('win.sail', { stop: next.name }),
+					() => goNext(levelIdx + 1),
+					{ kind: 'go', sub: next.sub, icon: iconSvg('ui', 'barque') },
+				],
+	};
 	setTimeout(() => {
 		busy = false;
 		showMsg(
-			`<h2 id="msgTitle">${T('win.title', { stop: core.level.name })}</h2>
-			<p class="lede">${last ? T('win.lede_last', { first: LEVELS[0].name, last: LEVELS[LEVELS.length - 1].name }) : T('win.lede')}</p>
-			<div class="stars">${[1, 2, 3].map(i => starSvg(i <= stars)).join('')}</div>
-			<p style="text-align:center">${T('win.score', { score: core.score.toLocaleString() })}${bonus ? T('win.score_bonus', { bonus: bonus.toLocaleString(), n: core.movesLeft }) : ''}.</p>
-			<p style="text-align:center">${T('win.rewards', { gold: winGold.toLocaleString(), lapis: winLapis.toLocaleString() })}${nOmens ? ` <em>${T('win.omens', { x: omenK.toFixed(1), n: nOmens })}</em>` : ''}</p>
-			${sealsLine(levelIdx, newSeals)}
-			${curseNote}
-			${last ? `<p style="text-align:center">${T('win.journey_done')}</p>` : ''}`,
+			html`
+				<h2 id="msgTitle">${T('win.title', { stop: core.level.name })}</h2>
+				<p class="lede">
+					${last ? T('win.lede_last', { first: LEVELS[0].name, last: LEVELS[LEVELS.length - 1].name }) : T('win.lede')}
+				</p>
+				<div class="stars">${[1, 2, 3].map(i => starSvg(i <= stars)).join('')}</div>
+				<p style="text-align:center">
+					${T('win.score', { score: core.score.toLocaleString() })}${bonus ? T('win.score_bonus', { bonus: bonus.toLocaleString(), n: core.movesLeft }) : ''}.
+				</p>
+				<p style="text-align:center">
+					${T('win.rewards', { gold: winGold.toLocaleString(), lapis: winLapis.toLocaleString() })}${nOmens ? ` <em>${T('win.omens', { x: omenK.toFixed(1), n: nOmens })}</em>` : ''}
+				</p> ${sealsLine(levelIdx, newSeals)} ${curseNote} ${last ? `<p style="text-align:center">${T('win.journey_done')}</p>` : ''}`,
 			[
 				// the way on first, then the doorway, if one is here, then the rest, quietly
 				last
@@ -111,21 +174,43 @@ function levelWon() {
 									dark: true,
 									oasis: !!doorway.oasis,
 									icon: iconSvg('map', placeIcon(doorway)),
-									sub: T(placeKey(doorway, save.chambers[doorway.id] ? 'win_again' : 'win_note'), {
-										name: midSentence(doorway.title),
-									}),
+									short: Tplain(
+										placeKey(
+											doorway,
+											save.chambers[doorway.id] ? 'go_back_short' : 'explore_short',
+										),
+									),
+									sub: T(
+										placeKey(
+											doorway,
+											save.chambers[doorway.id] ? 'win_again' : 'win_note',
+										),
+										{
+											name: midSentence(doorway.title),
+										},
+									),
 								},
 							],
 						]
 					: []),
 				...(last
-					? [[Tplain('win.play_again'), () => openStop(levelIdx), { kind: 'quiet', icon: iconSvg('dock', 'restart') }]]
+					? [
+							[
+								Tplain('win.play_again'),
+								() => openStop(levelIdx),
+								{ kind: 'quiet', icon: iconSvg('dock', 'restart') },
+							],
+						]
 					: [
 							[Tplain('win.map'), openMap, { kind: 'quiet', icon: iconSvg('dock', 'map') }],
-							[Tplain('win.replay'), () => openStop(levelIdx), { kind: 'quiet', icon: iconSvg('dock', 'restart') }],
+							[
+								Tplain('win.replay'),
+								() => openStop(levelIdx),
+								{ kind: 'quiet', icon: iconSvg('dock', 'restart') },
+							],
 						]),
 			],
-			{ noClose: true }
+			{ noClose: true },
 		);
 	}, 900);
 }
@@ -139,7 +224,7 @@ function levelLost() {
 		sfx('moves');
 		popups.push({
 			text: Tplain('popup.second_wind_moves'),
-			x: N / 2,
+			x: COLS / 2,
 			y: ROWS / 2,
 			life: 2,
 			size: 0.5,
@@ -148,6 +233,8 @@ function levelLost() {
 		busy = false;
 		return;
 	}
+	if (stopOver) return;
+	stopOver = true;
 	if (trial && !trial.done) failTrial(true);
 	const curseNote = save.curse
 		? `<p class="curse-note">${T('lose.curse', { curse: curseWords(save.curse) })}</p>`
@@ -164,7 +251,7 @@ function levelLost() {
 	if (f === PERSISTENCE.boonAtFail) {
 		const b = randomBoon();
 		save.boons.push(b);
-		gift = ` and ${BOONS[b].name}`;
+		gift = Tplain('lose.gift', { boon: BOONS[b].name });
 		renderBoons();
 	}
 	persist();
@@ -175,6 +262,20 @@ function levelLost() {
 		price = breath ? stallPrice(breath) : 0,
 		close = left <= Math.max(5, Math.round(core.total * 0.15)),
 		canBuy = !!breath && close && save[breath.cur] >= price;
+	const bare = museumSquares();
+	boardEnd = {
+		core,
+		title: T('lose.title'),
+		marks: html`
+			<span class="end-bare" style="background-image:url(${bare ? bare.bare : ''})"></span>
+			<b>\u00d7${left}</b>`,
+		label: Tplain('lose.lede', { n: left }),
+		go: [
+			Tplain('lose.try_again'),
+			() => startLevel(levelIdx),
+			{ kind: 'go', icon: iconSvg('dock', 'restart') },
+		],
+	};
 	setTimeout(() => {
 		busy = false;
 		const acts = [];
@@ -182,6 +283,7 @@ function levelLost() {
 			acts.push([
 				`${breath.name} (${price} ${breath.cur})`,
 				() => {
+					stopOver = false; // the stop goes on
 					save[breath.cur] -= price;
 					core.stallBought[breath.id] = (core.stallBought[breath.id] || 0) + 1;
 					core.movesLeft += breath.give.moves;
@@ -192,7 +294,7 @@ function levelLost() {
 					musicFollow();
 					popups.push({
 						text: Tplain('popup.n_moves', { n: breath.give.moves }),
-						x: N / 2,
+						x: COLS / 2,
 						y: ROWS / 2,
 						life: 1.6,
 						size: 0.6,
@@ -203,7 +305,11 @@ function levelLost() {
 				},
 				{ kind: 'card', sub: T('lose.buy', { n: breath.give.moves }) },
 			]);
-		acts.unshift([Tplain('lose.try_again'), () => startLevel(levelIdx), { kind: 'go', icon: iconSvg('dock', 'restart') }]);
+		acts.unshift([
+			Tplain('lose.try_again'),
+			() => startLevel(levelIdx),
+			{ kind: 'go', icon: iconSvg('dock', 'restart') },
+		]);
 		acts.push([Tplain('lose.map'), openMap, { kind: 'quiet', icon: iconSvg('dock', 'map') }]);
 		showMsg(
 			`<h2 id="msgTitle">${T('lose.title')}</h2>
@@ -211,7 +317,7 @@ function levelLost() {
 			<p class="persist-note">${T('lose.persist', { n: nextBonus })}${gift}.</p>
 			<p style="text-align:center">${T('lose.tip')}</p>${curseNote}`,
 			acts,
-			{ noClose: true }
+			{ noClose: true },
 		);
 	}, 700);
 }

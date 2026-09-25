@@ -20,7 +20,7 @@ function play(core,a,b,st){ core.swap(a,b); let m=1,res=core.clearStep([a,b],m);
 function attempt(i){
 	const L=K.LEVELS[i], shape=K.pickShape(i), fails=Math.min(K.PERSISTENCE.maxFails, (s.fails||{})[i]||0);
 	// the board as the game builds it (stopOptions in 01-core.js); on the first
-	// journey badges and cursed badges arrive at the stops settings.json says
+	// journey badges and cursed badges arrive at the stops settings.jsonc says
 	const staged = part => s.journeys > 1 || i >= K.CONTENT.settings.staging[part];
 	const core=new K.Core(L, K.stopOptions({level:L, idx:i, mode, cols:C, rows:R, shape, variant:Math.floor(Math.random()*5), difficulty:DIFF, fails, badgesOn:staged('badges'), cursesOn:staged('curses')}));
 	core.fill(); const st={gild:0,made:0,suns:0,casc:0,thick:0,duet:false,gem:0};

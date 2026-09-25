@@ -1,0 +1,6 @@
+<!-- The title screen's sound button: a loudspeaker, which everyone reads as sound without a label (the Menu's Sound tile, which has one, shows a sistrum). Its waves are papyrus with a dark outline, so they show on a dark button too. 32 by 32. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<path d="M6 12h6l7-6v20l-7-6H6z" fill="#e8d49e" stroke="#4a2c10" stroke-width="2" stroke-linejoin="round"/>
+<path d="M23 11a7 7 0 0 1 0 10M26 8a11 11 0 0 1 0 16" fill="none" stroke="#4a2c10" stroke-width="4.2" stroke-linecap="round"/>
+<path d="M23 11a7 7 0 0 1 0 10M26 8a11 11 0 0 1 0 16" fill="none" stroke="#e8d49e" stroke-width="1.8" stroke-linecap="round"/>
+</svg>

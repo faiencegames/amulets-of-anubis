@@ -1,9 +1,0 @@
-// Something Anubis sells: bought for one stop, used once.
-{
-	"id": "shift",
-	"name": "Shifting sands",
-	"description": "Every amulet on the board is reshuffled.",
-	"currency": "gold",
-	"price": 180,
-	"gives": {"reshuffle": true}
-}

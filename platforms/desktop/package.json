@@ -1,8 +1,8 @@
 {
 	"name": "amulets-of-the-nile",
 	"productName": "Amulets of Anubis",
-	"version": "0.9.2",
-	"description": "A match-3 journey down the Nile.",
+	"version": "0.9.3",
+	"description": "A match-3 roguelite down the Nile.",
 	"main": "main.js",
 	"author": "Faience Games",
 	"license": "GPL-3.0-or-later",

@@ -1,0 +1,22 @@
+// Something that can happen on the river between two stops.
+{
+	"id": "lioness",
+	"kind": "puzzle",
+	"title": "The lioness’s temple",
+	"text": "Priests of Sekhmet were singing to soothe the lioness Goddess, for Her temper was famous. They asked us to gild the pavement of Her court before the song ended, and we did not much care to find out what would happen if we failed.",
+	"goal": {"type": "gild"},
+	"moves": 18,
+	"amulet_types": 5,
+	"amulets": ["uraeus", "aten", "ankh", "cat", "eye"],
+	"floor_plan": [
+		"..1111..",
+		".111111.",
+		"11111111",
+		"11122111",
+		"11122111",
+		"11111111",
+		".111111.",
+		"..1111.."
+	],
+	"reward": {"boon": "sekhmet"}
+}

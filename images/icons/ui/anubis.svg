@@ -9,12 +9,15 @@
 <rect x="8" y="35" width="48" height="9" fill="url(#stallChest)" stroke="#3b2406" stroke-width="1"/>
 <g fill="#1f3a8a"><rect x="12" y="37" width="3" height="5"/><rect x="24" y="37" width="3" height="5"/><rect x="37" y="37" width="3" height="5"/><rect x="49" y="37" width="3" height="5"/></g>
 <g fill="#3b2406" opacity=".5"><rect x="17" y="38" width="4" height="1.4"/><rect x="29" y="38" width="5" height="1.4"/><rect x="42" y="38" width="4" height="1.4"/></g>
-<!-- the jackal, lying with its forelegs stretched out and its tail over the edge -->
-<path d="M57.5 38 C58.5 34 58 31 56.5 29 C57.5 25 56.5 20.5 52 19.5 C47 18.8 40 20 35 20 C33 18.6 31.6 16.4 31.2 13.6 C31 11.4 31.6 9.2 32.4 7.2 L32.2 1.8 L29.6 6.4 L28.2 2.4 L26.8 7.6 C25.6 8.6 24.6 9.6 23.2 10.2 L15.6 11.2 C14 11.4 13.8 13.4 15.4 13.8 L22.6 14.8 C23.8 15.2 24.6 16 25 17.4 C25.2 19.6 24.6 21.6 24 23.2 L13.6 24.6 C11.6 24.8 11.4 27.8 13.4 28 L26 28.6 C33 29.8 42 30 50 29.8 L55 30.4 C55.4 33.2 55.6 35.6 55.2 38 Z"
+<!-- the jackal, lying on the lid (his whole underside on it), forelegs stretched out, head raised, his tail over the end -->
+<path d="M57.8 26.4 C60.4 27.4 61.2 29.6 60.6 32.5 L59.8 42" fill="none" stroke="#c8962e" stroke-width="3" stroke-linecap="round"/>
+<path d="M57.8 26.4 C60.4 27.4 61.2 29.6 60.6 32.5 L59.8 42" fill="none" stroke="#14141a" stroke-width="1.3" stroke-linecap="round"/>
+<path d="M13.4 11.2 L20 10.2 C22 9.8 24 9 25.8 7.6 L28.6 0.6 L31.2 8.8 C33.2 11 33.4 14 34.6 16.6 C36 18.6 38.5 19.2 42 19.2 L49 19.2 C54.4 19 58.6 22 58.4 26 C58.2 28.6 57.2 30.2 55.4 31 L11 31 C9.6 31 9.6 28.4 11 28.4 L24 28.2 C25 26 25.6 23.6 25 21.4 C24.4 18.6 23.4 16.6 21.6 15.2 L15.2 14.4 C13.4 14.3 12.2 13.6 12.2 12.6 C12.2 11.8 12.7 11.3 13.4 11.2 Z"
   fill="url(#stallJackal)" stroke="#c8962e" stroke-width="1.1" stroke-linejoin="round"/>
-<!-- the haunch, the collar and the eye -->
-<path d="M46 29.4 C45 25 47.5 21.6 52 21.4" fill="none" stroke="#c8962e" stroke-width=".8" stroke-linecap="round" opacity=".7"/>
-<path d="M26.2 17.8 C28.4 19.8 31 20.8 34 20.8" fill="none" stroke="#e8b93e" stroke-width="1.8" stroke-linecap="round"/>
-<path d="M23.4 11.4 C24.6 10.6 26 10.6 27 11.4" fill="none" stroke="#f3cf64" stroke-width="1.1" stroke-linecap="round"/>
-<circle cx="25.2" cy="11.5" r=".7" fill="#f3cf64"/>
+<!-- the ear's gold lining, the eye, the collar, the line of the haunch and the foreleg -->
+<path d="M28.6 3.2 L30 8.4 L27 8.3 Z" fill="#e8b93e"/>
+<path d="M19.6 10.9 C20.6 10.1 21.9 10 23 10.6 C21.9 11.4 20.6 11.5 19.6 10.9 Z" fill="#f3cf64"/>
+<path d="M24.6 18.4 C27.6 19.9 31.2 19.6 34.4 17.6" fill="none" stroke="#e8b93e" stroke-width="2" stroke-linecap="round"/>
+<path d="M45.6 30.6 C44.8 25.8 48 21.8 53 22" fill="none" stroke="#c8962e" stroke-width=".8" stroke-linecap="round" opacity=".7"/>
+<path d="M14 29.6 L24 29.4" fill="none" stroke="#c8962e" stroke-width=".6" stroke-linecap="round" opacity=".6"/>
 </svg>

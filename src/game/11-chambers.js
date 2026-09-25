@@ -1,3 +1,28 @@
+/* =============================================================================
+ * 11-chambers.js  —  tombs, temples and oases: the small, dim boards beside a
+ * stop, with amulets buried in sand (content/chambers/).
+ *
+ * A chamber's doorway opens once its stop is gilded. Tombs and temples wake
+ * when the player goes back in (cursed badges, rising rewards); oases stay
+ * calm. The board itself is set up by setupSmallBoard() in
+ * 10-river-events.js.
+ *
+ * What's here:
+ *   chamberAt(i)        the chamber beside stop i, if any
+ *   chamberOpen()       whether its doorway is open
+ *   startChamber()      goes in; chamberFromWin() and chamberFromCard() go in
+ *                       from the win scroll or the stop card
+ *   visitReward(), returnBadges()
+ *                       what a visit pays, and the badges a return wakes
+ *   leaveChamber()      comes out, to the next stop or back to the one before
+ *   placeKey(), placeIcon(), midSentence()
+ *                       the words and picture for a tomb, temple or oasis
+ *                       (TOMB_WORDS)
+ *
+ * Changes in the save: nothing directly (10-river-events.js records the
+ * visits and pays the rewards).
+ * ===========================================================================*/
+
 // ---------- tomb and temple chambers ----------
 // A chamber is a small, dim board beside a stop (content/chambers/), with
 // amulets buried in sand. Its doorway opens once that stop is gilded (and
@@ -15,7 +40,6 @@ function chamberAt(i) {
 const TOMB_WORDS = {
 	kicker: 'chamber.kicker',
 	sub: 'chamber.sub',
-	hud: 'chamber.hud',
 	enter: 'chamber.enter',
 	cover: 'chamber.sand',
 	again: 'chamber.again',
@@ -30,6 +54,8 @@ const TOMB_WORDS = {
 	win_note: 'win.chamber',
 	win_again: 'win.chamber_again',
 	explore: 'win.explore',
+	explore_short: 'win.explore_short',
+	go_back_short: 'win.go_back_short',
 	map_new: 'map.door_new',
 	map_done: 'map.door_done',
 };
@@ -49,7 +75,11 @@ function chamberOpen(c) {
 }
 
 function chamberHead(c) {
-	return `<p class="river-kicker chamber-kicker"><span class="arrow-label">${T(placeKey(c, 'kicker'), { stop: LEVELS[c.at].name })}</span></p><h2 id="msgTitle">${c.title}</h2>`;
+	return html`
+		<p class="river-kicker chamber-kicker">
+			<span class="arrow-label">${T(placeKey(c, 'kicker'), { stop: LEVELS[c.at].name })}</span>
+		</p>
+		<h2 id="msgTitle">${c.title}</h2>`;
 }
 
 function startChamber(c, after, again) {
@@ -60,24 +90,39 @@ function startChamber(c, after, again) {
 		wins = save.chamberWins[c.id] || 0,
 		stirs = !!returnBadges(c).badBadges;
 	showMsg(
-		`<div class="chamber-portal">${iconSvg('ui', c.oasis ? 'oasis-view' : 'chamber-door', 'aria-hidden="true"')}</div>
-		${chamberHead(c)}<p class="chamber-text story">${c.text}</p>
-		<div class="chamber-plaque">
-			<p class="plaque-goal"><span class="arrow-label">${T('trial.do')}</span>${T('event.goal', { goal: T('event.gild'), n: core.startMoves })}</p>
-			${getLine(visitReward(c))}
-			${done ? `<p class="plaque-again">${T(placeKey(c, 'again'), { n: wins })}${stirs ? ' ' + T('chamber.stirs') : ''}</p>` : ''}
-			<p class="plaque-sand">${T(placeKey(c, 'cover'))}</p>
-		</div>`,
+		html`
+			<div class="chamber-portal">
+				${iconSvg('ui', c.oasis ? 'oasis-view' : 'chamber-door', 'aria-hidden="true"')}
+			</div> ${chamberHead(c)}
+			<p class="chamber-text story">${c.text}</p>
+			<div class="chamber-plaque">
+				<div class="card-body">
+					<p class="plaque-goal">${T('event.goal', { goal: T('event.gild'), n: core.startMoves })}</p>
+					${getLine(visitReward(c), true)} ${
+						done
+							? html`
+				<p class="plaque-again">
+					${T(placeKey(c, 'again'), { n: wins })}${stirs ? ' ' + T('chamber.stirs') : ''}
+				</p>`
+							: ''
+					}
+				</div>
+				<div class="card-foot">${T(placeKey(c, 'cover'))}</div>
+			</div>`,
 		[
-			[Tplain(placeKey(c, 'enter')), () => {}, { kind: 'go', dark: true, oasis: !!c.oasis, icon: iconSvg('map', placeIcon(c)) }],
-			[after.label, leaveChamber, { kind: 'quiet' }],
+			[
+				Tplain(placeKey(c, 'enter')),
+				() => {},
+				{ kind: 'go', dark: true, oasis: !!c.oasis, icon: iconSvg('map', placeIcon(c)) },
+			],
+			[after.label, leaveChamber, { kind: 'quiet', short: Tplain('chamber.leave') }],
 		],
-		{ onClose: () => {} }
+		{ onClose: () => {} },
 	);
 }
 
 // A tomb or temple already explored wakes when the player goes back in:
-// cursed badges turn up, likelier with each return (settings.json,
+// cursed badges turn up, likelier with each return (settings.jsonc,
 // "returning"). Oases stay calm; there are never curses on Relaxed, or
 // before curses have arrived on a first journey.
 function returnBadges(c) {

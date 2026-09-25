@@ -9,6 +9,11 @@
 // opens every screen from the dock and the menu. It prints what it did and
 // fails (exit code 1) if the page logs a single error. It does not judge how
 // anything looks: take.mjs and the pictures in docs/images/ do that.
+//
+// On a Mac the browser uses the real graphics chip (ANGLE on Metal), so the
+// board is drawn with WebGL as on a phone (src/game/02-board-pen.js); one
+// more run uses a browser without it, for the plain canvas the game falls
+// back to.
 
 import { chromium } from 'playwright';
 import path from 'node:path';
@@ -33,7 +38,8 @@ const PHONE = { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch:
 const SCREENS = ['#btnMap', '#btnHelp', '#btnAmulets', '#btnStall', '#btnTreasury', '#btnCustomise', '#openMuseum', '#btnMenu', '#stripPlace'];
 
 const errors = [];
-const browser = await chromium.launch();
+const GPU = process.platform === 'darwin' ? ['--use-angle=metal', '--enable-gpu', '--ignore-gpu-blocklist'] : [];
+let browser = await chromium.launch({ args: GPU });
 
 async function play(label, device, save) {
 	const page = await browser.newPage({ ...device, reducedMotion: 'reduce' });
@@ -90,7 +96,8 @@ async function play(label, device, save) {
 		await page.keyboard.press('Escape');
 		await page.waitForTimeout(250);
 	}
-	console.log(`${label}: ${tries} moves tried, ${opened} screens opened`);
+	const pen = await page.evaluate(() => (document.getElementById('board').getContext('webgl') ? 'WebGL' : 'canvas'));
+	console.log(`${label}: ${tries} moves tried, ${opened} screens opened, the board drawn with ${pen}`);
 	await page.close();
 }
 
@@ -98,6 +105,10 @@ await play('new player, desktop', DESKTOP, null);
 await play('new player, phone', PHONE, null);
 await play('journey, desktop', DESKTOP, JOURNEY);
 await play('journey, phone', PHONE, JOURNEY);
+await browser.close();
+// the fallback: a browser without the graphics chip draws with the plain canvas
+browser = await chromium.launch();
+await play('journey, phone, no graphics chip', PHONE, JOURNEY);
 await browser.close();
 
 if (errors.length) {

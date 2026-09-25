@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "punt",
+	"name": "The incense of Punt",
+	"description": "Earn forty thousand gold.",
+	"found_when": {"gold_earned": 40000},
+	"reward": {"lapis": 50}
+}

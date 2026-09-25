@@ -1,3 +1,30 @@
+/* =============================================================================
+ * 09-unlocks.js  —  what unlocks looks and finds relics, and the banners that
+ * announce it.
+ *
+ * Every look (amulet set, floor, frame, sparkle) and every relic has
+ * conditions in its content file ("need", "found_when"), checked by
+ * conditionMet() in 01-core.js.
+ *
+ * What's here:
+ *   checkRelics()       finds whatever relics are now earned, then runs
+ *                       checkLooks() for the looks (called after a win, a
+ *                       loss, a move, a river event)
+ *   conditionText(), lookNeedText(), needProgress()
+ *                       what a locked look asks for, in words, and how far
+ *                       along it is (the Customise screen)
+ *   CONDITION_NAMES, CONDITION_TEXT
+ *                       the words for each kind of condition. A new condition
+ *                       needs its words here and in content/text.jsonc.
+ *   announce()          a banner at the top of the screen, one at a time
+ *                       (new relics, looks, seals, stages)
+ *
+ * checkLooks() also runs when Customise opens, for anything earned where no
+ * check ran (a restored save).
+ *
+ * Changes in the save: skins, floors, frames, sparkles (unlocked looks).
+ * ===========================================================================*/
+
 // ---------- looks: when each is unlocked ----------
 // Every amulet set, floor, frame and sparkle has a `need`: a block of
 // conditions from its content file (see conditionMet in 01-core.js), or none.
@@ -7,12 +34,12 @@ function lookUnlocked(o) {
 
 // What a locked look (or anything with conditions) asks of the player, with
 // progress so far. A content file can say it in its own words instead.
-// What a condition asks, in words (content/text.json, "conditions"). {n} is its
+// What a condition asks, in words (content/text.jsonc, "conditions"). {n} is its
 // number; for a relic, stop, difficulty or board, {name} is that thing's name.
 const CONDITION_NAMES = {
 	// with its article: "the Golden barque", and "the royal granary" for The royal granary
 	relic: id => 'the ' + (RELICS.find(r => r.id === id) || { name: 'relic' }).name.replace(/^The /, ''),
-	win_at_stop: id => (LEVELS.find(L => L.id === id) || { name: id }).name,
+	win_at_stop: id => (LEVELS.find(stop => stop.id === id) || { name: id }).name,
 	win_on_difficulty: d => DIFFICULTY[d].name,
 	win_on_board: b => boardMode(b).name,
 };
@@ -28,9 +55,9 @@ const CONDITION_TEXT = new Proxy(
 							'conditions.' + k,
 							CONDITION_NAMES[k]
 								? { name: CONDITION_NAMES[k](v) }
-								: { n: typeof v === 'number' ? v.toLocaleString() : v }
+								: { n: typeof v === 'number' ? v.toLocaleString() : v },
 						),
-	}
+	},
 );
 function conditionText(when) {
 	if (!when) return '';
@@ -51,8 +78,9 @@ function lookNeedText(o) {
 }
 
 // How far a locked look is to unlocking, so the Customise screen can show a
-// bar. Counted conditions give an exact "x of y"; one-off deeds (a relic, a
-// stop gilded, a win) are 0 or done, so the bar reads empty or full.
+// bar. Counted conditions give an exact "x of y". A one-off deed (a relic, a
+// stop gilded, a win) has no bar on its own, as it would only read "0 of 1";
+// among several conditions it counts as one of them.
 function needProgress(o) {
 	if (lookUnlocked(o)) return { pct: 100, have: null, need: null };
 	const c = o.need ? Object.keys(o.need) : [];
@@ -65,8 +93,7 @@ function needProgress(o) {
 				have: Math.min(CONDITION_COUNTERS[k](save) || 0, v),
 				need: v,
 			};
-		if (k === 'relic')
-			return { pct: (save.relics || {})[v] ? 100 : 0, have: (save.relics || {})[v] ? 1 : 0, need: 1 };
+		// one relic to find: its words say so, and a bar of "0 of 1" adds nothing
 		return { pct: 0, have: null, need: null };
 	}
 	if (c.length > 1) {
@@ -138,7 +165,7 @@ function announce(label, name, pic, extra, sound) {
 function announceMore() {
 	const m = announceCur && announceCur.querySelector('.ut-more');
 	if (m) {
-		m.textContent = announceQ.length ? '+' + announceQ.length + ' more' : '';
+		m.textContent = announceQ.length ? Tplain('banner.more', { n: announceQ.length }) : '';
 	}
 }
 
@@ -151,7 +178,14 @@ function nextAnnounce() {
 	}
 	const el = document.createElement('div');
 	el.className = 'unlock-toast';
-	el.innerHTML = `${a.pic ? `<span class="ut-pic" aria-hidden="true">${a.pic}</span>` : ''}<span class="ut-text"><small>${a.label}</small><strong>${a.name}</strong>${a.extra ? `<span class="ut-extra">${a.extra}</span>` : ''}</span><em class="ut-more" aria-hidden="true"></em>`;
+	el.innerHTML = html`
+		${a.pic ? `<span class="ut-pic" aria-hidden="true">${a.pic}</span>` : ''}
+		<span class="ut-text">
+			<small>${a.label}</small>
+			<strong>${a.name}</strong>
+			${a.extra ? `<span class="ut-extra">${a.extra}</span>` : ''}
+		</span>
+		<em class="ut-more" aria-hidden="true"></em>`;
 	el.onclick = () => dismissAnnounce(el);
 	box.appendChild(el);
 	announceCur = el;
@@ -172,7 +206,7 @@ function dismissAnnounce(el) {
 			el.remove();
 			nextAnnounce();
 		},
-		reduceMotion ? 60 : 320
+		reduceMotion ? 60 : 320,
 	);
 }
 

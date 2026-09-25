@@ -1,12 +1,33 @@
 /* =============================================================================
- * 00-open.js  —  opens the single closure that wraps the whole game, and loads
- * the player's saved data (progress, stars, gold, lapis, upgrades, relics,
- * held boons, settings) from one localStorage key. persist() writes it back.
+ * 00-open.js  —  the player's save: loading it, bringing an older save up
+ * to date, and writing it back. The first part of the game: web/shell.html
+ * wraps all of src/ except 01-core.js in one function.
+ *
+ * What's here:
+ *   save                the player's progress, purse, looks and settings: one
+ *                       object, kept in localStorage as "amulets-nile-v1".
+ *                       Read and changed nearly everywhere.
+ *   persist()           writes save back; call it after changing save
+ *   applySaveDefaults() fills in any field an older save lacks. A new save
+ *                       field needs its default here (13-saves.js runs it on
+ *                       an imported save too).
+ *   remapStops()        keeps progress with its stop when stops are added or
+ *                       reordered in content/stops/
+ *   TRY, TRY_ID         try-out mode (#try in the address), with its own save
+ *   PICTURES            every picture from images/, put here by the build
+ *   applyColours(),     the colour mode and less motion, from the Settings
+ *   applyMotion()       screen or the phone (reduceMotion is read throughout)
+ *   deviceSetting()     a setting kept in this browser rather than the save
+ *                       (WebGL, fewer effects)
+ *   TAU                 a small helper used throughout
+ *
+ * Changes in the save: fills in defaults and migrates old fields on load;
+ * colours and motion (the Settings screen, 14-menu.js).
  * ===========================================================================*/
 
-(() => {
 const TAU = Math.PI * 2;
-const reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+let reduceMotion = false; // set by applyMotion(), below
+const COLOUR_MODES = ['game', 'dark', 'hcl', 'hcd', 'phone']; // applyColours(), below
 
 // ---------- persistence ----------
 // Try-out mode, for people adding content: open the game with #try at the
@@ -54,7 +75,10 @@ function applySaveDefaults(s) {
 	s.sparkle = s.sparkle || 'gold';
 	s.sparkles = s.sparkles || { gold: 1 };
 	s.steadySound = s.steadySound === true; // "Steadier sound": a larger audio buffer, off unless chosen
-	s.vibrate = s.vibrateChosen ? s.vibrate === true : false; // off unless chosen in Sound, music and vibration (it used to start on)
+	s.vibrate = s.vibrateChosen ? s.vibrate === true : false; // off unless chosen in Settings (it used to start on)
+	// the colour mode and motion (Settings): the game's own colours, and as the phone asks
+	s.colours = COLOUR_MODES.includes(s.colours) ? s.colours : 'game';
+	s.motion = ['phone', 'less', 'full'].includes(s.motion) ? s.motion : 'phone';
 	s.upg = s.upg || {};
 	s.relics = s.relics || {};
 	s.boons = (s.boons || []).filter(b => BOONS[b]); // a boon whose file is gone is let go
@@ -79,7 +103,7 @@ function applySaveDefaults(s) {
 			CONTENT.settings.paceAll
 				? 'all'
 				: 1;
-	// content/settings.json, "stops_open_at_start": how many stops are open before any is won
+	// content/settings.jsonc, "stops_open_at_start": how many stops are open before any is won
 	s.unlocked = Math.max(s.unlocked || 0, Math.min(LEVELS.length, CONTENT.settings.stopsOpen) - 1);
 	s.met = s.met || {};
 	s.fresh = s.fresh || {}; // "new" dots still showing, until the player looks (markNew in src/game/26-stages.js)   // seals stamped and most omens braved, by stop id
@@ -124,7 +148,7 @@ const ORIGINAL_STOPS = [
 ];
 
 function remapStops(s) {
-	const now = LEVELS.map(L => L.id),
+	const now = LEVELS.map(stop => stop.id),
 		was = Array.isArray(s.stopIds) ? s.stopIds : ORIGINAL_STOPS;
 	if (was.join() !== now.join()) {
 		const from = now.map(id => was.indexOf(id)); // old position of each stop, or -1 if new
@@ -157,7 +181,7 @@ applySaveDefaults(save);
 if (TRY) {
 	save.seenHelp = true;
 	save.unlocked = LEVELS.length - 1;
-	LEVELS.forEach((L, i) => {
+	LEVELS.forEach((stop, i) => {
 		if (!save.stars[i]) save.stars[i] = 1;
 	}); // one star each, so omens can be tried
 	[
@@ -168,13 +192,66 @@ if (TRY) {
 	].forEach(([k, list]) =>
 		list.forEach(o => {
 			save[k][o.id] = 1;
-		})
+		}),
 	);
 	save.gold = Math.max(save.gold || 0, 99999);
 	save.lapis = Math.max(save.lapis || 0, 9999);
 	if (!save.boons.length) save.boons = Object.keys(BOONS);
-	const at = LEVELS.findIndex(L => L.id === TRY_ID);
+	const at = LEVELS.findIndex(stop => stop.id === TRY_ID);
 	if (at >= 0) save.current = at;
+}
+
+// ---------- colours and motion ----------
+// The colour modes (web/css/00-colours.css): the game's own, dark, high
+// contrast light and dark, and following the phone (dark when the phone is,
+// high contrast when it asks for more contrast).
+const phoneAsks = query => !!(window.matchMedia && matchMedia(query).matches);
+function applyColours() {
+	let mode = save.colours;
+	if (mode === 'phone') {
+		const dark = phoneAsks('(prefers-color-scheme: dark)');
+		if (phoneAsks('(prefers-contrast: more)')) mode = dark ? 'hcd' : 'hcl';
+		else mode = dark ? 'dark' : 'game';
+	}
+	if (mode === 'game') delete document.documentElement.dataset.colours;
+	else document.documentElement.dataset.colours = mode;
+}
+// Less motion: chosen, or asked for by the phone unless the player chose Full.
+// The calm class on <html> quietens the stylesheet (01-base.css).
+function applyMotion() {
+	reduceMotion =
+		save.motion === 'less' || (save.motion === 'phone' && phoneAsks('(prefers-reduced-motion: reduce)'));
+	document.documentElement.classList.toggle('calm', reduceMotion);
+}
+applyColours();
+applyMotion();
+// the phone's settings can change while the game is open (dark mode at sunset)
+['(prefers-color-scheme: dark)', '(prefers-contrast: more)', '(prefers-reduced-motion: reduce)'].forEach(
+	query => {
+		const list = window.matchMedia && matchMedia(query);
+		const follow = () => {
+			applyColours();
+			applyMotion();
+		};
+		if (list && list.addEventListener) list.addEventListener('change', follow);
+		else if (list && list.addListener) list.addListener(follow);
+	},
+);
+
+// Settings that belong to this device rather than the player, so a save code
+// taken to another phone doesn't bring them: how the board is drawn
+// ('amulets-renderer', 02-board-pen.js) and fewer effects ('amulets-effects').
+function deviceSetting(key, fallback) {
+	try {
+		return localStorage.getItem(key) || fallback;
+	} catch (e) {
+		return fallback;
+	}
+}
+function setDeviceSetting(key, value) {
+	try {
+		localStorage.setItem(key, value);
+	} catch (e) {}
 }
 
 function persist() {
@@ -192,7 +269,7 @@ function persist() {
 const PICTURES = (() => {
 	const all = Object.assign(
 		{ amulets: {}, specials: {}, badges: {}, backdrops: {}, boards: {}, floors: {}, relics: {} },
-		/*IMAGES*/null || {}
+		/*IMAGES*/ null || {},
 	);
 	const url = v =>
 		typeof v === 'string'

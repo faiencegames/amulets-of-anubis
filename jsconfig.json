@@ -1,0 +1,13 @@
+{
+	// Tells editors (VS Code, Zed, and others that use the TypeScript
+	// language server) how the game's code fits together, so a name can be
+	// followed to where it is defined, in any file. All of src/ runs as one
+	// program: 01-core.js first, then the rest (build.py), so every file sees
+	// the names of every other. Editors only: the build never reads this.
+	"compilerOptions": {
+		"target": "ES2020",
+		"checkJs": false,
+		"lib": ["ES2020", "DOM"]
+	},
+	"include": ["src/**/*.js"]
+}

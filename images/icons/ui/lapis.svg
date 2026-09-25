@@ -1,0 +1,7 @@
+<!-- Lapis, wherever it is counted or paid: a rough chunk of lapis lazuli as it came from the mines, flecked with gold (the pyrite in real lapis). Given to the stylesheet as the variable ico-lapis (06-icons.js). 32 by 32. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<path d="M5 18 L9 7.5 L20 4.5 L28 11 L26.5 23 L15 28 L6.5 24.5 Z" fill="#2a4fc0" stroke="#4a2c10" stroke-width="2.2" stroke-linejoin="round"/>
+<path d="M9 7.5 L15 14 L20 4.5 M15 14 L28 11 M15 14 L15 28 M15 14 L5 18" fill="none" stroke="#132a7a" stroke-width="1.1"/>
+<path d="M9 7.5 L15 14 L5 18 Z" fill="#5f84e6"/><path d="M15 14 L20 4.5 L28 11 Z" fill="#3c63d6"/>
+<circle cx="21" cy="19" r=".9" fill="#f3cf64"/><circle cx="11" cy="22" r=".7" fill="#f3cf64"/><circle cx="23" cy="13.6" r=".55" fill="#f3cf64"/><circle cx="17.5" cy="23" r=".5" fill="#f3cf64"/>
+<path d="M8.6 12 L10.2 8.4" stroke="#e4ecff" stroke-width="1.4" stroke-linecap="round"/></svg>

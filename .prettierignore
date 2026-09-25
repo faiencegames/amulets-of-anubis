@@ -1,0 +1,8 @@
+# Prettier keeps the code and the stylesheet in one style (tools/format.sh).
+# Everything else is left alone: the docs use spaces, content files are
+# JSON with comments, and web/shell.html holds the build's placeholders.
+*
+!*/
+!src/**/*.js
+!web/css/*.css
+!web/fonts.css

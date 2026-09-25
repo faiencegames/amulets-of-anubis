@@ -1,12 +1,65 @@
-<!-- The Nile map: land, river and labels. 360 by 560. The stops are drawn on top by the game (their places are in each stop file, "map_position"). -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 560"><defs><radialGradient id="mg" cx=".35" cy=".3"><stop offset="0" stop-color="#fff4b8"/><stop offset=".6" stop-color="#e0ac3a"/><stop offset="1" stop-color="#8a5a10"/></radialGradient>
-    <pattern id="waves" width="24" height="10" patternUnits="userSpaceOnUse"><path d="M0 6 Q6 1 12 6 T24 6" fill="none" stroke="#1f3a7a" stroke-opacity=".35" stroke-width="1.5"/></pattern></defs>
-    <path d="M0 0 H360 V34 Q300 40 240 30 Q200 42 160 34 Q120 44 80 36 Q40 42 0 34 Z" fill="#6f95c8" fill-opacity=".55"/>
-    <path d="M0 0 H360 V34 Q300 40 240 30 Q200 42 160 34 Q120 44 80 36 Q40 42 0 34 Z" fill="url(#waves)"/>
-    <text x="180" y="20" text-anchor="middle" font-size="13" font-style="italic" fill="#1f3a7a">The Great Sea</text>
-    <path id="valley" d="M186 560 C186 520 180 500 190 480 C210 450 262 440 262 418 C262 390 250 360 250 330 C250 312 246 306 214 302 C180 298 150 270 144 232 C140 200 150 170 154 120 C150 90 120 60 118 36 M154 120 C170 90 196 60 202 34" fill="none" stroke="#8fa35a" stroke-opacity=".5" stroke-width="26" stroke-linecap="round"/>
-    <path d="M186 560 C186 520 180 500 190 480 C210 450 262 440 262 418 C262 390 250 360 250 330 C250 312 246 306 214 302 C180 298 150 270 144 232 C140 200 150 170 154 120 C150 90 120 60 118 36 M154 120 C170 90 196 60 202 34" fill="none" stroke="#2c5d9e" stroke-width="5" stroke-linecap="round"/>
-    <text x="40" y="300" font-size="15" font-style="italic" fill="#8a6a3a" transform="rotate(-80 40 300)">Western Desert</text>
-    <text x="318" y="200" font-size="15" font-style="italic" fill="#8a6a3a" transform="rotate(80 318 200)">Eastern Desert</text>
-    <text x="190" y="80" font-size="12" font-style="italic" fill="#6b4a22" text-anchor="start">Lower Egypt</text>
-    <text x="175" y="262" font-size="12" font-style="italic" fill="#6b4a22">Upper Egypt</text></svg>
+<!-- The Nile map: land, river and labels. 360 by 560. The stops are drawn on top by the game (their places are in each stop file, "map_position"). Painted on the scroll: sand with a fine grain and wind-rippled dunes inside an inked edge, the green valley and delta with the stripes of fields, the river in three blues with glints, the sea with a line of surf, and a compass rose. The land is named as the Egyptians named it: deshret, the red land of the desert, and kemet, the black land of the valley. The ids start with nile- (they must be unique across all icons). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 560">
+<defs>
+	<radialGradient id="mg" cx=".35" cy=".3"><stop offset="0" stop-color="#fff4b8"/><stop offset=".6" stop-color="#e0ac3a"/><stop offset="1" stop-color="#8a5a10"/></radialGradient>
+	<linearGradient id="nile-sand" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ecd29a"/><stop offset=".5" stop-color="#e3c283"/><stop offset="1" stop-color="#d8b06c"/></linearGradient>
+	<pattern id="nile-grain" width="41" height="37" patternUnits="userSpaceOnUse">
+		<circle cx="13.3" cy="5.6" r="0.61" fill="#fff6d8" fill-opacity="0.47"/><circle cx="22.0" cy="13.5" r="0.37" fill="#9a7a4a" fill-opacity="0.21"/><circle cx="3.5" cy="15.5" r="0.45" fill="#9a7a4a" fill-opacity="0.25"/><circle cx="33.9" cy="4.6" r="0.44" fill="#fff6d8" fill-opacity="0.61"/><circle cx="38.9" cy="21.4" r="0.51" fill="#8a6a3a" fill-opacity="0.19"/><circle cx="35.2" cy="10.7" r="0.41" fill="#8a6a3a" fill-opacity="0.27"/><circle cx="23.0" cy="25.2" r="0.39" fill="#fff6d8" fill-opacity="0.59"/><circle cx="7.7" cy="3.6" r="0.63" fill="#9a7a4a" fill-opacity="0.19"/><circle cx="8.4" cy="25.2" r="0.52" fill="#7a5a2a" fill-opacity="0.25"/><circle cx="37.9" cy="13.4" r="0.45" fill="#fff6d8" fill-opacity="0.49"/><circle cx="32.0" cy="3.0" r="0.47" fill="#7a5a2a" fill-opacity="0.32"/>
+		<circle cx="29.9" cy="10.7" r="0.74" fill="#8a6a3a" fill-opacity="0.26"/><circle cx="6.8" cy="12.7" r="0.72" fill="#fff6d8" fill-opacity="0.56"/><circle cx="39.4" cy="2.9" r="0.57" fill="#7a5a2a" fill-opacity="0.23"/><circle cx="14.4" cy="18.4" r="0.67" fill="#8a6a3a" fill-opacity="0.31"/><circle cx="38.7" cy="17.5" r="0.62" fill="#fff6d8" fill-opacity="0.47"/><circle cx="28.8" cy="23.9" r="0.75" fill="#7a5a2a" fill-opacity="0.23"/><circle cx="15.8" cy="24.7" r="0.36" fill="#7a5a2a" fill-opacity="0.24"/><circle cx="25.0" cy="18.3" r="0.44" fill="#fff6d8" fill-opacity="0.52"/><circle cx="30.3" cy="14.7" r="0.72" fill="#7a5a2a" fill-opacity="0.19"/><circle cx="18.4" cy="20.3" r="0.7" fill="#7a5a2a" fill-opacity="0.32"/><circle cx="11.4" cy="15.4" r="0.49" fill="#fff6d8" fill-opacity="0.67"/>
+	</pattern>
+	<pattern id="nile-dunes" width="160" height="74" patternUnits="userSpaceOnUse">
+		<path d="M6 20 Q22 11 44 17" fill="none" stroke="#a9803f" stroke-opacity=".22" stroke-width="1.2" stroke-linecap="round"/>
+		<path d="M9 21.5 Q24 14 41 18.5" fill="none" stroke="#fff3d0" stroke-opacity=".35" stroke-width=".9" stroke-linecap="round"/>
+		<path d="M92 9 Q104 4 118 8" fill="none" stroke="#a9803f" stroke-opacity=".18" stroke-width="1.1" stroke-linecap="round"/>
+		<path d="M70 50 Q90 40 116 47 Q130 51 142 46" fill="none" stroke="#a9803f" stroke-opacity=".2" stroke-width="1.2" stroke-linecap="round"/>
+		<path d="M74 51.5 Q92 43 114 48.5" fill="none" stroke="#fff3d0" stroke-opacity=".3" stroke-width=".9" stroke-linecap="round"/>
+		<path d="M20 62 Q30 57 42 60" fill="none" stroke="#a9803f" stroke-opacity=".16" stroke-width="1" stroke-linecap="round"/>
+	</pattern>
+	<pattern id="nile-fields" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(-20)">
+		<rect width="9" height="4" fill="#6f9440" fill-opacity=".35"/>
+	</pattern>
+	<linearGradient id="nile-sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2d6aac"/><stop offset="1" stop-color="#5b97d0"/></linearGradient>
+	<pattern id="nile-waves" width="26" height="11" patternUnits="userSpaceOnUse"><path d="M0 7 Q6.5 2 13 7 T26 7" fill="none" stroke="#e8f3ff" stroke-opacity=".45" stroke-width="1.3"/></pattern>
+	<clipPath id="nile-land"><rect x="7" y="7" width="346" height="546" rx="12"/></clipPath>
+</defs>
+<g clip-path="url(#nile-land)">
+	<!-- the desert: sand, grain, dunes -->
+	<rect width="360" height="560" fill="url(#nile-sand)"/>
+	<rect width="360" height="560" fill="url(#nile-dunes)"/>
+	<rect width="360" height="560" fill="url(#nile-grain)"/>
+	<!-- the delta: the green fan between the river's two branches -->
+	<path d="M154 120 C150 90 120 60 112 38 Q140 30 175 38 Q192 42 206 36 C196 60 170 90 154 120 Z" fill="#8fa95e"/>
+	<path d="M154 120 C150 90 120 60 112 38 Q140 30 175 38 Q192 42 206 36 C196 60 170 90 154 120 Z" fill="url(#nile-fields)"/>
+	<!-- the valley: the black land along the river, green with fields -->
+	<path d="M186 560 C186 520 180 500 190 480 C210 450 262 440 262 418 C262 390 250 360 250 330 C250 312 246 306 214 302 C180 298 150 270 144 232 C140 200 150 170 154 120 C150 90 120 60 118 36 M154 120 C170 90 196 60 202 34" fill="none" stroke="#8fa95e" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+	<path d="M186 560 C186 520 180 500 190 480 C210 450 262 440 262 418 C262 390 250 360 250 330 C250 312 246 306 214 302 C180 298 150 270 144 232 C140 200 150 170 154 120 C150 90 120 60 118 36 M154 120 C170 90 196 60 202 34" fill="none" stroke="url(#nile-fields)" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+	<!-- the edge of the desert, where the green stops -->
+	<path d="M186 560 C186 520 180 500 190 480 C210 450 262 440 262 418 C262 390 250 360 250 330 C250 312 246 306 214 302 C180 298 150 270 144 232 C140 200 150 170 154 120 C150 90 120 60 118 36 M154 120 C170 90 196 60 202 34" fill="none" stroke="#6b8a3a" stroke-opacity=".35" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 5"/>
+	<!-- the river: a dark edge, the water, and glints of light -->
+	<path d="M186 560 C186 520 180 500 190 480 C210 450 262 440 262 418 C262 390 250 360 250 330 C250 312 246 306 214 302 C180 298 150 270 144 232 C140 200 150 170 154 120 C150 90 120 60 118 36 M154 120 C170 90 196 60 202 34" fill="none" stroke="#1d3f78" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
+	<path d="M186 560 C186 520 180 500 190 480 C210 450 262 440 262 418 C262 390 250 360 250 330 C250 312 246 306 214 302 C180 298 150 270 144 232 C140 200 150 170 154 120 C150 90 120 60 118 36 M154 120 C170 90 196 60 202 34" fill="none" stroke="#3a78c2" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+	<path d="M186 560 C186 520 180 500 190 480 C210 450 262 440 262 418 C262 390 250 360 250 330 C250 312 246 306 214 302 C180 298 150 270 144 232 C140 200 150 170 154 120 C150 90 120 60 118 36 M154 120 C170 90 196 60 202 34" fill="none" stroke="#bfe0ff" stroke-opacity=".8" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="6 17"/>
+	<!-- the sea, over the ends of the valley and river so they stop at the shore; its waves and surf -->
+	<path d="M0 0 H360 V36 Q330 44 300 38 Q270 30 240 34 Q210 46 175 38 Q140 30 110 40 Q75 48 40 38 Q18 33 0 38 Z" fill="url(#nile-sea)"/>
+	<path d="M0 0 H360 V36 Q330 44 300 38 Q270 30 240 34 Q210 46 175 38 Q140 30 110 40 Q75 48 40 38 Q18 33 0 38 Z" fill="url(#nile-waves)"/>
+	<path d="M0 38 Q18 33 40 38 Q75 48 110 40 Q140 30 175 38 Q210 46 240 34 Q270 30 300 38 Q330 44 360 36" fill="none" stroke="#f6efd8" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="14 5 3 5"/>
+	<!-- the painting darkens a little towards its edge, as old maps do -->
+	<rect x="7" y="7" width="346" height="546" rx="12" fill="none" stroke="#8a5a20" stroke-opacity=".12" stroke-width="22"/>
+	<rect x="7" y="7" width="346" height="546" rx="12" fill="none" stroke="#8a5a20" stroke-opacity=".1" stroke-width="10"/>
+	<!-- a compass rose, north up -->
+	<g transform="translate(318 516)">
+		<circle r="15" fill="#f1dfb0" fill-opacity=".7" stroke="#7a5a2a" stroke-width="1"/>
+		<path d="M0 -21 L4 -4 L0 0 L-4 -4 Z" fill="#8e2415" stroke="#4a2c10" stroke-width=".8" stroke-linejoin="round"/>
+		<path d="M0 21 L4 4 L0 0 L-4 4 Z M-21 0 L-4 -4 L0 0 L-4 4 Z M21 0 L4 -4 L0 0 L4 4 Z" fill="#e3c283" stroke="#4a2c10" stroke-width=".8" stroke-linejoin="round"/>
+		<text y="-24" text-anchor="middle" font-size="10" fill="#4a2c10">N</text>
+	</g>
+</g>
+<!-- the inked edge of the painting -->
+<rect x="7" y="7" width="346" height="546" rx="12" fill="none" stroke="#6b4a22" stroke-opacity=".7" stroke-width="1.5"/>
+<text x="180" y="22" text-anchor="middle" font-size="13" font-style="italic" fill="#f3ecd8">The Great Sea</text>
+<text x="42" y="330" font-size="15" font-style="italic" fill="#7a5626" text-anchor="middle" transform="rotate(-80 42 330)">Deshret, the red land</text>
+<text x="318" y="210" font-size="15" font-style="italic" fill="#7a5626" text-anchor="middle" transform="rotate(80 318 210)">Deshret, the red land</text>
+<text x="190" y="80" font-size="12" font-style="italic" fill="#4a3014" text-anchor="start">Lower Egypt</text>
+<text x="175" y="262" font-size="12" font-style="italic" fill="#4a3014">Upper Egypt</text>
+<text x="185" y="205" font-size="11.5" font-style="italic" fill="#3f5a1e" text-anchor="middle" transform="rotate(84 185 205)">Kemet, the black land</text>
+</svg>

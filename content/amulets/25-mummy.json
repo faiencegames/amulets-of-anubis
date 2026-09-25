@@ -1,8 +1,0 @@
-// What the codex says about an amulet. The drawing itself is built in,
-// or comes from a picture in images/amulets/ with the same name as the id.
-{
-	"id": "mummy",
-	"name": "Mummy",
-	"plural": "mummies",
-	"meaning": "A body kept for the life after death: dried with natron salt and wrapped in linen bands, often with amulets tucked between the layers."
-}

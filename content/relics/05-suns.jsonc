@@ -1,0 +1,7 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "suns",
+	"name": "Disk of Ra",
+	"description": "Forge eight winged suns.",
+	"found_when": {"suns_forged": 8}
+}

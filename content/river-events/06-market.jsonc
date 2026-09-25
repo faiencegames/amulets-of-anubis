@@ -1,0 +1,20 @@
+// Something that can happen on the river between two stops.
+{
+	"id": "market",
+	"kind": "choice",
+	"title": "The market at Thebes",
+	"text": "Traders crowded the quay at Thebes with charms and linen, each calling louder than the last. A seller of amulets beckoned us over; he had, he swore, exactly what travellers like us were missing.",
+	"choices": [
+		{
+			"label": "Buy a charm",
+			"cost": {"gold": 250},
+			"give": {"boon": "random"}
+		},
+		{
+			"label": "Sell him one of your boons",
+			"take_a_boon": true,
+			"give": {"gold": 90}
+		},
+		{"label": "Walk on"}
+	]
+}

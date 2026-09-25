@@ -1,0 +1,10 @@
+// Something Anubis sells: bought for one stop, used once.
+{
+	"id": "bread",
+	"name": "Bread and beer",
+	"description": "The wages of the pyramid builders: five extra moves, right now.",
+	"icon": "bread",
+	"currency": "lapis",
+	"price": 70,
+	"gives": {"moves": 5}
+}

@@ -12,3 +12,6 @@ __pycache__/
 *.kate-swp
 *.swp
 tools/screenshots/looks-check.png
+
+# local settings of the coding assistant
+.claude/

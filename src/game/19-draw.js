@@ -1,44 +1,109 @@
+/* =============================================================================
+ * 19-draw.js  —  the game loop: moving things, and drawing the board every
+ * frame.
+ *
+ * What's here:
+ *   frame()             runs every frame (30-boot.js starts it): update(),
+ *                       then draw(). Frames slow down when nothing moves
+ *                       (idleWanted()), to save the battery.
+ *   update()            moves falling and swapping amulets and the effects
+ *   draw()              paints the board: the cached floor (01-caches.js),
+ *                       the amulets, badges, effects and popups
+ *   drawTile()          one amulet, with the mark of a special (How to play
+ *                       uses it too)
+ *   fewerEffects(),     fewer effects: the Settings choice, and the careful
+ *   setEffects(),       automatic that watches cascades on a slow phone
+ *   watchEffects()
+ *
+ * Don't make gradients or shadows here per square per frame: cache them
+ * (the manual, part 2, "Performance").
+ *
+ * Changes in the save: nothing (fewer effects is kept in this browser).
+ * ===========================================================================*/
+
 // ---------- update / draw ----------
 const SWAP_SPEED = 7.5,
 	GRAV = 38;
-let last = performance.now(),
+let lastFrameTime = performance.now(),
 	lastDraw = 0,
-	slow = 0,
-	frames = 0,
 	busyAnim = false,
 	lastSig = '';
+// ---------- fewer effects ----------
+// Settings, "Effects" ('amulets-effects', kept in this browser): 'full',
+// 'fewer', or 'auto'. Automatic turns them down only on a phone that reports
+// 4 GB of memory or less, where at least a fifth of the frames during
+// cascades were slow, at two different stops ('amulets-effects-slow' keeps
+// which). A good phone never meets the first condition, so a hitch or two
+// can never cost it its effects.
+let effectsChoice = deviceSetting('amulets-effects', 'auto');
+const fxWatch = { frames: 0, slow: 0 };
+function fewerEffects() {
+	const choice = deviceSetting('amulets-effects', 'auto');
+	return choice === 'fewer' || (choice === 'auto' && deviceSetting('amulets-effects-auto', '') === 'on');
+}
+function setEffects(choice) {
+	effectsChoice = choice;
+	setDeviceSetting('amulets-effects', choice);
+	if (lowFx !== fewerEffects()) {
+		lowFx = !lowFx;
+		fit();
+	}
+}
+function watchEffects(dt) {
+	if (lowFx || effectsChoice !== 'auto' || !(navigator.deviceMemory <= 4)) return;
+	fxWatch.frames++;
+	if (dt > 0.028) fxWatch.slow++;
+	if (fxWatch.frames < 240) return;
+	const stop = LEVELS[levelIdx] && LEVELS[levelIdx].id;
+	if (fxWatch.slow * 5 >= fxWatch.frames && stop) {
+		const stops = deviceSetting('amulets-effects-slow', '').split(' ').filter(Boolean);
+		if (!stops.includes(stop)) stops.push(stop);
+		setDeviceSetting('amulets-effects-slow', stops.join(' '));
+		if (stops.length >= 2) {
+			setDeviceSetting('amulets-effects-auto', 'on');
+			lowFx = true;
+			fit();
+			announce(
+				T('settings.fx_auto_label'),
+				T('settings.fx_auto_name'),
+				'',
+				T('settings.fx_auto_extra'),
+			);
+		}
+	}
+	fxWatch.frames = fxWatch.slow = 0;
+}
+
+// 2: something moves that should be smooth; 1: only the specials' slow glow;
+// 0: the board is still
 function idleWanted() {
 	if (armed >= 0 || hint || selected >= 0 || eventState || popups.length || bgDirty || bgCells.size)
-		return true;
+		return 2;
 	const cells = core ? core.cells : [];
-	for (let k = 0; k < cells.length; k++) {
-		const t = cells[k];
-		if (t && (t.special || t.pop || t.land)) return true;
+	let glow = 0;
+	for (let sq = 0; sq < cells.length; sq++) {
+		const tile = cells[sq];
+		if (tile && (tile.pop || tile.land)) return 2;
+		if (tile && tile.special) glow = 1;
 	}
-	return false;
+	return glow;
 }
 
 function frame(now) {
-	const dt = Math.min(0.05, (now - last) / 1000);
-	last = now;
-	time += dt;
+	const dt = Math.min(0.05, (now - lastFrameTime) / 1000);
+	lastFrameTime = now;
+	animTime += dt;
 	update(dt);
-	// a run of long frames means a slower device: shed the costly extras once
-	if (dt > 0.028 && busyAnim) {
-		if (++slow > 40 && !lowFx) {
-			lowFx = true;
-			fit();
-		}
-	} else if (++frames > 120) {
-		frames = 0;
-		slow = Math.max(0, slow - 1);
-	}
+	if (busyAnim) watchEffects(dt);
 	// Idle redraws: 30 a second (15 on a struggling device) while something on
-	// the board still moves by itself (a special's glow, a badge, the selected
-	// amulet, a hint, popups); when the board is truly still, 4 a second. Each
+	// the board still moves by itself (a badge, the selected amulet, a hint,
+	// popups); 12 a second when only the specials' slow glow moves (nearly
+	// always, and it still looks smooth); when the board is truly still, 4 a
+	// second. Each
 	// canvas frame is handed to the compositor whether or not it changed, so a
 	// still board drawn 30 times a second was wasted work and battery.
-	const idleGap = idleWanted() ? (lowFx ? 66 : 33) : 250;
+	const want = idleWanted(),
+		idleGap = want === 2 ? (lowFx ? 66 : 33) : want === 1 ? 83 : 250;
 	// ...and at once when a selection, boon, hint or score changes, so a still
 	// board never shows a stale highlight
 	const sig =
@@ -65,46 +130,46 @@ function frame(now) {
 
 function update(dt) {
 	let moving = false;
-	for (let k = 0; k < N * ROWS; k++) {
-		const t = core && core.cells[k];
-		if (!t) continue;
-		const tr = (k / N) | 0,
-			tc = k % N;
-		if (t.x === undefined) {
-			t.x = tc;
-			t.y = tr;
-			t.vy = 0;
+	for (let sq = 0; sq < COLS * ROWS; sq++) {
+		const tile = core && core.cells[sq];
+		if (!tile) continue;
+		const tr = (sq / COLS) | 0,
+			tc = sq % COLS;
+		if (tile.x === undefined) {
+			tile.x = tc;
+			tile.y = tr;
+			tile.vy = 0;
 		}
-		if (t.x !== tc) {
-			const d = tc - t.x,
+		if (tile.x !== tc) {
+			const d = tc - tile.x,
 				s = SWAP_SPEED * dt;
-			t.x = Math.abs(d) <= s ? tc : t.x + Math.sign(d) * s;
+			tile.x = Math.abs(d) <= s ? tc : tile.x + Math.sign(d) * s;
 			moving = true;
 		}
-		if (t.y !== tr) {
-			if (tr > t.y && !t.swapping) {
-				t.vy = (t.vy || 0) + GRAV * dt;
-				t.y += t.vy * dt;
-				if (t.y >= tr) {
-					t.y = tr;
-					if (t.vy > 6) {
-						t.land = 1;
+		if (tile.y !== tr) {
+			if (tr > tile.y && !tile.swapping) {
+				tile.vy = (tile.vy || 0) + GRAV * dt;
+				tile.y += tile.vy * dt;
+				if (tile.y >= tr) {
+					tile.y = tr;
+					if (tile.vy > 6) {
+						tile.land = 1;
 						sfx('land');
 					}
-					t.vy = 0;
+					tile.vy = 0;
 				}
 			} else {
-				const d = tr - t.y,
+				const d = tr - tile.y,
 					s = SWAP_SPEED * dt;
-				t.y = Math.abs(d) <= s ? tr : t.y + Math.sign(d) * s;
+				tile.y = Math.abs(d) <= s ? tr : tile.y + Math.sign(d) * s;
 			}
 			moving = true;
 		}
-		if (t.land) {
-			t.land = Math.max(0, t.land - dt * 5);
+		if (tile.land) {
+			tile.land = Math.max(0, tile.land - dt * 5);
 		}
-		if (t.pop) {
-			t.pop = Math.max(0, t.pop - dt * 2.5);
+		if (tile.pop) {
+			tile.pop = Math.max(0, tile.pop - dt * 2.5);
 		}
 	}
 	dying = dying.filter(d => (d.t += dt) < 0.3);
@@ -132,7 +197,7 @@ function update(dt) {
 		o.t += dt / o.dur;
 		if (o.t >= 1) {
 			flashes.set(o.to, 1);
-			burst(o.to % N, (o.to / N) | 0, 5);
+			burst(o.to % COLS, (o.to / COLS) | 0, 5);
 			return false;
 		}
 		return true;
@@ -170,71 +235,72 @@ function update(dt) {
 // One amulet on the board. The marks of a special amulet are pictures in
 // images/specials/, each a square and a half across (192 x 192 for a 128
 // square), centred on the amulet; here they are only placed and animated.
-function drawTile(t, x, y, scale = 1, alpha = 1, g = ctx, C = cs) {
+function drawTile(tile, x, y, scale = 1, alpha = 1, pen = ctx, C = squareSize) {
 	const size = C * 0.86 * scale,
 		px = x * C + C / 2,
 		py = y * C + C / 2;
-	const band = t.special === 'h' || t.special === 'v',
-		turn = t.special === 'v' ? Math.PI / 2 : 0;
+	const band = tile.special === 'h' || tile.special === 'v',
+		turn = tile.special === 'v' ? Math.PI / 2 : 0;
 	// put(picture, strength, grow, turn): the picture centred on the square
 	const put = (img, a = 1, k = 1, rot = 0) => {
 		if (!img) return;
 		const w = C * 1.5 * k;
-		g.save();
-		g.translate(px, py);
-		if (rot) g.rotate(rot);
-		g.globalAlpha = alpha * a;
-		g.drawImage(img, -w / 2, -w / 2, w, w);
-		g.restore();
+		pen.save();
+		pen.translate(px, py);
+		if (rot) pen.rotate(rot);
+		pen.globalAlpha = alpha * a;
+		pen.drawImage(img, -w / 2, -w / 2, w, w);
+		pen.restore();
 	};
 	// behind the amulet
-	if (t.special === 'bomb') put(SPECIAL['ring-glow'], 0.25 + 0.25 * (0.5 + 0.5 * Math.sin(time * 5)));
+	if (tile.special === 'bomb')
+		put(SPECIAL['ring-glow'], 0.25 + 0.25 * (0.5 + 0.5 * Math.sin(animTime * 5)));
 	if (band) {
-		put(SPECIAL['band-glow'], 0.22 + 0.12 * Math.sin(time * 6), 1, turn);
+		put(SPECIAL['band-glow'], 0.22 + 0.12 * Math.sin(animTime * 6), 1, turn);
 		put(SPECIAL.band, 1, 1, turn);
 	}
-	if (t.special === 'star') put(SPECIAL['star-glow'], 0.2 + 0.14 * Math.sin(time * 5));
-	g.globalAlpha = alpha;
-	if (!lowFx && g === ctx && C === cs) {
+	if (tile.special === 'star') put(SPECIAL['star-glow'], 0.2 + 0.14 * Math.sin(animTime * 5));
+	pen.globalAlpha = alpha;
+	if (!lowFx && pen === ctx && C === squareSize) {
 		const hi = haloImg();
-		g.drawImage(hi, px - C / 2, py - C / 2, C, C);
+		pen.drawImage(hi, px - C / 2, py - C / 2, C, C);
 	}
-	const pw = BADGES[t.special] && BADGES[t.special].colour; // the glow round a badged amulet
+	const pw = BADGES[tile.special] && BADGES[tile.special].colour; // the glow round a badged amulet
 	if (pw) {
-		const p = 0.5 + 0.5 * Math.sin(time * 4 + (t.id || 0));
-		const ag = g.createRadialGradient(px, py, C * 0.1, px, py, C * 0.52);
+		const p = 0.5 + 0.5 * Math.sin(animTime * 4 + (tile.id || 0));
+		const ag = pen.createRadialGradient(px, py, C * 0.1, px, py, C * 0.52);
 		ag.addColorStop(0, pw + 'aa');
 		ag.addColorStop(1, pw + '00');
-		g.globalAlpha = alpha * (0.55 + 0.45 * p);
-		g.fillStyle = ag;
-		g.fillRect(px - C / 2, py - C / 2, C, C);
-		g.globalAlpha = alpha;
+		pen.globalAlpha = alpha * (0.55 + 0.45 * p);
+		pen.fillStyle = ag;
+		pen.fillRect(px - C / 2, py - C / 2, C, C);
+		pen.globalAlpha = alpha;
 	}
-	const land = t.land || 0,
+	const land = tile.land || 0,
 		sq = 1 - land * 0.12;
 	const w = size * (1 + land * 0.08),
 		h = size * sq;
-	const flat = g === ctx && C === cs && !land && Math.abs(scale - 1) < 0.001;
-	const cached = flat ? tileAt(TILE_SPRITES[t.type]) : null;
-	if (cached) g.drawImage(cached, px - w / 2, py - h / 2, w, h);
-	else if (TILE_SPRITES[t.type])
-		g.drawImage(TILE_SPRITES[t.type], px - w / 2, py - h / 2 + (size - h) / 2, w, h);
-	if (pw) drawBadge(g, t.special, px + C * 0.26, py + C * 0.26, C * 0.2);
-	if (t.sand) put(SPECIAL[t.wet ? 'water' : 'sand']); // an amulet under sand (tombs) or water (oases)
+	const flat = pen === ctx && C === squareSize && !land && Math.abs(scale - 1) < 0.001;
+	const cached = flat ? tileAt(TILE_SPRITES[tile.type]) : null;
+	if (cached) pen.drawImage(cached, px - w / 2, py - h / 2, w, h);
+	else if (TILE_SPRITES[tile.type])
+		pen.drawImage(TILE_SPRITES[tile.type], px - w / 2, py - h / 2 + (size - h) / 2, w, h);
+	if (pw) drawBadge(pen, tile.special, px + C * 0.26, py + C * 0.26, C * 0.2);
+	if (tile.sand) put(SPECIAL[tile.wet ? 'water' : 'sand']); // an amulet under sand (tombs) or water (oases)
 	// in front: the band's arrows and the star's points move in and out, the ring turns
-	if (band) put(SPECIAL['band-arrows'], 1, 1 + Math.sin(time * 6) * 0.068, turn);
-	if (t.special === 'star') put(SPECIAL['star-points'], 1, 1 + Math.sin(time * 6) * 0.06);
-	if (t.special === 'bomb') put(SPECIAL.ring, 1, 1, time * 0.8);
-	g.globalAlpha = 1;
+	if (band) put(SPECIAL['band-arrows'], 1, 1 + Math.sin(animTime * 6) * 0.068, turn);
+	if (tile.special === 'star') put(SPECIAL['star-points'], 1, 1 + Math.sin(animTime * 6) * 0.06);
+	if (tile.special === 'bomb') put(SPECIAL.ring, 1, 1, animTime * 0.8);
+	pen.globalAlpha = 1;
 }
 
 // A badge's picture, images/badges/<id>.svg: 96 x 96, the badge a circle of
 // radius 24 in the middle, drawn here at radius r. The badges themselves are
 // content files (content/badges/, BADGES in 01-core.js).
 
-function drawBadge(g, kind, x, y, r) {
+function drawBadge(pen, kind, x, y, r) {
 	const img = BADGE[kind];
-	if (img) g.drawImage(img, x - 2 * r, y - 2 * r, 4 * r, 4 * r);
+	if (img) pen.drawImage(img, x - 2 * r, y - 2 * r, 4 * r, 4 * r);
 }
 
 function draw() {
@@ -242,6 +308,7 @@ function draw() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	if (!core) {
 		ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+		if (ctx.isGL) ctx.flush();
 		return;
 	}
 	if (bgDirty) buildBg();
@@ -249,56 +316,56 @@ function draw() {
 	if (bgLayer) ctx.drawImage(bgLayer, 0, 0);
 	ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 	for (const [k, fl] of flashes) {
-		const r = (k / N) | 0,
-			c = k % N;
+		const row = (k / COLS) | 0,
+			col = k % COLS;
 		ctx.fillStyle = `rgba(255,250,210,${fl * 0.7})`;
-		ctx.fillRect(c * cs + 1, r * cs + 1, cs - 2, cs - 2);
+		ctx.fillRect(col * squareSize + 1, row * squareSize + 1, squareSize - 2, squareSize - 2);
 	}
 	if (armed >= 0) {
 		ctx.save();
-		ctx.strokeStyle = 'rgba(255,214,90,' + (0.5 + 0.3 * Math.sin(time * 5)) + ')';
+		ctx.strokeStyle = 'rgba(255,214,90,' + (0.5 + 0.3 * Math.sin(animTime * 5)) + ')';
 		ctx.lineWidth = 4;
-		ctx.strokeRect(2, 2, N * cs - 4, ROWS * cs - 4);
+		ctx.strokeRect(2, 2, COLS * squareSize - 4, ROWS * squareSize - 4);
 		ctx.restore();
 	}
 	if (selected >= 0) {
-		const r = (selected / N) | 0,
-			c = selected % N;
+		const row = (selected / COLS) | 0,
+			col = selected % COLS;
 		ctx.save();
 		ctx.shadowColor = '#ffd65a';
 		ctx.shadowBlur = 14;
 		ctx.strokeStyle = '#ffe99a';
 		ctx.lineWidth = 3;
-		ctx.strokeRect(c * cs + 3, r * cs + 3, cs - 6, cs - 6);
+		ctx.strokeRect(col * squareSize + 3, row * squareSize + 3, squareSize - 6, squareSize - 6);
 		ctx.restore();
 	}
 	if (showCursor && cursor >= 0) {
-		const r = (cursor / N) | 0,
-			c = cursor % N;
+		const row = (cursor / COLS) | 0,
+			col = cursor % COLS;
 		ctx.save();
 		ctx.setLineDash([5, 4]);
 		ctx.strokeStyle = '#e8f0ff';
 		ctx.lineWidth = 2.5;
-		ctx.strokeRect(c * cs + 5, r * cs + 5, cs - 10, cs - 10);
+		ctx.strokeRect(col * squareSize + 5, row * squareSize + 5, squareSize - 10, squareSize - 10);
 		ctx.restore();
 	}
-	for (let k = 0; k < N * ROWS; k++) {
-		const t = core.cells[k];
-		if (!t || t.x === undefined) continue;
-		let x = t.x,
-			y = t.y,
-			sc = 1 + (t.pop || 0) * 0.3;
-		if (hint && (hint[0] === k || hint[1] === k)) {
-			const o = hint[0] === k ? hint[1] : hint[0];
-			const dx = (o % N) - (k % N),
-				dy = ((o / N) | 0) - ((k / N) | 0);
-			const w = Math.max(0, Math.sin(time * 9)) * 0.09;
+	for (let sq = 0; sq < COLS * ROWS; sq++) {
+		const tile = core.cells[sq];
+		if (!tile || tile.x === undefined) continue;
+		let x = tile.x,
+			y = tile.y,
+			sc = 1 + (tile.pop || 0) * 0.3;
+		if (hint && (hint[0] === sq || hint[1] === sq)) {
+			const o = hint[0] === sq ? hint[1] : hint[0];
+			const dx = (o % COLS) - (sq % COLS),
+				dy = ((o / COLS) | 0) - ((sq / COLS) | 0);
+			const w = Math.max(0, Math.sin(animTime * 9)) * 0.09;
 			x += dx * w;
 			y += dy * w;
 		}
-		if (k === selected) sc *= 1 + 0.06 * Math.sin(time * 7) + 0.04;
+		if (sq === selected) sc *= 1 + 0.06 * Math.sin(animTime * 7) + 0.04;
 		if (y < -1) continue;
-		drawTile(t, x, y, sc);
+		drawTile(tile, x, y, sc);
 	}
 	dying.forEach(d => {
 		const p = d.t / 0.3;
@@ -307,9 +374,9 @@ function draw() {
 	beams.forEach(b => {
 		if (b.dir === 'd1' || b.dir === 'd2') {
 			ctx.save();
-			const th = cs * 0.6 * b.life,
-				L = Math.hypot(N, ROWS) * cs;
-			ctx.translate(b.c * cs + cs / 2, b.r * cs + cs / 2);
+			const th = squareSize * 0.6 * b.life,
+				L = Math.hypot(COLS, ROWS) * squareSize;
+			ctx.translate(b.c * squareSize + squareSize / 2, b.r * squareSize + squareSize / 2);
 			ctx.rotate(b.dir === 'd1' ? Math.PI / 4 : -Math.PI / 4);
 			const g = ctx.createLinearGradient(0, -th / 2, 0, th / 2);
 			g.addColorStop(0, 'rgba(170,210,255,0)');
@@ -321,134 +388,110 @@ function draw() {
 			return;
 		}
 		ctx.save();
-		const th = cs * 0.7 * b.life;
+		const th = squareSize * 0.7 * b.life;
 		const g =
 			b.dir === 'h'
-				? ctx.createLinearGradient(0, b.idx * cs + cs / 2 - th / 2, 0, b.idx * cs + cs / 2 + th / 2)
-				: ctx.createLinearGradient(b.idx * cs + cs / 2 - th / 2, 0, b.idx * cs + cs / 2 + th / 2, 0);
+				? ctx.createLinearGradient(
+						0,
+						b.idx * squareSize + squareSize / 2 - th / 2,
+						0,
+						b.idx * squareSize + squareSize / 2 + th / 2,
+					)
+				: ctx.createLinearGradient(
+						b.idx * squareSize + squareSize / 2 - th / 2,
+						0,
+						b.idx * squareSize + squareSize / 2 + th / 2,
+						0,
+					);
 		g.addColorStop(0, 'rgba(255,200,80,0)');
 		g.addColorStop(0.5, `rgba(255,250,215,${b.life})`);
 		g.addColorStop(1, 'rgba(255,200,80,0)');
 		ctx.fillStyle = g;
-		if (b.dir === 'h') ctx.fillRect(0, b.idx * cs + cs / 2 - th / 2, N * cs, th);
-		else ctx.fillRect(b.idx * cs + cs / 2 - th / 2, 0, th, ROWS * cs);
+		if (b.dir === 'h')
+			ctx.fillRect(0, b.idx * squareSize + squareSize / 2 - th / 2, COLS * squareSize, th);
+		else ctx.fillRect(b.idx * squareSize + squareSize / 2 - th / 2, 0, th, ROWS * squareSize);
 		ctx.restore();
 	});
 	rings.forEach(r => {
 		ctx.strokeStyle = `rgba(255,225,140,${r.life})`;
-		ctx.lineWidth = cs * 0.18 * r.life;
+		ctx.lineWidth = squareSize * 0.18 * r.life;
 		ctx.beginPath();
 		ctx.arc(
-			r.x * cs + cs / 2,
-			r.y * cs + cs / 2,
-			cs * (r.big ? 4 : 1.6) * (1 - r.life) + cs * 0.3,
+			r.x * squareSize + squareSize / 2,
+			r.y * squareSize + squareSize / 2,
+			squareSize * (r.big ? 4 : 1.6) * (1 - r.life) + squareSize * 0.3,
 			0,
-			TAU
+			TAU,
 		);
 		ctx.stroke();
 	});
 	orbs.forEach(o => {
-		const x0 = (o.from % N) + 0.5,
-			y0 = ((o.from / N) | 0) + 0.5,
-			x1 = (o.to % N) + 0.5,
-			y1 = ((o.to / N) | 0) + 0.5,
+		const x0 = (o.from % COLS) + 0.5,
+			y0 = ((o.from / COLS) | 0) + 0.5,
+			x1 = (o.to % COLS) + 0.5,
+			y1 = ((o.to / COLS) | 0) + 0.5,
 			e = o.t < 0 ? 0 : o.t,
 			mx = (x0 + x1) / 2,
 			my = Math.min(y0, y1) - 1.8;
 		const x = (1 - e) * (1 - e) * x0 + 2 * (1 - e) * e * mx + e * e * x1,
 			y = (1 - e) * (1 - e) * y0 + 2 * (1 - e) * e * my + e * e * y1;
-		const og = ctx.createRadialGradient(x * cs, y * cs, 0, x * cs, y * cs, cs * 0.35);
+		const og = ctx.createRadialGradient(
+			x * squareSize,
+			y * squareSize,
+			0,
+			x * squareSize,
+			y * squareSize,
+			squareSize * 0.35,
+		);
 		og.addColorStop(0, 'rgba(255,255,230,1)');
 		og.addColorStop(0.35, 'rgba(255,214,90,.9)');
 		og.addColorStop(1, 'rgba(255,180,40,0)');
 		ctx.fillStyle = og;
 		ctx.beginPath();
-		ctx.arc(x * cs, y * cs, cs * 0.35, 0, TAU);
+		ctx.arc(x * squareSize, y * squareSize, squareSize * 0.35, 0, TAU);
 		ctx.fill();
 	});
 	particles.forEach(p => {
 		const a = Math.min(1, p.life * 2);
 		ctx.fillStyle = p.col;
 		ctx.globalAlpha = a;
-		const s = p.s * cs;
+		const s = p.s * squareSize;
 		ctx.save();
-		ctx.translate(p.x * cs, p.y * cs);
+		ctx.translate(p.x * squareSize, p.y * squareSize);
 		ctx.rotate(p.life * 6);
 		ctx.fillRect(-s / 2, -s / 8, s, s / 4);
 		ctx.fillRect(-s / 8, -s / 2, s / 4, s);
 		ctx.restore();
 	});
 	ctx.globalAlpha = 1;
-	if (eventState && eventState.ev.torch) {
-		// a chamber: dim, lit by two torches at the top corners, gently pulsing
-		const L = torchLayer();
-		ctx.globalAlpha = 0.95 + 0.05 * Math.sin(time * 1.9); // a slow pulse of torchlight ctx.drawImage(L,0,0,N*cs,ROWS*cs); ctx.globalAlpha=1;
-	}
 	if (eventState && eventState.ev.fog) {
 		// the night crossing: only lamplight shows the board
 		const L = eventState.lamp,
-			x = L.x * cs,
-			y = L.y * cs,
-			r = cs * (2.9 + Math.sin(time * 2.3) * 0.12);
+			x = L.x * squareSize,
+			y = L.y * squareSize,
+			r = squareSize * (2.9 + Math.sin(animTime * 2.3) * 0.12);
 		const fg = ctx.createRadialGradient(x, y, r * 0.35, x, y, r);
 		fg.addColorStop(0, 'rgba(8,8,20,0)');
 		fg.addColorStop(0.6, 'rgba(8,8,20,.55)');
 		fg.addColorStop(1, 'rgba(6,6,16,.95)');
 		ctx.fillStyle = fg;
-		ctx.fillRect(0, 0, N * cs, ROWS * cs);
+		ctx.fillRect(0, 0, COLS * squareSize, ROWS * squareSize);
 	}
 	popups.forEach(p => {
 		const a = Math.min(1, p.life * 2);
 		ctx.globalAlpha = a;
-		ctx.font = `400 ${p.size * cs}px 'IM Fell Double Pica', Georgia, serif`;
+		ctx.font = `400 ${p.size * squareSize}px 'IM Fell Double Pica', Georgia, serif`;
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'middle';
-		const half = ctx.measureText(p.text).width / 2 + cs * 0.15,
-			x = Math.min(Math.max(p.x * cs, half), N * cs - half),
-			y = Math.min(Math.max(p.y * cs, cs * 0.4), ROWS * cs - cs * 0.4);
-		ctx.lineWidth = cs * 0.08;
+		const half = ctx.measureText(p.text).width / 2 + squareSize * 0.15,
+			x = Math.min(Math.max(p.x * squareSize, half), COLS * squareSize - half),
+			y = Math.min(Math.max(p.y * squareSize, squareSize * 0.4), ROWS * squareSize - squareSize * 0.4);
+		ctx.lineWidth = squareSize * 0.08;
 		ctx.strokeStyle = '#2b1606';
 		ctx.strokeText(p.text, x, y);
 		ctx.fillStyle = p.col || '#ffe38a';
 		ctx.fillText(p.text, x, y);
 	});
 	ctx.globalAlpha = 1;
-}
-
-// The chamber's darkness, made once per board size (gradients each frame are
-// too dear on a phone): a dim wash, darker at the edges, with the warm light of
-// two torches falling from the top corners.
-let torchCache = null;
-function torchLayer() {
-	const w = Math.round(N * cs * dpr),
-		h = Math.round(ROWS * cs * dpr),
-		key = w + 'x' + h;
-	if (torchCache && torchCache.key === key) return torchCache.c;
-	const c = document.createElement('canvas');
-	c.width = w;
-	c.height = h;
-	const g = c.getContext('2d');
-	g.fillStyle = 'rgba(16,9,3,.42)';
-	g.fillRect(0, 0, w, h);
-	const v = g.createRadialGradient(
-		w / 2,
-		h * 0.55,
-		Math.min(w, h) * 0.25,
-		w / 2,
-		h * 0.55,
-		Math.max(w, h) * 0.75
-	);
-	v.addColorStop(0, 'rgba(10,5,1,0)');
-	v.addColorStop(1, 'rgba(10,5,1,.7)');
-	g.fillStyle = v;
-	g.fillRect(0, 0, w, h);
-	for (const x of [0, w]) {
-		const t = g.createRadialGradient(x, 0, 0, x, 0, Math.max(w, h) * 0.6);
-		t.addColorStop(0, 'rgba(255,170,70,.22)');
-		t.addColorStop(1, 'rgba(255,150,50,0)');
-		g.fillStyle = t;
-		g.fillRect(0, 0, w, h);
-	}
-	torchCache = { key, c };
-	return c;
+	if (ctx.isGL) ctx.flush(); // WebGL (02-board-pen.js): hand the batch to the graphics chip
 }

@@ -1,0 +1,15 @@
+Amulets of Anubis is a match-3 roguelite on the Nile. Each journey runs from Memphis to Alexandria through twelve stops, and at each one you swap amulets into rows of three until the grey stone floor has turned to gold. No two journeys go the same way. The priests set different trials, a failed one brings a curse, boons come and go, and the river throws up puzzles and choices between the stops. What you earn is kept for the next journey, in the Treasury's upgrades, the relics in the museum and the looks you unlock. Every stop has its own amulets, scenery, floor plans and music, and a short note on its history.
+
+What is in it:
+
+* Twelve stops down the Nile, each with its own floor plans, amulets and scenery. The music is made while you play, in the stop's own key and on its own instrument.
+* Special amulets. Four in a row makes a banded amulet, an L or a T makes a ringed one, and five in a row makes the winged sun. Some amulets fall wearing a badge with a power of its own, and a few rare badges are cursed.
+* Boons, trials and shops. Priests set you trials and reward you with boons, which you keep until you need them. Between stops there are puzzles and choices on the river. Anubis runs a stall for one-off help, and the Treasury sells lasting upgrades.
+* Tombs, temples and oases beside nine of the stops, once you have gilded them.
+* Three seals at every stop, omens you can brave for a bigger reward, 46 relics for the museum, and amulet sets, floors, frames and sparkles to earn.
+* A gentle start: on your first journey the game brings in its parts one at a time. You can have everything at once if you prefer.
+* Four board sizes, four difficulties, and in Settings dark and high-contrast colours, less motion, and fewer effects for older phones.
+
+The game never goes online. It has no ads, no tracking and no account, and it asks for no permissions except vibration. Your progress stays on your device; Menu, Save and restore gives you a code to move it to another copy of the game, on Android, on a computer or in a browser.
+
+The same game is a single HTML file that runs in any browser, and almost everything in it (the stops, their history notes, the prices, every picture) lives in small text files that you can change without programming. The code is under the GNU GPL, version 3 or later; the pictures are CC0 and the typefaces are under the SIL Open Font License.

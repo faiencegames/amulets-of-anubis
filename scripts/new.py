@@ -3,8 +3,8 @@
 Starts a new thing for the game from a ready-made, commented file.
 
 	python scripts/new.py                    asks what you want to make
-	python scripts/new.py stop siwa          makes content/stops/13-siwa.json
-	python scripts/new.py relic golden-ankh  makes content/relics/26-golden-ankh.json
+	python scripts/new.py stop siwa          makes content/stops/13-siwa.jsonc
+	python scripts/new.py relic golden-ankh  makes content/relics/26-golden-ankh.jsonc
 
 (On Windows you may need  py scripts\\new.py ... , or just double-click scripts\\new.bat.)
 
@@ -261,6 +261,7 @@ kind('curse', 'curses', 'a curse: what a failed trial costs at the next stop')("
 	//   "fewer_moves_percent"  n percent fewer moves
 	//   "thick_stones"         n bare stones start thick
 	//   "thick_stones_share"   one bare stone in n starts thick
+	//   "buried_amulets"       n amulets start buried in sand
 	//   "fewer_badges"         badged amulets fall n percent less often (100: none)
 	//   "more_cursed_badges"   cursed badges fall, n times as often
 	//   "no_boons"             no boons can be used
@@ -273,7 +274,7 @@ kind('curse', 'curses', 'a curse: what a failed trial costs at the next stop')("
 
 kind('omen', 'omens', 'an omen: a hardship braved at a gilded stop, for more reward')("""\
 // An omen: a hardship a player may choose to brave at a stop they have
-// already gilded, for a richer reward (settings.json, "omens"). It lasts for
+// already gilded, for a richer reward (settings.jsonc, "omens"). It lasts for
 // that stop and its restarts. Saves remember omens by id: don't change it.
 {
 	"id": "{id}",
@@ -286,6 +287,7 @@ kind('omen', 'omens', 'an omen: a hardship braved at a gilded stop, for more rew
 	//   "fewer_moves_percent"  n percent fewer moves
 	//   "thick_stones"         n bare stones start thick
 	//   "thick_stones_share"   one bare stone in n starts thick
+	//   "buried_amulets"       n amulets start buried in sand
 	//   "fewer_badges"         badged amulets fall n percent less often (100: none)
 	//   "more_cursed_badges"   cursed badges fall, n times as often
 	//   "no_boons"             no boons can be used (needs no amount)
@@ -298,10 +300,13 @@ kind('stall', 'anubis-stall', "something to buy at Anubis's stall")("""\
 // Something Anubis sells: bought for one stop, used once.
 // "gives" is one of: {"moves": n}, {"reshuffle": true}, {"second_wind": n},
 // or {"boon": ["flood"]} (a boon name, or "random").
+// "icon" is its picture in images/icons/stall/ (breath, bread, sands, chest,
+// wind, or a new SVG of your own); leave it out for a boon, which shows its own.
 {
 	"id": "{id}",
 	"name": "{name}",
 	"description": "Four extra moves, right now.",
+	"icon": "breath",
 	"currency": "gold",
 	"price": 450,
 	"gives": {"moves": 4}
@@ -430,10 +435,10 @@ def main():
 	d = os.path.join(HERE, 'content', folder)
 	os.makedirs(d, exist_ok=True)
 	for n in os.listdir(d):
-		if n.endswith('.json') and re.search(r'"id"\s*:\s*"' + re.escape(ident) + '"', open(os.path.join(d, n), encoding='utf-8').read()):
+		if n.endswith(('.json', '.jsonc')) and re.search(r'"id"\s*:\s*"' + re.escape(ident) + '"', open(os.path.join(d, n), encoding='utf-8').read()):
 			fail(f'There is already one with the id "{ident}": content/{folder}/{n}. Pick another id.')
 	nums = [int(m.group(1)) for n in os.listdir(d) for m in [re.match(r'(\d+)-', n)] if m]
-	fname = f'{(max(nums) + 1 if nums else 1):02d}-{ident}.json'
+	fname = f'{(max(nums) + 1 if nums else 1):02d}-{ident}.jsonc'
 	name = ident.replace('-', ' ').capitalize()
 	text = template.replace('{id}', ident).replace('{name}', name)
 	with open(os.path.join(d, fname), 'w', encoding='utf-8') as f: f.write(text)

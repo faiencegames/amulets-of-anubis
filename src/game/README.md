@@ -5,7 +5,9 @@ game. The rules themselves (matching, cascades, specials, boons, curses) are
 in `src/01-core.js`, which has no browser code so the simulators can run it.
 
 `build.py` joins these files in file-name order, after `00-open.js`,
-`02-pictures.js`, `03-themes.js` and `04-boards.js`, into one closure. So:
+`02-pictures.js`, `03-themes.js` and `04-boards.js`, and `web/shell.html`
+wraps them all in one function. Each file is complete JavaScript on its own.
+So:
 
 * **The numbers are the order.** A `let` or `const` that is used while the
   game starts (by `fit()`, or anything the boot calls) must sit in an earlier

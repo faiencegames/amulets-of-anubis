@@ -1,0 +1,8 @@
+// A relic for the museum: found once, kept on every journey.
+{
+	"id": "calendar",
+	"name": "The calendar of lucky days",
+	"description": "Brave fifteen omens in all.",
+	"found_when": {"omens_braved": 15},
+	"reward": {"lapis": 30}
+}
