@@ -1,6 +1,6 @@
 /* =============================================================================
- * 21-moves.js  —  playing a move: the swap, the matches, the cascade that
- * follows, and what they earn.
+ * 21-moves.js: playing a move: the swap, the matches, the cascade that
+ * follows and what they earn.
  *
  * What's here:
  *   attemptSwap(a, b)   swaps two amulets (22-input.js); if they match, runs
@@ -252,7 +252,7 @@ function showClear(res, mult) {
 			beams.push({ dir: 'd1', r: row, c: col, life: 1 });
 			beams.push({ dir: 'd2', r: row, c: col, life: 1 });
 			popups.push({
-				text: Tplain('popup.star_of_sopdet'),
+				text: Tplain('popup.star'),
 				x: col + 0.5,
 				y: row + 0.1,
 				life: 1.3,

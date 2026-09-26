@@ -273,9 +273,16 @@ const CASES = {
 		await page.evaluate(() => window.__edge.newJourney());
 		await page.waitForTimeout(400);
 		await page.click('#njGo');
-		await page.waitForTimeout(1500);
-		const s = await state(page);
-		if (s.open.length) report(name, `a new journey left a scroll open: ${s.open.join(', ')}`);
+		// the new journey's scroll takes a moment to roll up on a slow machine
+		let s = await state(page);
+		for (let t = 0; t < 5000 && s.open.length; t += 250) {
+			await page.waitForTimeout(250);
+			s = await state(page);
+		}
+		if (s.open.length) {
+			const title = await page.evaluate(() => (document.querySelector('.overlay.open h2, .overlay.open h1') || {}).textContent || '');
+			report(name, `a new journey left a scroll open: ${s.open.join(', ')} ("${title.trim()}")`);
+		}
 		if (s.moves <= 0) report(name, `a new journey's first stop has no moves (${JSON.stringify(s)})`);
 		if (!(await swap(page))) report(name, 'a new journey\'s first stop has no move to make');
 		await settle(page);

@@ -1,5 +1,5 @@
 /* =============================================================================
- * 07-trials-boons.js  —  trials, curses and boons.
+ * 07-trials-boons.js: trials, curses and boons.
  *
  * A trial is the extra challenge offered at the start of a stop
  * (content/trials/); failing one leaves a curse for the next stop
@@ -12,7 +12,7 @@
  *   trialProgress(), completeTrial(), failTrial()
  *                       a trial as it goes (21-moves.js, 24-win-lose.js)
  *   curseFor(), carryCurse(), curseWords()
- *                       picking a curse, keeping it for the next stop, and
+ *                       picking a curse, keeping it for the next stop and
  *                       saying what it does
  *   renderTrial(), renderBoons(), renderCurse()
  *                       the trial, boons and curse in the column beside the

@@ -1,5 +1,5 @@
 /* =============================================================================
- * 10-river-events.js  —  river events, and the small boards they share with
+ * 10-river-events.js: river events and the small boards they share with
  * tombs, temples and oases.
  *
  * Between stops the boat may meet something on the river
@@ -15,7 +15,7 @@
  *                       (11-chambers.js uses it too)
  *   eventAfterMove()    after each move on a puzzle: goal met, or out of moves
  *   giveReward(), rewardText(), getLine()
- *                       paying a reward, and saying it in words ("You get:")
+ *                       paying a reward and saying it in words ("You get:")
  *   eventState          the event under way, or null
  *
  * Changes in the save: gold, lapis, boons, life, lastEvent; chambers and

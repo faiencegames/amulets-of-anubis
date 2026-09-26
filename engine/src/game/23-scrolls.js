@@ -1,10 +1,10 @@
 /* =============================================================================
- * 23-scrolls.js  —  scrolls: every screen that opens over the board (the
+ * 23-scrolls.js: scrolls: every screen that opens over the board (the
  * overlays in web/shell.html).
  *
  * What's here:
  *   showMsg(body, actions, opts)
- *                       the general scroll: words, and buttons for what to
+ *                       the general scroll: words and buttons for what to
  *                       do next. Each action is [label, fn, {kind: 'go' |
  *                       'card' | 'quiet' | 'exit', sub, icon, dark, oasis,
  *                       short}]: one big "go" button for the usual next step

@@ -1,0 +1,11 @@
+// An amulet set with pictures of its own, in images/amulet-sets/engraved/,
+// drawn by tools/amulet-sets/draw.py. Changes the look only. For sale in
+// Customise, never earned (no unlocked_by).
+{
+	"id": "engraved",
+	"name": "Engraved plates",
+	"description": "Hatched in black and coloured by hand, like the plates in old travellers’ books.",
+	"unlocked_by": null,
+	"currency": "gold",
+	"price": 1200
+}

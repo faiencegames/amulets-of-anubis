@@ -1,4 +1,4 @@
-// Where the engine is, where the game it builds is, and that game's values
+// Where the engine is, where the game it builds is and that game's values
 // from edition.jsonc, for the browser tools. The rule is the one in
 // tools/where.py and build.py: the game is the folder that holds
 // edition.jsonc (TESSERA_GAME if set; else the folder above the engine when

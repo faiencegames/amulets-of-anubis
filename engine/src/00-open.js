@@ -1,6 +1,6 @@
 /* =============================================================================
- * 00-open.js  —  the player's save: loading it, bringing an older save up
- * to date, and writing it back. The first part of the game: web/shell.html
+ * 00-open.js: the player's save: loading it, bringing an older save up
+ * to date and writing it back. The first part of the game: web/shell.html
  * wraps all of src/ except 01-core.js in one function.
  *
  * What's here:

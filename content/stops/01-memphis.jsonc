@@ -1,11 +1,11 @@
 // Stop 1 of the journey: Memphis.
 // The number at the front of the file name sets the order of the stops.
-// Every field is explained in docs/content-reference.md.
+// Every field is explained in engine/docs/content-reference.md.
 {
 	"id": "memphis",
 	"name": "Memphis",
 	"subtitle": "The white walls of Ptah",
-	"history": "We set out from Memphis, where Upper and Lower Egypt meet. Tradition holds that King Menes founded the city around 3100 BCE, and for much of the Old Kingdom the kings ruled from here; its patron was Ptah, protector of craftsmen. A fitting God, we thought, to see off a party of travellers with a chest full of amulets!",
+	"history": "We set out from Memphis, where Upper and Lower Egypt meet. Tradition holds that King Menes founded the city around 3100 BCE and for much of the Old Kingdom the kings ruled from here; its patron was Ptah, protector of craftsmen. A fitting God, we thought, to see off a party of travellers with a chest full of amulets!",
 	"moves": 22,
 	// Three sets: each time the stop starts, the game picks one at random.
 	"amulets": [

@@ -1,5 +1,6 @@
 /* =============================================================================
- * 03-sound.js  —  the sound effects, all made at run time with Web Audio:
+ * 03-sound.js: the sound effects, made at run time with Web Audio (or a
+ * game's own recordings, from sounds/, played instead):
  * plucked strings, bells, gongs, flutes, crinkling paper, a rattle.
  *
  * What's here:
@@ -95,6 +96,7 @@ function getCtx() {
 			setTimeout(() => {
 				prewarmKS();
 				prewarmBells();
+				Object.values(SOUND_FILES.effects).forEach(soundBuffer); // decode the recorded ones
 			}, 0); // the stop began before there was an engine to warm
 		} catch (e) {
 			return null;
@@ -525,6 +527,46 @@ function chordTone(k) {
 // a sound due "now" may land in the past, skip its fade-in and click. 30 ms is
 // too short to notice between a tap and its sound.
 const SFX_LEAD = 0.03;
+// ---------- recorded sound ----------
+// A game may bring recorded sounds: sounds/<effect> plays instead of the
+// effect of that name, music/<stop id> (or music/default) loops instead of
+// the music the game makes up (engine/build.py puts them in PICTURES.sounds).
+// Each is decoded once; until it is, the made-up sound plays.
+const SOUND_FILES = PICTURES.sounds || { effects: {}, music: {} };
+const soundBuffers = new Map(); // address -> {buffer, ready}
+function soundBuffer(url) {
+	if (!soundBuffers.has(url)) {
+		const entry = { buffer: null };
+		entry.ready = new Promise(done => {
+			const bytes = Uint8Array.from(atob(url.slice(url.indexOf(',') + 1)), ch => ch.charCodeAt(0));
+			audioCtx.decodeAudioData(
+				bytes.buffer,
+				b => done((entry.buffer = b)),
+				() => done(null),
+			);
+		});
+		soundBuffers.set(url, entry);
+	}
+	return soundBuffers.get(url);
+}
+function playRecorded(name, t, pan) {
+	const url = SOUND_FILES.effects[name];
+	if (!url) return false;
+	const b = soundBuffer(url).buffer;
+	if (!b) return false; // still being decoded: the made-up one this once
+	const src = audioCtx.createBufferSource();
+	src.buffer = b;
+	let out = sfxOut;
+	if (audioCtx.createStereoPanner) {
+		out = audioCtx.createStereoPanner();
+		out.pan.value = Math.max(-1, Math.min(1, pan));
+		out.connect(sfxOut);
+	}
+	src.connect(out);
+	src.start(t);
+	return true;
+}
+
 function sfx(name, n = 1, x = 0.5) {
 	if (!save.sound) return;
 	const a = getCtx();
@@ -532,6 +574,7 @@ function sfx(name, n = 1, x = 0.5) {
 	const t = a.currentTime + SFX_LEAD,
 		inst = theme().audio.inst,
 		pan = (x - 0.5) * 1.2;
+	if (playRecorded(name, t, pan)) return;
 	switch (name) {
 		case 'ui':
 			pluck(660, t, 0.1, { bright: 0.3, decay: 0.97, dur: 0.18 });

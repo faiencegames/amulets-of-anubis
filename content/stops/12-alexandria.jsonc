@@ -1,11 +1,11 @@
 // Stop 12 of the journey: Alexandria.
 // The number at the front of the file name sets the order of the stops.
-// Every field is explained in docs/content-reference.md.
+// Every field is explained in engine/docs/content-reference.md.
 {
 	"id": "alexandria",
 	"name": "Alexandria",
 	"subtitle": "Cleopatra’s city",
-	"history": "Our journey ended by the sea, at Alexandria. Alexander the Great founded the city in 331 BCE, and it grew famous for its great library and the Pharos lighthouse, one of the Seven Wonders; Cleopatra VII, the last ruler of the Ptolemaic dynasty, reigned here until her death in 30 BCE. Little of all that still stands, alas, yet we lingered on the shore until the lamps were lit.",
+	"history": "Our journey ended by the sea, at Alexandria. Alexander the Great founded the city in 331 BCE and it grew famous for its great library and the Pharos lighthouse, one of the Seven Wonders; Cleopatra VII, the last ruler of the Ptolemaic dynasty, reigned here until her death in 30 BCE. Little of all that still stands, alas, yet we lingered on the shore until the lamps were lit.",
 	"moves": 50,
 	// Three sets: each time the stop starts, the game picks one at random.
 	"amulets": [

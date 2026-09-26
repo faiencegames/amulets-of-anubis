@@ -1,6 +1,6 @@
 /* =============================================================================
- * 04-boards.js  —  what the board is made of: the colours of its frame, the
- * amulet sets (looks), and the floor squares.
+ * 04-boards.js: what the board is made of: the colours of its frame, the
+ * amulet sets (looks) and the floor squares.
  *
  * What's here:
  *   BOARDS              one per stop, in the order of LEVELS: the [face,
@@ -28,6 +28,7 @@ let TILE_SPRITES = [],
 // Cosmetic finishes: the same drawings re-rendered through a canvas filter.
 const skinCache = new Map();
 function skinned(src, name, skinId) {
+	if (SET_PICS[skinId] && SET_PICS[skinId][name]) src = SET_PICS[skinId][name]; // the set's own picture
 	const skin = skinById(skinId);
 	if (!skin.filter && !skin.glow) return src;
 	const key = name + '|' + skinId;

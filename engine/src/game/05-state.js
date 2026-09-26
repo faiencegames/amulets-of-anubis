@@ -1,5 +1,5 @@
 /* =============================================================================
- * 05-state.js  —  the stop being played: its state, starting it, and the
+ * 05-state.js: the stop being played: its state, starting it and the
  * display around the board.
  *
  * What's here:

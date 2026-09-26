@@ -1,4 +1,4 @@
-// Old saves still load: a player's progress in the browser, and a save code
+// Old saves still load: a player's progress in the browser and a save code
 // made by an earlier version, both reach the game as they were. Run it after
 // any change to how the save is read or written, or to edition.jsonc:
 //

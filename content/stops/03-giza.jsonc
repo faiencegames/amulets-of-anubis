@@ -1,11 +1,11 @@
 // Stop 3 of the journey: Giza.
 // The number at the front of the file name sets the order of the stops.
-// Every field is explained in docs/content-reference.md.
+// Every field is explained in engine/docs/content-reference.md.
 {
 	"id": "giza",
 	"name": "Giza",
 	"subtitle": "The house of Khufu",
-	"history": "At Giza we gazed up at the Great Pyramid of Khufu. It once stood about 146 metres tall, and for nearly four thousand years nothing built by human hands stood taller; that is, until the spire of Lincoln Cathedral rose in England, around 1311. Roughly 2.3 million blocks of stone went into it, a number we must admit we did not try to verify.",
+	"history": "At Giza we gazed up at the Great Pyramid of Khufu. It once stood about 146 metres tall and for nearly four thousand years nothing built by human hands stood taller; that is, until the spire of Lincoln Cathedral rose in England, around 1311. Roughly 2.3 million blocks of stone went into it, a number we must admit we did not try to verify.",
 	"moves": 21,
 	// Three sets: each time the stop starts, the game picks one at random.
 	"amulets": [

@@ -1,5 +1,5 @@
 /* =============================================================================
- * 20-effects.js  —  small effects: sparks and vibration.
+ * 20-effects.js: small effects: sparks and vibration.
  *
  * What's here:
  *   burst(x, y, n)      a burst of sparks at a square, in the chosen sparkle

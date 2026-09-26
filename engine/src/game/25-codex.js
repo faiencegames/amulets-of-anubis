@@ -1,5 +1,5 @@
 /* =============================================================================
- * 25-codex.js  —  How to play, a book in chapters.
+ * 25-codex.js: How to play, a book in chapters.
  *
  * What's here:
  *   openHelp(chapter)   opens it: on a wide screen the chapters run down the

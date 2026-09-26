@@ -1,11 +1,11 @@
 // Stop 4 of the journey: Faiyum.
 // The number at the front of the file name sets the order of the stops.
-// Every field is explained in docs/content-reference.md.
+// Every field is explained in engine/docs/content-reference.md.
 {
 	"id": "faiyum",
 	"name": "Faiyum",
 	"subtitle": "The garden of Sobek",
-	"history": "We turned west from the Nile into the Faiyum, a green basin watered by a channel called the Bahr Yussef. Its people honoured Sobek, the crocodile God, so devotedly that Greek visitors named their chief town Crocodilopolis. A name like that does little to calm the nerves, and we kept well back from the water’s edge.",
+	"history": "We turned west from the Nile into the Faiyum, a green basin watered by a channel called the Bahr Yussef. Its people honoured Sobek, the crocodile God, so devotedly that Greek visitors named their chief town Crocodilopolis. A name like that does little to calm the nerves and we kept well back from the water’s edge.",
 	"moves": 25,
 	// Three sets: each time the stop starts, the game picks one at random.
 	"amulets": [

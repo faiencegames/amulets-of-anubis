@@ -1,9 +1,9 @@
 /* =============================================================================
- * 28-map.js  —  the map of the journey, the stop card, and the Amulets
+ * 28-map.js: the map of the journey, the stop card and the Amulets
  * scroll.
  *
  * What's here:
- *   openMap()           the map: the river with every stop, and a list under
+ *   openMap()           the map: the river with every stop and a list under
  *                       it with each stop's stars and what else is there
  *   MAP_SIZE            the map's width and height: its picture's viewBox
  *                       (images/icons/map/background.svg)

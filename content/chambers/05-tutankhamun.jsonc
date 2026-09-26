@@ -7,7 +7,7 @@
 	"id": "tutankhamun",
 	"at": "valley-of-the-kings",
 	"name": "The tomb of Tutankhamun",
-	"text": "We went down the steps Howard Carter found cut into the rock of the Valley of the Kings in November 1922. They led to a small tomb, its antechamber crowded with chariots, couches and chests, and beyond it a sealed burial chamber. Asked what he could see, Carter is said to have answered, “Yes, wonderful things.” We could only agree.",
+	"text": "We went down the steps Howard Carter found cut into the rock of the Valley of the Kings in November 1922. They led to a small tomb, its antechamber crowded with chariots, couches and chests. Beyond it lay a sealed burial chamber. Asked what he could see, Carter is said to have answered, “Yes, wonderful things.” We could only agree.",
 	"scenery": "tomb",
 	// Three sets: each time the place opens, the game picks one at random.
 	"amulets": [

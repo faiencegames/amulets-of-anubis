@@ -8,7 +8,7 @@
 	// {n} in the description is the amount
 	"description": "Anubis weighs the floor: every thick, cracked stone loses a layer.",
 	// what it does, one of the effects the game knows (* = the player picks
-	// a square; "amount" changes the number, and has a default):
+	// a square; "amount" changes the number and has a default):
 	//   "extra_moves"        n more moves (6)
 	//   "gild_stones"        n stones, chosen at random, lose a layer (8)
 	//   "thin_thick_stones"  every thick or cracked stone loses a layer
@@ -18,7 +18,7 @@
 	//   "make_banded" *      the amulet becomes a banded amulet
 	//   "make_sun" *         the amulet becomes the winged sun
 	//   "make_ringed"        n amulets become ringed amulets (3)
-	//   "shuffle"            the amulets are shuffled, and n more moves (2)
+	//   "shuffle"            the amulets are shuffled and n more moves (2)
 	"effect": "thin_thick_stones",
 	// shown on the board when it is used ({n} is the amount)
 	"popup": "Anubis weighs the stone",

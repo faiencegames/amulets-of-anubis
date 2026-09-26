@@ -1,11 +1,11 @@
 // Stop 6 of the journey: Abydos.
 // The number at the front of the file name sets the order of the stops.
-// Every field is explained in docs/content-reference.md.
+// Every field is explained in engine/docs/content-reference.md.
 {
 	"id": "abydos",
 	"name": "Abydos",
 	"subtitle": "Resting place of Osiris",
-	"history": "We came next to Abydos, sacred to Osiris, Lord of the dead. Pilgrims came here for His festival, and many left a stone tablet behind, asking to share in the God’s rebirth. In the temple of Seti I we found his list of the kings who came before him, name after name, as neat as a ledger; yet a few are missing, Hatshepsut and Akhenaten among them. Forgotten? Hardly. They were, it seems, left out on purpose.",
+	"history": "We came next to Abydos, sacred to Osiris, Lord of the dead. Pilgrims came here for His festival and many left a stone tablet behind, asking to share in the God’s rebirth. In the temple of Seti I we found his list of the kings who came before him, name after name, as neat as a ledger; yet a few are missing, Hatshepsut and Akhenaten among them. Forgotten? Hardly. They were, it seems, left out on purpose.",
 	"moves": 28,
 	// Three sets: each time the stop starts, the game picks one at random.
 	"amulets": [

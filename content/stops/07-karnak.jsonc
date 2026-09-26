@@ -1,11 +1,11 @@
 // Stop 7 of the journey: Karnak.
 // The number at the front of the file name sets the order of the stops.
-// Every field is explained in docs/content-reference.md.
+// Every field is explained in engine/docs/content-reference.md.
 {
 	"id": "karnak",
 	"name": "Karnak",
 	"subtitle": "A forest of stone columns",
-	"history": "Karnak was enlarged over some two thousand years in honour of the God Amun, one king after another adding something of his own, as though none of them could bear to be outdone. We lost our way in its Great Hypostyle Hall among 134 massive columns, the tallest rising about 21 metres, and were not sorry in the least.",
+	"history": "Karnak was enlarged over some two thousand years in honour of the God Amun, one king after another adding something of his own, as though none of them could bear to be outdone. We lost our way in its Great Hypostyle Hall among 134 massive columns (the tallest rise about 21 metres) and were not sorry in the least.",
 	"moves": 27,
 	// Three sets: each time the stop starts, the game picks one at random.
 	"amulets": [

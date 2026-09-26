@@ -3,7 +3,7 @@
 A forest of columns in rows that go back into the dim hall. The great columns
 of the middle aisle have open papyrus capitals; the rows beside them have
 closed papyrus buds. The shafts are carved with scenes of the king making
-offerings to the Gods, and with cartouches, and were painted. Light falls in
+offerings to the Gods and with cartouches. They were painted. Light falls in
 through the stone window grilles high in the clerestory.
 
 Run: python3 tools/scenery/karnak.py > images/backdrops/karnak.svg

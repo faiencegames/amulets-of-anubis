@@ -3,7 +3,7 @@
 	"id": "barque",
 	"kind": "puzzle",
 	"title": "Aground on a sandbank",
-	"text": "Our barque ran onto a sandbank and there she stuck, much to the amusement of the village boatmen watching from the shore. They would haul us off, they said, but only for gold; so gild the deck we must, and quickly, before the river rose.",
+	"text": "Our barque ran onto a sandbank and there she stuck, much to the amusement of the village boatmen watching from the shore. They would haul us off, they said, but only for gold; so we had to gild the deck quickly, before the river rose.",
 	"goal": {"type": "gild"},
 	"moves": 20,
 	"amulet_types": 5,

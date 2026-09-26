@@ -1,0 +1,8 @@
+// An amulet set with pictures of its own, in images/amulet-sets/naqada/,
+// drawn by tools/amulet-sets/draw.py. Changes the look only.
+{
+	"id": "naqada",
+	"name": "Naqada pots",
+	"description": "Paint on buff clay, like the oldest painted pots of Egypt.",
+	"unlocked_by": null
+}

@@ -8,7 +8,7 @@
 	"at": "alexandria",
 	"setting": "oasis",
 	"name": "The oasis of Siwa",
-	"text": "Far out in the Western Desert, springs feed the palm groves of Siwa. We came to see where the oracle of Amun once spoke; it was famous across the Greek world, and in 331 BCE Alexander the Great crossed the desert to consult it. What it told him he kept to himself, or so the old writers say.",
+	"text": "Far out in the Western Desert, springs feed the palm groves of Siwa. We came to see where the oracle of Amun once spoke; it was famous across the Greek world and in 331 BCE Alexander the Great crossed the desert to consult it. What it told him he kept to himself, or so the old writers say.",
 	"scenery": "oasis",
 	// Three sets: each time the place opens, the game picks one at random.
 	"amulets": [

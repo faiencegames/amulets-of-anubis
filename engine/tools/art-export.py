@@ -17,7 +17,7 @@ dist/art-export/:
              picture) with a JSON map in Aseprite's own format, which game
              engines (Godot, Unity, Phaser) and TexturePacker read.
 
-The originals stay the SVGs in images/: those are what the game uses, and
+The originals stay the SVGs in images/: those are what the game uses and
 what Inkscape, Affinity and Illustrator edit best. The larger PNGs are in
 dist/art-references/ (tools/art-references.py, run by the build).
 

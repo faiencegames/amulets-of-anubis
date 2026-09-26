@@ -1,0 +1,11 @@
+// An amulet set with pictures of its own, in images/amulet-sets/cloisonne/,
+// drawn by tools/amulet-sets/draw.py. Changes the look only. For sale in
+// Customise, never earned (no unlocked_by).
+{
+	"id": "cloisonne",
+	"name": "Cloisonné",
+	"description": "Coloured stone and glass set in cells of gold, like the jewels of the kings.",
+	"unlocked_by": null,
+	"currency": "lapis",
+	"price": 300
+}

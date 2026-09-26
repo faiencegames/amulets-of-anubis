@@ -1,6 +1,6 @@
 // A first journey, as a new player meets it: the parts of the game arrive at
 // the stops settings.jsonc says (badges, cursed badges...), a lost stop is
-// tried again with the persistence moves, and every board is built by
+// tried again with the persistence moves and every board is built by
 // stopOptions() in 01-core.js, exactly as the game builds it. It reports, for
 // each stop, how often the first try wins and how many tries it takes, on the
 // board sizes players see: 8 x 8 (a desktop window) and 8 x 13 (a phone).

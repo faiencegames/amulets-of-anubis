@@ -1,5 +1,5 @@
 // What makes this game this game, rather than another made with the same
-// engine: its name, the file the build writes, and where a player's progress
+// engine: its name, the file the build writes and where a player's progress
 // is kept. The build checks this file and passes it to the code.
 //
 // Once people play, never change save_key, try_key, device_prefix or
@@ -11,7 +11,7 @@
 	// the game file the build writes: dist/<file>.html
 	"file": "amulets-of-anubis",
 
-	// where the browser keeps a player's progress, and try-out mode's own
+	// where the browser keeps a player's progress and try-out mode's own
 	// save (dist/try-it.html), so trying things never touches the real one
 	"save_key": "amulets-nile-v1",
 	"try_key": "amulets-nile-try",
@@ -20,7 +20,7 @@
 	// than the player (how the board is drawn, fewer effects)
 	"device_prefix": "amulets-",
 
-	// a save code starts with this (Menu, Save and restore), and a saved
+	// a save code starts with this (Menu, Save and restore) and a saved
 	// code file is called <save_file_name><date>.txt
 	"export_prefix": "AMULETS1:",
 	"save_file_name": "amulets-of-anubis-save-",

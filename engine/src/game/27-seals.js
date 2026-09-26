@@ -1,12 +1,12 @@
 /* =============================================================================
- * 27-seals.js  —  seals: three challenges at each stop (content/stops/,
+ * 27-seals.js: seals: three challenges at each stop (content/stops/,
  * "seals"), each stamped the first time a win meets it and worth lapis.
  *
  * What's here:
  *   stampSeals()        after a win, stamps any seals newly met
  *                       (24-win-lose.js)
  *   sealsOf(i), sealsLine()
- *                       a stop's seals, and how they show on the win scroll
+ *                       a stop's seals and how they show on the win scroll
  *   mark(), marks(), doorMark(), gildBar(), journeyRiver()
  *                       seals, omens and a doorway as small pictures (the
  *                       stop card's tiles)

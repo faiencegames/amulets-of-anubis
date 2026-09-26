@@ -1,5 +1,5 @@
 /* =============================================================================
- * 06-icons.js  —  the icons: SVG files in images/icons/<group>/<name>.svg,
+ * 06-icons.js: the icons: SVG files in images/icons/<group>/<name>.svg,
  * put into ICONS by the build.
  *
  * What's here:

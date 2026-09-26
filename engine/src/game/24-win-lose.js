@@ -1,9 +1,9 @@
 /* =============================================================================
- * 24-win-lose.js  —  winning and losing a stop.
+ * 24-win-lose.js: winning and losing a stop.
  *
  * What's here:
  *   levelWon()          the stop is gilded: stars, rewards, seals, the trial,
- *                       unlocks, and the win scroll with the way on (the next
+ *                       unlocks and the win scroll with the way on (the next
  *                       stop, a doorway, the map)
  *   levelLost()         out of moves: the lose scroll; when the floor was
  *                       nearly gilded, more moves to buy (the stall's "Three

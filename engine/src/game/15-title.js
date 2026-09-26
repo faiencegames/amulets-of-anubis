@@ -1,12 +1,12 @@
 /* =============================================================================
- * 15-title.js  —  the title screen.
+ * 15-title.js: the title screen.
  *
  * Its own layer (#ovTitle) over the scenery of the stop the player is at,
  * with the rest of the game hidden (body.at-title). Shown on every launch
  * and from the Menu.
  *
  * What's here:
- *   openTitle()         the title screen: Continue, and the smaller ways in
+ *   openTitle()         the title screen: Continue and the smaller ways in
  *                       (How to play, sound, saves, a new journey)
  *
  * Changes in the save: nothing.

@@ -3,6 +3,39 @@
 What changed in each version of Amulets of Anubis, newest first. The GitHub
 Release for each version shows its part of this file.
 
+## 0.9.5 (26 September 2026)
+
+### New
+
+- **Four new amulet sets** with every amulet drawn anew: engraved plates,
+  Naqada pots, Djoser's tiles and cloisonné. Naqada pots is yours from the
+  start and the others are earned with stars, river events and stops won.
+
+### Fixed
+
+- **A stuck board** that had to be filled anew could lose its sand and
+  water: the covered amulets came back uncovered. Now they keep their
+  covers.
+
+### Better
+
+- **Undo** in the shops is sandstone like every other button, with an arrow.
+- **The words**: the stop notes, tombs, river events and a few buttons read
+  more smoothly, with a handful of sentences written anew.
+- **The manual** is written anew for beginners, step by step, with every
+  bit of code explained. Its second part and the content reference now come
+  with the engine and the build checks them against it, so they can't fall
+  out of date. The website's manual shows code inside numbered steps
+  properly.
+
+### Behind the scenes
+
+- The engine can now sell looks in Customise and play recorded sounds and
+  music instead of the ones it makes up. The game doesn't use either yet.
+- The Android app is built so that F-Droid can check that its copy is
+  exactly the one on GitHub.
+- The build's messages are plainer when a content file has a mistake.
+
 ## 0.9.4 (25 September 2026)
 
 ### Fixed

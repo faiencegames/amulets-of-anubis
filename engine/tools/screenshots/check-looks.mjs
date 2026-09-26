@@ -1,15 +1,15 @@
 // Checks that every amulet set stays easy to tell apart in every look.
 //
 //	python3 build.py           # not needed: this reads the content itself
-//	node check-looks.mjs       # a report, and dist/looks-check.png
+//	node check-looks.mjs       # a report and dist/looks-check.png
 //
 // For every look (content/amulet-sets/) it draws each amulet the way the game
-// does (skinned() in 04-boards.js: the same canvas filter, glow and tint), and
+// does (skinned() in 04-boards.js: the same canvas filter, glow and tint) and
 // takes its average colour in Lab, the colour space in which distances match
 // what the eye sees. Then, for every set of every stop, tomb, temple and oasis,
 // it measures how far apart each pair of amulets is (ΔE). Two amulets whose
 // colours come closer than CLOSE can only be told apart by their shape.
-// The report lists, per look, how many pairs are too close, and the worst ones;
+// The report lists, per look, how many pairs are too close and the worst ones;
 // looks-check.png shows each look's worst set so they can be judged by eye.
 import { chromium } from 'playwright';
 import fs from 'node:fs';

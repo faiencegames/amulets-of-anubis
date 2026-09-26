@@ -1,5 +1,5 @@
 /* =============================================================================
- * 30-boot.js  —  starting the game, last of all.
+ * 30-boot.js: starting the game, last of all.
  *
  * Loads the pictures (02-pictures.js), starts the stop the player was at
  * (startLevel(), 05-state.js) and the game loop (frame(), 19-draw.js), then

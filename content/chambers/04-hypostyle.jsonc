@@ -7,7 +7,7 @@
 	"id": "hypostyle",
 	"at": "karnak",
 	"name": "The Great Hypostyle Hall",
-	"text": "In the Great Hypostyle Hall at Karnak we walked through a forest of 134 sandstone columns, and a forest it was, too. The twelve central ones rise about 21 metres; light once fell into the hall only through stone window grilles high above them, so the hall below would have lain in a kind of twilight.",
+	"text": "In the Great Hypostyle Hall at Karnak we walked through a forest of 134 sandstone columns. A forest it was, too. The twelve central ones rise about 21 metres; light once fell into the hall only through stone window grilles high above them, so the hall below would have lain in a kind of twilight.",
 	// Three sets: each time the place opens, the game picks one at random.
 	"amulets": [
 		["column", "torch", "scarab", "ankh", "obelisk"],

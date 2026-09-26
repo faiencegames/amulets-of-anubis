@@ -9,8 +9,8 @@ Starts a new thing for the game from a ready-made, commented file.
 (On Windows you may need  py scripts\\new.py ... , or just double-click scripts\\new.bat.)
 
 The new file works as it is: build straight away and it is in the game. Then
-open it in a text editor, read the comments, and change what you like. Build
-again, and double-click dist/try-it.html to try it (it opens the game in
+open it in a text editor, read the comments and change what you like. Build
+again and double-click dist/try-it.html to try it (it opens the game in
 try-out mode, right at the stop or river event you changed last).
 """
 import os, re, sys
@@ -26,7 +26,7 @@ def kind(key, folder, what):
 	return add
 
 kind('stop', 'stops', 'a new stop on the journey, with its own floor, scenery and music')("""\
-// A stop on the journey. Everything here is explained in docs/content-reference.md
+// A stop on the journey. Everything here is explained in engine/docs/content-reference.md
 // ("stops"). The number at the front of the file name sets its place.
 {
 	"id": "{id}",                 // permanent: saves remember the stop by this
@@ -78,7 +78,7 @@ kind('stop', 'stops', 'a new stop on the journey, with its own floor, scenery an
 
 kind('relic', 'relics', 'a relic for the museum, found by doing something')("""\
 // A relic for the museum: found once, kept on every journey.
-// The conditions you can use are listed in docs/content-reference.md.
+// The conditions you can use are listed in engine/docs/content-reference.md.
 {
 	"id": "{id}",
 	"name": "{name}",
@@ -133,8 +133,9 @@ kind('chamber', 'chambers', 'a tomb, temple or oasis beside a stop')("""\
 	"moves": 26,
 	// . gap, 1 stone, 2 thick stone, 0 already gold; s is a stone with an
 	// amulet buried in sand on it, S a thick stone with one (w and W: under
-	// water, for an oasis). A covered amulet can't be moved: a match beside it
-	// clears it. Every patch of sand or water must touch a square that starts clear.
+	// water, for an oasis; each cover in content/covers/ has two letters).
+	// A covered amulet can't be moved: a match beside it clears it. Every
+	// patch of covers must touch a square that starts clear.
 	"floor_plan": [
 		"........",
 		"11111111",
@@ -225,13 +226,21 @@ kind('badge', 'badges', 'a badge an amulet can fall wearing, with a power')("""\
 	"text": "Gives you {n} extra moves.",
 	// what it does when the amulet is cleared, one of the powers the game
 	// knows; "amount" changes the number, and has a default:
-	//   "gild_stones"      golden light gilds n bare stones anywhere (4)
-	//   "gild_around"      gilds the stones in the nine squares around it
-	//   "row_and_column"   clears the whole row and column it sits in
-	//   "extra_moves"      n more moves (3)
-	//   "give_lapis"       n lapis into the purse (3)
-	//   "lose_moves"       n moves lost, never the last one (2)
-	//   "ungild_stones"    n gilded stones turn bare again (3)
+	//   "gild_stones"          golden light gilds n bare stones anywhere (4)
+	//   "gild_around"          gilds the stones in the nine squares around it
+	//   "gild_wide"            gilds the stones up to n squares away on every side (2)
+	//   "gild_row_and_column"  gilds the stones in its row and its column
+	//   "row_and_column"       clears the whole row and column it sits in
+	//   "clear_around"         clears everything up to n squares away on every side (1)
+	//   "clear_its_kind"       clears every amulet of its own kind
+	//   "break_covers"         breaks one layer of every cover on the board
+	//   "extra_moves"          n more moves (3)
+	//   "give_lapis"           n lapis into the purse (3)
+	// and, for cursed badges:
+	//   "lose_moves"           n moves lost, never the last one (2)
+	//   "ungild_stones"        n gilded stones turn bare again (3)
+	//   "thicken_stones"       n bare stones turn thick (3)
+	//   "cover_amulets"        n plain amulets go under sand (2)
 	"effect": "extra_moves",
 	"amount": 2,
 	// shown on the board when it fires ({n} is the amount)
@@ -261,7 +270,9 @@ kind('curse', 'curses', 'a curse: what a failed trial costs at the next stop')("
 	//   "fewer_moves_percent"  n percent fewer moves
 	//   "thick_stones"         n bare stones start thick
 	//   "thick_stones_share"   one bare stone in n starts thick
-	//   "buried_amulets"       n amulets start buried in sand
+	//   "thick_edges"          n bare stones along the edge of the floor start thick
+	//   "buried_amulets"       n amulets start under a cover (sand, unless "cover" names another)
+	//   "covered_edges"        n amulets along the edge of the floor start under a cover
 	//   "fewer_badges"         badged amulets fall n percent less often (100: none)
 	//   "more_cursed_badges"   cursed badges fall, n times as often
 	//   "no_boons"             no boons can be used
@@ -287,7 +298,9 @@ kind('omen', 'omens', 'an omen: a hardship braved at a gilded stop, for more rew
 	//   "fewer_moves_percent"  n percent fewer moves
 	//   "thick_stones"         n bare stones start thick
 	//   "thick_stones_share"   one bare stone in n starts thick
-	//   "buried_amulets"       n amulets start buried in sand
+	//   "thick_edges"          n bare stones along the edge of the floor start thick
+	//   "buried_amulets"       n amulets start under a cover (sand, unless "cover" names another)
+	//   "covered_edges"        n amulets along the edge of the floor start under a cover
 	//   "fewer_badges"         badged amulets fall n percent less often (100: none)
 	//   "more_cursed_badges"   cursed badges fall, n times as often
 	//   "no_boons"             no boons can be used (needs no amount)

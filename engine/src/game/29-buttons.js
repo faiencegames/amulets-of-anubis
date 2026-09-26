@@ -1,5 +1,5 @@
 /* =============================================================================
- * 29-buttons.js  —  what the buttons around the board do: the dock (map,
+ * 29-buttons.js: what the buttons around the board do: the dock (map,
  * hints, restart, the shops, How to play, the Menu) and the note beside the
  * board. Each only opens the screen that another file makes.
  *

@@ -1,5 +1,5 @@
 /* =============================================================================
- * 16-treasury.js  —  the Treasury, and putting on a look.
+ * 16-treasury.js: the Treasury and putting on a look.
  *
  * What's here:
  *   openTreasury()      the Treasury: lasting upgrades bought with gold and
@@ -10,7 +10,7 @@
  *                       redraws the board. Always go through this: it also
  *                       empties the amulet picture cache.
  *   dockAmulet()        the Amulets button's picture: an amulet in the
- *                       amulet set in use (applyLook(), and 30-boot.js)
+ *                       amulet set in use (applyLook() and 30-boot.js)
  *   skinPreview(), floorPreview(), cachedPreview()
  *                       the small pictures of each look, drawn once and kept
  *                       (the Customise screen uses them)

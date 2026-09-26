@@ -1,0 +1,5 @@
+New: four amulet sets with every amulet drawn anew (engraved plates, Naqada pots, Djoser's tiles and cloisonné).
+
+Fixed: a stuck board that had to be filled anew could lose its sand and water. The covered amulets now keep their covers.
+
+Better: the stop notes, tombs and river events read more smoothly. Undo in the shops looks like every other button. The manual is written anew for beginners.

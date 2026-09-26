@@ -15,7 +15,7 @@
 // it as part of a full build.
 //
 // The same build gives the same pictures: the game's dice are seeded and
-// motion is reduced, and a picture is only replaced when it looks different
+// motion is reduced and a picture is only replaced when it looks different
 // (so a build doesn't mark every screenshot as changed in git).
 
 import { createRequire } from 'node:module';
@@ -284,6 +284,25 @@ const SCENES = {
 		const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 		await page.setContent(`<body style="margin:0;background:#1e1a17"><pre style="margin:0;padding:18px 22px;color:#e8e2d6;font:13px/1.45 Menlo,Consolas,monospace;white-space:pre">${esc(text)}</pre></body>`);
 		await save('guide-new-py.png', await (await page.$('pre')).screenshot());
+		await page.close();
+	},
+	// the manual's build error: a real build of a copy of the game whose
+	// first stop has lost the comma after its "moves"
+	async builderror() {
+		const tmp = fs.mkdtempSync(path.join(ROOT, 'dist', 'build-error-'));
+		for (const d of ['content', 'images', 'docs/manual']) fs.cpSync(path.join(ROOT, d), path.join(tmp, d), { recursive: true });
+		for (const f of ['edition.jsonc', 'build.py']) fs.copyFileSync(path.join(ROOT, f), path.join(tmp, f));
+		fs.symlinkSync(path.join(ROOT, 'engine'), path.join(tmp, 'engine'));
+		const stops = path.join(tmp, 'content', 'stops');
+		const first = path.join(stops, fs.readdirSync(stops).sort()[0]);
+		fs.writeFileSync(first, fs.readFileSync(first, 'utf-8').replace(/("moves":\s*\d+),/, '$1'));
+		const out = spawnSync('python3', [path.join(tmp, 'build.py')], { cwd: tmp, encoding: 'utf-8' });
+		fs.rmSync(tmp, { recursive: true, force: true });
+		const text = '$ python3 build.py\n' + (out.stdout + out.stderr).trim();
+		const page = await browser.newPage({ viewport: { width: 900, height: 200 }, deviceScaleFactor: 1.5 });
+		const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+		await page.setContent(`<body style="margin:0;background:#1e1a17"><pre style="margin:0;padding:18px 22px;color:#e8e2d6;font:13px/1.45 Menlo,Consolas,monospace;white-space:pre-wrap;width:860px">${esc(text)}</pre></body>`);
+		await save('guide-build-error.png', await (await page.$('pre')).screenshot());
 		await page.close();
 	},
 };

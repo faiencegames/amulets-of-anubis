@@ -7,10 +7,10 @@
 	"id": "sand",
 	// its name and what it means, in How to play ("Tombs & oases")
 	"name": "Buried in sand",
-	"text": "This amulet can’t be moved, and it is in no match. Make a match right beside it, or blast it with a special, and the sand is brushed off. From then on it is an ordinary amulet, and the stone under it is gilded when you match it.",
+	"text": "This amulet can’t be moved and it is in no match. Make a match right beside it or blast it with a special to brush the sand off. From then on it is an ordinary amulet and the stone under it is gilded when you match it.",
 	// shown when the player tries to move one
 	"popup": "Buried in sand: match beside it",
-	// in a floor plan: the letter on bare stone, and on thick stone
+	// in a floor plan: the letter on bare stone and on thick stone
 	// the note on the card of a chamber whose floor has it (else its "popup")
 	"chamber_note": "Some amulets are buried in sand. They can't be moved: make a match beside one to brush it clean.",
 	"letters": ["s", "S"],
@@ -23,7 +23,7 @@
 	"matches": false,
 	// after a move that broke none of it, it grows onto an amulet beside it
 	"spreads": false,
-	// the sound it makes breaking, and the two colours it bursts into
+	// the sound it makes breaking and the two colours it bursts into
 	"sound": "sand",
 	"burst": ["#e8c98a", "#b88a48"],
 	// the amulet How to play shows under it

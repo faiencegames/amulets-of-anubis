@@ -1,5 +1,5 @@
 /* =============================================================================
- * 19-draw.js  —  the game loop: moving things, and drawing the board every
+ * 19-draw.js: the game loop: moving things and drawing the board every
  * frame.
  *
  * What's here:
@@ -11,7 +11,7 @@
  *                       the amulets, badges, effects and popups
  *   drawTile()          one amulet, with the mark of a special (How to play
  *                       uses it too)
- *   fewerEffects(),     fewer effects: the Settings choice, and the careful
+ *   fewerEffects(),     fewer effects: the Settings choice and the careful
  *   setEffects(),       automatic that watches cascades on a slow phone
  *   watchEffects()
  *

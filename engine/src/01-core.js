@@ -1,5 +1,5 @@
 /* =============================================================================
- * 01-core.js  —  the rules of the game, with no browser code at all.
+ * 01-core.js: the rules of the game, with no browser code at all.
  *
  * Everything here can be run in plain Node, which is how the simulators in
  * tools/ test the difficulty of every stop. Keep it that way: no document,
@@ -14,7 +14,7 @@
  *   CONTENT, T()        everything from content/; T(key) gives the
  *                       words on screen (content/text.jsonc)
  *   LEVELS, TRIALS ...  short names for parts of CONTENT, used everywhere
- *   BOARD_MODES         Classic, Grand, Ruins and Omega, and how each builds
+ *   BOARD_MODES         Classic, Grand, Ruins and Omega and how each builds
  *                       its floor
  *   DIFFICULTY          the four difficulties
  *   helpers             the words every rule is written in: where a square
@@ -884,7 +884,9 @@ class Core {
 	won() {
 		return this.remaining() === 0;
 	}
-	fill() {
+	// keepCovered: a shuffle's last resort, which refills every square but
+	// the covered amulets (and so leaves each cover as worn as it was)
+	fill(keepCovered = false) {
 		for (let tries = 0; tries < 300; tries++) {
 			for (let row = 0; row < ROWS; row++)
 				for (let col = 0; col < COLS; col++) {
@@ -893,6 +895,7 @@ class Core {
 						this.cells[sq] = null;
 						continue;
 					}
+					if (keepCovered && this.cells[sq] && this.cells[sq].cover) continue;
 					const opts = [];
 					for (let ty = 0; ty < this.types; ty++) {
 						if (this.typeAt(row, col - 1) === ty && this.typeAt(row, col - 2) === ty) continue;
@@ -901,9 +904,10 @@ class Core {
 					}
 					this.cells[sq] = this.newTile(opts[Math.floor(Math.random() * opts.length)]);
 				}
-			this.coverAt.forEach(([sq, id]) => {
-				if (this.cells[sq]) coverAmulet(this, sq, id);
-			});
+			if (!keepCovered)
+				this.coverAt.forEach(([sq, id]) => {
+					if (this.cells[sq]) coverAmulet(this, sq, id);
+				});
 			if (this.hasMove()) return;
 		}
 	}
@@ -1250,7 +1254,7 @@ class Core {
 			ks.forEach((sq, i) => (this.cells[sq] = tiles[i]));
 			if (!this.findRuns().length && this.hasMove()) return;
 		}
-		this.fill();
+		this.fill(true);
 	}
 	// After a move: each kind of cover that spreads, and of which none broke
 	// during the move (broken: a Set of cover ids), grows onto one plain amulet

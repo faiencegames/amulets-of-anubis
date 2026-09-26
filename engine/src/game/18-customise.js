@@ -1,10 +1,13 @@
 /* =============================================================================
- * 18-customise.js  —  Customise: where the player dresses the game. One tab
+ * 18-customise.js: Customise: where the player dresses the game. One tab
  * each for amulet sets, floors, the frame round the board and the sparkles.
  *
  * What's here:
  *   openCustomise()     the Customise scroll (the dock, the Menu); locked
- *                       looks show what unlocks them (09-unlocks.js)
+ *                       looks show what unlocks them (09-unlocks.js), and a
+ *                       look for sale its price: a tap buys it, and it can
+ *                       be taken back until the scroll closes (logBuy(),
+ *                       12-stall.js)
  *   framePreview(), sparklePreview()
  *                       the small pictures of frames and sparkles
  *   warmPreviews()      draws the previews in idle moments, so the screen
@@ -12,7 +15,8 @@
  *
  * Choosing a look calls applyLook() (16-treasury.js).
  *
- * Changes in the save: skin, floor, frame, sparkle (the looks being worn).
+ * Changes in the save: skin, floor, frame, sparkle (the looks being worn);
+ * skins, floors, frames, sparkles, gold and lapis when a look is bought.
  * ===========================================================================*/
 
 // ---------- customise ----------
@@ -105,59 +109,58 @@ function openCustomise(tab) {
 				<span class="lock-num">${T('customise.progress', { have: pr.have.toLocaleString(), need: pr.need.toLocaleString() })}</span>
 			</span>`;
 	};
-	const skinCard = sk => {
-		const have = !!save.skins[sk.id],
-			on = save.skin === sk.id;
-		return html`
-			<button class="skin${have ? '' : ' locked'}${on ? ' on' : ''}" ${have ? `data-s="${sk.id}"` : 'disabled'}>
-				<img src="${skinPreview(sk.id)}" alt="">
-				<strong>${sk.name}</strong>
-				<span>${have ? sk.desc : lookNeedText(sk)}</span>
-				${have ? '' : lockBar(sk)}${on ? `<em class="equipped">${T('customise.in_use')}</em>` : ''}
-			</button>`;
-	};
-	const floorCard = f => {
-		const have = !!save.floors[f.id],
-			on = save.floor === f.id;
-		return html`
-			<button class="skin${have ? '' : ' locked'}${on ? ' on' : ''}" ${have ? `data-f="${f.id}"` : 'disabled'}>
-				<img src="${floorPreview(f.id)}" alt="">
-				<strong>${f.name}</strong>
-				<span>${have ? f.desc : lookNeedText(f)}</span>
-				${have ? '' : lockBar(f)}${on ? `<em class="equipped">${T('customise.in_use')}</em>` : ''}
-			</button>`;
-	};
-	const frameCard = f => {
-		const have = !!save.frames[f.id],
-			on = save.frame === f.id;
-		return html`
-			<button class="skin${have ? '' : ' locked'}${on ? ' on' : ''}" ${have ? `data-fr="${f.id}"` : 'disabled'}>
-				<img src="${framePreview(f.id)}" alt="">
-				<strong>${f.name}</strong>
-				<span>${have ? f.desc : lookNeedText(f)}</span>
-				${have ? '' : lockBar(f)}${on ? `<em class="equipped">${T('customise.in_use')}</em>` : ''}
-			</button>`;
-	};
-	const sparkCard = s => {
-		const have = !!save.sparkles[s.id],
-			on = save.sparkle === s.id;
-		return html`
-			<button class="skin${have ? '' : ' locked'}${on ? ' on' : ''}" ${have ? `data-sp="${s.id}"` : 'disabled'}>
-				<img src="${sparklePreview(s.id)}" alt="">
-				<strong>${s.name}</strong>
-				<span>${have ? s.desc : lookNeedText(s)}</span>
-				${have ? '' : lockBar(s)}${on ? `<em class="equipped">${T('customise.in_use')}</em>` : ''}
-			</button>`;
+	// The four kinds of look: where the save keeps which are owned and which is
+	// worn, the preview, and what changes on screen when one is put on.
+	const kinds = {
+		sets: { list: SKINS, own: 'skins', wear: 'skin', preview: skinPreview, put: applyLook },
+		floors: { list: FLOOR_SETS, own: 'floors', wear: 'floor', preview: floorPreview, put: applyLook },
+		frames: {
+			list: FRAMES,
+			own: 'frames',
+			wear: 'frame',
+			preview: framePreview,
+			put: () => paintBoardFrame(BOARDS[levelIdx] || BOARDS[0]),
+		},
+		sparkles: {
+			list: SPARKLES,
+			own: 'sparkles',
+			wear: 'sparkle',
+			preview: sparklePreview,
+			put: () => {},
+		},
 	};
 	// Only the showing tab's cards are built: the previews are drawn on demand
 	// and warmed in idle time, so building every list at once would stall the open.
-	const cards = {
-		sets: [SKINS, skinCard],
-		floors: [FLOOR_SETS, floorCard],
-		frames: [FRAMES, frameCard],
-		sparkles: [SPARKLES, sparkCard],
-	}[customiseTab];
-	const body = `<div class="skins">${cards[0].map(cards[1]).join('')}</div>`;
+	const kind = kinds[customiseTab];
+	// A look for sale shows its price and is bought with a tap; one the player
+	// can't afford yet shows the price, dimmed.
+	const card = o => {
+		const have = !!save[kind.own][o.id],
+			on = save[kind.wear] === o.id,
+			sale = !have && !!o.price,
+			can = sale && save[o.cur] >= o.price;
+		const act = have ? `data-wear="${o.id}"` : can ? `data-buy="${o.id}"` : 'disabled';
+		return html`
+			<button class="skin${have ? '' : ' locked'}${sale ? ' forsale' : ''}${on ? ' on' : ''}" ${act}>
+				<img src="${kind.preview(o.id)}" alt="">
+				<strong>${o.name}</strong>
+				<span>${have || (sale && !o.need) ? o.desc : lookNeedText(o)}</span>
+				${have ? '' : lockBar(o)}${
+					sale
+						? `<em class="price${can ? '' : ' short'}">${o.price.toLocaleString()} <i class="g-ico ${o.cur}"></i></em>`
+						: ''
+				}${on ? `<em class="equipped">${T('customise.in_use')}</em>` : ''}
+			</button>`;
+	};
+	// looks bought since Customise opened, each with a way to take it back
+	const bought = kind.list.filter(o => canUndo('look', `${kind.own}:${o.id}`));
+	const shop = kind.list.some(o => o.price && !save[kind.own][o.id]) || bought.length;
+	const top = shop
+		? html`
+		<p class="purse">${purseLine()}</p>
+		${bought.map(o => `<p class="bought">${T('customise.bought', { name: o.name })} ${undoButton('look', `${kind.own}:${o.id}`)}</p>`).join('')}`
+		: '';
+	const body = `${top}<div class="skins">${kind.list.map(card).join('')}</div>`;
 	$('msgBody').innerHTML = html`
 		<h2 id="msgTitle">${T('customise.title')}</h2>
 		<p class="lede">${T('customise.lede')}</p>
@@ -182,49 +185,46 @@ function openCustomise(tab) {
 				}),
 		);
 	$('msgBody')
-		.querySelectorAll('.skin[data-s]')
+		.querySelectorAll('.skin[data-wear]')
 		.forEach(
 			b =>
 				(b.onclick = () => {
-					save.skin = b.dataset.s;
+					save[kind.wear] = b.dataset.wear;
 					persist();
 					sfx('select');
-					applyLook();
+					kind.put();
 					openCustomise();
 				}),
 		);
 	$('msgBody')
-		.querySelectorAll('.skin[data-f]')
+		.querySelectorAll('.skin[data-buy]')
 		.forEach(
 			b =>
 				(b.onclick = () => {
-					save.floor = b.dataset.f;
+					const o = kind.list.find(x => x.id === b.dataset.buy);
+					if (save[o.cur] < o.price) return;
+					save[o.cur] -= o.price;
+					save[kind.own][o.id] = 1;
+					logBuy('look', `${kind.own}:${o.id}`, o.cur, o.price, () => {
+						delete save[kind.own][o.id];
+						if (save[kind.wear] === o.id) {
+							save[kind.wear] = FIRST_LOOKS[kind.wear];
+							kind.put();
+						}
+					});
 					persist();
-					sfx('select');
-					applyLook();
+					updateHUD();
+					sfx(o.cur === 'gold' ? 'coins' : 'gems');
+					sfx('create');
 					openCustomise();
 				}),
 		);
 	$('msgBody')
-		.querySelectorAll('.skin[data-fr]')
+		.querySelectorAll('.undo')
 		.forEach(
 			b =>
 				(b.onclick = () => {
-					save.frame = b.dataset.fr;
-					persist();
-					sfx('select');
-					paintBoardFrame(BOARDS[levelIdx] || BOARDS[0]);
-					openCustomise();
-				}),
-		);
-	$('msgBody')
-		.querySelectorAll('.skin[data-sp]')
-		.forEach(
-			b =>
-				(b.onclick = () => {
-					save.sparkle = b.dataset.sp;
-					persist();
-					sfx('select');
+					undoBuy(b.dataset.undoSrc, b.dataset.undo);
 					openCustomise();
 				}),
 		);

@@ -1,5 +1,5 @@
 /* =============================================================================
- * 22-input.js  —  the player's hands on the board: tapping, dragging and the
+ * 22-input.js: the player's hands on the board: tapping, dragging and the
  * keyboard.
  *
  * What's here:

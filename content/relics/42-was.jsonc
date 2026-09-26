@@ -2,7 +2,7 @@
 {
 	"id": "was",
 	"name": "The was sceptre",
-	"description": "Make a cascade of fifteen in a stop, and win it.",
+	"description": "Make a cascade of fifteen in a stop and win it.",
 	"found_when": {"win_best_cascade": 15},
 	"reward": {"gold": 300}
 }

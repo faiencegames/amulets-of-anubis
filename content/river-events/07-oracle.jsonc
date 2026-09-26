@@ -3,7 +3,7 @@
 	"id": "oracle",
 	"kind": "choice",
 	"title": "An oracle by the water",
-	"text": "An old woman sat where the reeds meet the river, as though she had been waiting for us. “Take what I offer freely,” she said, “or ask the Gods. They are generous, and They are not always kind.”",
+	"text": "An old woman sat where the reeds meet the river, as though she had been waiting for us. “Take what I offer freely,” she said, “or ask the Gods. They are generous and They are not always kind.”",
 	"choices": [
 		{"label": "Take her gift", "give": {"lapis": 5}},
 		{

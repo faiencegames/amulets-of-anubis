@@ -1,4 +1,4 @@
-/* 08-shops-and-looks.css: Board size picker, toggles, the Treasury and stall rows, and the Customise cards. */
+/* 08-shops-and-looks.css: Board size picker, toggles, the Treasury and stall rows and the Customise cards. */
 
 /* board size picker */
 /* the board choice: a row each, a picture of the board's floor plan beside
@@ -302,6 +302,57 @@
 .skin.locked span {
 	font-style: italic;
 }
+/* a look for sale shows its colours and its price, and is bought with a tap */
+.skin.forsale {
+	opacity: 1;
+	cursor: pointer;
+}
+.skin.forsale[disabled] {
+	cursor: not-allowed;
+}
+.skin.forsale img {
+	filter: none;
+}
+.skin.forsale span {
+	font-style: normal;
+}
+/* the price: the same sandstone button as the Treasury's and the stall's */
+.skin .price {
+	justify-self: start;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin-top: 6px;
+	min-height: 40px;
+	padding: 5px 14px;
+	border-radius: 2px;
+	border: 3px solid;
+	border-color: var(--bevel-hi) var(--bevel-lo) var(--bevel-lo) var(--bevel-hi);
+	background: linear-gradient(180deg, var(--stone-face-hi), var(--stone-face-lo));
+	box-shadow: 0 2px 0 #00000044;
+	text-shadow: 0 1px 0 var(--bevel-hi);
+	font-style: normal;
+	font-family: var(--display);
+	font-weight: 700;
+	font-size: 17px;
+	color: var(--accent);
+	font-variant-numeric: tabular-nums;
+}
+.skin .price.short {
+	opacity: 0.5;
+	box-shadow: none;
+}
+/* a look just bought, with the button that takes it back */
+.bought {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	margin: 4px 0;
+	font-family: var(--display);
+	font-size: 17px;
+	color: var(--good);
+}
 /* the badge sits in the card's bottom corner, clear of the preview picture */
 .equipped {
 	position: absolute;
@@ -367,15 +418,23 @@
 	align-items: center;
 	flex: none;
 }
+/* Undo: sandstone like every button, a little smaller than the price beside
+   it and in ink rather than red, with its arrow (images/icons/ui/undo.svg) */
 .btn.undo {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
 	min-width: 0;
-	min-height: 34px;
-	padding: 4px 10px;
-	font-size: 14px;
-	color: var(--ink-cool);
-	background: linear-gradient(180deg, var(--undo-hi), var(--undo-lo));
-	border-color: var(--undo-edge-hi) var(--undo-edge-lo) var(--undo-edge-lo) var(--undo-edge-hi);
-	text-shadow: none;
+	min-height: 40px;
+	padding: 4px 10px 4px 7px;
+	font-size: 15px;
+	color: var(--ink-2);
+	box-shadow: 0 2px 0 #00000033;
+}
+.undo-ico {
+	flex: none;
+	width: 20px;
+	height: 20px;
 }
 .refund-note {
 	text-align: center;

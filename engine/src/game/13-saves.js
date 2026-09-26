@@ -1,5 +1,5 @@
 /* =============================================================================
- * 13-saves.js  —  saving to a code and back, and starting a new journey.
+ * 13-saves.js: saving to a code and back and starting a new journey.
  *
  * What's here:
  *   openSaves()         the Saves scroll (the Menu, the title screen): copy
@@ -7,7 +7,7 @@
  *                       everything
  *   saveCode(), readCode()
  *                       the save as text (the edition's export_prefix,
- *                       "AMULETS1:", and a code) and back;
+ *                       "AMULETS1:" and a code) and back;
  *                       an imported save goes through applySaveDefaults()
  *                       (00-open.js)
  *   openNewJourney()    starts the river again from the first stop. Relics

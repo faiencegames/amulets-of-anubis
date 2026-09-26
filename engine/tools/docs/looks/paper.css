@@ -1,0 +1,63 @@
+/* paper: the engine's own plain look, as in a game that hasn't got one of its
+   own yet: light paper, grey stone and a little gold, with the engine's two
+   typefaces (web/fonts.css, put in by build.py). */
+/*FONTS*/
+:root {
+	--page: #f3eee3;
+	--sheet: #faf6ed;
+	--ink: #2b2620;
+	--ink-2: #6b6255;
+	--line: #d9cfbd;
+	--accent: #7c2f1c;
+	--link: #7c2f1c;
+	--code-bg: #ebe4d5;
+	--head-bg: #ebe4d5;
+	--k: #2c4f7a;
+	--s: #3d6b3a;
+	--n: #8e2415;
+	--b: #8a5d12;
+	--f: #6a3e82;
+	--c: #7d7262;
+	--body: 'IM Fell English', Georgia, serif;
+	--display: 'IM Fell Double Pica', Georgia, serif;
+}
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme='light']) {
+		color-scheme: dark;
+		--page: #1f1b16;
+		--sheet: #28231c;
+		--ink: #ece3d2;
+		--ink-2: #b3a78f;
+		--line: #3f372c;
+		--accent: #e3a86b;
+		--link: #e8b77f;
+		--code-bg: #2f2921;
+		--head-bg: #2f2921;
+		--k: #8fb4e0;
+		--s: #9ccf8f;
+		--n: #ec8f78;
+		--b: #e0b453;
+		--f: #caa3e3;
+		--c: #9d9079;
+	}
+}
+:root[data-theme='dark'] {
+	color-scheme: dark;
+	--page: #1f1b16;
+	--sheet: #28231c;
+	--ink: #ece3d2;
+	--ink-2: #b3a78f;
+	--line: #3f372c;
+	--accent: #e3a86b;
+	--link: #e8b77f;
+	--code-bg: #2f2921;
+	--head-bg: #2f2921;
+	--k: #8fb4e0;
+	--s: #9ccf8f;
+	--n: #ec8f78;
+	--b: #e0b453;
+	--f: #caa3e3;
+	--c: #9d9079;
+}
+.article h1, .article h2, .article h3 { font-weight: 400; }
+body { font-size: 18px; }

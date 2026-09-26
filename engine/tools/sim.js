@@ -1,6 +1,6 @@
 // Balance harness: plays every stop the way the game does (random shape from the
 // stop's pool), on a given board size, with everything on (as on a second
-// journey), and reports win rates. The board is built by stopOptions() in
+// journey) and reports win rates. The board is built by stopOptions() in
 // 01-core.js, the same function the game uses. For a first journey, as a new
 // player meets it, see journey-sim.js.
 const K=require('./load-core')(['LEVELS','Core','DIFFICULTY','setBoardSize','boardMode','pickShape','stopOptions']);

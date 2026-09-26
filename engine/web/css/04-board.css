@@ -1,5 +1,5 @@
 /* 04-board.css: The stage and the board: layer promotion, the Omega layout, the side tablet,
-	 the board frame and canvas, and the gilding tube. */
+	 the board frame and canvas and the gilding tube. */
 
 /* ---------- performance: paint the heavy, still layers once ----------
 	 The board canvas redraws often and is see-through where the floor has

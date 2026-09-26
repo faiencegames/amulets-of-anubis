@@ -7,7 +7,7 @@
 	"id": "osireion",
 	"at": "abydos",
 	"name": "The Osireion",
-	"text": "Behind the temple of Seti I at Abydos we went down into the Osireion, a sunken hall of massive granite pillars built as a symbolic tomb of Osiris. It lies below the level of the groundwater, and we found its central hall standing in water, as it often does; a fitting home, perhaps, for a God so bound up with the yearly flood.",
+	"text": "Behind the temple of Seti I at Abydos we went down into the Osireion, a sunken hall of massive granite pillars built as a symbolic tomb of Osiris. It lies below the level of the groundwater and we found its central hall standing in water, as it often does; a fitting home, perhaps, for a God so bound up with the yearly flood.",
 	"scenery": "tomb",
 	// Three sets: each time the place opens, the game picks one at random.
 	"amulets": [

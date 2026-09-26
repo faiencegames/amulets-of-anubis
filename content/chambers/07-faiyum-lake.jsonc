@@ -8,7 +8,7 @@
 	"at": "faiyum",
 	"setting": "oasis",
 	"name": "The lake of the Faiyum",
-	"text": "West of the Nile we came to the great lake of the Faiyum, fed by the Bahr Yussef; the Greeks called it Lake Moeris. Kings of the Middle Kingdom drained the marshes around it to win new farmland, and the Faiyum is farmed to this day.",
+	"text": "West of the Nile we came to the great lake of the Faiyum, fed by the Bahr Yussef; the Greeks called it Lake Moeris. Kings of the Middle Kingdom drained the marshes around it to win new farmland and the Faiyum is farmed to this day.",
 	"scenery": "oasis",
 	// Three sets: each time the place opens, the game picks one at random.
 	"amulets": [

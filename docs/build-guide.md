@@ -172,7 +172,7 @@ keytool -genkeypair -v \
 The name in `-dname` is written into every APK you sign, where anyone can
 read it, so use the game's name or a pen name rather than your own. The
 build picks up `release.jks` and `release.pass` automatically on the next
-run, and `.gitignore` keeps both out of git.
+run and `.gitignore` keeps both out of git.
 **Keep that file safe.** Losing it means you can no longer update existing
 installs under the same identity.
 
@@ -190,7 +190,7 @@ Everything else is the same as the signed build.
 
 The Android build asks nothing and needs no network: Python builds the game,
 then the SDK's own tools (`aapt2`, `javac`, `d8`, `zipalign`) pack it. It
-uses these versions, and nothing else:
+uses these versions and nothing else:
 
 | Tool | Version |
 |---|---|
@@ -208,13 +208,13 @@ file it adds to the APK, `classes.dex`, a fixed date.
 
 ### Version numbers and tags
 
-A release has one version, like `0.9.2`, and the source of that release is
+A release has one version, like `0.9.2`. The source of that release is
 the tag `v0.9.2`. Android also needs a *version code*, a whole number that
 must rise with every release, or phones refuse the update. It is made from
 the version: major × 10000 + minor × 100 + patch, so `0.9.2` is `902`,
 `0.9.3` is `903` and `1.0.0` is `10000`. (So the minor and patch numbers stay
 below 100.) Both numbers are written in `platforms/android/AndroidManifest.xml`,
-where F-Droid looks for them, and `build.sh` gives the same ones to `aapt2`.
+where F-Droid looks for them and `build.sh` gives the same ones to `aapt2`.
 
 Each version also has a line for app stores on what changed:
 `fastlane/metadata/android/en-US/changelogs/<version code>.txt`, in plain

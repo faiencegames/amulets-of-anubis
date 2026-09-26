@@ -1,7 +1,7 @@
 """Abu Simbel at dawn: the great temple of Ramesses II cut into the cliff.
 
 Four seated colossi of the king, two each side of the door; the second from
-the left lost its head and chest in an earthquake soon after it was carved,
+the left lost its head and chest in an earthquake soon after it was carved
 and the pieces lie at its feet. Over the door, in a niche, the falcon-headed
 Ra-Horakhty; along the top, a row of baboons greeting the sun. The temple
 faces east, so the rising sun, behind us, lights the whole front.

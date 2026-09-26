@@ -3,7 +3,7 @@
 El-Qurn, "the horn", is a natural peak shaped like a pyramid that stands over
 the valley; the kings of the New Kingdom were buried in tombs cut into the
 rock beneath it. Here the last sun lights the peak while the first stars come
-out, and the valley below is already in shadow. The tomb entrances are cut
+out and the valley below is already in shadow. The tomb entrances are cut
 into the foot of the cliffs, with a sloping cutting leading down to each door.
 
 Run: python3 tools/scenery/valley_of_the_kings.py > images/backdrops/valley-of-the-kings.svg

@@ -1,10 +1,10 @@
 /* =============================================================================
- * 14-menu.js  —  the Menu, and the settings it opens.
+ * 14-menu.js: the Menu and the settings it opens.
  *
  * What's here:
  *   openMenu()          the Menu: eight tiles in two rows (the map, How to
  *                       play, the Treasury, Customise, the Museum, sound,
- *                       difficulty, and the stall or Learning pace), and the
+ *                       difficulty and the stall or Learning pace) and the
  *                       ways out of the game small at the foot
  *   openSettings()      Settings: sound and music, vibration, colours,
  *                       motion and effects, this device; five tiles, each

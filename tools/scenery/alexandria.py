@@ -1,9 +1,9 @@
 """Alexandria by day: the Pharos, the great lighthouse, over the harbour.
 
 The lighthouse in its three stages, as ancient writers and coins describe it:
-a tall square tower, an eight-sided one above it, and a round one at the top
+a tall square tower, an eight-sided one above it and a round one at the top
 where the fire burned. It stands on the island of Pharos at the mouth of the
-harbour; across the water, the white city Alexander founded, and ships under
+harbour; across the water, the white city Alexander founded and ships under
 square sails.
 
 Run: python3 tools/scenery/alexandria.py > images/backdrops/alexandria.svg

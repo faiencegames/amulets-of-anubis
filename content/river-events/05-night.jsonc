@@ -3,7 +3,7 @@
 	"id": "night",
 	"kind": "puzzle",
 	"title": "A night crossing",
-	"text": "We crossed after dark with a single lamp, and the river was very black indeed. Only what the lamp touched could be seen, and it followed wherever we set the amulets; by its light alone we had to gild the deck.",
+	"text": "We crossed after dark with a single lamp and the river was very black indeed. Only what the lamp touched could be seen and it followed wherever we set the amulets; by its light alone we had to gild the deck.",
 	"goal": {"type": "gild"},
 	"moves": 22,
 	"amulet_types": 5,

@@ -1,6 +1,6 @@
 // The rules' own test: every helper, every kind of cover, every badge power
 // and every hardship in src/01-core.js, each tried on a small board of its
-// own, and checked. Run it after changing the rules:
+// own and checked. Run it after changing the rules:
 //
 //	node tools/rules-test.js                   with the game the build would build
 //	node tools/rules-test.js --game <folder>   with another game

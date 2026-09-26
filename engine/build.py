@@ -12,26 +12,26 @@ game's edition.jsonc, with the game's other values of its own.
 This is the engine's build. A game that holds the engine as its engine/
 folder has a small build.py of its own that runs this one for it; the game
 is the folder that holds edition.jsonc (see game_root() below). Everything
-said below about content/, images/ and dist/ is in the game's folder, and
+said below about content/, images/ and dist/ is in the game's folder and
 about src/, web/ and tools/ in the engine's.
 
 It also writes dist/try-it.html: double-click it to open the game in try-out
 mode, with a separate save and everything unlocked, straight at the stop or
 river event you changed last. (Your real save is never touched.) And, when
 rsvg-convert is installed, dist/art-references/: every picture as a PNG.
-To start a new thing from a ready-made file:  python scripts/new.py
+To start a new thing from a ready-made file: new.sh (or new.bat) in the game.
 
-It needs only Python 3, and the file it makes needs only a web browser.
+It needs only Python 3 and the file it makes needs only a web browser.
 Everything is put inside that one file: the code, the stylesheet (web/css/,
 joined in file-name order, with the game's own web/css/ files replacing or
-joining the engine's), the fonts, the content files in content/, and every
+joining the engine's), the fonts, the content files in content/ and every
 picture in images/ (see images/README.md):
 
 	images/amulets/<name>.svg        an amulet (.svg, .png, .jpg or .webp)
 	images/backdrops/<stop>.svg      the scenery behind a stop, by its id (harbour.svg)
 	images/boards/<stop>.svg         what shows through the gaps of that stop's board
 	images/floors/<set>/             a floor set: bare, thick and gilded squares
-	images/specials/, images/badges/ the marks of special amulets, and badges
+	images/specials/, images/badges/ the marks of special amulets and badges
 	images/icons/                    every icon (buttons, boons, relics, menu, map)
 	images/relics/<relic>.png        a picture for a relic, instead of its icon
 	images/favicon.svg               the picture in the browser's tab (or .png)
@@ -42,7 +42,9 @@ says which file, which line and what to do; the last good game file is left
 alone.
 
 For the simulators in tools/:  python build.py --content-json  prints the
-checked content, as the game sees it, and nothing else.
+checked content, as the game sees it and nothing else. And
+python build.py --docs  writes the parts of the engine's docs that follow the
+code by themselves and checks the rest (tools/reference.py).
 """
 import base64, difflib, json, os, re, subprocess, sys, time, urllib.parse
 from xml.etree import ElementTree
@@ -68,7 +70,7 @@ GAME = game_root()
 if '--watch' in sys.argv:
 	def stamp():
 		out = {}
-		for d in (os.path.join(GAME, 'content'), os.path.join(GAME, 'images'), os.path.join(GAME, 'web'), os.path.join(ENGINE, 'src'), os.path.join(ENGINE, 'web')):
+		for d in (os.path.join(GAME, 'content'), os.path.join(GAME, 'images'), os.path.join(GAME, 'web'), os.path.join(GAME, 'sounds'), os.path.join(GAME, 'music'), os.path.join(ENGINE, 'src'), os.path.join(ENGINE, 'web')):
 			for root, _, files in os.walk(d):
 				for n in files:
 					try: out[os.path.join(root, n)] = os.path.getmtime(os.path.join(root, n))
@@ -104,6 +106,8 @@ def say(*a):
 	if not QUIET: print(*a)
 
 errors, warnings = [], []
+# where the engine's content reference is, as a reader would find it from the game
+REFERENCE = os.path.relpath(os.path.join(ENGINE, 'docs', 'content-reference.md'), GAME).replace(os.sep, '/')
 
 # The code runs as one script, so two functions with the same name don't
 # clash: the later one quietly replaces the earlier, everywhere. Stop on it.
@@ -154,6 +158,8 @@ WIN_CONDITIONS = ['win_moves_to_spare', 'win_on_difficulty', 'win_at_stop', 'win
 SPECIAL_PICTURES = ['band', 'band-glow', 'band-arrows', 'ring', 'ring-glow', 'star-glow', 'star-points']
 # the sounds a cover may make when it breaks (sfx() in src/game/03-sound.js)
 COVER_SOUNDS = ['sand', 'splash', 'crack', 'stone', 'gild', 'blessing', 'create', 'land']
+CURRENCIES = ['gold', 'lapis']
+EVENT_GOALS = ['gild', 'collect', 'score']   # an event puzzle's goal.type
 COLOUR_CHANGES = {'hue_shift': 'hue-rotate({}deg)', 'saturation': 'saturate({})', 'brightness': 'brightness({})',
 				  'contrast': 'contrast({})', 'sepia': 'sepia({})', 'greyscale': 'grayscale({})'}
 
@@ -229,6 +235,7 @@ RELIC_ICONS = sorted(ICONS.get('relics', {}))
 # Pictures
 # =============================================================================
 TYPES = {'.png':'image/png', '.jpg':'image/jpeg', '.jpeg':'image/jpeg', '.webp':'image/webp', '.gif':'image/gif', '.svg':'image/svg+xml'}
+SOUND_TYPES = {'.mp3': 'audio/mpeg', '.wav': 'audio/wav', '.ogg': 'audio/ogg', '.m4a': 'audio/mp4'}
 
 def picture_files(folder):
 	"""{name: full path} for every picture in images/<folder>/."""
@@ -264,7 +271,7 @@ def data_uri(full):
 	if size > 2_000_000:
 		warnings.append(f'{rel(full)}: {size//1024} KB is large; the game file will grow by that much. Consider making it smaller.')
 	with open(full, 'rb') as f:
-		return f'data:{TYPES[os.path.splitext(full)[1].lower()]};base64,' + base64.b64encode(f.read()).decode()
+		return f'data:{dict(TYPES, **SOUND_TYPES)[os.path.splitext(full)[1].lower()]};base64,' + base64.b64encode(f.read()).decode()
 
 # =============================================================================
 # Reading content files: JSON, with // comments and trailing commas allowed
@@ -375,14 +382,19 @@ class Check:
 	plain-English message if something is off. `where` names the file."""
 	def __init__(self, obj, where, known=None):
 		self.obj, self.where = obj, where
+		self.typos = {}   # a known field -> the unknown one that is probably it, mistyped
 		if not isinstance(obj, dict):
 			self.fail('should be one { ... } block of fields.')
 		if known is not None:
 			for k in obj:
 				if k not in known:
 					close = difflib.get_close_matches(k, known, 1, .6)
+					if close: self.typos[close[0]] = k
 					warnings.append(f'{where}: I don\'t know the field "{k}", so it is ignored.' + (f' Did you mean "{close[0]}"?' if close else f' Fields here: {", ".join(known)}.'))
 	def fail(self, msg):
+		m = re.match(r'needs a "([^"]+)"', msg)
+		if m and m.group(1) in self.typos:
+			msg += f' This file has a "{self.typos[m.group(1)]}", which is probably it, mistyped.'
 		errors.append(f'{self.where}: {msg}'); raise Bad()
 	def warn(self, msg): warnings.append(f'{self.where}: {msg}')
 	def has(self, key): return key in self.obj and self.obj[key] is not None
@@ -529,7 +541,7 @@ def plan(v, ck, key, need_stone=True):
 				name = COVER_RULES[COVER_LETTERS[v[r][c]][0]]['name'].lower()
 				if not touches: ck.fail(f'"{key}": the {name} at row {r+1}, column {c+1} touches no clear square, so it could never be cleared.')
 		clear_cells = sum(ch in '012' for row in v for ch in row)
-		if clear_cells < 16: ck.fail(f'"{key}" covers too much: only {clear_cells} squares start clear, and the board needs room to make matches.')
+		if clear_cells < 16: ck.fail(f'"{key}" covers too much: only {clear_cells} squares start clear and the board needs room to make matches.')
 	return v
 
 # =============================================================================
@@ -549,7 +561,7 @@ def check_condition(v, ck, key):
 	for k, x in v.items():
 		if k not in allowed:
 			close = difflib.get_close_matches(k, allowed, 1, .5)
-			ck.fail(f'"{key}" uses "{k}", which I don\'t know.' + (f' Did you mean "{close[0]}"?' if close else '') + ' docs/content-reference.md lists them all.')
+			ck.fail(f'"{key}" uses "{k}", which I don\'t know.' + (f' Did you mean "{close[0]}"?' if close else '') + f' The content reference ({REFERENCE}) lists them all.')
 		if k in COUNT_CONDITIONS or k in ('win_moves_to_spare', 'win_after_failures', 'win_with_omens', 'win_suns_forged', 'win_best_cascade', 'win_specials_made'):
 			if isinstance(x, bool) or not isinstance(x, int) or x < 1: ck.fail(f'"{key}": "{k}" should be a whole number of 1 or more.')
 		elif k in ('win_without_boons', 'win_two_specials_at_once'):
@@ -723,9 +735,9 @@ def cover(ck):
 	letters = ck.listof('letters', lo=2, hi=2)
 	for ch in letters:
 		if not isinstance(ch, str) or len(ch) != 1 or ch in '.0123456789' or ch.isspace():
-			ck.fail('"letters" should be two single letters in quotes, like ["s", "S"]: the cover on stone, and on thick stone.')
+			ck.fail('"letters" should be two single letters in quotes, like ["s", "S"]: the cover on stone and on thick stone.')
 		if ch in COVER_LETTERS: ck.fail(f'the letter "{ch}" is already used by the cover "{COVER_LETTERS[ch][0]}". Each cover needs letters of its own.')
-	if letters[0] == letters[1]: ck.fail('"letters" should be two different letters: the cover on stone, and on thick stone.')
+	if letters[0] == letters[1]: ck.fail('"letters" should be two different letters: the cover on stone and on thick stone.')
 	burst = ck.listof('burst', False, 2, 2) or ['#e8c98a', '#b88a48']
 	c = {'id': cid, 'name': ck.text('name'), 'text': ck.text('text'), 'popup': ck.text('popup'), 'letters': letters,
 		 'chamberNote': ck.text('chamber_note', False) or ck.text('popup'),
@@ -733,7 +745,7 @@ def cover(ck):
 		 'matches': ck.yes('matches'), 'spreads': ck.yes('spreads'), 'sound': ck.choice('sound', COVER_SOUNDS, False, 'sand'),
 		 'burst': [as_colour(x, ck, 'burst') for x in burst]}
 	if c['brokenBy'] == 'on' and not c['matches']:
-		ck.warn('"broken_by": "on", and the amulet under it doesn\'t match: only a special or a badge can ever break it.')
+		ck.warn('"broken_by": "on" and the amulet under it doesn\'t match: only a special or a badge can ever break it.')
 	shown = ck.get('amulet_on_show')
 	if shown is not None: check_amulet(shown, ck, 'amulet_on_show')
 	c['shownOn'] = shown or (AMULET_NAMES_ALL[0] if AMULET_NAMES_ALL else None)
@@ -812,7 +824,7 @@ def event(ck):
 	e = {'id': ck.id(), 'kind': kind, 'title': ck.text('title'), 'text': ck.text('text'), 'weight': ck.number('weight', False, 1, 0, 100)}
 	if kind == 'puzzle':
 		g = ck.sub('goal', ['type', 'amulet', 'count', 'points'])
-		gt = g.choice('type', ['gild', 'collect', 'score'])
+		gt = g.choice('type', EVENT_GOALS)
 		goal = {'type': gt}
 		types = ck.whole('amulet_types', lo=4, hi=6)
 		if ck.has('amulets'): e['set'] = check_amulet_list(ck, 'amulets', types, 6)
@@ -898,7 +910,7 @@ def chamber_scenery(ck, cid):
 # ---- the stall and the treasury -------------------------------------------------
 def stall(ck):
 	it = {'id': ck.id(), 'name': ck.text('name'), 'desc': ck.text('description'),
-		  'cur': ck.choice('currency', ['gold', 'lapis']), 'price': ck.whole('price', lo=1)}
+		  'cur': ck.choice('currency', CURRENCIES), 'price': ck.whole('price', lo=1)}
 	g = ck.sub('gives', ['moves', 'reshuffle', 'boon', 'second_wind'])
 	if len(g.obj) != 1: g.fail('should give exactly one thing: "moves", "reshuffle", "boon" or "second_wind".')
 	k, v = next(iter(g.obj.items()))
@@ -924,14 +936,18 @@ def upgrade(ck):
 	for p in prices:
 		if isinstance(p, bool) or not isinstance(p, int) or p < 1: ck.fail('"prices" should be a list of whole numbers, one per level, like [300, 600, 1200].')
 	eff = ck.choice('effect', list(UPGRADE_EFFECTS))
-	return {'id': ck.id(), 'name': ck.text('name'), 'desc': ck.text('description'), 'cur': ck.choice('currency', ['gold', 'lapis']),
+	return {'id': ck.id(), 'name': ck.text('name'), 'desc': ck.text('description'), 'cur': ck.choice('currency', CURRENCIES),
 			'tiers': len(prices), 'prices': prices, 'effect': eff,
 			'amount': round(ck.number('amount_per_level', lo=0) * UPGRADE_EFFECTS[eff], 6)}
 
 # ---- looks -----------------------------------------------------------------
 def look(ck):
-	return {'id': ck.id(), 'name': ck.text('name'), 'desc': ck.text('description'),
-			'need': check_condition(ck.get('unlocked_by'), ck, 'unlocked_by'), 'needText': ck.text('how_to_unlock', False, None)}
+	o = {'id': ck.id(), 'name': ck.text('name'), 'desc': ck.text('description'),
+		 'need': check_condition(ck.get('unlocked_by'), ck, 'unlocked_by'), 'needText': ck.text('how_to_unlock', False, None)}
+	# for sale in Customise: bought only, or bought or earned if it also has unlocked_by
+	if ck.has('price') or ck.has('currency'):
+		o['cur'], o['price'] = ck.choice('currency', CURRENCIES), ck.whole('price', lo=1)
+	return o
 
 def skin(ck):
 	s = look(ck)
@@ -947,6 +963,13 @@ def skin(ck):
 	if ck.has('css_filter'): s['filter'] = ck.text('css_filter')
 	if ck.has('glow'): s['glow'] = ck.colour('glow')
 	if ck.has('tint'): s['tint'] = ck.colour('tint'); s['tintAlpha'] = ck.number('tint_strength', False, .25, 0, 1)
+	# pictures of its own, images/amulet-sets/<id>/<amulet>: drawn instead of the usual ones
+	pics = picture_files('amulet-sets/' + s['id'])
+	if pics:
+		PICTURES['amulet-sets'][s['id']] = {n: embed(f) for n, f in pics.items()}
+		strangers = [n for n in pics if n not in PICTURE_FILES['amulets']]
+		if strangers: ck.warn(f'images/amulet-sets/{s["id"]}/ has pictures for amulets the game doesn\'t have: {", ".join(strangers)}.')
+	if ck.yes('pixel_art'): s['pixel'] = True   # drawn with square pixels, never smoothed
 	return s
 
 def floor_set(ck):
@@ -980,7 +1003,7 @@ def sparkle(ck):
 	s['a'], s['b'] = [as_colour(c, ck, 'colours') for c in ck.listof('colours', lo=2, hi=2)]
 	return s
 
-LOOK_FIELDS = ['id', 'name', 'description', 'unlocked_by', 'how_to_unlock']
+LOOK_FIELDS = ['id', 'name', 'description', 'unlocked_by', 'how_to_unlock', 'currency', 'price']
 # (folder, key in the game, fields, reader, the free look every save starts with:
 # its field in edition.jsonc, "starting_looks")
 KINDS = [
@@ -998,13 +1021,15 @@ KINDS = [
 	('chambers', 'chambers', ['id', 'at', 'name', 'text', 'setting', 'scenery', 'moves', 'amulet_types', 'amulets', 'floor_plan', 'reward', 'return_reward'], chamber, None),
 	('stall', 'stall', ['id', 'name', 'description', 'icon', 'currency', 'price', 'gives'], stall, None),
 	('treasury', 'upgrades', ['id', 'name', 'description', 'currency', 'prices', 'effect', 'amount_per_level'], upgrade, None),
-	('amulet-sets', 'skins', LOOK_FIELDS + ['colour_changes', 'css_filter', 'glow', 'tint', 'tint_strength'], skin, 'amulet_set'),
+	('amulet-sets', 'skins', LOOK_FIELDS + ['colour_changes', 'css_filter', 'glow', 'tint', 'tint_strength', 'pixel_art'], skin, 'amulet_set'),
 	('floor-sets', 'floorSets', LOOK_FIELDS + ['uses_each_stops_own_stone'], floor_set, 'floor_set'),
 	('frames', 'frames', LOOK_FIELDS + ['colours'], frame, 'frame'),
 	('sparkles', 'sparkles', LOOK_FIELDS + ['colours'], sparkle, 'sparkle'),
 ]
 NEED_AT_LEAST_ONE = {'badges', 'boons', 'stops', 'trials', 'stall', 'skins', 'floorSets', 'frames', 'sparkles'}
 
+# the groups of settings in content/settings.jsonc
+SETTINGS_FIELDS = ['river_event_percent', 'stall_price_rise_percent', 'persistence', 'earnings', 'stops_open_at_start', 'stars', 'trial_offer_percent', 'staging', 'badges', 'returning', 'omens', 'seals', 'difficulty', 'sound', 'amulets_on_show', 'river_channel']
 def settings():
 	"""content/settings.jsonc: the numbers that tune the game. Every field is
 	optional; what is left out keeps the value written here as the default."""
@@ -1012,9 +1037,7 @@ def settings():
 	s = load_json(full) if os.path.isfile(full) else {}
 	if s is None: s = {}
 	try:
-		ck = Check(s, 'content/settings.jsonc', ['river_event_percent', 'stall_price_rise_percent', 'persistence', 'earnings',
-												'stops_open_at_start', 'stars', 'trial_offer_percent', 'staging', 'badges', 'returning',
-												'omens', 'seals', 'difficulty', 'sound', 'amulets_on_show', 'river_channel'])
+		ck = Check(s, 'content/settings.jsonc', SETTINGS_FIELDS)
 		p = ck.sub('persistence', ['extra_moves_per_failure', 'failures_that_count', 'boon_after_failures'], False) or Check({}, ck.where)
 		e = ck.sub('earnings', ['stones_per_gold', 'specials_per_lapis', 'gold_for_winning', 'gold_per_spare_move', 'lapis_for_winning'], False) or Check({}, ck.where)
 		st = ck.sub('stars', ['three_stars_moves_left_percent', 'two_stars_moves_left_percent'], False) or Check({}, ck.where)
@@ -1158,7 +1181,7 @@ def load_content():
 			want = EDITION.get('looks', {}).get(first) or items[0]['id']
 			if want not in seen:
 				errors.append(f'edition.jsonc, "starting_looks": "{first}" is "{want}", but there is no such id in content/{folder}/. '
-							  'Every player starts with it, and saves rely on it: keep that file, or name one that is there.')
+							  'Every player starts with it and saves rely on it: keep that file, or name one that is there.')
 			STARTING[STARTING_LOOKS[first]] = want
 		if kind in NEED_AT_LEAST_ONE and not items and not errors:
 			errors.append(f'content/{folder}/: there is nothing here. The game needs at least one.')
@@ -1225,7 +1248,7 @@ if '--edition-json' in sys.argv:   # for the test tools: the file name and the s
 	print(json.dumps(EDITION, ensure_ascii=False)); sys.exit(1 if errors[before:] else 0)
 say(f'Building {EDITION["name"]}...')
 PICTURE_FILES = {f: picture_files(f) for f in ('amulets', 'specials', 'badges', 'backdrops', 'boards', 'relics')}
-PICTURES = {'amulets': {}, 'specials': {}, 'badges': {}, 'backdrops': {}, 'boards': {}, 'floors': {}, 'relics': {}, 'covers': {}}
+PICTURES = {'amulets': {}, 'specials': {}, 'badges': {}, 'backdrops': {}, 'boards': {}, 'floors': {}, 'relics': {}, 'covers': {}, 'amulet-sets': {}}
 for name, full in PICTURE_FILES['amulets'].items():
 	if not re.fullmatch(r'[a-z][a-z0-9-]*', name):
 		warnings.append(f'{rel(full)}: the file name must start with a letter and use only letters, numbers and hyphens, like old-harbour.svg'); continue
@@ -1239,12 +1262,48 @@ for folder, needed in (('specials', SPECIAL_PICTURES),):   # the badges' picture
 
 CONTENT = load_content()
 
-for folder in ('backdrops', 'boards'):
+# Recorded sound, if the game brings any: sounds/<effect>.mp3 (or .wav, .ogg,
+# .m4a) plays instead of the effect the game makes up with that name, and
+# music/<stop id> (or music/default) loops instead of the made-up music there.
+# They go into the game file as they are, so keep them short and small.
+def sound_files(folder):
+	d = os.path.join(GAME, folder)
+	if not os.path.isdir(d): return {}
+	found = {}
+	for name in sorted(os.listdir(d)):
+		stem, ext = os.path.splitext(name)
+		if name.startswith('.'): continue
+		if ext.lower() not in SOUND_TYPES:
+			warnings.append(f'{folder}/{name}: not a sound I can use (use .mp3, .wav, .ogg or .m4a)'); continue
+		found[stem.lower()] = os.path.join(d, name)
+	return found
+EFFECT_NAMES = sorted(set(re.findall(r"case '([a-z-]+)':", read('src', 'game', '03-sound.js'))))
+PICTURES['sounds'] = {'effects': {}, 'music': {}}
+for name, full in sound_files('sounds').items():
+	if name not in EFFECT_NAMES:
+		close = difflib.get_close_matches(name, EFFECT_NAMES, 1, .6)
+		warnings.append(f'{rel(full)}: there is no sound called "{name}", so it is not used.' + (f' Did you mean "{close[0]}"?' if close else f' The sounds are: {", ".join(EFFECT_NAMES)}.'))
+	else: PICTURES['sounds']['effects'][name] = data_uri(full)
+STOP_IDS = [st['id'] for st in CONTENT['stops']]
+for name, full in sound_files('music').items():
+	if name != 'default' and name not in STOP_IDS:
+		warnings.append(f'{rel(full)}: there is no stop with the id "{name}" (or name it default.mp3 for every stop), so it is not used.')
+	else: PICTURES['sounds']['music'][name] = data_uri(full)
+
+for folder in ('backdrops', 'boards'):   # not after a problem: a stop that could not be read uses none
 	for name, full in PICTURE_FILES[folder].items():
-		if full not in USED_PICTURES: warnings.append(f'{rel(full)} is not used by any stop or chamber: name it after one\'s id, or name it in its file.')
+		if not errors and full not in USED_PICTURES: warnings.append(f'{rel(full)} is not used by any stop or chamber: name it after one\'s id, or name it in its file.')
 for rid in PICTURE_FILES['relics']:
 	if rid not in IDS.get('relics', ()): warnings.append(f'images/relics/{rid}: there is no relic with the id "{rid}".')
 say(f'  pictures: {sum(len(v) for v in PICTURES.values())} from images/, {sum(len(v) for v in ICONS.values())} icons')
+
+def manual_part_1():
+	"""Where the manual's part 1 is: the game's own, or the engine's."""
+	import glob
+	for root in (GAME, ENGINE):
+		found = sorted(glob.glob(os.path.join(root, 'docs', 'manual', 'part-1-*.md')))
+		if found: return rel(found[0])
+	return 'docs/manual'
 
 def report():
 	out = sys.stderr if QUIET else sys.stdout
@@ -1254,7 +1313,7 @@ def report():
 	if errors:
 		print(f'\n{len(errors)} {"problem" if len(errors) == 1 else "problems"} in the content files. Nothing was built; the last good game file is unchanged.\n', file=out)
 		for e in errors: print('  x ' + e + '\n', file=out)
-		print('Fix the first one, build again, and repeat. The manual, docs/manual/part-1-making-things.md ("If something goes wrong"), can help.', file=out)
+		print(f'Fix the first one, build again and repeat. The manual, {manual_part_1()} ("If something goes wrong"), can help.', file=out)
 
 if errors:
 	report(); sys.exit(1)
@@ -1264,6 +1323,14 @@ if QUIET:
 say(f'  content: {len(CONTENT["stops"])} stops, {len(CONTENT.get("chambers", []))} chambers, {len(CONTENT["relics"])} relics, {len(CONTENT["boons"])} boons, {len(CONTENT["badges"])} badges, {len(CONTENT["curses"])} curses, {len(CONTENT["omens"])} omens, {len(CONTENT["events"])} river events, '
 	f'{len(CONTENT["trials"])} trials, {len(CONTENT["stall"]) + len(CONTENT["upgrades"])} things to buy, '
 	f'{sum(len(CONTENT[k]) for k in ("skins", "floorSets", "frames", "sparkles"))} looks')
+# --docs: the content reference's appendix and the map of the code, written
+# from the code, and the rest of the reference checked (tools/reference.py)
+sys.path.insert(0, path('tools'))
+import reference
+if '--docs' in sys.argv:
+	sys.exit(reference.run(globals()))
+if GAME == os.path.join(ENGINE, 'example'):   # building the engine's own example: are its docs in step?
+	warnings.extend(reference.quick(globals()))
 if '--check' in sys.argv:
 	report(); say('\nThe content files are fine. (Checked only; nothing was written.)'); sys.exit(0)
 

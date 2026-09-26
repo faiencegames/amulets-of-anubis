@@ -12,7 +12,7 @@ const s={stars:[],life:{wins:0,events:0,hardWins:0},relics:{},trialsDone:0,suns:
 let lapisEarned=0, attempts=0, got=new Set(), log=[];
 function checkAll(tag){
 	for(let pass=0;pass<3;pass++) K.RELICS.forEach(r=>{ if(!s.relics[r.id] && K.conditionMet(r.when,s)){ s.relics[r.id]=1; if(r.reward){ s.gold+=r.reward.gold||0; s.goldEarned+=r.reward.gold||0; s.lapis+=r.reward.lapis||0; lapisEarned+=r.reward.lapis||0; } log.push(`${tag}: relic ${r.name}`);} });
-	looks.forEach(([k,o])=>{ const key=k+':'+o.id; if(!got.has(key) && K.conditionMet(o.need,s)){ got.add(key); if(o.need) log.push(`${tag}: ${k} ${o.name}`);} });
+	looks.forEach(([k,o])=>{ const key=k+':'+o.id; if(!got.has(key) && !(o.price && !o.need) && K.conditionMet(o.need,s)){ got.add(key); if(o.need) log.push(`${tag}: ${k} ${o.name}`);} });
 }
 function play(core,a,b,st){ core.play(a,b,(res,m)=>{ if(st){ st.gild+=res.gild.length; st.made+=res.made.length; st.suns+=res.made.filter(x=>x.tile.special==='sun').length; st.casc=Math.max(st.casc,m); st.thick+=res.gild.filter(g=>g.now===1&&!g.blessed).length; if(res.fired.length>=2) st.duet=true; res.fired.forEach(f=>{ if(f.kind==='lapis') st.gem+=f.n; }); } }); }
 function attempt(i){

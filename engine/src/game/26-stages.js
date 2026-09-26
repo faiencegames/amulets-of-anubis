@@ -1,6 +1,6 @@
 /* =============================================================================
- * 26-stages.js  —  staging: on a first journey the game's parts arrive one at
- * a time, and "new" dots.
+ * 26-stages.js: staging: on a first journey the game's parts arrive one at
+ * a time and "new" dots.
  *
  * What's here:
  *   STAGES              each part (trials, boons, the stall, badges, curses,

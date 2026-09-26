@@ -1,5 +1,5 @@
 /* =============================================================================
- * 04-music.js  —  the music: a score made as it plays, in each stop's scale
+ * 04-music.js: the music: a score made as it plays, in each stop's scale
  * and instrument (THEMES, 03-themes.js).
  *
  * Layers (a choir pad, a drone, plucks, an arpeggio, a pulse, a lead, bells)
@@ -456,7 +456,7 @@ function musicStep(step, t, late) {
 const MUSIC_AHEAD = 0.4; // seconds scheduled in advance
 const MUSIC_MARGIN = 0.03; // the soonest a note may start
 function musicTick() {
-	if (!music.running || !audioCtx) return;
+	if (!music.running || !audioCtx || music.fileUrl) return;
 	const spb = 60 / music.tempo / 4;
 	const now = audioCtx.currentTime;
 	if (music.next < now - 0.5) music.next = now + 0.05; // woke from a pause: don't rush to catch up
@@ -468,9 +468,40 @@ function musicTick() {
 	}
 }
 
+// the recorded music for this stop, if the game brought some
+function musicFile() {
+	const stop = LEVELS[levelIdx];
+	return SOUND_FILES.music[stop && stop.id] || SOUND_FILES.music.default || null;
+}
+// loops a recorded piece through the music's bus, so its volume, ducking and
+// muffling work as for the made-up music
+function playMusicFile(url) {
+	if (music.fileUrl === url && music.fileSrc) return;
+	if (music.fileSrc) music.fileSrc.stop(audioCtx.currentTime + 0.5);
+	music.fileSrc = null;
+	music.fileUrl = url;
+	soundBuffer(url).ready.then(b => {
+		if (!b || music.fileUrl !== url || !music.running) return;
+		const src = audioCtx.createBufferSource();
+		src.buffer = b;
+		src.loop = true;
+		src.connect(music.bus);
+		src.start();
+		music.fileSrc = src;
+	});
+}
+
 function startMusic() {
 	if (save.music === false || music.running) return;
 	if (!musicSetup()) return;
+	const file = musicFile();
+	if (file) {
+		music.running = true;
+		playMusicFile(file);
+		musicVolume();
+		return;
+	}
+	music.fileUrl = null;
 	music.running = true;
 	music.step = 0;
 	music.chordI = 0;
@@ -486,6 +517,9 @@ function stopMusic() {
 	if (!music.running) return;
 	music.running = false;
 	const t = audioCtx.currentTime;
+	if (music.fileSrc) music.fileSrc.stop(t + 3);
+	music.fileSrc = null;
+	music.fileUrl = null;
 	music.bus.gain.cancelScheduledValues(t);
 	music.bus.gain.setTargetAtTime(0.0001, t, 0.4);
 	music.pad.forEach(v => v.o.forEach(o => o.stop(t + 3)));
@@ -499,6 +533,13 @@ function musicStopBegins() {
 	music.progress = 0;
 	music.resting = false;
 	music.tempo = 92;
+	const file = musicFile();
+	if (music.running && (file || music.fileUrl)) {
+		// recorded music: from one piece to the next, or between it and the made-up music
+		if (file && music.fileUrl) return playMusicFile(file);
+		stopMusic();
+		return startMusic();
+	}
 	if (music.running) {
 		music.step = Math.ceil(music.step / 32) * 32;
 		music.chordI = 0;
@@ -521,7 +562,7 @@ function musicFollow() {
 }
 
 function musicCascade(mult, made) {
-	if (!music.running || !audioCtx) return;
+	if (!music.running || !audioCtx || music.fileUrl) return;
 	const t = audioCtx.currentTime + MUSIC_MARGIN,
 		L = scaleLen();
 	if (mult >= 3) {
@@ -535,7 +576,7 @@ function musicCascade(mult, made) {
 
 function musicResolve(won) {
 	// end of a stop
-	if (!music.running || !audioCtx) return;
+	if (!music.running || !audioCtx || music.fileUrl) return;
 	const t = audioCtx.currentTime + 0.1;
 	music.resting = true;
 	music.tension = 0;

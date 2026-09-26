@@ -1,0 +1,6 @@
+<!-- The Undo button's arrow, turning back to the left: take back what was just bought. Papyrus with a dark outline, like the other buttons' pictures. 32 by 32. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<path d="M11 11 H19 C24 11 27 14.5 27 18.5 C27 22.5 24 26 19 26 H13" fill="none" stroke="#4a2c10" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M11 11 H19 C24 11 27 14.5 27 18.5 C27 22.5 24 26 19 26 H13" fill="none" stroke="#e8d49e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M3.5 11 L12.5 4.5 V17.5 Z" fill="#e8d49e" stroke="#4a2c10" stroke-width="2" stroke-linejoin="round"/>
+</svg>

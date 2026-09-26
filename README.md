@@ -3,31 +3,31 @@
 ![A tomb by torchlight: the Grand Gallery at Giza, with some amulets buried in sand](docs/images/screenshot-tomb.jpg)
 
 Amulets of Anubis is a match-3 roguelite on the Nile. Each journey runs from
-Memphis to Alexandria through twelve stops, and at each one you swap amulets
+Memphis to Alexandria through twelve stops and at each one you swap amulets
 into rows of three until the grey stone floor has turned to gold. No two
 journeys go the same way. The priests set different trials, a failed one
-brings a curse, boons come and go, and the river throws up puzzles and choices
+brings a curse, boons come and go and the river throws up puzzles and choices
 between the stops. What you earn is kept for the next journey, in the
 Treasury's upgrades, the relics in the museum and the looks you unlock. Every
-stop has its own amulets, scenery, floor plans and music, and a short note on
+stop has its own amulets, scenery, floor plans and music, as well as a short note on
 its history that I have tried hard to get right.
 
 The whole game is a single HTML file. There is nothing to install and no
-account to make, and it never goes online: no ads, no tracking, and no update
-that changes it behind your back. Open the file in a browser and it works, and
-it should still work in twenty years. It can also be installed as a web app,
+account to make. It never goes online: no ads, no tracking and no update
+that changes it behind your back. Open the file in a browser and it works.
+It should still work in twenty years, too. It can also be installed as a web app
 and there are Android and desktop versions.
 
 I also wanted it to be easy to change. Almost everything you see, from the
 stops and their history notes to the prices in the shop and every picture,
-lives in small text files that explain themselves. You can make your own
+can be found in small text files that explain themselves. You can make your own
 version without writing any code.
 
 <div class="start">
 <p><a href="docs/manual/part-1-making-things.md"><b>Change the game</b><br><span>The manual, part 1: your own pictures, words and prices, a new stop, tomb or boon. No programming.</span></a></p>
-<p><a href="docs/content-reference.md"><b>Look something up</b><br><span>Every field of every content file, and every name the build knows.</span></a></p>
+<p><a href="engine/docs/content-reference.md"><b>Look something up</b><br><span>Every field of every content file and every name the build knows.</span></a></p>
 <p><a href="docs/build-guide.md"><b>Build the apps</b><br><span>The Android and desktop apps, from this one folder.</span></a></p>
-<p><a href="docs/manual/part-2-the-engine.md"><b>Work on the code</b><br><span>The manual, part 2: how the engine works inside, and how to extend it.</span></a></p>
+<p><a href="engine/docs/manual/part-2-the-engine.md"><b>Work on the code</b><br><span>The manual, part 2: how the engine works inside and how to extend it.</span></a></p>
 </div>
 
 ## What's in it
@@ -36,23 +36,23 @@ version without writing any code.
   floor plans, amulets and scenery. The music is composed while you play, in
   the stop's own key and on its own instrument.
 - **Special amulets.** Four in a row makes a banded amulet, an L or a T makes
-  a ringed one, and five in a row makes the winged sun. Some amulets also fall
-  wearing a badge with a power of its own, and a few rare badges are cursed.
+  a ringed one and five in a row makes the winged sun. Some amulets also fall
+  wearing a badge with a power of its own. A few rare badges are cursed.
 - **Boons, trials and shops.** Priests set you trials and reward you with
   boons, which you keep until you need them. Between stops there are puzzles
-  and choices on the river. Anubis runs a stall for one-off help, and the
+  and choices on the river. Anubis runs a stall for one-off help and the
   Treasury sells lasting upgrades.
 - **Tombs, temples and oases** open up beside nine of the stops once you have
   gilded them. The tombs are lit by torches and some of their amulets are
   buried in sand. The oases lie among date palms, with amulets under water.
 - **Reasons to come back:** three seals at every stop, omens you can brave for
-  a bigger reward, 46 relics for the museum, and amulet sets, floors, frames
+  a bigger reward, 46 relics for the museum and amulet sets, floors, frames
   and sparkles to earn.
 - **A gentle start.** On your first journey the game brings in its parts one
   at a time, each with a short note. If you would rather have everything at
   once, you can.
-- **Four board sizes, four difficulties**, full keyboard controls, and in
-  Settings dark and high-contrast colours, less motion, and fewer effects for
+- **Four board sizes, four difficulties**, full keyboard controls and in
+  Settings dark and high-contrast colours, less motion and fewer effects for
   older phones.
 
 There are more pictures on the [screenshots page](docs/screenshots.md).
@@ -76,7 +76,7 @@ python3 build.py            # or double-click build.bat on Windows
 ```
 
 The build checks every content file before it writes anything. If something
-is wrong, it tells you which file and which line in plain words, and leaves
+is wrong, it tells you which file and which line in plain words and leaves
 your last working game alone. Otherwise it writes
 `dist/amulets-of-anubis.html`.
 
@@ -107,14 +107,15 @@ Most of the game is content rather than code:
 If you have never programmed, start with the
 **[first part of the manual](docs/manual/part-1-making-things.md)**. It walks
 you through changing pictures, words and numbers and adding a new stop, with
-pictures at every step, and ends with how to write a boon of your own.
+pictures at every step and ends with how to write a boon of your own.
 
 ## Documentation
 
 | | |
 |---|---|
 | [The manual](docs/manual/README.md) | in two parts: making things (for everyone) and the engine (for programmers) |
-| [Content reference](docs/content-reference.md) | every field of every kind of content file |
+| [Content reference](engine/docs/content-reference.md) | every field of every kind of content file |
+| [A map of the code](engine/docs/code-map.md) | what each file of the engine is for and what's in it |
 | [Build guide](docs/build-guide.md) | the Android and desktop apps |
 | [Screenshots](docs/screenshots.md) | pictures of every part of the game |
 
@@ -131,7 +132,7 @@ each kind of thing:
 * **The pictures** are in the public domain under
   [CC0 1.0](LICENSES/CC0-1.0.txt) (`CC0-1.0`), so you can use them for
   anything without asking. That is every picture in `images/` and `docs/`,
-  the app icons in `web/` and `platforms/`, and the store pictures in
+  the app icons in `web/` and `platforms/` and the store pictures in
   `fastlane/`. What little comes from elsewhere is listed, with its source,
   in [images/CREDITS.md](images/CREDITS.md).
 * **The two typefaces** in `engine/web/fonts.css`, IM Fell Double Pica and IM Fell

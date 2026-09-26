@@ -1,5 +1,5 @@
 /* =============================================================================
- * 08-relics.js  —  relics: their pictures, and what happens when one is found.
+ * 08-relics.js: relics: their pictures and what happens when one is found.
  *
  * Relics are content files (content/relics/), each saying in "found_when"
  * what finds it; 09-unlocks.js checks that after every stop.
@@ -12,7 +12,7 @@
  *   grantRelic(r)       the relic is found: pays its reward, shows a banner
  *                       and puts a "new" dot on the Museum
  *
- * Changes in the save: relics, and gold, lapis or boons from a relic's
+ * Changes in the save: relics and gold, lapis or boons from a relic's
  * reward.
  * ===========================================================================*/
 

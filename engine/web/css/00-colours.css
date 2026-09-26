@@ -1,4 +1,4 @@
-/* 00-colours.css: Every colour and texture of the interface, by name, and the four colour modes.
+/* 00-colours.css: Every colour and texture of the interface, by name and the four colour modes.
 
    This is the engine's own look: plain paper, grey stone and a little gold,
    with no texture, so a game that brings no look of its own still reads
@@ -104,10 +104,6 @@
 	--oasis-ink: #10304e;
 	--oasis-ink-2: #163a5a;
 	--oasis-glint: #d8eefa88;
-	--undo-hi: #e6ecf2;
-	--undo-lo: #b9c7d6;
-	--undo-edge-hi: #f4f7fa;
-	--undo-edge-lo: #6a7c90;
 	/* the page behind everything, seen before a stop's scenery arrives and
 	   round the edges: the same in every mode */
 	--page: #4a4e55;
@@ -198,10 +194,6 @@
 	--oasis-ink: #dff0ff;
 	--oasis-ink-2: #b8dcf6;
 	--oasis-glint: transparent;
-	--undo-hi: #2c3a4a;
-	--undo-lo: #1f2a36;
-	--undo-edge-hi: #56687c;
-	--undo-edge-lo: #0c1218;
 }
 
 /* High contrast: plain surfaces with no texture, black on white or white on
@@ -283,10 +275,6 @@
 	--oasis-ink: #000;
 	--oasis-ink-2: #000;
 	--oasis-glint: transparent;
-	--undo-hi: #e6f0ff;
-	--undo-lo: #e6f0ff;
-	--undo-edge-hi: #000;
-	--undo-edge-lo: #000;
 	color-scheme: light;
 }
 :root[data-colours='hcd'] {
@@ -365,8 +353,4 @@
 	--oasis-ink: #9fd4ff;
 	--oasis-ink-2: #9fd4ff;
 	--oasis-glint: transparent;
-	--undo-hi: #000;
-	--undo-lo: #000;
-	--undo-edge-hi: #9fd4ff;
-	--undo-edge-lo: #9fd4ff;
 }

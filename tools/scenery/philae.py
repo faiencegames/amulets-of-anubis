@@ -1,7 +1,7 @@
 """Philae at dusk: the island of Isis, seen from the water.
 
 The temple of Isis in silhouette against the evening sky: its great first
-pylon with the gateway, the smaller second pylon behind, a colonnade, and the
+pylon with the gateway, the smaller second pylon behind, a colonnade and the
 Kiosk of Trajan at the water's edge, with palms. The low sun on the right,
 its light broken on the river.
 

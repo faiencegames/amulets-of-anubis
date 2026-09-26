@@ -7,7 +7,7 @@
 	"id": "serapeum",
 	"at": "saqqara",
 	"name": "The Serapeum",
-	"text": "At Saqqara we went down into the dark, where the long galleries of the Serapeum run beneath the sand. Here the sacred Apis bulls of Memphis were laid to rest, each in a stone coffin cut from a single block, so vast we could scarcely believe our eyes. Auguste Mariette found these galleries in 1850 by following a buried avenue of sphinxes, and we followed the same road down.",
+	"text": "At Saqqara we went down into the dark, where the long galleries of the Serapeum run beneath the sand. Here the sacred Apis bulls of Memphis were laid to rest, each in a stone coffin cut from a single block, so vast we could scarcely believe our eyes. Auguste Mariette found these galleries in 1850 by following a buried avenue of sphinxes and we followed the same road down.",
 	"scenery": "tomb",
 	// Three sets: each time the place opens, the game picks one at random.
 	"amulets": [

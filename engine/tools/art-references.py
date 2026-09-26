@@ -8,7 +8,7 @@ showing the game's art to people and tools that can't read SVG.
 
 build.py runs it after every build. It needs rsvg-convert (librsvg:
 `brew install librsvg`, or `apt install librsvg2-bin`); without it, it says
-so and does nothing, and the game builds as before. Only pictures changed
+so and does nothing and the game builds as before. Only pictures changed
 since their PNG was made are drawn again, so it is quick after the first time.
 The prints (JPEG) are converted with ImageMagick or macOS's sips, whichever
 is there.

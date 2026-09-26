@@ -1,6 +1,6 @@
 /* =============================================================================
- * 12-stall.js  —  the stall, where boons and moves are bought during a
- * stop, and the refunds that the stall and the Treasury share.
+ * 12-stall.js: the stall, where boons and moves are bought during a
+ * stop and the refunds that the stall and the Treasury share.
  *
  * What's here:
  *   openStall()      the stall's scroll (the stall's button in the dock, the
@@ -9,7 +9,7 @@
  *                    is bought at this stop (STALL_RISE, content/settings.jsonc)
  *   logBuy(), undoBuy(), undoButton(), purseLine()
  *                    refunds: anything bought can be taken back until the
- *                    scroll closes. 16-treasury.js uses these too, and
+ *                    scroll closes. 16-treasury.js uses these too and
  *                    closeOverlays() (23-scrolls.js) empties the list.
  *
  * Changes in the save: gold, lapis, boons, charges.
@@ -62,7 +62,7 @@ function purseLine() {
 
 function undoButton(src, id) {
 	return canUndo(src, id)
-		? `<button class="btn undo" data-undo-src="${src}" data-undo="${id}">${T('shop.undo')}</button>`
+		? `<button class="btn undo" data-undo-src="${src}" data-undo="${id}">${iconSvg('ui', 'undo', 'class="undo-ico" aria-hidden="true"')}${T('shop.undo')}</button>`
 		: '';
 }
 

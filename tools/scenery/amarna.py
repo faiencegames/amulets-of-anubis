@@ -3,7 +3,7 @@
 The Aten is drawn as Amarna's own carvings show it: a disc whose rays end in
 small hands, some holding an ankh, the sign of life. Below, the low ruins of
 the city on its wide plain, the open courts of the Great Aten Temple with
-rows of offering tables, and the cliffs of the eastern desert behind.
+rows of offering tables and the cliffs of the eastern desert behind.
 
 Run: python3 tools/scenery/amarna.py > images/backdrops/amarna.svg
 """

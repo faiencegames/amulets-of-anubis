@@ -16,7 +16,7 @@ browser; the two narrow ones are from a phone.
 <figure><img src="images/screenshot-treasury.jpg" width="300" alt="The Treasury"><figcaption><b>The Treasury.</b> Lasting upgrades, bought with gold and lapis.</figcaption></figure>
 <figure><img src="images/screenshot-museum.jpg" width="300" alt="The Museum"><figcaption><b>The Museum.</b> The relics you have found, one for each deed along the river.</figcaption></figure>
 <figure><img src="images/screenshot-stall.jpg" width="300" alt="Anubis's stall"><figcaption><b>Anubis's stall.</b> One-time help, for gold or lapis.</figcaption></figure>
-<figure><img src="images/screenshot-customise.jpg" width="300" alt="Customise"><figcaption><b>Customise.</b> Amulet sets, floors, frames and sparkles, earned by playing.</figcaption></figure>
+<figure><img src="images/screenshot-customise.jpg" width="300" alt="Customise"><figcaption><b>Customise.</b> Amulet sets, floors, frames and sparkles, earned by playing or bought.</figcaption></figure>
 <figure><img src="images/screenshot-phone-amarna.jpg" width="240" alt="Amarna on a phone"><figcaption><b>On a phone.</b> The board runs edge to edge; the boons sit below it.</figcaption></figure>
 <figure><img src="images/screenshot-title.jpg" width="300" alt="The title screen"><figcaption><b>The title screen.</b> Over the scenery of the stop you are at, so it changes as you travel.</figcaption></figure>
 <figure><img src="images/screenshot-how-to-play.jpg" width="300" alt="How to play"><figcaption><b>How to play.</b> Twelve chapters in the margin: every amulet, special, boon and rule, with pictures.</figcaption></figure>

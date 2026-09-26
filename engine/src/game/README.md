@@ -1,4 +1,4 @@
-# src/game — the running game
+# src/game: the running game
 
 Everything the player sees move, hear or click, one file per part of the
 game. The rules themselves (matching, cascades, specials, boons, curses) are

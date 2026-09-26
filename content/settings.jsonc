@@ -37,7 +37,7 @@
 	},
 
 	// The amulets the interface shows as examples: "button" on the Amulets
-	// button and in the floor previews, "how_to_play" in How to play, and four
+	// button and in the floor previews, "how_to_play" in How to play and four
 	// "previews" to show a look where a stop has fewer of its own. (The one
 	// shown under each cover is in its file, content/covers/.)
 	"amulets_on_show": {
@@ -47,7 +47,7 @@
 	},
 
 	// The four difficulty steps, easiest first. Their names are this game's
-	// own: saves keep a difficulty by its place, and curses and relics name
+	// own: saves keep a difficulty by its place and curses and relics name
 	// it, so never rename one. moves_percent scales every stop's moves;
 	// badge_chance_percent is how often a new amulet falls wearing a badge;
 	// hint_after_seconds is how long before a hint (0 = never).
@@ -78,8 +78,8 @@
 	},
 
 	// Tombs and temples explored before wake when the player goes back in:
-	// cursed badges (Apep and the sandstorm) start to turn up, and grow likelier
-	// with each return, and so does the reward. Oases stay calm. "curse_multiplier" is how much likelier
+	// cursed badges (Apep and the sandstorm) start to turn up and grow likelier
+	// with each return and so does the reward. Oases stay calm. "curse_multiplier" is how much likelier
 	// the cursed badges are than their weight above, on the first return; each
 	// further return adds "each_return", up to "most".
 	"returning": {
@@ -105,7 +105,7 @@
 	"seals": {"lapis_each": 4},
 
 	// The Nile down the middle of an Omega board: the water at its banks and
-	// in the middle, the ripples on it, and the reeds along both banks.
+	// in the middle, the ripples on it and the reeds along both banks.
 	"river_channel": {
 		"water_edge": "#1d4f73",
 		"water_middle": "#2f78a6",

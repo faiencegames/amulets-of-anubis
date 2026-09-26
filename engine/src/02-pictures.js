@@ -1,5 +1,5 @@
 /* =============================================================================
- * 02-pictures.js  —  loads every picture before the game starts.
+ * 02-pictures.js: loads every picture before the game starts.
  *
  * The pictures are files in images/ (see images/README.md); the build embeds
  * them in PICTURES (00-open.js). Nothing here draws: this only turns them into
@@ -10,12 +10,13 @@
  *   AMULET_PICS[name]   amulets, each a 128 x 128 canvas (images/amulets/)
  *   SPECIAL[name]       the marks of special amulets (images/specials/)
  *   BADGE[kind]         badges (images/badges/)
- *   COVER_PICS[name]    covers, drawn over an amulet (images/covers/), and
+ *   SET_PICS[set][name] an amulet set's own pictures (images/amulet-sets/)
+ *   COVER_PICS[name]    covers, drawn over an amulet (images/covers/) and
  *                       coverPicture(tile), the one for a tile's cover and
  *                       the layers it has left
  *   FLOOR_PICS[id]      {bare, thick, gilded:[...]} per floor set
  *                       (images/floors/)
- *   PIC_SIZE, makeCanvas()  the 128-pixel size, and a helper that makes a canvas
+ *   PIC_SIZE, makeCanvas()  the 128-pixel size and a helper that makes a canvas
  *                       of it (used by 04-boards.js)
  *
  * Backdrops, board backings and relic pictures are used straight from
@@ -39,6 +40,7 @@ const AMULET_PICS = {},
 	SPECIAL = {},
 	BADGE = {},
 	COVER_PICS = {},
+	SET_PICS = {},
 	FLOOR_PICS = {};
 
 // a cover with layers may have a picture for each number left (sand-2)
@@ -87,6 +89,31 @@ function loadPictures() {
 				img.height * k,
 			);
 		});
+	});
+	// an amulet set's own pictures (images/amulet-sets/<set>/), squared as the
+	// amulets are; a pixel-art set is drawn with square pixels, never smoothed
+	Object.entries(PICTURES['amulet-sets']).forEach(([setId, pics]) => {
+		const pixel = CONTENT.skins.some(s => s.id === setId && s.pixel);
+		const into = (SET_PICS[setId] = {});
+		Object.entries(pics).forEach(([name, src]) =>
+			jobs.push(
+				loadImage(src).then(img => {
+					if (!img) return;
+					into[name] = makeCanvas(pen => {
+						pen.imageSmoothingEnabled = !pixel;
+						const k = Math.min(PIC_SIZE / img.width, PIC_SIZE / img.height);
+						pen.drawImage(
+							img,
+							(PIC_SIZE - img.width * k) / 2,
+							(PIC_SIZE - img.height * k) / 2,
+							img.width * k,
+							img.height * k,
+						);
+					});
+					into[name].pixel = pixel;
+				}),
+			),
+		);
 	});
 	each('specials', SPECIAL);
 	each('badges', BADGE);

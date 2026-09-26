@@ -1,5 +1,5 @@
 /* =============================================================================
- * 01-caches.js  —  the drawing caches that keep the game smooth on a phone.
+ * 01-caches.js: the drawing caches that keep the game smooth on a phone.
  *
  * The floor, its shadows and the amulet pictures don't change between moves,
  * so they are drawn once into offscreen canvases and copied onto the board
@@ -39,7 +39,9 @@ function tileAt(sprite, key) {
 	if (!c || c.width !== px) {
 		c = document.createElement('canvas');
 		c.width = c.height = px;
-		c.getContext('2d').drawImage(sprite, 0, 0, px, px);
+		const pen = c.getContext('2d');
+		if (sprite.pixel) pen.imageSmoothingEnabled = false; // pixel art keeps its square pixels
+		pen.drawImage(sprite, 0, 0, px, px);
 		scaledTiles.set(sprite, c);
 	}
 	return c;

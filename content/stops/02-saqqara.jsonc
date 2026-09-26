@@ -1,11 +1,11 @@
 // Stop 2 of the journey: Saqqara.
 // The number at the front of the file name sets the order of the stops.
-// Every field is explained in docs/content-reference.md.
+// Every field is explained in engine/docs/content-reference.md.
 {
 	"id": "saqqara",
 	"name": "Saqqara",
 	"subtitle": "Imhotep’s staircase to the sky",
-	"history": "At Saqqara the Step Pyramid of King Djoser rose above us in six great steps, set there around 2650 BCE; why, nothing so large had ever been built of cut stone before it! Its architect, Imhotep, was so admired that later Egyptians came to worship him as a God of wisdom and healing, and having stood beneath his work, we could hardly blame them.",
+	"history": "At Saqqara the Step Pyramid of King Djoser rose above us in six great steps, set there around 2650 BCE; why, nothing so large had ever been built of cut stone before it! Its architect, Imhotep, was so admired that later Egyptians came to worship him as a God of wisdom and healing. Having stood beneath his work, we could hardly blame them.",
 	"moves": 24,
 	// Three sets: each time the stop starts, the game picks one at random.
 	"amulets": [

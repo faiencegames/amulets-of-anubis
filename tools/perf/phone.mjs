@@ -1,10 +1,10 @@
 // Plays the game on a real Android phone and measures it: the frame times the
-// page sees, how busy the page's main thread is, and Android's own frame
+// page sees, how busy the page's main thread is and Android's own frame
 // statistics for the app (gfxinfo).
 //
 // Needs: the phone connected with USB debugging, a debug build of the app on
 // it (ANDROID_DEBUG=1 ./build.sh android, then adb install -r ...), which
-// carries the edge tests' hook (window.__edge), and the game running.
+// carries the edge tests' hook (window.__edge). The game has to be running.
 // With two phones connected, say which: ANDROID_SERIAL=<id from adb devices>.
 //
 //   node tools/perf/phone.mjs [moves] [label] [2d|gl]
@@ -16,7 +16,7 @@
 //
 // It never plays in the player's own save: it keeps a copy
 // (dist/phone-save-backup.json, on this computer too), plays a fixed
-// benchmark save (the same stop every time, so runs compare fairly), and
+// benchmark save (the same stop every time, so runs compare fairly) and
 // puts the player's save back at the end. Only the game's own page and
 // statistics are touched: nothing else on the phone.
 //

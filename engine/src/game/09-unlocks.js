@@ -1,5 +1,5 @@
 /* =============================================================================
- * 09-unlocks.js  —  what unlocks looks and finds relics, and the banners that
+ * 09-unlocks.js: what unlocks looks and finds relics and the banners that
  * announce it.
  *
  * Every look (amulet set, floor, frame, sparkle) and every relic has
@@ -11,7 +11,7 @@
  *                       checkLooks() for the looks (called after a win, a
  *                       loss, a move, a river event)
  *   conditionText(), lookNeedText(), needProgress()
- *                       what a locked look asks for, in words, and how far
+ *                       what a locked look asks for, in words and how far
  *                       along it is (the Customise screen)
  *   CONDITION_NAMES, CONDITION_TEXT
  *                       the words for each kind of condition. A new condition
@@ -28,7 +28,9 @@
 // ---------- looks: when each is unlocked ----------
 // Every amulet set, floor, frame and sparkle has a `need`: a block of
 // conditions from its content file (see conditionMet in 01-core.js), or none.
+// A look with a price and no conditions is only ever bought (18-customise.js).
 function lookUnlocked(o) {
+	if (o.price && !o.need) return false;
 	return conditionMet(o.need, save);
 }
 

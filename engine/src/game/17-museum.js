@@ -1,12 +1,12 @@
 /* =============================================================================
- * 17-museum.js  —  the Museum: the relics found so far, and the ones still
+ * 17-museum.js: the Museum: the relics found so far and the ones still
  * to find, with what each was and what finds it.
  *
  * What's here:
  *   openMuseum()        the Museum scroll (the Menu, the relics beside the
  *                       board)
  *   museumSquares()      a bare and a gilded square of the floor in use, as
- *                       pictures (the Museum, and the relic strip beside the
+ *                       pictures (the Museum and the relic strip beside the
  *                       board, 05-state.js)
  *
  * Changes in the save: nothing.

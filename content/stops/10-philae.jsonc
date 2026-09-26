@@ -1,11 +1,11 @@
 // Stop 10 of the journey: Philae.
 // The number at the front of the file name sets the order of the stops.
-// Every field is explained in docs/content-reference.md.
+// Every field is explained in engine/docs/content-reference.md.
 {
 	"id": "philae",
 	"name": "Philae",
 	"subtitle": "The pearl of the Nile",
-	"history": "At Philae we landed at the temple of Isis, one of the last places where the old Gods were worshipped. Here, in 394 CE, someone carved the last hieroglyphic inscription we know of, after more than three and a half thousand years of the script. Imagine being the last! In the 1970s the whole temple was taken apart, stone by stone, and raised again on a nearby island, out of reach of the flood waters.",
+	"history": "At Philae we landed at the temple of Isis, one of the last places where the old Gods were worshipped. Here, in 394 CE, someone carved the last hieroglyphic inscription we know of, after more than three and a half thousand years of the script. Imagine being the last! In the 1970s the whole temple was taken apart stone by stone and raised again on a nearby island, out of reach of the flood waters.",
 	"moves": 42,
 	// Three sets: each time the stop starts, the game picks one at random.
 	"amulets": [

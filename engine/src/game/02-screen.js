@@ -1,5 +1,5 @@
 /* =============================================================================
- * 02-screen.js  —  the page and the board's size on it.
+ * 02-screen.js: the page and the board's size on it.
  *
  * What's here:
  *   $(id)               document.getElementById, used everywhere
@@ -9,7 +9,7 @@
  *                       labels (T() in 01-core.js gives them with bold and
  *                       italics)
  *   canvas, ctx         the board's canvas and its drawing context
- *   cs, dpr             the size of a square in pixels, and the screen's
+ *   cs, dpr             the size of a square in pixels and the screen's
  *                       pixel density
  *   fit()               sizes the board to the window; runs on every resize
  *

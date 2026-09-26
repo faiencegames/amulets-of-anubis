@@ -25,7 +25,7 @@
 # a browser's path). The Android app needs the Android SDK (set ANDROID_SDK or
 # ANDROID_HOME) and a JDK. Missing tools are skipped.
 #
-# GAME_VERSION (default 0.9.4) is the version the apps show. Android also
+# GAME_VERSION (default 0.9.5) is the version the apps show. Android also
 # needs a version code that rises with every release; it is made from the
 # version (1.2.3 becomes 10203) unless ANDROID_VERSION_CODE says otherwise.
 # (The same two numbers are written in platforms/android/AndroidManifest.xml,
@@ -46,7 +46,7 @@ cd "$(dirname "$0")"
 
 ELECTRON_VERSION="44.4.3"
 APP_NAME="Amulets of Anubis"
-GAME_VERSION="${GAME_VERSION:-0.9.4}"
+GAME_VERSION="${GAME_VERSION:-0.9.5}"
 GAME="dist/amulets-of-anubis.html"
 
 info() { printf '\033[1m==> %s\033[0m\n' "$*"; }
@@ -143,8 +143,10 @@ if want android || [ "$TARGET" = aab ]; then
 				javac --release 8 -cp "$J" -d "$WORK/classes" \
 						"$WORK/gen/com/amulets/nile/R.java" "$SRC/MainActivity.java" "$SRC/Vibration.java"
 				"$B/d8" --min-api 24 --lib "$J" --output "$WORK/dex" $(find "$WORK/classes" -name '*.class')
-				# a fixed date on classes.dex, so the same source makes the same app
+				# a fixed date and mode on classes.dex, so the same source makes the same app
+				# on any machine (zip keeps the mode, which otherwise follows the umask)
 				touch -t 198001010000 "$WORK/dex/classes.dex"
+				chmod 644 "$WORK/dex/classes.dex"
 				KEY="${ANDROID_KEYSTORE:-$SRC/release.jks}"
 				PASSFILE="${ANDROID_KEYSTORE_PASS_FILE:-$SRC/release.pass}"
 				if [ "$TARGET" = aab ]; then
@@ -193,7 +195,10 @@ if want android || [ "$TARGET" = aab ]; then
 												-dname "CN=Android Debug,O=Android,C=US" 2>/dev/null
 										ok "No release.jks: signed with the debug key"
 								fi
-								"$B/apksigner" sign --v1-signing-enabled true --v2-signing-enabled true \
+								# The entries stay exactly as zipalign left them and no v1 files are
+								# added (Android 7 and up read v2), so the signed app is the unsigned
+								# one plus its signature: F-Droid checks it that way.
+								"$B/apksigner" sign --alignment-preserved --v1-signing-enabled false --v2-signing-enabled true \
 										--ks "$KEY" $PASS --out "$OUT/amulets-of-anubis.apk" "$WORK/aligned.apk"
 								rm -rf "$WORK"
 								ok "Android app: dist/android/amulets-of-anubis.apk"

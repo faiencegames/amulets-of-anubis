@@ -1,5 +1,5 @@
 /* =============================================================================
- * 02-board-pen.js  —  the board drawn with WebGL, on the graphics chip.
+ * 02-board-pen.js: the board drawn with WebGL, on the graphics chip.
  *
  * A trial (September 2026): on a phone, drawing the board with the canvas's
  * own calls cost more than the game's rules. GLPen understands the few

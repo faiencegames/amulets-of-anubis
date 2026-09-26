@@ -1,5 +1,5 @@
 """
-Where the engine is, and where the game it builds is, for the Python tools
+Where the engine is and where the game it builds is, for the Python tools
 (build.py has the same rule written into it).
 
 The game is the folder that holds edition.jsonc:

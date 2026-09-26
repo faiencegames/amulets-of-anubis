@@ -1,0 +1,64 @@
+/* ink: a printed reference book: a book typeface, deep blue ink and a red
+   for headings, with generous margins. */
+:root {
+	--page: #fbfaf7;
+	--sheet: #fbfaf7;
+	--ink: #1c2230;
+	--ink-2: #5a6272;
+	--line: #d8dbe2;
+	--accent: #a3241b;
+	--link: #23408e;
+	--code-bg: #eef0f4;
+	--head-bg: #eef0f4;
+	--k: #23408e;
+	--s: #276b43;
+	--n: #a3241b;
+	--b: #7a5510;
+	--f: #6d3b8f;
+	--c: #6a7282;
+	--body: 'Iowan Old Style', 'Charter', 'Bitstream Charter', 'Sitka Text', Cambria, Georgia, serif;
+	--display: var(--body);
+	--measure: 40rem;
+}
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme='light']) {
+		color-scheme: dark;
+		--page: #10131b;
+		--sheet: #151925;
+		--ink: #e3e6ee;
+		--ink-2: #a1a8b8;
+		--line: #2a3040;
+		--accent: #f08a7c;
+		--link: #9db4f2;
+		--code-bg: #1c2130;
+		--head-bg: #1c2130;
+		--k: #9db4f2;
+		--s: #8fd3a6;
+		--n: #f08a7c;
+		--b: #e2bb62;
+		--f: #cfa6ee;
+		--c: #8d95a8;
+	}
+}
+:root[data-theme='dark'] {
+	color-scheme: dark;
+	--page: #10131b;
+	--sheet: #151925;
+	--ink: #e3e6ee;
+	--ink-2: #a1a8b8;
+	--line: #2a3040;
+	--accent: #f08a7c;
+	--link: #9db4f2;
+	--code-bg: #1c2130;
+	--head-bg: #1c2130;
+	--k: #9db4f2;
+	--s: #8fd3a6;
+	--n: #f08a7c;
+	--b: #e2bb62;
+	--f: #cfa6ee;
+	--c: #8d95a8;
+}
+body { font-size: 18px; line-height: 1.62; }
+.article h1 { font-size: 2.6rem; font-weight: 500; letter-spacing: -0.01em; }
+.article h2 { font-weight: 500; border-top: 0; font-variant: small-caps; letter-spacing: 0.02em; }
+.pages h2 { font-variant: small-caps; text-transform: none; letter-spacing: 0.04em; font-size: 0.95rem; }

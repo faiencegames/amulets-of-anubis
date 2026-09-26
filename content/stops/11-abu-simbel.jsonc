@@ -1,6 +1,6 @@
 // Stop 11 of the journey: Abu Simbel.
 // The number at the front of the file name sets the order of the stops.
-// Every field is explained in docs/content-reference.md.
+// Every field is explained in engine/docs/content-reference.md.
 {
 	"id": "abu-simbel",
 	"name": "Abu Simbel",

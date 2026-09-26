@@ -9,7 +9,7 @@
 	// what it does, in How to play; {n} is the amount
 	"text": "Gives you three extra moves.",
 	// what it does when the amulet is cleared, one of the powers the game
-	// knows; "amount" changes the number, and has a default:
+	// knows; "amount" changes the number and has a default:
 	//   "gild_stones"      golden light gilds n bare stones anywhere (4)
 	//   "gild_around"      gilds the stones in the nine squares around it
 	//   "row_and_column"   clears the whole row and column it sits in

@@ -1,5 +1,5 @@
 /* =============================================================================
- * 11-chambers.js  —  tombs, temples and oases: the small, dim boards beside a
+ * 11-chambers.js: tombs, temples and oases: the small, dim boards beside a
  * stop, often with amulets under covers (content/chambers/, content/covers/).
  *
  * A chamber's doorway opens once its stop is gilded. Tombs and temples wake
@@ -13,7 +13,7 @@
  *   startChamber()      goes in; chamberFromWin() and chamberFromCard() go in
  *                       from the win scroll or the stop card
  *   visitReward(), returnBadges()
- *                       what a visit pays, and the badges a return wakes
+ *                       what a visit pays and the badges a return wakes
  *   leaveChamber()      comes out, to the next stop or back to the one before
  *   placeKey(), placeIcon()
  *                       the words and picture for a tomb, temple or oasis

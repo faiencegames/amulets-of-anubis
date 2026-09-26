@@ -1,11 +1,11 @@
 // Stop 9 of the journey: Valley of the Kings.
 // The number at the front of the file name sets the order of the stops.
-// Every field is explained in docs/content-reference.md.
+// Every field is explained in engine/docs/content-reference.md.
 {
 	"id": "valley-of-the-kings",
 	"name": "Valley of the Kings",
 	"subtitle": "Where the pharaohs sleep",
-	"history": "We came up into this dry valley at dawn. For about five hundred years the kings of the New Kingdom were buried here, in tombs cut deep into the rock, under the watch of Anubis, the jackal-headed God of embalming. When Howard Carter opened Tutankhamun’s tomb in 1922, a figure of Him still lay on a gilded shrine at the door of the treasury; He had kept His watch for more than three thousand years, and kept it well.",
+	"history": "We came up into this dry valley at dawn. For about five hundred years the kings of the New Kingdom were buried here, in tombs cut deep into the rock, under the watch of Anubis, the jackal-headed God of embalming. When Howard Carter opened Tutankhamun’s tomb in 1922, a figure of Him still lay on a gilded shrine at the door of the treasury; He had kept His watch for more than three thousand years and kept it well.",
 	"moves": 28,
 	// Three sets: each time the stop starts, the game picks one at random.
 	"amulets": [
