@@ -71,26 +71,18 @@ def engraved(name):
 
 
 # ---------------------------------------------------------------- Naqada pots
-PAINTS = {'red': '#9a3018', 'green': '#2f7050', 'black': '#1c1410', 'ochre': '#b07a1a', 'brown': '#6a4020'}
-# the first stop's amulets, chosen by eye so the five of each of its sets differ;
-# every other amulet takes the paint nearest its own colour (paint())
-PAINT = {'ankh': 'ochre', 'scarab': 'black', 'eye': 'green', 'lotus': 'red', 'pyramid': 'brown', 'bull': 'black',
-	'doublecrown': 'red', 'was': 'ochre', 'djed': 'green', 'sphinx': 'brown', 'bee': 'ochre', 'papyrus': 'green',
-	'ka': 'red', 'nefer': 'brown'}
-
-
 def paint(name):
-	"""The Naqada paint for an amulet: red, green, black, ochre or brown."""
-	if name in PAINT: return PAINTS[PAINT[name]]
-	r, g, b = (int(TONE[name][1][i:i + 2], 16) / 255 for i in (1, 3, 5))
+	"""The Naqada paint for an amulet: its own colour, deepened and a little
+	muted so it reads as paint on buff clay. Pale amulets (white, sand, stone)
+	take their darkest tone."""
+	l, m, d = TONE[name]
+	r, g, b = (int(m[i:i + 2], 16) / 255 for i in (1, 3, 5))
 	hue, light, sat = colorsys.rgb_to_hls(r, g, b)
-	hue *= 360
-	if light < .25 or (200 <= hue < 300 and sat > .3): return PAINTS['black']
-	if sat < .25 or light > .85: return PAINTS['brown']
-	if hue < 20 or hue >= 330: return PAINTS['red']
-	if hue < 70: return PAINTS['ochre']
-	if hue < 200: return PAINTS['green']
-	return PAINTS['black']
+	if light > .72 or sat < .2:
+		r, g, b = (int(d[i:i + 2], 16) / 255 for i in (1, 3, 5))
+		hue, light, sat = colorsys.rgb_to_hls(r, g, b)
+	r, g, b = colorsys.hls_to_rgb(hue, min(light, .38), min(sat * .9, .8))
+	return '#%02x%02x%02x' % (round(r * 255), round(g * 255), round(b * 255))
 
 
 def naqada(name):
@@ -110,7 +102,7 @@ def naqada(name):
 				i += 1
 		else:
 			s += f'<path d="{p}" fill="none" stroke="{pg}" stroke-width="{w}" stroke-linecap="round"/>'
-	return svg('Red, ochre or black paint on buff clay, with wavy lines and zigzags, like the painted pots of the Naqada period.', s + '\n', defs)
+	return svg('Paint in the amulet\'s own colour on buff clay, with wavy lines and zigzags, like the painted pots of the Naqada period.', s + '\n', defs)
 
 
 # ---------------------------------------------------------------- Djoser's tiles

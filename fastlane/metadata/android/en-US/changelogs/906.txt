@@ -1,0 +1,3 @@
+Better: the Naqada pots amulet set is painted in each amulet's own colour, so its amulets are easy to tell apart.
+
+Behind the scenes: the Android app is built with R8, as F-Droid asked.

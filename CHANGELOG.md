@@ -3,6 +3,19 @@
 What changed in each version of Amulets of Anubis, newest first. The GitHub
 Release for each version shows its part of this file.
 
+## 0.9.6 (26 September 2026)
+
+### Better
+
+- **Naqada pots** are painted in each amulet's own colour instead of five
+  earth colours, so amulets that looked alike (the cat and the blue crown)
+  are easy to tell apart.
+
+### Behind the scenes
+
+- The Android app's small bit of Java is shrunk with R8, as F-Droid's
+  reviewers asked.
+
 ## 0.9.5 (26 September 2026)
 
 ### New

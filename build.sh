@@ -25,7 +25,7 @@
 # a browser's path). The Android app needs the Android SDK (set ANDROID_SDK or
 # ANDROID_HOME) and a JDK. Missing tools are skipped.
 #
-# GAME_VERSION (default 0.9.5) is the version the apps show. Android also
+# GAME_VERSION (default 0.9.6) is the version the apps show. Android also
 # needs a version code that rises with every release; it is made from the
 # version (1.2.3 becomes 10203) unless ANDROID_VERSION_CODE says otherwise.
 # (The same two numbers are written in platforms/android/AndroidManifest.xml,
@@ -46,7 +46,7 @@ cd "$(dirname "$0")"
 
 ELECTRON_VERSION="44.4.3"
 APP_NAME="Amulets of Anubis"
-GAME_VERSION="${GAME_VERSION:-0.9.5}"
+GAME_VERSION="${GAME_VERSION:-0.9.6}"
 GAME="dist/amulets-of-anubis.html"
 
 info() { printf '\033[1m==> %s\033[0m\n' "$*"; }
@@ -139,10 +139,17 @@ if want android || [ "$TARGET" = aab ]; then
 				"$B/aapt2" link $PROTO -o "$WORK/base.apk" -I "$J" --manifest "$SRC/AndroidManifest.xml" \
 						-A "$WORK/assets" --java "$WORK/gen" --min-sdk-version 24 --target-sdk-version "${ANDROID_TARGET:-35}" \
 						--version-code "${ANDROID_VERSION_CODE:-$(echo "$GAME_VERSION" | awk -F. '{print $1*10000 + $2*100 + $3}')}" \
-						--version-name "$GAME_VERSION" --replace-version "$WORK/res.zip"
+						--version-name "$GAME_VERSION" --replace-version "$WORK/res.zip" --proguard "$WORK/aapt-rules.pro"
 				javac --release 8 -cp "$J" -d "$WORK/classes" \
 						"$WORK/gen/com/amulets/nile/R.java" "$SRC/MainActivity.java" "$SRC/Vibration.java"
-				"$B/d8" --min-api 24 --lib "$J" --output "$WORK/dex" $(find "$WORK/classes" -name '*.class')
+				# R8 rather than plain d8 (F-Droid's reviewers asked for it): it leaves out
+				# the code nothing uses, mostly the table of resource numbers. It keeps
+				# what the manifest names (the rules aapt2 wrote) and what
+				# platforms/android/r8-rules.pro lists: the page's bridge to vibration
+				# and the classes only newer Androids load.
+				java -cp "$B/lib/d8.jar" com.android.tools.r8.R8 --release --min-api 24 --lib "$J" \
+						--pg-conf "$SRC/r8-rules.pro" --pg-conf "$WORK/aapt-rules.pro" \
+						--output "$WORK/dex" $(find "$WORK/classes" -name '*.class')
 				# a fixed date and mode on classes.dex, so the same source makes the same app
 				# on any machine (zip keeps the mode, which otherwise follows the umask)
 				touch -t 198001010000 "$WORK/dex/classes.dex"
